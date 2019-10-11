@@ -60,6 +60,12 @@ export default class ClapDetector extends React.Component<ClapDetectorProps, Cla
                 const AudioContext = window.AudioContext || window.webkitAudioContext;
                 const context = new AudioContext();
 
+                console.log('the default ')
+                
+                console.log(this.state.audioInputDeviceIds[0]);
+                console.log(this.state.audioInputDeviceIds[1]);
+                console.log(this.state.audioInputDeviceIds[3]);
+
                 Promise.all([
                     this.addAudioStreamNode(this.state.audioInputDeviceIds[0], context),
                     this.addAudioStreamNode(this.state.audioInputDeviceIds[1], context),
@@ -78,15 +84,21 @@ export default class ClapDetector extends React.Component<ClapDetectorProps, Cla
                         let sim2 = this.getClapSimilarity(externalInputAnalyser, 5, 2);
                         let sim3 = this.getClapSimilarity(wirelessInputAnalyser, 5, 3);
 
-                        if (sim1 >= sim2 && sim1 >= sim3 && sim1 >= 0.90) {
+                        if (sim1 || sim2 || sim3) {
+                            console.log(`sim1 is ${sim1}`);
+                            console.log(`sim2 is ${sim2}`);
+                            console.log(`sim3 is ${sim3}`);
+                        }
+
+                        if (sim1 >= sim2 && sim1 >= sim3 && sim1 >= 0.85) {
                             console.log(sim1);
                             console.log('left');
                             this.props.onDetect('left');
-                        } else if (sim2 >= sim1 && sim2 >= sim3 && sim2 >= 0.90) {
+                        } else if (sim2 >= sim1 && sim2 >= sim3 && sim2 >= 0.85) {
                             console.log(sim2);
                             console.log('right');
                             this.props.onDetect('right');
-                        } else if (sim3 >= sim1 && sim3 >= sim2 && sim3 >= 0.90) {
+                        } else if (sim3 >= sim1 && sim3 >= sim2 && sim3 >= 0.85) {
                             console.log(sim3);
                             console.log('forward');
                             this.props.onDetect('forward');
