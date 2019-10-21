@@ -4,4 +4,13 @@ function bluetoothApiIsAvailable(): boolean {
     return !!((navigator: any).bluetooth);
 }
 
-export { bluetoothApiIsAvailable };
+function webAudioAPIIsAvailable(): boolean {
+    return !!((window: any).AudioContext || (window:any).webkitAudioContext);
+}
+
+function mediaDevicesIsAvailable(): boolean {
+    return !!((navigator: any).mediaDevices);
+}
+
+
+export { bluetoothApiIsAvailable, webAudioAPIIsAvailable, mediaDevicesIsAvailable };

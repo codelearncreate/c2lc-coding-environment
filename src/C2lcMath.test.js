@@ -27,3 +27,10 @@ test('C2lcMath.wrap', () => {
     expect(C2lcMath.wrap(-20, -10, -30)).toBe(-20);
     expect(C2lcMath.wrap(-20, -10, -33)).toBe(-13);
 });
+
+test('Calculating normalized correlation', () => {
+    // javascript rounds-up to 16 decimal degits 
+    expect(C2lcMath.getNormalizedCorrelation([0,2,3],[0,2])).toBe(0);
+    expect(C2lcMath.getNormalizedCorrelation([1,3,5],[1,3,5])).toBe(1);
+    expect(C2lcMath.getNormalizedCorrelation([3,6,2,4,9], [2,1,5,8,7])).toBe(0.8097322097809019);
+});
