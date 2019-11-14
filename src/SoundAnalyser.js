@@ -5,7 +5,6 @@ import * as C2lcMath from './C2lcMath';
 export default class SoundAnalyser {
     webAudioContextInstance: any;
     mediaDevicesInstance: any;
-    deviceInstance: any;
     deviceList: Array<string>;
     context: any;
     soundSamples: { clap : Array<number> };
@@ -13,23 +12,26 @@ export default class SoundAnalyser {
     constructor(webAudioContextInstance: any, mediaDevicesInstance: any, soundSamples:  { clap : Array<number> }) {
         this.webAudioContextInstance = webAudioContextInstance;
         this.mediaDevicesInstance = mediaDevicesInstance;
-
         this.deviceList = [];
         this.context = new webAudioContextInstance();
         this.soundSamples = soundSamples;
     }
 
-    getMicrophones = () => {
-        if ( this.mediaDevicesInstance ) {
-            this.mediaDevicesInstance.enumerateDevices().then((devices) => {
-                for (const device of devices) {
-                    if (device.kind === 'audioinput') this.deviceList.push(device.deviceId);
-                }
-            }, (error) => {
-                console.log(error.name);
-                console.log(error.message);
-            });
-        }
+    getAudioInputDeviceIds = () => {
+        return new Promise((resolve, reject) => {
+            if ( this.mediaDevicesInstance ) {
+                this.mediaDevicesInstance.enumerateDevices().then((devices) => {
+                    for (const device of devices) {
+                        if (device.kind === 'audioinput') this.deviceList.push(device.deviceId);
+                    }
+                    resolve(this.deviceList);
+                }, (error) => {
+                    console.log(error.name);
+                    console.log(error.message);
+                    reject(error);
+                });
+            }
+        });
     }
 
     configureDetection(deviceConfig: { string: { (): void }}) {
@@ -45,7 +47,7 @@ export default class SoundAnalyser {
             scriptProcessorAnalysisNode.onaudioprocess = () => {
                 for (const analyser of analysers) {
                     let sim1 = this.getSoundSimilarity(analyser);
-                    if (sim1 >= 0.75) {
+                    if (sim1 >= 0.90) {
                         console.log('is a clap');
                         deviceConfig[analyser.deviceId]();
                     }
@@ -84,7 +86,15 @@ export default class SoundAnalyser {
         });
     }
 
-    start() {}
-    
-    stop() {}
+    start() {
+        this.webAudioContextInstance.resume().then(() => {
+            console.log('Audio is back on listening');
+        });
+    }
+
+    stop() {
+        this.webAudioContextInstance.suspend().then(() => {
+            console.log('Audio is suspended');
+        });
+    }
 }
