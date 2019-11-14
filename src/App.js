@@ -34,7 +34,7 @@ export default class App extends React.Component<{}, AppState> {
     soundAnalyser: SoundAnalyser;
     syntax: TextSyntax;
     turtleGraphicsRef: { current: null | TurtleGraphics };
-    
+
 
     constructor(props: {}) {
         super(props);
@@ -178,8 +178,13 @@ export default class App extends React.Component<{}, AppState> {
     }
 
     componentDidMount() {
-        this.soundAnalyser.getMicrophones();
-        this.soundAnalyser.configureDetection({"cb3b7c5cefb4536a35cdb8ab6975a00705300108fe461fc31965de349f3722d7" : this.handleClap});
+        this.soundAnalyser.getAudioInputDeviceIds().then((deviceIds) => {
+            let deviceConfig = {}
+            for (const deviceId of deviceIds) {
+                deviceConfig[deviceId] = this.handleClap;
+            }
+            this.soundAnalyser.configureDetection(deviceConfig);
+        });
     }
 
     componentDidUpdate(prevProps: {}, prevState: AppState) {
