@@ -14,6 +14,7 @@
         "DeviceConnectControl.notConnected": "Not connected",
         "DeviceConnectControl.connecting": "Connecting",
         "DeviceConnectControl.connected": "Connected",
+        "PlayButton.run": "Run current program",
         "ProgramBlockEditor.commandForward": "Forward, position {index} of current program",
         "ProgramBlockEditor.commandLeft": "Left, position {index} of current program",
         "ProgramBlockEditor.commandNone": "Empty block, position {index} of current program",
