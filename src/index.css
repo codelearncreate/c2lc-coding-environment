@@ -30,7 +30,7 @@ button.command-block {
 
 button.command-block--pressed,
 button.command-block--pressed:hover {
-    border: 2px dashed #000000;
+    border: 2px dashed #000000 !important;
 }
 
 button.btn-command-block--none {
