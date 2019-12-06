@@ -50,18 +50,3 @@ button.ProgramBlockEditor__program-block {
     margin-right: 1rem;
 }
 
-button.btn.ProgramBlockEditor__run-block {
-    padding: 0;
-    margin-top: 0.5rem;
-    height: 2.8rem;
-    width: 2.8rem;
-    border-radius: 50%;
-}
-
-
-.play-svg {
-    padding-left: 0.3rem;
-    width: 1.5rem;
-    height: 1.5rem;
-}
-
