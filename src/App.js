@@ -8,6 +8,7 @@ import DashDriver from './DashDriver';
 import DeviceConnectControl from './DeviceConnectControl';
 import * as FeatureDetection from './FeatureDetection';
 import Interpreter from './Interpreter';
+import PlayButton from './PlayButton';
 import ProgramBlockEditor from './ProgramBlockEditor';
 import type {DeviceConnectionStatus, Program, SelectedAction} from './types';
 import messages from './messages.json';
@@ -195,18 +196,13 @@ export default class App extends React.Component<{}, AppState> {
                                 selectedAction={this.state.selectedAction}
                                 onSelectAction={this.handleSelectAction}
                                 onChange={this.handleChangeProgram}
+                                playButton={
+                                    <PlayButton
+                                        disabled={this.state.dashConnectionStatus !== 'connected'}
+                                        program={this.state.program}
+                                        onClick={this.handleClickRun}/>}
                             />
                         </Col>
-                        {/* <Col>
-                            <div className='App__interpreter-controls'>
-                                <button
-                                    disabled={this.state.dashConnectionStatus !== 'connected'}
-                                    onClick={this.handleClickRun}
-                                    aria-label={`Run current program ${this.state.program.join(' ')}`}>
-                                    <Image src={playIcon} />
-                                </button>
-                            </div>
-                        </Col> */}
                     </Row>
                 </Container>
             </IntlProvider>
