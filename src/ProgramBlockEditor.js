@@ -10,7 +10,6 @@ import { ReactComponent as ArrowTurnRight } from './svg/ArrowTurnRight.svg';
 import { ReactComponent as ArrowForward } from './svg/ArrowForward.svg';
 import { ReactComponent as AddIcon } from './svg/Add.svg';
 import { ReactComponent as DeleteIcon } from './svg/Delete.svg';
-import { ReactComponent as PlayIcon } from './svg/Play.svg';
 import './ProgramBlockEditor.css';
 
 type ProgramBlockEditorProps = {
@@ -19,7 +18,8 @@ type ProgramBlockEditorProps = {
     program: Program,
     selectedAction: SelectedAction,
     onSelectAction: (selectedAction: SelectedAction) => void,
-    onChange: (Program) => void
+    onChange: (Program) => void,
+    playButton: React.Component<any>
 };
 
 class ProgramBlockEditor extends React.Component<ProgramBlockEditorProps, {}> {
@@ -210,9 +210,7 @@ class ProgramBlockEditor extends React.Component<ProgramBlockEditorProps, {}> {
                     </Col>
                 </Row>
                 <Row className='ProgramBlockEditor__footer'>
-                    <Button className='ProgramBlockEditor__run-block'>
-                        <PlayIcon className='play-svg' />
-                    </Button>
+                    {this.props.playButton}
                 </Row>
             </div>
         );
