@@ -8,7 +8,7 @@ import DashDriver from './DashDriver';
 import DeviceConnectControl from './DeviceConnectControl';
 import * as FeatureDetection from './FeatureDetection';
 import Interpreter from './Interpreter';
-import PlayButton from './PlayButton';
+import RunProgramButton from './RunProgramButton';
 import ProgramBlockEditor from './ProgramBlockEditor';
 import type {DeviceConnectionStatus, Program, SelectedAction} from './types';
 import messages from './messages.json';
@@ -197,7 +197,7 @@ export default class App extends React.Component<{}, AppState> {
                                 onSelectAction={this.handleSelectAction}
                                 onChange={this.handleChangeProgram}
                                 playButton={
-                                    <PlayButton
+                                    <RunProgramButton
                                         disabled={this.state.dashConnectionStatus !== 'connected'}
                                         program={this.state.program}
                                         onClick={this.handleClickRun}/>}

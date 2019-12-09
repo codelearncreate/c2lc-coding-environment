@@ -5,9 +5,9 @@ import * as React from 'react';
 import { injectIntl } from 'react-intl';
 import { Button } from 'react-bootstrap';
 import { ReactComponent as PlayIcon } from './svg/Play.svg';
-import './PlayButton.css';
+import './RunProgramButton.css';
 
-type PlayButtonProps = {
+type RunProgramButtonProps = {
     intl: any,
     disabled: boolean,
     program: Program,
@@ -15,15 +15,15 @@ type PlayButtonProps = {
 
 };
 
-class PlayButton extends React.Component<PlayButtonProps, {}> {
+class RunProgramButton extends React.Component<RunProgramButtonProps, {}> {
     render() {
         return (
             <Button
-                className='PlayButton__run-block'
+                className='RunProgramButton__run-block'
                 disabled={this.props.disabled}
                 onClick={this.props.onClick}
-                aria-label={`${this.props.intl.formatMessage({id:'PlayButton.run'})} ${this.props.program.join(' ')}`}>
-                <span role='img' aria-label={this.props.intl.formatMessage({id:'PlayButton.run'})}>
+                aria-label={`${this.props.intl.formatMessage({id:'RunProgramButton.run'})} ${this.props.program.join(' ')}`}>
+                <span role='img' aria-label={this.props.intl.formatMessage({id:'RunProgramButton.run'})}>
                     <PlayIcon className='play-svg'/>
                 </span>
             </Button>
@@ -31,4 +31,4 @@ class PlayButton extends React.Component<PlayButtonProps, {}> {
     }
 }
 
-export default injectIntl(PlayButton);
+export default injectIntl(RunProgramButton);
