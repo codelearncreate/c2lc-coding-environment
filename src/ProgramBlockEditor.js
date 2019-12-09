@@ -94,7 +94,7 @@ class ProgramBlockEditor extends React.Component<ProgramBlockEditorProps, {}> {
             'ProgramBlockEditor__program-block',
             'command-block'
         ]
-        if (programStepNumber <= pressedUpTo) {
+        if (programStepNumber <= pressedUpTo || (this.props.selectedAction && this.props.selectedAction.type === 'command')) {
             classNames.push('command-block--pressed');
         }
         switch(command) {
