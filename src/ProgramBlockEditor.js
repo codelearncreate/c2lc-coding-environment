@@ -81,25 +81,28 @@ class ProgramBlockEditor extends React.Component<ProgramBlockEditorProps, {}> {
         }
     };
 
-    getLastNonEmptyBlockIndex(program : Program) {
-        let index = -1;
-        for (let i=0, programLength=program.length;i<programLength;i++) {
-            if (program[i] !== 'none') {
-                index = i;
-            }
-        }
-        return index;
+    isDeleteAction() {
+        return this.props.selectedAction && this.props.selectedAction.type === 'editorAction' && this.props.selectedAction.action === 'delete';
+    }
+
+    isAddAction() {
+        return this.props.selectedAction && this.props.selectedAction.type === 'editorAction' && this.props.selectedAction.action === 'add';
     }
 
     makeProgramBlock(programStepNumber: number, command: string) {
-        const pressedUpTo = this.props.selectedAction && this.props.selectedAction.type === 'editorAction' ? this.getLastNonEmptyBlockIndex(this.props.program) : -1;
         let classNames = [
             'ProgramBlockEditor__program-block',
             'command-block'
         ]
-        if (programStepNumber <= pressedUpTo || (this.props.selectedAction && this.props.selectedAction.type === 'command')) {
+        if (this.isAddAction() || (this.props.selectedAction && this.props.selectedAction.type === 'command')) {
             classNames.push('command-block--pressed');
         }
+
+        if (programStepNumber >= this.props.minVisibleSteps && this.isDeleteAction()) {
+            classNames.push('command-block--pressed');
+        }
+
+
         switch(command) {
             case 'forward':
                 return (
