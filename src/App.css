@@ -1,16 +1,36 @@
-.App__mode-and-robots-section {
-    margin-top: 1rem;
-    margin-bottom: 1.5rem;
+.App__heading-section {
+    background: #000;
+    color: #FFF;
 }
 
-.App__editor-and-graphics-section {
-    margin-bottom: 1.5rem;
+.App__app-heading {
+    font-weight: normal;
+    font-size: 1.3rem;
+    margin: 1rem 0;
+}
+
+.App__robot-connection-section {
+    margin-top: 1.5rem;
+    text-align: right;
+}
+
+.App__program-section {
+    margin-top: 1.5rem;
 }
 
 .App__command-palette {
-    margin-bottom: 1.5rem;
+    height: 100%;
+    padding: 1rem 0;
+    background-color: #F1F1F1;
+    text-align: center;
 }
 
-.App__interpreter-controls {
+.App__command-palette-heading {
+    font-weight: bold;
+    font-size: inherit;
+    margin: 0 0 2rem 0;
+}
+
+.App__command-palette-command {
     margin-top: 1rem;
 }

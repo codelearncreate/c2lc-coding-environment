@@ -20,7 +20,11 @@ test('number of commands rendered by CommandPaletteCategory should be equal to t
 
     const oneCommandsWrapper = shallow(
         <CommandPaletteCategory eventKey='movements' title='Movements'>
-            <CommandPaletteCommand commandName='forward'/>
+            <CommandPaletteCommand
+                commandName='forward'
+                icon={null}
+                selectedCommandName={null}
+                onChange={() => {}}/>
         </CommandPaletteCategory>
     );
     commands = oneCommandsWrapper.find(CommandPaletteCommand);
@@ -28,9 +32,21 @@ test('number of commands rendered by CommandPaletteCategory should be equal to t
 
     const threeCommandsWrapper = shallow(
         <CommandPaletteCategory eventKey='movements' title='Movements'>
-            <CommandPaletteCommand commandName='forward'/>
-            <CommandPaletteCommand commandName='left'/>
-            <CommandPaletteCommand commandName='right'/>
+            <CommandPaletteCommand
+                commandName='forward'
+                icon={null}
+                selectedCommandName={null}
+                onChange={() => {}}/>
+            <CommandPaletteCommand
+                commandName='left'
+                icon={null}
+                selectedCommandName={null}
+                onChange={() => {}}/>
+            <CommandPaletteCommand
+                commandName='right'
+                icon={null}
+                selectedCommandName={null}
+                onChange={() => {}}/>
         </CommandPaletteCategory>
     );
 

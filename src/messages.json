@@ -1,5 +1,6 @@
 {
     "en": {
+        "App.appHeading": "C2LC Coding Environment",
         "App.blockMode": "Block",
         "App.changeMode": "Change Mode",
         "App.connectToDash": "Connect to Dash",
@@ -11,9 +12,16 @@
         "CommandPaletteCommand.forward": "Forward",
         "CommandPaletteCommand.left": "Left",
         "CommandPaletteCommand.right": "Right",
+        "DashConnectionErrorModal.cancelButton": "Cancel connection",
+        "DashConnectionErrorModal.error": "Connection Error",
+        "DashConnectionErrorModal.firstMessage": "Make sure your device's bluetooth is turned on",
+        "DashConnectionErrorModal.retryButton": "Try again",
+        "DashConnectionErrorModal.secondMessage": "Make sure Dash is turned on and it's near your device",
+        "DashConnectionErrorModal.title": "Something went wrong!",
         "DeviceConnectControl.notConnected": "Not connected",
         "DeviceConnectControl.connecting": "Connecting",
         "DeviceConnectControl.connected": "Connected",
+        "PlayButton.run": "Run current program",
         "ProgramBlockEditor.commandForward": "Forward, position {index} of current program",
         "ProgramBlockEditor.commandLeft": "Left, position {index} of current program",
         "ProgramBlockEditor.commandNone": "Empty block, position {index} of current program",
@@ -22,6 +30,8 @@
         "ProgramBlockEditor.commandOnDelete": "Press to delete this command",
         "ProgramBlockEditor.editorAction.add": "add a command to the program",
         "ProgramBlockEditor.editorAction.delete": "delete a command from the program",
+        "ProgramBlockEditor.programHeading": "Program",
+        "ProgramBlockEditor.startIndicator": "Start",
         "ProgramTextEditor.programLabel": "Program:"
     },
     "fr": {
