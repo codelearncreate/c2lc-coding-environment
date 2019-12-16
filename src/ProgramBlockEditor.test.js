@@ -232,4 +232,50 @@ test('blocks', () => {
     expect(mockChangeHandler.mock.calls[5][0]).toStrictEqual(['forward', 'left', 'forward', 'left']);
     expect(mockSelectHandler.mock.calls.length).toBe(6);
     expect(mockSelectHandler.mock.calls[5][0]).toBeNull();
-})
+});
+
+
+test('Test delete indicator', () => {
+    const mockChangeHandler = jest.fn();
+    const mockSelectHandler = jest.fn();
+    const minVisibleSteps = 6;
+
+    const wrapper = mount(
+        <ProgramBlockEditor
+            minVisibleSteps={minVisibleSteps}
+            program={[]}
+            selectedAction={{'action' : 'delete', 'type': 'editorAction'}}
+            runButtonDisabled={false}
+            onClickRunButton={()=>{}}
+            onSelectAction={mockSelectHandler}
+            onChange={mockChangeHandler} />,
+        {
+            wrappingComponent: IntlProvider,
+            wrappingComponentProps: {
+                locale: 'en',
+                defaultLocale: 'en',
+                messages: messages.en
+            }
+        }
+    );
+
+    // When the program is empty, there should be 6 empty blocks without indicator
+    expect(getProgramBlocks(wrapper).at(0).hasClass('command-block--pressed')).toBe(false);
+    expect(getProgramBlocks(wrapper).at(1).hasClass('command-block--pressed')).toBe(false);
+    expect(getProgramBlocks(wrapper).at(2).hasClass('command-block--pressed')).toBe(false);
+    expect(getProgramBlocks(wrapper).at(3).hasClass('command-block--pressed')).toBe(false);
+    expect(getProgramBlocks(wrapper).at(4).hasClass('command-block--pressed')).toBe(false);
+    expect(getProgramBlocks(wrapper).at(5).hasClass('command-block--pressed')).toBe(false);
+
+    wrapper.setProps({program: ['forward', 'left', 'forward', 'left']});
+
+    // When there are less blocks than minimum visible steps, filled in empty blocks shouldn't be indicated
+    expect(getProgramBlocks(wrapper).length).toBe(minVisibleSteps);
+    expect(getProgramBlocks(wrapper).at(0).hasClass('command-block--pressed')).toBe(true);
+    expect(getProgramBlocks(wrapper).at(1).hasClass('command-block--pressed')).toBe(true);
+    expect(getProgramBlocks(wrapper).at(2).hasClass('command-block--pressed')).toBe(true);
+    expect(getProgramBlocks(wrapper).at(3).hasClass('command-block--pressed')).toBe(true);
+    expect(getProgramBlocks(wrapper).at(4).hasClass('command-block--pressed')).toBe(false);
+    expect(getProgramBlocks(wrapper).at(5).hasClass('command-block--pressed')).toBe(false);
+
+});
