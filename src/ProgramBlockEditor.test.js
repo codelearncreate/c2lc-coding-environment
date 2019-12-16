@@ -234,10 +234,7 @@ test('blocks', () => {
     expect(mockSelectHandler.mock.calls[5][0]).toBeNull();
 });
 
-
-test('Test delete indicator', () => {
-    const mockChangeHandler = jest.fn();
-    const mockSelectHandler = jest.fn();
+test('When delete from the editor action is pressed', () => {
     const minVisibleSteps = 6;
 
     const wrapper = mount(
@@ -247,8 +244,8 @@ test('Test delete indicator', () => {
             selectedAction={{'action' : 'delete', 'type': 'editorAction'}}
             runButtonDisabled={false}
             onClickRunButton={()=>{}}
-            onSelectAction={mockSelectHandler}
-            onChange={mockChangeHandler} />,
+            onSelectAction={()=>{}}
+            onChange={()=>{}} />,
         {
             wrappingComponent: IntlProvider,
             wrappingComponentProps: {
@@ -260,22 +257,176 @@ test('Test delete indicator', () => {
     );
 
     // When the program is empty, there should be 6 empty blocks without indicator
-    expect(getProgramBlocks(wrapper).at(0).hasClass('command-block--pressed')).toBe(false);
-    expect(getProgramBlocks(wrapper).at(1).hasClass('command-block--pressed')).toBe(false);
-    expect(getProgramBlocks(wrapper).at(2).hasClass('command-block--pressed')).toBe(false);
-    expect(getProgramBlocks(wrapper).at(3).hasClass('command-block--pressed')).toBe(false);
-    expect(getProgramBlocks(wrapper).at(4).hasClass('command-block--pressed')).toBe(false);
-    expect(getProgramBlocks(wrapper).at(5).hasClass('command-block--pressed')).toBe(false);
+    expect(getProgramBlockAtPosition(wrapper, 0).hasClass('command-block--pressed')).toBe(false);
+    expect(getProgramBlockAtPosition(wrapper, 1).hasClass('command-block--pressed')).toBe(false);
+    expect(getProgramBlockAtPosition(wrapper, 2).hasClass('command-block--pressed')).toBe(false);
+    expect(getProgramBlockAtPosition(wrapper, 3).hasClass('command-block--pressed')).toBe(false);
+    expect(getProgramBlockAtPosition(wrapper, 4).hasClass('command-block--pressed')).toBe(false);
+    expect(getProgramBlockAtPosition(wrapper, 5).hasClass('command-block--pressed')).toBe(false);
 
     wrapper.setProps({program: ['forward', 'left', 'forward', 'left']});
 
-    // When there are less blocks than minimum visible steps, filled in empty blocks shouldn't be indicated
+    // When there are less blocks than the minimum visible steps, filled in empty blocks shouldn't be indicated
     expect(getProgramBlocks(wrapper).length).toBe(minVisibleSteps);
-    expect(getProgramBlocks(wrapper).at(0).hasClass('command-block--pressed')).toBe(true);
-    expect(getProgramBlocks(wrapper).at(1).hasClass('command-block--pressed')).toBe(true);
-    expect(getProgramBlocks(wrapper).at(2).hasClass('command-block--pressed')).toBe(true);
-    expect(getProgramBlocks(wrapper).at(3).hasClass('command-block--pressed')).toBe(true);
-    expect(getProgramBlocks(wrapper).at(4).hasClass('command-block--pressed')).toBe(false);
-    expect(getProgramBlocks(wrapper).at(5).hasClass('command-block--pressed')).toBe(false);
+    expect(getProgramBlockAtPosition(wrapper, 0).hasClass('command-block--pressed')).toBe(true);
+    expect(getProgramBlockAtPosition(wrapper, 1).hasClass('command-block--pressed')).toBe(true);
+    expect(getProgramBlockAtPosition(wrapper, 2).hasClass('command-block--pressed')).toBe(true);
+    expect(getProgramBlockAtPosition(wrapper, 3).hasClass('command-block--pressed')).toBe(true);
+    expect(getProgramBlockAtPosition(wrapper, 4).hasClass('command-block--pressed')).toBe(false);
+    expect(getProgramBlockAtPosition(wrapper, 5).hasClass('command-block--pressed')).toBe(false);
 
+    wrapper.setProps({program: ['forward', 'left', 'none', 'forward', 'none', 'right']});
+
+    // When there are examtly same blocks as the minumum visible steps, indicate all blocks except last filled in empty block
+    expect(getProgramBlockAtPosition(wrapper, 0).hasClass('command-block--pressed')).toBe(true);
+    expect(getProgramBlockAtPosition(wrapper, 1).hasClass('command-block--pressed')).toBe(true);
+    expect(getProgramBlockAtPosition(wrapper, 2).hasClass('command-block--pressed')).toBe(true);
+    expect(getProgramBlockAtPosition(wrapper, 3).hasClass('command-block--pressed')).toBe(true);
+    expect(getProgramBlockAtPosition(wrapper, 4).hasClass('command-block--pressed')).toBe(true);
+    expect(getProgramBlockAtPosition(wrapper, 5).hasClass('command-block--pressed')).toBe(true);
+    expect(getProgramBlockAtPosition(wrapper, 6).hasClass('command-block--pressed')).toBe(false);
+
+    wrapper.setProps({program: ['forward', 'left', 'none', 'forward', 'none', 'right', 'right']});
+
+    // When there are more blocks than the minimum visible steps, indicate all blocks, including last filled in empty block
+    expect(getProgramBlockAtPosition(wrapper, 0).hasClass('command-block--pressed')).toBe(true);
+    expect(getProgramBlockAtPosition(wrapper, 1).hasClass('command-block--pressed')).toBe(true);
+    expect(getProgramBlockAtPosition(wrapper, 2).hasClass('command-block--pressed')).toBe(true);
+    expect(getProgramBlockAtPosition(wrapper, 3).hasClass('command-block--pressed')).toBe(true);
+    expect(getProgramBlockAtPosition(wrapper, 4).hasClass('command-block--pressed')).toBe(true);
+    expect(getProgramBlockAtPosition(wrapper, 5).hasClass('command-block--pressed')).toBe(true);
+    expect(getProgramBlockAtPosition(wrapper, 6).hasClass('command-block--pressed')).toBe(true);
+    expect(getProgramBlockAtPosition(wrapper, 7).hasClass('command-block--pressed')).toBe(true);
 });
+
+test('When add from the editor action is pressed', () => {
+    const minVisibleSteps = 6;
+
+    const wrapper = mount(
+        <ProgramBlockEditor
+            minVisibleSteps={minVisibleSteps}
+            program={[]}
+            selectedAction={{'action' : 'add', 'type': 'editorAction'}}
+            runButtonDisabled={false}
+            onClickRunButton={()=>{}}
+            onSelectAction={()=>{}}
+            onChange={()=>{}} />,
+        {
+            wrappingComponent: IntlProvider,
+            wrappingComponentProps: {
+                locale: 'en',
+                defaultLocale: 'en',
+                messages: messages.en
+            }
+        }
+    );
+
+    // When the program is empty, there should be 6 empty blocks with indicator
+    expect(getProgramBlockAtPosition(wrapper, 0).hasClass('command-block--pressed')).toBe(true);
+    expect(getProgramBlockAtPosition(wrapper, 1).hasClass('command-block--pressed')).toBe(true);
+    expect(getProgramBlockAtPosition(wrapper, 2).hasClass('command-block--pressed')).toBe(true);
+    expect(getProgramBlockAtPosition(wrapper, 3).hasClass('command-block--pressed')).toBe(true);
+    expect(getProgramBlockAtPosition(wrapper, 4).hasClass('command-block--pressed')).toBe(true);
+    expect(getProgramBlockAtPosition(wrapper, 5).hasClass('command-block--pressed')).toBe(true);
+
+    wrapper.setProps({program: ['forward', 'left', 'forward', 'left']});
+
+    // When there are less blocks than the minimum visible steps, filled in empty blocks should be indicated
+    expect(getProgramBlocks(wrapper).length).toBe(minVisibleSteps);
+    expect(getProgramBlockAtPosition(wrapper, 0).hasClass('command-block--pressed')).toBe(true);
+    expect(getProgramBlockAtPosition(wrapper, 1).hasClass('command-block--pressed')).toBe(true);
+    expect(getProgramBlockAtPosition(wrapper, 2).hasClass('command-block--pressed')).toBe(true);
+    expect(getProgramBlockAtPosition(wrapper, 3).hasClass('command-block--pressed')).toBe(true);
+    expect(getProgramBlockAtPosition(wrapper, 4).hasClass('command-block--pressed')).toBe(true);
+    expect(getProgramBlockAtPosition(wrapper, 5).hasClass('command-block--pressed')).toBe(true);
+
+    wrapper.setProps({program: ['forward', 'left', 'none', 'forward', 'none', 'right']});
+
+    // When there are examtly same blocks as the minumum visible steps, indicate all blocks
+    expect(getProgramBlockAtPosition(wrapper, 0).hasClass('command-block--pressed')).toBe(true);
+    expect(getProgramBlockAtPosition(wrapper, 1).hasClass('command-block--pressed')).toBe(true);
+    expect(getProgramBlockAtPosition(wrapper, 2).hasClass('command-block--pressed')).toBe(true);
+    expect(getProgramBlockAtPosition(wrapper, 3).hasClass('command-block--pressed')).toBe(true);
+    expect(getProgramBlockAtPosition(wrapper, 4).hasClass('command-block--pressed')).toBe(true);
+    expect(getProgramBlockAtPosition(wrapper, 5).hasClass('command-block--pressed')).toBe(true);
+    expect(getProgramBlockAtPosition(wrapper, 6).hasClass('command-block--pressed')).toBe(true);
+
+    wrapper.setProps({program: ['forward', 'left', 'none', 'forward', 'none', 'right', 'right']});
+
+    // When there are more blocks than the minimum visible steps, indicate all blocks, including last filled in empty block
+    expect(getProgramBlockAtPosition(wrapper, 0).hasClass('command-block--pressed')).toBe(true);
+    expect(getProgramBlockAtPosition(wrapper, 1).hasClass('command-block--pressed')).toBe(true);
+    expect(getProgramBlockAtPosition(wrapper, 2).hasClass('command-block--pressed')).toBe(true);
+    expect(getProgramBlockAtPosition(wrapper, 3).hasClass('command-block--pressed')).toBe(true);
+    expect(getProgramBlockAtPosition(wrapper, 4).hasClass('command-block--pressed')).toBe(true);
+    expect(getProgramBlockAtPosition(wrapper, 5).hasClass('command-block--pressed')).toBe(true);
+    expect(getProgramBlockAtPosition(wrapper, 6).hasClass('command-block--pressed')).toBe(true);
+    expect(getProgramBlockAtPosition(wrapper, 7).hasClass('command-block--pressed')).toBe(true);
+});
+
+test('When a command from the command panel is pressed', () => {
+    const minVisibleSteps = 6;
+
+    const wrapper = mount(
+        <ProgramBlockEditor
+            minVisibleSteps={minVisibleSteps}
+            program={[]}
+            selectedAction={{'action' : 'forward', 'type': 'command'}}
+            runButtonDisabled={false}
+            onClickRunButton={()=>{}}
+            onSelectAction={()=>{}}
+            onChange={()=>{}} />,
+        {
+            wrappingComponent: IntlProvider,
+            wrappingComponentProps: {
+                locale: 'en',
+                defaultLocale: 'en',
+                messages: messages.en
+            }
+        }
+    );
+
+    // When the program is empty, there should be 6 empty blocks with indicator
+    expect(getProgramBlockAtPosition(wrapper, 0).hasClass('command-block--pressed')).toBe(true);
+    expect(getProgramBlockAtPosition(wrapper, 1).hasClass('command-block--pressed')).toBe(true);
+    expect(getProgramBlockAtPosition(wrapper, 2).hasClass('command-block--pressed')).toBe(true);
+    expect(getProgramBlockAtPosition(wrapper, 3).hasClass('command-block--pressed')).toBe(true);
+    expect(getProgramBlockAtPosition(wrapper, 4).hasClass('command-block--pressed')).toBe(true);
+    expect(getProgramBlockAtPosition(wrapper, 5).hasClass('command-block--pressed')).toBe(true);
+
+    wrapper.setProps({program: ['forward', 'left', 'forward', 'left']});
+
+    // When there are less blocks than the minimum visible steps, filled in empty blocks should be indicated
+    expect(getProgramBlocks(wrapper).length).toBe(minVisibleSteps);
+    expect(getProgramBlockAtPosition(wrapper, 0).hasClass('command-block--pressed')).toBe(true);
+    expect(getProgramBlockAtPosition(wrapper, 1).hasClass('command-block--pressed')).toBe(true);
+    expect(getProgramBlockAtPosition(wrapper, 2).hasClass('command-block--pressed')).toBe(true);
+    expect(getProgramBlockAtPosition(wrapper, 3).hasClass('command-block--pressed')).toBe(true);
+    expect(getProgramBlockAtPosition(wrapper, 4).hasClass('command-block--pressed')).toBe(true);
+    expect(getProgramBlockAtPosition(wrapper, 5).hasClass('command-block--pressed')).toBe(true);
+
+    wrapper.setProps({program: ['forward', 'left', 'none', 'forward', 'none', 'right']});
+
+    // When there are examtly same blocks as the minumum visible steps, indicate all blocks
+    expect(getProgramBlockAtPosition(wrapper, 0).hasClass('command-block--pressed')).toBe(true);
+    expect(getProgramBlockAtPosition(wrapper, 1).hasClass('command-block--pressed')).toBe(true);
+    expect(getProgramBlockAtPosition(wrapper, 2).hasClass('command-block--pressed')).toBe(true);
+    expect(getProgramBlockAtPosition(wrapper, 3).hasClass('command-block--pressed')).toBe(true);
+    expect(getProgramBlockAtPosition(wrapper, 4).hasClass('command-block--pressed')).toBe(true);
+    expect(getProgramBlockAtPosition(wrapper, 5).hasClass('command-block--pressed')).toBe(true);
+    expect(getProgramBlockAtPosition(wrapper, 6).hasClass('command-block--pressed')).toBe(true);
+
+    wrapper.setProps({program: ['forward', 'left', 'none', 'forward', 'none', 'right', 'right']});
+
+    // When there are more blocks than the minimum visible steps, indicate all blocks, including last filled in empty block
+    expect(getProgramBlockAtPosition(wrapper, 0).hasClass('command-block--pressed')).toBe(true);
+    expect(getProgramBlockAtPosition(wrapper, 1).hasClass('command-block--pressed')).toBe(true);
+    expect(getProgramBlockAtPosition(wrapper, 2).hasClass('command-block--pressed')).toBe(true);
+    expect(getProgramBlockAtPosition(wrapper, 3).hasClass('command-block--pressed')).toBe(true);
+    expect(getProgramBlockAtPosition(wrapper, 4).hasClass('command-block--pressed')).toBe(true);
+    expect(getProgramBlockAtPosition(wrapper, 5).hasClass('command-block--pressed')).toBe(true);
+    expect(getProgramBlockAtPosition(wrapper, 6).hasClass('command-block--pressed')).toBe(true);
+    expect(getProgramBlockAtPosition(wrapper, 7).hasClass('command-block--pressed')).toBe(true);
+});
+
+
