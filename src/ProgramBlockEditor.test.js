@@ -371,7 +371,7 @@ test('When a command from the command panel is pressed', () => {
         <ProgramBlockEditor
             minVisibleSteps={minVisibleSteps}
             program={[]}
-            selectedAction={{'action' : 'forward', 'type': 'command'}}
+            selectedAction={{'commandName' : 'forward', 'type': 'command'}}
             runButtonDisabled={false}
             onClickRunButton={()=>{}}
             onSelectAction={()=>{}}
