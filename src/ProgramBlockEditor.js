@@ -108,7 +108,7 @@ class ProgramBlockEditor extends React.Component<ProgramBlockEditorProps, {}> {
             classNames.push('command-block--pressed');
         }
 
-        if (programStepNumber >= this.props.minVisibleSteps && this.isDeleteAction()) {
+        if (this.props.program.length > this.props.minVisibleSteps && this.isDeleteAction()) {
             classNames.push('command-block--pressed');
         }
 
