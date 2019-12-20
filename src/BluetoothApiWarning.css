@@ -1,0 +1,12 @@
+.BluetoothApiWarning {
+    display: inline-block;
+    background-color: #E7DB6E;
+    border: 1px solid #F1F1F1;
+    padding: 0.5rem 2rem 0.5rem 1rem;
+}
+
+.BluetoothApiWarning__error-icon-svg {
+    width: 2rem;
+    height: 2rem;
+    margin-right: 0.5rem;
+}

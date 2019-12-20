@@ -6,6 +6,7 @@ import type {Program} from './types';
 export type CommandHandler = { (Interpreter): Promise<void> };
 /* eslint-enable no-use-before-define */
 
+export type InterpreterRunningState = { isRunning: boolean, activeStep: ?number }
 // TODO: I don't think that Interpreter having memory is quite the right
 //       factoring. But this will evolve. Maybe something like a parameterized
 //       Project<T> that contains program and memory.
@@ -16,13 +17,15 @@ export default class Interpreter {
     programCounter: number;
     memory: { [string]: any };
     isRunning: boolean;
+    onRunningStateChange: (InterpreterRunningState) => void;
 
-    constructor() {
+    constructor(onRunningStateChange: (InterpreterRunningState) => void) {
         this.commands = {};
         this.program = [];
         this.programCounter = 0;
         this.memory = {};
         this.isRunning = false;
+        this.onRunningStateChange = onRunningStateChange;
     }
 
     addCommandHandler(command: string, namespace: string, handler: CommandHandler) {
@@ -39,22 +42,34 @@ export default class Interpreter {
         this.programCounter = 0;
     }
 
-    run(program: Program): void {
+    run(program: Program): Promise<void> {
         this.program = program;
         this.programCounter = 0;
         this.isRunning = true;
-        this.continueRun();
+        return new Promise((resolve, reject) => {
+            this.continueRun(resolve, reject);
+        });
     }
 
-    continueRun(): void {
+    continueRun(resolve: any, reject: any): void {
         if (this.isRunning) {
             if (this.atEnd()) {
                 this.isRunning = false;
+                this.onRunningStateChange({isRunning: this.isRunning, activeStep: null});
+                resolve();
             } else {
+                this.onRunningStateChange({isRunning: this.isRunning, activeStep: this.programCounter});
                 this.step().then(() => {
-                    this.continueRun();
+                    this.continueRun(resolve, reject);
+                }, (error) => {
+                    // Reject the run Promise when the step Promise is rejected
+                    this.isRunning = false;
+                    this.onRunningStateChange({isRunning: this.isRunning, activeStep: null});
+                    reject(error);
                 });
             }
+        } else {
+            resolve();
         }
     }
 
@@ -74,12 +89,15 @@ export default class Interpreter {
                     this.programCounter = this.programCounter + 1;
                     resolve();
                 }, (error) => {
-                    console.log(error.name);
-                    console.log(error.message);
                     reject(error);
                 });
             }
         });
+    }
+
+    stop(): void {
+        this.isRunning = false;
+        this.onRunningStateChange({isRunning: this.isRunning, activeStep: null});
     }
 
     doCommand(command: string): Promise<any> {

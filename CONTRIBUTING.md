@@ -21,3 +21,46 @@
 - Methods and Functions: lowerCamelCase
 - Event handlers begin with "handle" (for example `handleClick`)
 - Event emitters begin with "on" (for example `onClick={this.handleClick}`)
+
+## Testing with Enzyme and react-intl
+
+### Shallow Rendering
+
+When `injectIntl` is used, render `ComponentUnderTest.WrappedComponent` with an `intl` prop:
+
+    import { createIntl } from 'react-intl';
+
+    const intl = createIntl({
+        locale,
+        defaultLocale,
+        messages
+    });
+
+    const wrapper = shallow(
+        <ComponentUnderTest.WrappedComponent
+            intl={intl} />
+    );
+
+Otherwise, render `ComponentUnderTest` directly:
+
+    const wrapper = shallow(
+        <ComponentUnderTest />
+    );
+
+### DOM Rendering
+
+Render `ComponentUnderTest` with an `IntlProvider` `wrappingComponent`:
+
+    import { IntlProvider } from 'react-intl';
+
+    const wrapper = mount(
+        <ComponentUnderTest />,
+        {
+            wrappingComponent: IntlProvider,
+            wrappingComponentProps: {
+                locale,
+                defaultLocale,
+                messages
+            }
+        }
+    );

@@ -19,3 +19,11 @@
     width: 0.9rem;
     height: 0.9rem;
 }
+
+.DeviceConnectControl svg {
+    stroke: #000;
+}
+
+.DeviceConnectControl.DeviceConnectControl--disabled svg {
+    stroke: #777;
+}

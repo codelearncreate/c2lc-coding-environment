@@ -9,15 +9,15 @@
         "material-design-icons": "3.0.1",
         "node-sass": "4.13.0",
         "react": "16.9.0",
-        "react-bootstrap": "1.0.0-beta.14",
+        "react-bootstrap": "1.0.0-beta.16",
         "react-dom": "16.9.0",
         "react-intl": "3.3.0",
         "react-mic": "12.4.1",
-        "react-scripts": "3.2.0",
+        "react-scripts": "3.3.0",
         "soundex": "0.2.1"
     },
     "devDependencies": {
-        "flow-bin": "0.107.0"
+        "flow-bin": "0.114.0"
     },
     "scripts": {
         "start": "react-scripts start",

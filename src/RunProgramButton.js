@@ -19,12 +19,12 @@ class RunProgramButton extends React.Component<RunProgramButtonProps, {}> {
     render() {
         return (
             <Button
-                className='RunProgramButton__run-block'
+                className='RunProgramButton__run-button'
                 disabled={this.props.disabled}
                 onClick={this.props.onClick}
-                aria-label={`${this.props.intl.formatMessage({id:'RunProgramButton.run'})} ${this.props.program.join(' ')}`}>
-                <span role='img' aria-label={this.props.intl.formatMessage({id:'RunProgramButton.run'})}>
-                    <PlayIcon className='play-svg'/>
+                aria-label={`${this.props.intl.formatMessage({id:'PlayButton.run'})} ${this.props.program.join(' ')}`}>
+                <span role='img' aria-label={this.props.intl.formatMessage({id:'PlayButton.run'})}>
+                    <PlayIcon className='RunProgramButton__play-svg'/>
                 </span>
             </Button>
         );

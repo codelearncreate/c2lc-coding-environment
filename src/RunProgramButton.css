@@ -1,13 +1,19 @@
-button.btn.RunProgramButton__run-block {
-    padding: 0;
-    margin-top: 0.5rem;
-    height: 2.8rem;
-    width: 2.8rem;
+button.btn.RunProgramButton__run-button {
+    padding: 0.6rem 0.45rem 0.6rem 0.75rem;
+    border: 1px solid #FFF;
     border-radius: 50%;
 }
 
-.play-svg {
-    padding-left: 0.3rem;
-    width: 1.5rem;
-    height: 1.5rem;
+button.btn.RunProgramButton__run-button:disabled svg {
+    fill: #777;
+}
+
+button.btn.RunProgramButton__run-button:not(:focus) {
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.25);
+}
+
+.RunProgramButton__play-svg {
+    width: 1.6rem;
+    height: 1.6rem;
+    display: block;
 }

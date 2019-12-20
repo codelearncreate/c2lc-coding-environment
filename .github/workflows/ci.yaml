@@ -43,11 +43,11 @@ jobs:
         with:
           name: ${{ format('build-{0}', matrix.node-version) }}
           path: build
-  deploy:
-    name: Deploy
+  deploy-master:
+    name: Deploy master
     needs: build
     runs-on: ubuntu-18.04
-    if: (github.repository == 'codelearncreate/c2lc-coding-environment') && (github.ref == 'refs/heads/dev-0.1') && (github.event_name == 'push')
+    if: (github.repository == 'codelearncreate/c2lc-coding-environment') && (github.ref == 'refs/heads/master') && (github.event_name == 'push')
     steps:
       - uses: actions/checkout@v1
         with:

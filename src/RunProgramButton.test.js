@@ -12,7 +12,7 @@ import RunProgramButton from './RunProgramButton';
 configure({ adapter: new Adapter()});
 
 function getRunButton(wrapper) {
-    return wrapper.find('.RunProgramButton__run-block').getElement();
+    return wrapper.find('.RunProgramButton__run-button').getElement();
 }
 
 const intl = createIntl({
@@ -31,9 +31,9 @@ test('Run button should not be disabled when disabled prop is false', () => {
             onClick={() => {}}/>
     );
     expect(getRunButton(wrapper).props.disabled).toBe(false);
-    expect(getRunButton(wrapper).props['aria-label']).toBe(`${intl.messages['RunProgramButton.run']} ${program.join(' ')}`);
+    expect(getRunButton(wrapper).props['aria-label']).toBe(`${intl.messages['PlayButton.run']} ${program.join(' ')}`);
     expect(getRunButton(wrapper).props.children.props.role).toBe('img');
-    expect(getRunButton(wrapper).props.children.props['aria-label']).toBe(intl.messages['RunProgramButton.run']);
+    expect(getRunButton(wrapper).props.children.props['aria-label']).toBe(intl.messages['PlayButton.run']);
     expect(getRunButton(wrapper).props.children.props.children.type.render.name).toBe('SvgPlay');
 });
 

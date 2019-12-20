@@ -3,7 +3,6 @@
 import React from 'react';
 import { Button } from 'react-bootstrap';
 import {injectIntl} from 'react-intl';
-import './CommandPaletteCommand.css';
 
 type CommandPaletteCommandProps = {
     commandName: string,
@@ -23,7 +22,6 @@ class CommandPaletteCommand extends React.Component<CommandPaletteCommandProps, 
     render() {
         const pressed = this.props.commandName === this.props.selectedCommandName;
         let classNames = [
-            'CommandPaletteCommand__command-button',
             'command-block'
         ];
         if (pressed) {
