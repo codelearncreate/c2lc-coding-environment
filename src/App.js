@@ -250,11 +250,6 @@ export default class App extends React.Component<{}, AppState> {
                                 onClickRunButton={this.handleClickRun}
                                 onSelectAction={this.handleSelectAction}
                                 onChange={this.handleChangeProgram}
-                                // playButton={
-                                //     <RunProgramButton
-                                //         disabled={this.state.dashConnectionStatus !== 'connected'}
-                                //         program={this.state.program}
-                                //         onClick={this.handleClickRun}/>}
                             />
                         </Col>
                     </Row>
