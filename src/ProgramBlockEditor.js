@@ -23,8 +23,7 @@ type ProgramBlockEditorProps = {
     runButtonDisabled: boolean,
     onClickRunButton: () => void,
     onSelectAction: (selectedAction: SelectedAction) => void,
-    onChange: (Program) => void,
-    playButton: React.Component<any>
+    onChange: (Program) => void
 };
 
 class ProgramBlockEditor extends React.Component<ProgramBlockEditorProps, {}> {
