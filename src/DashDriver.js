@@ -11,7 +11,6 @@ export default class DashDriver {
         this.connected = false;
     }
 
-    // I think this changes are right
     connect(onDisconnected: () => void): Promise<void> {
         return new Promise((resolve, reject) => {
             (navigator: any).bluetooth.requestDevice({
