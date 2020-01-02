@@ -11,6 +11,9 @@ export default class DashDriver {
             (navigator: any).bluetooth.requestDevice({
                 filters: [{ services: [dashServiceUuid] }]
             }).then((device) => {
+                setTimeout(()=> {
+                    reject(Error('Connection Timeout'));
+                }, 3000);
                 device.addEventListener('gattserverdisconnected', onDisconnected);
                 return device.gatt.connect();
             }).then((server) => {
