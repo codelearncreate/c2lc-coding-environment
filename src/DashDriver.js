@@ -5,7 +5,13 @@ const dashCommandCharacteristicUuid = 'af230002-879d-6186-1f49-deca0e85d9c1';
 
 export default class DashDriver {
     commandCharacteristic: any;
+    connected: boolean;
 
+    constructor() {
+        this.connected = false;
+    }
+
+    // I think this changes are right
     connect(onDisconnected: () => void): Promise<void> {
         return new Promise((resolve, reject) => {
             (navigator: any).bluetooth.requestDevice({
@@ -14,6 +20,7 @@ export default class DashDriver {
                 device.addEventListener('gattserverdisconnected', onDisconnected);
                 return device.gatt.connect();
             }).then((server) => {
+                this.connected = server.connected;
                 return server.getPrimaryService(dashServiceUuid);
             }).then((service) => {
                 return service.getCharacteristic(dashCommandCharacteristicUuid);
