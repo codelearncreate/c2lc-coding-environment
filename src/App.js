@@ -183,7 +183,7 @@ export default class App extends React.Component<{}, AppState> {
                         </Row>
                     </Container>
                 </div>
-                <Container role='main' className='mb-5'>
+                <Container className='mb-5'>
                     <Row className='App__robot-connection-section'>
                         <Col>
                             {!this.appContext.bluetoothApiIsAvailable &&
