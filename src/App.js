@@ -114,15 +114,17 @@ export default class App extends React.Component<{}, AppState> {
         });
         this.dashDriver.connect(this.handleDashDisconnect).then(() => {
             this.setState({
-                dashConnectionStatus: 'connected'
+                dashConnectionStatus: this.dashDriver.connected ? 'connected' : 'notConnected'
             });
         }, (error) => {
-            console.log('ERROR');
-            console.log(error.name);
-            console.log(error.message);
+            if (!this.dashDriver.connected) {
+                console.log('ERROR');
+                console.log(error.name);
+                console.log(error.message);
+            }
             this.setState({
-                dashConnectionStatus: 'notConnected',
-                showDashConnectionError: true
+                dashConnectionStatus: this.dashDriver.connected ? 'connected' : 'notConnected',
+                showDashConnectionError: !this.dashDriver.connected
             });
         });
     };
