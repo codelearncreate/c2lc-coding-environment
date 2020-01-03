@@ -104,6 +104,7 @@ class ProgramBlockEditor extends React.Component<ProgramBlockEditorProps, {}> {
             case 'forward':
                 return (
                     <Button
+                        disabled={this.props.editingDisabled}
                         ref={active ? this.setActiveCommandBlockRef : null}
                         key={`${programStepNumber}-forward`}
                         data-stepnumber={programStepNumber}
@@ -123,6 +124,7 @@ class ProgramBlockEditor extends React.Component<ProgramBlockEditorProps, {}> {
             case 'left':
                 return (
                     <Button
+                        disabled={this.props.editingDisabled}
                         ref={active ? this.setActiveCommandBlockRef : null}
                         key={`${programStepNumber}-left`}
                         data-stepnumber={programStepNumber}
@@ -142,6 +144,7 @@ class ProgramBlockEditor extends React.Component<ProgramBlockEditorProps, {}> {
             case 'right':
                 return (
                     <Button
+                        disabled={this.props.editingDisabled}
                         ref={active ? this.setActiveCommandBlockRef : null}
                         key={`${programStepNumber}-right`}
                         data-stepnumber={programStepNumber}
@@ -161,6 +164,7 @@ class ProgramBlockEditor extends React.Component<ProgramBlockEditorProps, {}> {
             case 'none':
                 return (
                     <Button
+                        disabled={this.props.editingDisabled}
                         ref={active ? this.setActiveCommandBlockRef : null}
                         key={`${programStepNumber}-none`}
                         data-stepnumber={programStepNumber}
