@@ -192,7 +192,9 @@ export default class App extends React.Component<{}, AppState> {
                         </Col>
                         <Col md='auto'>
                             <DeviceConnectControl
-                                    disabled={!this.appContext.bluetoothApiIsAvailable}
+                                    disabled={
+                                        this.state.showDashConnectionError ||
+                                        !this.appContext.bluetoothApiIsAvailable}
                                     connectionStatus={this.state.dashConnectionStatus}
                                     onClickConnect={this.handleClickConnectDash}>
                                 <FormattedMessage id='App.connectToDash' />
@@ -208,6 +210,7 @@ export default class App extends React.Component<{}, AppState> {
                                 <div className='App__command-palette-command'>
                                     <CommandPaletteCommand
                                         commandName='forward'
+                                        disabled={this.state.showDashConnectionError}
                                         icon={React.createElement(
                                             ArrowForward,
                                             {className:'command-block-svg'}
@@ -218,6 +221,7 @@ export default class App extends React.Component<{}, AppState> {
                                 <div className='App__command-palette-command'>
                                     <CommandPaletteCommand
                                         commandName='right'
+                                        disabled={this.state.showDashConnectionError}
                                         icon={React.createElement(
                                             ArrowTurnRight,
                                             {className:'command-block-svg'}
@@ -228,6 +232,7 @@ export default class App extends React.Component<{}, AppState> {
                                 <div className='App__command-palette-command'>
                                     <CommandPaletteCommand
                                         commandName='left'
+                                        disabled={this.state.showDashConnectionError}
                                         icon={React.createElement(
                                             ArrowTurnLeft,
                                             {className:'command-block-svg'}
@@ -240,11 +245,14 @@ export default class App extends React.Component<{}, AppState> {
                         <Col md={8} lg={9}>
                             <ProgramBlockEditor
                                 activeProgramStepNum={this.state.activeProgramStepNum}
-                                editingDisabled={this.state.interpreterIsRunning === true}
+                                editingDisabled={
+                                    this.state.showDashConnectionError ||
+                                    this.state.interpreterIsRunning === true}
                                 minVisibleSteps={6}
                                 program={this.state.program}
                                 selectedAction={this.state.selectedAction}
                                 runButtonDisabled={
+                                    this.state.showDashConnectionError ||
                                     this.state.dashConnectionStatus !== 'connected' ||
                                     this.state.interpreterIsRunning}
                                 onClickRunButton={this.handleClickRun}
