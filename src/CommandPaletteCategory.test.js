@@ -22,6 +22,7 @@ test('number of commands rendered by CommandPaletteCategory should be equal to t
         <CommandPaletteCategory eventKey='movements' title='Movements'>
             <CommandPaletteCommand
                 commandName='forward'
+                disabled={false}
                 icon={null}
                 selectedCommandName={null}
                 onChange={() => {}}/>
@@ -34,16 +35,19 @@ test('number of commands rendered by CommandPaletteCategory should be equal to t
         <CommandPaletteCategory eventKey='movements' title='Movements'>
             <CommandPaletteCommand
                 commandName='forward'
+                disabled={false}
                 icon={null}
                 selectedCommandName={null}
                 onChange={() => {}}/>
             <CommandPaletteCommand
                 commandName='left'
+                disabled={false}
                 icon={null}
                 selectedCommandName={null}
                 onChange={() => {}}/>
             <CommandPaletteCommand
                 commandName='right'
+                disabled={false}
                 icon={null}
                 selectedCommandName={null}
                 onChange={() => {}}/>
