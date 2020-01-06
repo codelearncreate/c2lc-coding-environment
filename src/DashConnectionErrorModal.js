@@ -41,13 +41,11 @@ class DashConnectionErrorModal extends React.Component<DashConnectionErrorModalP
                     </div>
                     <div className='DashConnectionErrorModal__footer'>
                         <Button
-                            tabindex='-1'
                             className='DashConnectionErrorModal__option-button mr-4'
                             onClick={this.props.onCancel}>
                             <FormattedMessage id='DashConnectionErrorModal.cancelButton' />
                         </Button>
                         <Button
-                            tabindex='-1'
                             className='DashConnectionErrorModal__option-button'
                             onClick={this.props.onRetry}>
                             <FormattedMessage id='DashConnectionErrorModal.retryButton' />
