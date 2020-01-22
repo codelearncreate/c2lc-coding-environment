@@ -268,6 +268,7 @@ class ProgramBlockEditor extends React.Component<ProgramBlockEditorProps, Progra
                             onClick={this.handleClickAdd}
                             aria-pressed={this.addIsSelected() ? 'true' : 'false'}
                             key='addButton'
+                            tabIndex={this.props.actionButtonDisabled ? '-1' : '0'}
                         >
                             <AddIcon className='ProgramBlockEditor__editor-action-button-svg'/>
                         </AriaDisablingButton>
@@ -283,6 +284,7 @@ class ProgramBlockEditor extends React.Component<ProgramBlockEditorProps, Progra
                             onClick={this.handleClickDelete}
                             aria-pressed={this.deleteIsSelected() ? 'true' : 'false'}
                             key='deleteButton'
+                            tabIndex={this.props.actionButtonDisabled ? '-1' : '0'}
                         >
                             <DeleteIcon className='ProgramBlockEditor__editor-action-button-svg'/>
                         </AriaDisablingButton>
@@ -319,6 +321,7 @@ class ProgramBlockEditor extends React.Component<ProgramBlockEditorProps, Progra
                             disabledClassName='ProgramBlockEditor__run-button--disabled'
                             disabled={this.props.runButtonDisabled}
                             onClick={this.props.onClickRunButton}
+                            tabIndex={this.props.actionButtonDisabled ? '-1' : '0'}
                         >
                             <PlayIcon className='ProgramBlockEditor__play-svg' />
                         </AriaDisablingButton>
