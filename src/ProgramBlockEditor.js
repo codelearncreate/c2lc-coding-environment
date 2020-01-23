@@ -31,7 +31,8 @@ type ProgramBlockEditorProps = {
     deleteModeDescriptionId: string,
     onClickRunButton: () => void,
     onSelectAction: (selectedAction: SelectedAction) => void,
-    onChange: (Program) => void
+    onChange: (Program) => void,
+    onModalDisplay: (showModal: boolean) => void
 };
 
 type ProgramBlockEditorState = {
@@ -268,7 +269,7 @@ class ProgramBlockEditor extends React.Component<ProgramBlockEditorProps, Progra
                             onClick={this.handleClickAdd}
                             aria-pressed={this.addIsSelected() ? 'true' : 'false'}
                             key='addButton'
-                            tabIndex={this.props.actionButtonDisabled ? '-1' : '0'}
+                            tabIndex={this.props.actionButtonDisabled ? '-1' : undefined}
                         >
                             <AddIcon className='ProgramBlockEditor__editor-action-button-svg'/>
                         </AriaDisablingButton>
@@ -284,7 +285,7 @@ class ProgramBlockEditor extends React.Component<ProgramBlockEditorProps, Progra
                             onClick={this.handleClickDelete}
                             aria-pressed={this.deleteIsSelected() ? 'true' : 'false'}
                             key='deleteButton'
-                            tabIndex={this.props.actionButtonDisabled ? '-1' : '0'}
+                            tabIndex={this.props.actionButtonDisabled ? '-1' : undefined}
                         >
                             <DeleteIcon className='ProgramBlockEditor__editor-action-button-svg'/>
                         </AriaDisablingButton>
@@ -292,13 +293,16 @@ class ProgramBlockEditor extends React.Component<ProgramBlockEditorProps, Progra
                 </Row>
                 <Row className='ProgramBlockEditor__delete-all-button-container'>
                     <Collapse in={this.deleteIsSelected()}>
-                        <Button
+                        <AriaDisablingButton
                             aria-label={this.props.intl.formatMessage({id:'ProgramBlockEditor.deleteAll'})}
-                            className='ProgramBlockEditor__delete-all-button'
+                            className={'ProgramBlockEditor__delete-all-button'}
+                            disabledClassName='ProgramBlockEditor__delete-all--disabled'
+                            disabled={this.state.showConfirmDeleteAll}
                             onClick={this.handleClickDeleteAll}
+                            tabIndex={this.state.showConfirmDeleteAll ? '-1' : undefined}
                         >
                             <FormattedMessage id='ProgramBlockEditor.deleteAll' />
-                        </Button>
+                        </AriaDisablingButton>
                     </Collapse>
                 </Row>
                 <Row>
@@ -321,7 +325,7 @@ class ProgramBlockEditor extends React.Component<ProgramBlockEditorProps, Progra
                             disabledClassName='ProgramBlockEditor__run-button--disabled'
                             disabled={this.props.runButtonDisabled}
                             onClick={this.props.onClickRunButton}
-                            tabIndex={this.props.actionButtonDisabled ? '-1' : '0'}
+                            tabIndex={this.props.actionButtonDisabled ? '-1' : undefined}
                         >
                             <PlayIcon className='ProgramBlockEditor__play-svg' />
                         </AriaDisablingButton>
@@ -335,7 +339,10 @@ class ProgramBlockEditor extends React.Component<ProgramBlockEditorProps, Progra
         );
     }
 
-    componentDidUpdate() {
+    componentDidUpdate(prevProps: {}, prevState: ProgramBlockEditorState) {
+        if (this.state.showConfirmDeleteAll !== prevState.showConfirmDeleteAll) {
+            this.props.onModalDisplay(this.state.showConfirmDeleteAll);
+        }
         if (this.focusIndex != null) {
             let element = this.commandBlockRefs.get(this.focusIndex);
             if (element) {
