@@ -34,6 +34,7 @@ type AppState = {
     program: Program,
     settings: AppSettings,
     dashConnectionStatus: DeviceConnectionStatus,
+    modalIsShowing: boolean,
     activeProgramStepNum: ?number,
     interpreterIsRunning: boolean,
     showDashConnectionError: boolean,
@@ -210,9 +211,10 @@ export default class App extends React.Component<{}, AppState> {
                         </Col>
                         <Col md='auto'>
                             <DeviceConnectControl
-                                    disabled={!this.appContext.bluetoothApiIsAvailable}
+                                    disabled={
+                                        !this.appContext.bluetoothApiIsAvailable ||
+                                        this.state.modalIsShowing}
                                     connectionStatus={this.state.dashConnectionStatus}
-                                    tabIndex={this.state.modalIsShowing ? '-1' : undefined}
                                     onClickConnect={this.handleClickConnectDash}>
                                 <FormattedMessage id='App.connectToDash' />
                             </DeviceConnectControl>
@@ -227,34 +229,34 @@ export default class App extends React.Component<{}, AppState> {
                                 <div className='App__command-palette-command'>
                                     <CommandPaletteCommand
                                         commandName='forward'
+                                        disabled={this.state.modalIsShowing}
                                         icon={React.createElement(
                                             ArrowForward,
                                             {className:'command-block-svg'}
                                         )}
                                         selectedCommandName={this.getSelectedCommandName()}
-                                        tabIndex={this.state.modalIsShowing ? '-1' : undefined}
                                         onChange={this.handleCommandFromCommandPalette}/>
                                 </div>
                                 <div className='App__command-palette-command'>
                                     <CommandPaletteCommand
                                         commandName='right'
+                                        disabled={this.state.modalIsShowing}
                                         icon={React.createElement(
                                             ArrowTurnRight,
                                             {className:'command-block-svg'}
                                         )}
                                         selectedCommandName={this.getSelectedCommandName()}
-                                        tabIndex={this.state.modalIsShowing? '-1' : undefined}
                                         onChange={this.handleCommandFromCommandPalette}/>
                                 </div>
                                 <div className='App__command-palette-command'>
                                     <CommandPaletteCommand
                                         commandName='left'
+                                        disabled={this.state.modalIsShowing}
                                         icon={React.createElement(
                                             ArrowTurnLeft,
                                             {className:'command-block-svg'}
                                         )}
                                         selectedCommandName={this.getSelectedCommandName()}
-                                        tabIndex={this.state.modalIsShowing? '-1' : undefined}
                                         onChange={this.handleCommandFromCommandPalette}/>
                                 </div>
                             </div>
