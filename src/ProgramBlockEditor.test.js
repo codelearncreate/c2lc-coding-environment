@@ -181,7 +181,8 @@ test('blocks', () => {
             deleteModeDescriptionId={'someDeleteModeDescriptionId'}
             onClickRunButton={()=>{}}
             onSelectAction={mockSelectHandler}
-            onChange={mockChangeHandler} />,
+            onChange={mockChangeHandler}
+            onModalDisplay={()=>{}} />,
         {
             wrappingComponent: IntlProvider,
             wrappingComponentProps: {
@@ -287,7 +288,8 @@ test('The editor action buttons have aria-describedby set to provided ids', () =
             deleteModeDescriptionId={'someDeleteModeDescriptionId'}
             onClickRunButton={()=>{}}
             onSelectAction={()=>{}}
-            onChange={()=>{}} />,
+            onChange={()=>{}}
+            onModalDisplay={()=>{}} />,
         {
             wrappingComponent: IntlProvider,
             wrappingComponentProps: {
@@ -321,7 +323,8 @@ test('Whenever active program step number updates, auto scroll to the step', () 
             deleteModeDescriptionId={'someDeleteModeDescriptionId'}
             onClickRunButton={()=>{}}
             onSelectAction={()=>{}}
-            onChange={()=>{}} />,
+            onChange={()=>{}}
+            onModalDisplay={()=>{}} />,
         {
             wrappingComponent: IntlProvider,
             wrappingComponentProps: {
@@ -360,7 +363,8 @@ test('The editor action buttons disabled states are set according to the editing
             deleteModeDescriptionId={'someDeleteModeDescriptionId'}
             onClickRunButton={mockRunHandler}
             onSelectAction={()=>{}}
-            onChange={()=>{}} />,
+            onChange={()=>{}}
+            onModalDisplay={()=>{}} />,
         {
             wrappingComponent: IntlProvider,
             wrappingComponentProps: {
