@@ -90,6 +90,10 @@ button.ProgramBlockEditor__delete-all-button {
     right: 0;
 }
 
+button.ProgramBlockEditor__delete-all--disabled {
+    cursor: default;
+}
+
 button.ProgramBlockEditor__delete-all-button:hover {
     color: #FFF;
     background-color: #000;
