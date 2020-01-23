@@ -1,3 +1,5 @@
+@import 'variables';
+
 .DeviceConnectControl {
     position: relative;
     z-index: inherit;
@@ -25,5 +27,5 @@
 }
 
 .DeviceConnectControl.DeviceConnectControl--disabled svg {
-    stroke: #777;
+    stroke: $c2lc-disabled-color;
 }

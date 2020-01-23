@@ -6,7 +6,7 @@ import { Button, Spinner } from 'react-bootstrap';
 import type {DeviceConnectionStatus} from './types';
 import { ReactComponent as StatusConnectedIcon } from './svg/Status_Connected.svg';
 import { ReactComponent as StatusNotConnectedIcon } from './svg/Status_NotConnected.svg';
-import './DeviceConnectControl.css';
+import './DeviceConnectControl.scss';
 
 type DeviceConnectControlProps = {
     intl: any,

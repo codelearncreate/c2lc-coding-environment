@@ -4,7 +4,7 @@ import React from 'react';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import type { $npm$ReactIntl$IntlShape } from 'react-intl';
 import { ReactComponent as ErrorIcon } from './svg/Error.svg';
-import './BluetoothApiWarning.css';
+import './BluetoothApiWarning.scss';
 
 type BluetoothApiWarningProps = {
     intl: $npm$ReactIntl$IntlShape

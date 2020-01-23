@@ -1,0 +1,64 @@
+@import 'variables';
+
+/* Bootstrap */
+
+$theme-colors: (
+    'primary': $c2lc-primary-button-color,
+    'command-block--forward': $c2lc-forward-command-color,
+    'command-block--left': $c2lc-left-command-color,
+    'command-block--right': $c2lc-right-command-color,
+    'command-block--none': #F8F8F8
+);
+
+@import '~bootstrap/scss/bootstrap.scss';
+
+/* C2LC Global Styles */
+
+html {
+    font-size: 18px;
+}
+
+body {
+    margin: 0;
+    font-family: 'Roboto', sans-serif;
+}
+
+button.btn {
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    border-radius: 0.6rem;
+}
+
+button.btn:focus {
+    box-shadow: 0 0 0 $c2lc-focus-indicator-width #000;
+}
+
+button.btn-primary,
+button.btn-primary:hover {
+    border: $c2lc-button-border-width solid #000000;
+    font-weight: bold;
+    padding: 1.15rem 1.25rem;
+}
+
+button.btn-primary:disabled {
+    border: $c2lc-button-border-width solid $c2lc-disabled-color;
+    color: $c2lc-disabled-color;
+}
+
+button.btn-command-block--none {
+    border: 1px solid #C4C4C4;
+}
+
+button.command-block {
+    min-width: 6.25rem;
+    min-height: 4rem;
+}
+
+button.command-block--pressed,
+button.command-block--pressed:hover {
+    border: $c2lc-button-border-width dashed #000000;
+}
+
+.command-block-svg {
+    width: 2.75rem;
+    height: 2.75rem;
+}
