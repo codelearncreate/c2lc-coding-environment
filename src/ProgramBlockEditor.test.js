@@ -37,7 +37,7 @@ function getRunButton(programBlockEditorWrapper) {
 }
 
 function getDeleteAllButton(programBlockEditorWrapper) {
-    return programBlockEditorWrapper.find(Button)
+    return programBlockEditorWrapper.find(AriaDisablingButton)
         .filter('.ProgramBlockEditor__delete-all-button');
 }
 
@@ -435,7 +435,8 @@ test('Delete all button appears when delete action is toggled, which will open a
             minVisibleSteps={6}
             program={['forward', 'left', 'forward', 'left']}
             selectedAction={null}
-            onSelectAction={mockSelectHandler} />
+            onSelectAction={mockSelectHandler}
+            onModalDisplay={()=>{}}/>
     );
 
     // initially, confirm modal for delete all is not visiable
