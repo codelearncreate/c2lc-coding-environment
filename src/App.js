@@ -119,9 +119,9 @@ export default class App extends React.Component<{}, AppState> {
 
     handleClickConnectDash = () => {
         this.setState({
-            modalIsShowing: false,
             dashConnectionStatus: 'connecting',
-            showDashConnectionError: false
+            showDashConnectionError: false,
+            modalIsShowing: false
         });
         this.dashDriver.connect(this.handleDashDisconnect).then(() => {
             this.setState({
@@ -132,17 +132,17 @@ export default class App extends React.Component<{}, AppState> {
             console.log(error.name);
             console.log(error.message);
             this.setState({
-                modalIsShowing: true,
                 dashConnectionStatus: 'notConnected',
-                showDashConnectionError: true
+                showDashConnectionError: true,
+                modalIsShowing: false
             });
         });
     };
 
     handleCancelDashConnection = () => {
         this.setState({
-            modalIsShowing: false,
-            showDashConnectionError: false
+            showDashConnectionError: false,
+            modalIsShowing: false
         });
     };
 
@@ -180,7 +180,7 @@ export default class App extends React.Component<{}, AppState> {
         });
     }
 
-    handleModalDisplay = (showModal: boolean) => {
+    handleSetModalIsShowing = (showModal: boolean) => {
         this.setState({
             modalIsShowing: showModal
         });
@@ -264,7 +264,7 @@ export default class App extends React.Component<{}, AppState> {
                         <Col md={8} lg={9}>
                             <ProgramBlockEditor
                                 activeProgramStepNum={this.state.activeProgramStepNum}
-                                actionButtonDisabled={this.state.modalIsShowing}
+                                modalIsShowing={this.state.modalIsShowing}
                                 editingDisabled={this.state.interpreterIsRunning === true}
                                 interpreterIsRunning={this.state.interpreterIsRunning}
                                 minVisibleSteps={6}
@@ -278,7 +278,7 @@ export default class App extends React.Component<{}, AppState> {
                                 onClickRunButton={this.handleClickRun}
                                 onSelectAction={this.handleSelectAction}
                                 onChange={this.handleChangeProgram}
-                                onModalDisplay={this.handleModalDisplay}
+                                onModalDisplay={this.handleSetModalIsShowing}
                             />
                         </Col>
                     </Row>
