@@ -6,6 +6,7 @@ import {injectIntl} from 'react-intl';
 
 type CommandPaletteCommandProps = {
     commandName: string,
+    disabled: boolean,
     icon: any,
     intl: any,
     selectedCommandName: ?string,
@@ -30,6 +31,7 @@ class CommandPaletteCommand extends React.Component<CommandPaletteCommandProps, 
         return (
             <Button
                 className={classNames.join(' ')}
+                disabled={this.props.disabled}
                 variant={`command-block--${this.props.commandName}`}
                 aria-label={this.props.intl.formatMessage({ id: `CommandPaletteCommand.${this.props.commandName}`})}
                 aria-pressed={pressed}

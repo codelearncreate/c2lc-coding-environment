@@ -34,6 +34,7 @@ type AppState = {
     program: Program,
     settings: AppSettings,
     dashConnectionStatus: DeviceConnectionStatus,
+    modalIsShowing: boolean,
     activeProgramStepNum: ?number,
     interpreterIsRunning: boolean,
     showDashConnectionError: boolean,
@@ -60,6 +61,7 @@ export default class App extends React.Component<{}, AppState> {
                 language: 'en'
             },
             dashConnectionStatus: 'notConnected',
+            modalIsShowing: false,
             activeProgramStepNum: null,
             interpreterIsRunning: false,
             showDashConnectionError: false,
@@ -118,7 +120,8 @@ export default class App extends React.Component<{}, AppState> {
     handleClickConnectDash = () => {
         this.setState({
             dashConnectionStatus: 'connecting',
-            showDashConnectionError: false
+            showDashConnectionError: false,
+            modalIsShowing: false
         });
         this.dashDriver.connect(this.handleDashDisconnect).then(() => {
             this.setState({
@@ -130,14 +133,16 @@ export default class App extends React.Component<{}, AppState> {
             console.log(error.message);
             this.setState({
                 dashConnectionStatus: 'notConnected',
-                showDashConnectionError: true
+                showDashConnectionError: true,
+                modalIsShowing: false
             });
         });
     };
 
     handleCancelDashConnection = () => {
         this.setState({
-            showDashConnectionError: false
+            showDashConnectionError: false,
+            modalIsShowing: false
         });
     };
 
@@ -175,6 +180,12 @@ export default class App extends React.Component<{}, AppState> {
         });
     }
 
+    handleSetModalIsShowing = (showModal: boolean) => {
+        this.setState({
+            modalIsShowing: showModal
+        });
+    }
+
     render() {
         return (
             <IntlProvider
@@ -200,7 +211,9 @@ export default class App extends React.Component<{}, AppState> {
                         </Col>
                         <Col md='auto'>
                             <DeviceConnectControl
-                                    disabled={!this.appContext.bluetoothApiIsAvailable}
+                                    disabled={
+                                        !this.appContext.bluetoothApiIsAvailable ||
+                                        this.state.modalIsShowing}
                                     connectionStatus={this.state.dashConnectionStatus}
                                     onClickConnect={this.handleClickConnectDash}>
                                 <FormattedMessage id='App.connectToDash' />
@@ -216,6 +229,7 @@ export default class App extends React.Component<{}, AppState> {
                                 <div className='App__command-palette-command'>
                                     <CommandPaletteCommand
                                         commandName='forward'
+                                        disabled={this.state.modalIsShowing}
                                         icon={React.createElement(
                                             ArrowForward,
                                             {className:'command-block-svg'}
@@ -226,6 +240,7 @@ export default class App extends React.Component<{}, AppState> {
                                 <div className='App__command-palette-command'>
                                     <CommandPaletteCommand
                                         commandName='right'
+                                        disabled={this.state.modalIsShowing}
                                         icon={React.createElement(
                                             ArrowTurnRight,
                                             {className:'command-block-svg'}
@@ -236,6 +251,7 @@ export default class App extends React.Component<{}, AppState> {
                                 <div className='App__command-palette-command'>
                                     <CommandPaletteCommand
                                         commandName='left'
+                                        disabled={this.state.modalIsShowing}
                                         icon={React.createElement(
                                             ArrowTurnLeft,
                                             {className:'command-block-svg'}
@@ -248,6 +264,7 @@ export default class App extends React.Component<{}, AppState> {
                         <Col md={8} lg={9}>
                             <ProgramBlockEditor
                                 activeProgramStepNum={this.state.activeProgramStepNum}
+                                modalIsShowing={this.state.modalIsShowing}
                                 editingDisabled={this.state.interpreterIsRunning === true}
                                 interpreterIsRunning={this.state.interpreterIsRunning}
                                 minVisibleSteps={6}
@@ -261,6 +278,7 @@ export default class App extends React.Component<{}, AppState> {
                                 onClickRunButton={this.handleClickRun}
                                 onSelectAction={this.handleSelectAction}
                                 onChange={this.handleChangeProgram}
+                                onModalDisplay={this.handleSetModalIsShowing}
                             />
                         </Col>
                     </Row>

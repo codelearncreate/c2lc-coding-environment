@@ -170,6 +170,7 @@ test('blocks', () => {
     const wrapper = mount(
         <ProgramBlockEditor
             activeProgramStepNum={null}
+            modalIsShowing={false}
             editingDisabled={false}
             interpreterIsRunning={false}
             minVisibleSteps={6}
@@ -180,7 +181,8 @@ test('blocks', () => {
             deleteModeDescriptionId={'someDeleteModeDescriptionId'}
             onClickRunButton={()=>{}}
             onSelectAction={mockSelectHandler}
-            onChange={mockChangeHandler} />,
+            onChange={mockChangeHandler}
+            onModalDisplay={()=>{}} />,
         {
             wrappingComponent: IntlProvider,
             wrappingComponentProps: {
@@ -275,6 +277,7 @@ test('The editor action buttons have aria-describedby set to provided ids', () =
     const wrapper = mount(
         <ProgramBlockEditor
             activeProgramStepNum={null}
+            modalIsShowing={false}
             editingDisabled={false}
             interpreterIsRunning={false}
             minVisibleSteps={6}
@@ -285,7 +288,8 @@ test('The editor action buttons have aria-describedby set to provided ids', () =
             deleteModeDescriptionId={'someDeleteModeDescriptionId'}
             onClickRunButton={()=>{}}
             onSelectAction={()=>{}}
-            onChange={()=>{}} />,
+            onChange={()=>{}}
+            onModalDisplay={()=>{}} />,
         {
             wrappingComponent: IntlProvider,
             wrappingComponentProps: {
@@ -308,6 +312,7 @@ test('Whenever active program step number updates, auto scroll to the step', () 
     const wrapper = mount(
         <ProgramBlockEditor
             activeProgramStepNum={0}
+            modalIsShowing={false}
             editingDisabled={true}
             interpreterIsRunning={true}
             minVisibleSteps={6}
@@ -318,7 +323,8 @@ test('Whenever active program step number updates, auto scroll to the step', () 
             deleteModeDescriptionId={'someDeleteModeDescriptionId'}
             onClickRunButton={()=>{}}
             onSelectAction={()=>{}}
-            onChange={()=>{}} />,
+            onChange={()=>{}}
+            onModalDisplay={()=>{}} />,
         {
             wrappingComponent: IntlProvider,
             wrappingComponentProps: {
@@ -346,6 +352,7 @@ test('The editor action buttons disabled states are set according to the editing
     const wrapper = mount(
         <ProgramBlockEditor
             activeProgramStepNum={null}
+            modalIsShowing={false}
             editingDisabled={false}
             interpreterIsRunning={false}
             minVisibleSteps={6}
@@ -356,7 +363,8 @@ test('The editor action buttons disabled states are set according to the editing
             deleteModeDescriptionId={'someDeleteModeDescriptionId'}
             onClickRunButton={mockRunHandler}
             onSelectAction={()=>{}}
-            onChange={()=>{}} />,
+            onChange={()=>{}}
+            onModalDisplay={()=>{}} />,
         {
             wrappingComponent: IntlProvider,
             wrappingComponentProps: {
@@ -427,7 +435,8 @@ test('Delete all button appears when delete action is toggled, which will open a
             minVisibleSteps={6}
             program={['forward', 'left', 'forward', 'left']}
             selectedAction={null}
-            onSelectAction={mockSelectHandler} />
+            onSelectAction={mockSelectHandler}
+            onModalDisplay={()=>{}}/>
     );
 
     // initially, confirm modal for delete all is not visiable
