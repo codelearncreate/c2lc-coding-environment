@@ -170,7 +170,7 @@ test('blocks', () => {
     const wrapper = mount(
         <ProgramBlockEditor
             activeProgramStepNum={null}
-            actionButtonDisabled={false}
+            modalIsShowing={false}
             editingDisabled={false}
             interpreterIsRunning={false}
             minVisibleSteps={6}
@@ -277,7 +277,7 @@ test('The editor action buttons have aria-describedby set to provided ids', () =
     const wrapper = mount(
         <ProgramBlockEditor
             activeProgramStepNum={null}
-            actionButtonDisabled={false}
+            modalIsShowing={false}
             editingDisabled={false}
             interpreterIsRunning={false}
             minVisibleSteps={6}
@@ -312,7 +312,7 @@ test('Whenever active program step number updates, auto scroll to the step', () 
     const wrapper = mount(
         <ProgramBlockEditor
             activeProgramStepNum={0}
-            actionButtonDisabled={false}
+            modalIsShowing={false}
             editingDisabled={true}
             interpreterIsRunning={true}
             minVisibleSteps={6}
@@ -352,7 +352,7 @@ test('The editor action buttons disabled states are set according to the editing
     const wrapper = mount(
         <ProgramBlockEditor
             activeProgramStepNum={null}
-            actionButtonDisabled={false}
+            modalIsShowing={false}
             editingDisabled={false}
             interpreterIsRunning={false}
             minVisibleSteps={6}
