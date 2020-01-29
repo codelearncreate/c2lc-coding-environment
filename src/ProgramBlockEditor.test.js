@@ -37,7 +37,7 @@ function getRunButton(programBlockEditorWrapper) {
 }
 
 function getDeleteAllButton(programBlockEditorWrapper) {
-    return programBlockEditorWrapper.find(AriaDisablingButton)
+    return programBlockEditorWrapper.find(Button)
         .filter('.ProgramBlockEditor__delete-all-button');
 }
 
