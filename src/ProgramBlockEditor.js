@@ -20,7 +20,7 @@ import './ProgramBlockEditor.scss';
 type ProgramBlockEditorProps = {
     intl: any,
     activeProgramStepNum: ?number,
-    actionButtonDisabled: boolean,
+    modalIsShowing: boolean,
     editingDisabled: boolean,
     interpreterIsRunning: boolean,
     minVisibleSteps: number,
@@ -148,7 +148,7 @@ class ProgramBlockEditor extends React.Component<ProgramBlockEditorProps, Progra
             case 'forward':
                 return (
                     <Button
-                        disabled={this.props.actionButtonDisabled}
+                        disabled={this.props.modalIsShowing}
                         ref={ (element) => this.setCommandBlockRef(programStepNumber, element) }
                         key={`${programStepNumber}-forward`}
                         data-stepnumber={programStepNumber}
@@ -168,7 +168,7 @@ class ProgramBlockEditor extends React.Component<ProgramBlockEditorProps, Progra
             case 'left':
                 return (
                     <Button
-                        disabled={this.props.actionButtonDisabled}
+                        disabled={this.props.modalIsShowing}
                         ref={ (element) => this.setCommandBlockRef(programStepNumber, element) }
                         key={`${programStepNumber}-left`}
                         data-stepnumber={programStepNumber}
@@ -188,7 +188,7 @@ class ProgramBlockEditor extends React.Component<ProgramBlockEditorProps, Progra
             case 'right':
                 return (
                     <Button
-                        disabled={this.props.actionButtonDisabled}
+                        disabled={this.props.modalIsShowing}
                         ref={ (element) => this.setCommandBlockRef(programStepNumber, element) }
                         key={`${programStepNumber}-right`}
                         data-stepnumber={programStepNumber}
@@ -208,7 +208,7 @@ class ProgramBlockEditor extends React.Component<ProgramBlockEditorProps, Progra
             case 'none':
                 return (
                     <Button
-                        disabled={this.props.actionButtonDisabled}
+                        disabled={this.props.modalIsShowing}
                         ref={ (element) => this.setCommandBlockRef(programStepNumber, element) }
                         key={`${programStepNumber}-none`}
                         data-stepnumber={programStepNumber}
@@ -269,7 +269,7 @@ class ProgramBlockEditor extends React.Component<ProgramBlockEditorProps, Progra
                             onClick={this.handleClickAdd}
                             aria-pressed={this.addIsSelected() ? 'true' : 'false'}
                             key='addButton'
-                            tabIndex={this.props.actionButtonDisabled ? '-1' : undefined}
+                            tabIndex={this.props.modalIsShowing ? '-1' : undefined}
                         >
                             <AddIcon className='ProgramBlockEditor__editor-action-button-svg'/>
                         </AriaDisablingButton>
@@ -285,7 +285,7 @@ class ProgramBlockEditor extends React.Component<ProgramBlockEditorProps, Progra
                             onClick={this.handleClickDelete}
                             aria-pressed={this.deleteIsSelected() ? 'true' : 'false'}
                             key='deleteButton'
-                            tabIndex={this.props.actionButtonDisabled ? '-1' : undefined}
+                            tabIndex={this.props.modalIsShowing ? '-1' : undefined}
                         >
                             <DeleteIcon className='ProgramBlockEditor__editor-action-button-svg'/>
                         </AriaDisablingButton>
@@ -299,7 +299,7 @@ class ProgramBlockEditor extends React.Component<ProgramBlockEditorProps, Progra
                             disabledClassName='ProgramBlockEditor__delete-all--disabled'
                             disabled={this.state.showConfirmDeleteAll}
                             onClick={this.handleClickDeleteAll}
-                            tabIndex={this.state.showConfirmDeleteAll ? '-1' : undefined}
+                            tabIndex={this.props.modalIsShowing ? '-1' : undefined}
                         >
                             <FormattedMessage id='ProgramBlockEditor.deleteAll' />
                         </AriaDisablingButton>
@@ -325,7 +325,7 @@ class ProgramBlockEditor extends React.Component<ProgramBlockEditorProps, Progra
                             disabledClassName='ProgramBlockEditor__run-button--disabled'
                             disabled={this.props.runButtonDisabled}
                             onClick={this.props.onClickRunButton}
-                            tabIndex={this.props.actionButtonDisabled ? '-1' : undefined}
+                            tabIndex={this.props.modalIsShowing ? '-1' : undefined}
                         >
                             <PlayIcon className='ProgramBlockEditor__play-svg' />
                         </AriaDisablingButton>
