@@ -1,7 +1,8 @@
 // @flow
 
 import React from 'react';
-import { Button, Modal } from 'react-bootstrap';
+import Modal from 'react-modal';
+import { Button } from 'react-bootstrap';
 import { injectIntl, FormattedMessage } from 'react-intl';
 import { ReactComponent as ErrorIcon } from './svg/Error.svg';
 import './ConfirmDeleteAllModal.css';
@@ -13,21 +14,34 @@ type ConfrimDeleteAllModalProps = {
     onConfirm: () => void
 };
 
+const customStyles = {
+    content : {
+        top                   : '50%',
+        left                  : '50%',
+        right                 : 'auto',
+        bottom                : 'auto',
+        marginRight           : '-50%',
+        transform             : 'translate(-50%, -50%)'
+    },
+    overlay: {zIndex: 1000}
+};
+
 class ConfrimDeleteAllModal extends React.Component<ConfrimDeleteAllModalProps, {}> {
     render() {
         return (
             <Modal
-                show={this.props.show}
-                onHide={this.props.onCancel}
-                size='lg'
-                dialogClassName='ConfrimDeleteAllModal'
-                centered>
-                <Modal.Body className='ConfrimDeleteAllModal__content'>
-                    <div tabIndex='-1' className='ConfrimDeleteAllModal__header'>
-                        <span role='img' aria-label={this.props.intl.formatMessage({id:'ConfrimDeleteAllModal.warning'})} >
-                            <ErrorIcon className='ConfrimDeleteAllModal__warning-svg' />
-                        </span>
-                        <FormattedMessage id='ConfrimDeleteAllModal.title' />
+                ariaHideApp={false}
+                isOpen={this.props.show}
+                onRequestClose={this.props.onCancel}
+                style={customStyles}
+                contentLabel="Confirm Delete All">
+                    <div role='alert' className='ConfrimDeleteAllModal__content'>
+                        <div tabIndex='-1' className='ConfrimDeleteAllModal__header'>
+                            <span role='img' aria-label={this.props.intl.formatMessage({id:'ConfrimDeleteAllModal.warning'})} >
+                                <ErrorIcon className='ConfrimDeleteAllModal__warning-svg' />
+                            </span>
+                            <FormattedMessage id='ConfrimDeleteAllModal.title' />
+                        </div>
                     </div>
                     <div className='ConfrimDeleteAllModal__footer'>
                         <Button
@@ -41,7 +55,6 @@ class ConfrimDeleteAllModal extends React.Component<ConfrimDeleteAllModalProps, 
                             <FormattedMessage id='ConfrimDeleteAllModal.confirmButton' />
                         </Button>
                     </div>
-                </Modal.Body>
             </Modal>
         );
     }
