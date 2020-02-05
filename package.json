@@ -14,6 +14,7 @@
         "react-dom": "16.9.0",
         "react-intl": "3.3.0",
         "react-mic": "12.4.1",
+        "react-modal": "^3.11.1",
         "react-scripts": "3.3.0",
         "soundex": "0.2.1"
     },
