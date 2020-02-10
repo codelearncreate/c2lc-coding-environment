@@ -6,9 +6,10 @@ jobs:
 
   build:
     name: Build
-    runs-on: ubuntu-18.04
+    runs-on: ${{ matrix.os }}
     strategy:
       matrix:
+        os: [ubuntu-18.04, windows-latest, macos-latest]
         node-version: [10.x, 12.x]
     env:
       CI: true
@@ -25,8 +26,7 @@ jobs:
           node --version
           echo NPM:
           npm --version
-      - name: NPM audit NOTE TEMPORARILY WILL NOT FAIL BUILDS
-        continue-on-error: true # Allow DoS node-sass vulnerability https://npmjs.com/advisories/961
+      - name: NPM audit
         run: npm audit
       - name: NPM install (ci)
         run: npm ci
@@ -35,11 +35,12 @@ jobs:
       - name: Flow
         run: npx flow
       - name: Test
-        run: npm test
+        run: npm test -- --verbose
       - name: Archive build artifact
+        if: (matrix.os == 'ubuntu-18.04') && (matrix.node-version == '10.x')
         uses: actions/upload-artifact@v1
         with:
-          name: ${{ format('build-{0}', matrix.node-version) }}
+          name: ${{ format('build-{0}-node-{1}', matrix.os, matrix.node-version) }}
           path: build
 
   deploy-master:
@@ -53,7 +54,7 @@ jobs:
           fetch-depth: 1
       - uses: actions/download-artifact@v1
         with:
-          name: build-10.x
+          name: build-ubuntu-18.04-node-10.x
           path: build
       - uses: w9jds/firebase-action@v1.1.0
         with:
