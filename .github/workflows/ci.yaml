@@ -48,7 +48,6 @@ jobs:
     name: Deploy master
     needs: build
     runs-on: ubuntu-18.04
-    if: (github.repository == 'codelearncreate/c2lc-coding-environment') && (github.ref == 'refs/heads/master') && (github.event_name == 'push')
     steps:
       - uses: actions/checkout@v1
         with:
