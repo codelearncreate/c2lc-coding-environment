@@ -1,5 +1,9 @@
 @import 'variables';
 
+body {
+    overflow: hidden;
+}
+
 .App__header {
     display: flex;
     background: #000;
@@ -22,6 +26,7 @@
 }
 
 .App__program-section {
+    height: 60vh;
     margin-top: 1.5rem;
 }
 
