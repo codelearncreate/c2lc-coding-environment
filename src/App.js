@@ -17,8 +17,6 @@ import * as Utils from './Utils';
 import type { DeviceConnectionStatus, Program, RobotDriver, SelectedAction } from './types';
 import messages from './messages.json';
 import './App.scss';
-import AddModeImage from './AddModeImage';
-import DeleteModeImage from './DeleteModeImage';
 
 // Uncomment to use the FakeRobotDriver (see driver construction below also)
 //import FakeRobotDriver from './FakeRobotDriver';
@@ -250,29 +248,6 @@ export default class App extends React.Component<{}, AppState> {
                                 onSelectAction={this.handleSelectAction}
                                 onChange={this.handleChangeProgram}
                             />
-                        </Col>
-                    </Row>
-                    <Row>
-                        <Col>
-                            <h2 className='App__instructions-heading'>
-                                <FormattedMessage id='App.instructions.heading' />
-                            </h2>
-                            <h3 className="App__instructions-section-heading">
-                                <FormattedMessage id='App.instructions.addHeading' />
-                            </h3>
-                            <div className='App__instructions-text' id={this.addModeDescriptionId}>
-                                <FormattedMessage id='App.instructions.addText1' />
-                                <AddModeImage className='App__add-mode-image'/>
-                                <FormattedMessage id='App.instructions.addText2' />
-                            </div>
-                            <h3 className="App__instructions-section-heading">
-                                <FormattedMessage id='App.instructions.deleteHeading' />
-                            </h3>
-                            <div className='App__instructions-text' id={this.deleteModeDescriptionId}>
-                                <FormattedMessage id='App.instructions.deleteText1' />
-                                <DeleteModeImage className='App__delete-mode-image'/>
-                                <FormattedMessage id='App.instructions.deleteText2' />
-                            </div>
                         </Col>
                     </Row>
                 </Container>
