@@ -207,6 +207,7 @@ export default class App extends React.Component<{}, AppState> {
                             </Col>
                         </Row>
                     }
+                    <Row><Col>Hello</Col></Row>
                     <Row className='App__program-section' noGutters={true}>
                         <Col md={4} lg={3} className='pr-md-3 mb-3 mb-md-0'>
                             <div className='App__command-palette'>
