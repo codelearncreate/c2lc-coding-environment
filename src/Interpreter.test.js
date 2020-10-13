@@ -32,7 +32,7 @@ test('Stepping an empty program leaves the program counter at 0', (done) => {
 test('Step a program with 1 command', (done) => {
     const interpreter = new Interpreter(()=>{});
     interpreter.addCommandHandler('increment-x', 'test', makeIncrement('x'));
-    interpreter.setProgram(['increment-x']);
+    interpreter.setProgram([{commandName:'increment-x', commandParameters:{}}]);
     interpreter.memory.x = 10;
 
     expect(interpreter.programCounter).toBe(0);
@@ -52,7 +52,9 @@ test('Step a program with 1 command', (done) => {
 test('Step a program with 2 commands', (done) => {
     const interpreter = new Interpreter(()=>{});
     interpreter.addCommandHandler('increment-x', 'test', makeIncrement('x'));
-    interpreter.setProgram(['increment-x', 'increment-x']);
+    interpreter.setProgram([
+        {commandName:'increment-x', commandParameters: {}},
+        {commandName:'increment-x', commandParameters: {}}]);
     interpreter.memory.x = 10;
 
     expect(interpreter.programCounter).toBe(0);
@@ -77,7 +79,7 @@ test('Step a program with 2 handlers for the same command', (done) => {
     const interpreter = new Interpreter(()=>{});
     interpreter.addCommandHandler('increment', 'x', makeIncrement('x'));
     interpreter.addCommandHandler('increment', 'y', makeIncrement('y'));
-    interpreter.setProgram(['increment']);
+    interpreter.setProgram([{commandName:'increment', commandParameters: {}}]);
     interpreter.memory.x = 10;
     interpreter.memory.y = 20;
 
@@ -94,7 +96,7 @@ test('Step a program with 2 handlers for the same command', (done) => {
 
 test('Stepping a program with an unknown command rejects with Error', () => {
     const interpreter = new Interpreter(()=>{});
-    interpreter.setProgram(['unknown-command']);
+    interpreter.setProgram([{commandName:'unknown-command', commandParameters:{}}]);
 
     return expect(interpreter.step()).rejects.toThrow('Unknown command: unknown-command');
 });
@@ -118,7 +120,7 @@ test('Do a command with a program', (done) => {
     const interpreter = new Interpreter(()=>{});
     interpreter.addCommandHandler('increment-x', 'test', makeIncrement('x'));
     interpreter.addCommandHandler('increment-y', 'test', makeIncrement('y'));
-    interpreter.setProgram(['increment-y']);
+    interpreter.setProgram([{commandName:'increment-y', commandParameters:{}}]);
     interpreter.memory.x = 10;
     interpreter.memory.y = 20;
 
@@ -166,7 +168,7 @@ test('onRunningStateChange is called on run() program with one step', (done) => 
             resolve();
         });
     });
-    interpreter.run(['step1']).then(() => {
+    interpreter.run([{commandName: 'step1', commandParameters: {}}]).then(() => {
         expect(mockStateChangeHandler.mock.calls.length).toBe(2);
         expect(mockStateChangeHandler.mock.calls[0][0]).toStrictEqual({'isRunning': true, 'activeStep': 0});
         expect(mockStateChangeHandler.mock.calls[1][0]).toStrictEqual({'isRunning': false, 'activeStep': null});
@@ -191,7 +193,9 @@ test('onRunningStateChange is called on run() program with two steps', (done) =>
             resolve();
         });
     });
-    interpreter.run(['step1', 'step2']).then(() => {
+    interpreter.run([
+            {commandName: 'step1', commandParameters: {}},
+            {commandName: 'step2', commandParameters: {}}]).then(() => {
         expect(mockStateChangeHandler.mock.calls.length).toBe(3);
         expect(mockStateChangeHandler.mock.calls[0][0]).toStrictEqual({'isRunning': true, 'activeStep': 0});
         expect(mockStateChangeHandler.mock.calls[1][0]).toStrictEqual({'isRunning': true, 'activeStep': 1});
@@ -216,7 +220,9 @@ test('Do not continue through program if stop is called', (done) => {
         // This step is not executed, as stop is called in step1
         return Promise.reject();
     });
-    interpreter.run(['step1', 'step2']).then(() => {
+    interpreter.run([
+            {commandName: 'step1', commandParameters: {}},
+            {commandName: 'step2', commandParameters: {}}]).then(() => {
         expect(mockStateChangeHandler.mock.calls.length).toBe(2);
         expect(mockStateChangeHandler.mock.calls[0][0]).toStrictEqual({'isRunning': true, 'activeStep': 0});
         expect(mockStateChangeHandler.mock.calls[1][0]).toStrictEqual({'isRunning': false, 'activeStep': null});
@@ -227,7 +233,9 @@ test('Do not continue through program if stop is called', (done) => {
 test('run() Promise is rejected on first command error', (done) => {
     const mockStateChangeHandler = jest.fn();
     const interpreter = new Interpreter(mockStateChangeHandler);
-    interpreter.run(['unknown-command1', 'unknown-command2']).then(() => {}, (error: Error) => {
+    interpreter.run([
+            {commandName: 'unknown-command1', commandParameters: {}},
+            {commandName: 'unknown-command2', commandParameters: {}}]).then(() => {}, (error: Error) => {
         expect(error.message).toBe('Unknown command: unknown-command1');
         expect(mockStateChangeHandler.mock.calls.length).toBe(2);
         expect(mockStateChangeHandler.mock.calls[0][0]).toStrictEqual({'isRunning': true, 'activeStep': 0});

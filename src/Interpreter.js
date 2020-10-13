@@ -1,9 +1,9 @@
 // @flow
 
-import type {Program} from './types';
+import type {Program, ProgramCommand} from './types';
 
 /* eslint-disable no-use-before-define */
-export type CommandHandler = { (Interpreter): Promise<void> };
+export type CommandHandler = { (Interpreter, command: ProgramCommand): Promise<void> };
 /* eslint-enable no-use-before-define */
 
 export type InterpreterRunningState = { isRunning: boolean, activeStep: ?number }
@@ -83,7 +83,7 @@ export default class Interpreter {
                 // We're at the end, nothing to do
                 resolve();
             } else {
-                this.doCommand(this.program[this.programCounter]).then(() => {
+                this.doCommand(this.program[this.programCounter].commandName).then(() => {
                     // When the command has completed, increment
                     // the programCounter and resolve the step Promise
                     this.programCounter = this.programCounter + 1;
@@ -112,7 +112,7 @@ export default class Interpreter {
     callCommandHandlers(handlers: Array<CommandHandler>): Promise<any> {
         const promises = [];
         for (const handler of handlers) {
-            promises.push(handler(this));
+            promises.push(handler(this, this.program[this.programCounter]));
         }
         return Promise.all(promises);
     };
