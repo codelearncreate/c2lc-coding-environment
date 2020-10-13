@@ -32,7 +32,7 @@ class ActionPanel extends React.Component<ActionPanelProps, {}> {
     }
 
     makeStepInfoMessage() {
-        const currentStepName = this.props.program[this.props.pressedStepIndex];
+        const currentStepName = this.props.program[this.props.pressedStepIndex].commandName;
 
         const ariaLabelObj = {
             'stepNumber': this.props.pressedStepIndex + 1,
@@ -51,7 +51,7 @@ class ActionPanel extends React.Component<ActionPanelProps, {}> {
         }
 
         if (this.props.pressedStepIndex > 0) {
-            const prevStepName = this.props.program[this.props.pressedStepIndex - 1];
+            const prevStepName = this.props.program[this.props.pressedStepIndex - 1].commandName;
             ariaLabelObj['previousStepInfo'] =
                 this.props.intl.formatMessage(
                     { id: `CommandInfo.previousStep.${prevStepName}`},
@@ -60,7 +60,7 @@ class ActionPanel extends React.Component<ActionPanelProps, {}> {
         }
 
         if (this.props.pressedStepIndex < (this.props.program.length - 1)) {
-            const nextStepName = this.props.program[this.props.pressedStepIndex + 1];
+            const nextStepName = this.props.program[this.props.pressedStepIndex + 1].commandName;
             ariaLabelObj['nextStepInfo'] =
                 this.props.intl.formatMessage(
                     { id: `CommandInfo.nextStep.${nextStepName}`},
