@@ -34,6 +34,7 @@ type ProgramBlockEditorProps = {
     audioManager: AudioManager,
     focusTrapManager: FocusTrapManager,
     addNodeExpandedMode: boolean,
+    sceneGridCellWidth: number,
     onChangeProgram: (Program) => void,
     onChangeActionPanelStepIndex: (index: ?number) => void,
     onChangeAddNodeExpandedMode: (boolean) => void
@@ -70,12 +71,34 @@ class ProgramBlockEditor extends React.Component<ProgramBlockEditorProps, Progra
         return this.props.selectedAction != null;
     }
 
+    getDefaultCommandParameters(commandName: string) {
+        const defaultParameters = {
+            commandName: commandName,
+            commandParameters: {}
+        };
+        if (commandName === 'forward') {
+            defaultParameters['commandParameters'] = {
+                distance: this.props.sceneGridCellWidth
+            }
+        } else if (commandName === 'right') {
+            defaultParameters['commandParameters'] = {
+                angle: 90
+            }
+        } else if (commandName === 'left') {
+            defaultParameters['commandParameters'] = {
+                angle: 90
+            }
+        }
+        return defaultParameters;
+    }
+
     insertSelectedCommandIntoProgram(index: number) {
         if (this.props.selectedAction) {
             this.focusCommandBlockIndex = index;
             this.scrollToAddNodeIndex = index + 1;
             this.props.onChangeProgram(ProgramUtils.insert(this.props.program,
-                index, this.props.selectedAction, 'none'));
+                index, this.getDefaultCommandParameters(this.props.selectedAction),
+                this.getDefaultCommandParameters('none')));
         }
     }
 
@@ -149,9 +172,10 @@ class ProgramBlockEditor extends React.Component<ProgramBlockEditorProps, Progra
     handleActionPanelReplaceStep = (index: number) => {
         this.props.audioManager.playSound('replace');
         if (this.props.selectedAction) {
-            if (this.props.program[index] !== this.props.selectedAction) {
+            if (this.props.program[index].commandName !== this.props.selectedAction) {
                 this.props.onChangeProgram(ProgramUtils.overwrite(this.props.program,
-                        index, this.props.selectedAction, 'none'));
+                        index, this.getDefaultCommandParameters(this.props.selectedAction),
+                        this.getDefaultCommandParameters('none')));
                 this.setState({
                     replaceIsActive: false
                 });
@@ -291,8 +315,8 @@ class ProgramBlockEditor extends React.Component<ProgramBlockEditorProps, Progra
                     { id: 'ProgramBlockEditor.betweenBlocks' },
                     {
                         command: this.props.selectedAction,
-                        prevCommand: `${programStepNumber}, ${this.props.program[programStepNumber-1]}`,
-                        postCommand: `${programStepNumber+1}, ${this.props.program[programStepNumber]}`
+                        prevCommand: `${programStepNumber}, ${this.props.program[programStepNumber-1].commandName}`,
+                        postCommand: `${programStepNumber+1}, ${this.props.program[programStepNumber].commandName}`
                     }
                 );
             }
@@ -365,7 +389,7 @@ class ProgramBlockEditor extends React.Component<ProgramBlockEditorProps, Progra
 
     render() {
         const contents = this.props.program.map((command, stepNumber) => {
-            return this.makeProgramBlockSection(stepNumber, command);
+            return this.makeProgramBlockSection(stepNumber, command.commandName);
         });
 
         contents.push(this.makeEndOfProgramAddNodeSection(this.props.program.length));

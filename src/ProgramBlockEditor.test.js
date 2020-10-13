@@ -21,7 +21,11 @@ configure({ adapter: new Adapter()});
 // TODO: Mock the FocusTrapManager
 
 const defaultProgramBlockEditorProps = {
-    program: ['forward', 'left', 'forward', 'left'],
+    program: [
+        {commandName:'forward', commandParameters: {distance: 100}},
+        {commandName:'left', commandParameters: {angle: 90}},
+        {commandName:'forward', commandParameters: {distance: 100}},
+        {commandName:'left', commandParameters: {angle: 90}}],
     interpreterIsRunning: false,
     activeProgramStepNum: null,
     actionPanelStepIndex: null,
@@ -30,7 +34,8 @@ const defaultProgramBlockEditorProps = {
     replaceIsActive: false,
     isDraggingCommand: false,
     focusTrapManager: new FocusTrapManager(),
-    addNodeExpandedMode: false
+    addNodeExpandedMode: false,
+    sceneGridCellWidth: 100
 };
 
 function createShallowProgramBlockEditor(props) {
@@ -217,16 +222,19 @@ describe('The expand add node toggle switch should be configurable via propertie
 describe("Add nodes", () => {
     test("All aria labels for add buttons should be correct when no action is selected.", () => {
         expect.assertions(3);
-    
+
         const { wrapper } = createMountProgramBlockEditor({
-            program: ['forward', 'right'],
-            addNodeExpandedMode: true            
+            program: [
+                {commandName:'forward', commandParameters: {distance: 100}},
+                {commandName:'right', commandParameters: {angle: 90}}
+            ],
+            addNodeExpandedMode: true
         });
-        
+
         const leadingAddButton  = getAddNodeButtonAtPosition(wrapper, 0);
         const middleAddButton   = getAddNodeButtonAtPosition(wrapper, 1);
         const trailingAddButton = getAddNodeButtonAtPosition(wrapper, 2);
-        
+
         [leadingAddButton, middleAddButton, trailingAddButton].forEach((button)=> {
             const ariaLabel = button.getDOMNode().getAttribute('aria-label');
             expect(ariaLabel).toBe("Make sure an action is selected");
@@ -235,17 +243,20 @@ describe("Add nodes", () => {
 
     test("All aria labels for add buttons should be correct when an action is selected.", () => {
         expect.assertions(3);
-    
+
         const { wrapper } = createMountProgramBlockEditor({
-            program: ['forward', 'right'],
+            program: [
+                {commandName:'forward', commandParameters: {distance: 100}},
+                {commandName:'right', commandParameters: {angle: 90}}
+            ],
             selectedAction: 'left',
             addNodeExpandedMode: true
         });
-        
+
         const leadingAddButton  = getAddNodeButtonAtPosition(wrapper, 0);
         const middleAddButton   = getAddNodeButtonAtPosition(wrapper, 1);
         const trailingAddButton = getAddNodeButtonAtPosition(wrapper, 2);
-        
+
         // Add to the begining when an action is selected
         const addAtBeginningLabel = leadingAddButton.getDOMNode().getAttribute('aria-label');
         expect(addAtBeginningLabel).toBe("Add selected action left to the beginning of the program");
@@ -261,14 +272,14 @@ describe("Add nodes", () => {
 
     test("The aria label for the add button should be correct when there are no program blocks and an action is selected.", () => {
         expect.assertions(1);
-    
+
         const { wrapper } = createMountProgramBlockEditor({
             program: [],
             selectedAction: 'left'
         });
-        
+
         const soleAddButton  = getAddNodeButtonAtPosition(wrapper, 0);
-        
+
         // Add to the end when an action is selected
         const addButtonLabel = soleAddButton.getDOMNode().getAttribute('aria-label');
         expect(addButtonLabel).toBe("Add selected action left to the end of the program");
@@ -277,13 +288,13 @@ describe("Add nodes", () => {
 
     test("The aria label for the add button should be correct when there are no program blocks and no action is selected.", () => {
         expect.assertions(1);
-    
+
         const { wrapper } = createMountProgramBlockEditor({
             program: []
         });
-        
+
         const soleAddButton  = getAddNodeButtonAtPosition(wrapper, 0);
-        
+
         // Add to the end when an action is selected
         const addButtonLabel = soleAddButton.getDOMNode().getAttribute('aria-label');
         expect(addButtonLabel).toBe("Make sure an action is selected");
@@ -312,26 +323,39 @@ describe('Delete All button', () => {
 describe("Add program steps", () => {
     test('We should be able to add a step at the end of the program', () => {
         expect.assertions(4);
-    
+
         // Given a program of 5 forwards and 'left' as the selected command
         const { wrapper, audioManagerMock, mockChangeProgramHandler } = createMountProgramBlockEditor({
-            program: ['forward', 'forward', 'forward', 'forward', 'forward'],
+            program: [
+                {commandName:'forward', commandParameters: {distance: 100}},
+                {commandName:'forward', commandParameters: {distance: 100}},
+                {commandName:'forward', commandParameters: {distance: 100}},
+                {commandName:'forward', commandParameters: {distance: 100}},
+                {commandName:'forward', commandParameters: {distance: 100}}
+            ],
             selectedAction: 'left'
         });
-    
+
         // When 'left' is added to the end of the program
         // (The index is zero because the add nodes aren't expanded).
         const addNode = getAddNodeButtonAtPosition(wrapper, 0);
         addNode.simulate('click');
-    
+
         // Then the 'add' sound should be played
         expect(audioManagerMock.playSound.mock.calls.length).toBe(1);
         expect(audioManagerMock.playSound.mock.calls[0][0]).toBe('add');
-    
+
         // And the program should be changed
         expect(mockChangeProgramHandler.mock.calls.length).toBe(1);
         expect(mockChangeProgramHandler.mock.calls[0][0]).toStrictEqual(
-            ['forward', 'forward', 'forward', 'forward', 'forward', 'left']);
+            [
+                {commandName:'forward', commandParameters: {distance: 100}},
+                {commandName:'forward', commandParameters: {distance: 100}},
+                {commandName:'forward', commandParameters: {distance: 100}},
+                {commandName:'forward', commandParameters: {distance: 100}},
+                {commandName:'forward', commandParameters: {distance: 100}},
+                {commandName:'left', commandParameters: {angle: 90}}
+            ]);
     });
 
     test('We should be able to add a step at the beginning of the program', () => {
@@ -339,7 +363,13 @@ describe("Add program steps", () => {
 
         // Given a program of 5 forwards and 'left' as the selected command
         const { wrapper, audioManagerMock, mockChangeProgramHandler } = createMountProgramBlockEditor({
-            program: ['forward', 'forward', 'forward', 'forward', 'forward'],
+            program: [
+                {commandName:'forward', commandParameters: {distance: 100}},
+                {commandName:'forward', commandParameters: {distance: 100}},
+                {commandName:'forward', commandParameters: {distance: 100}},
+                {commandName:'forward', commandParameters: {distance: 100}},
+                {commandName:'forward', commandParameters: {distance: 100}}
+            ],
             selectedAction: 'left',
             addNodeExpandedMode: true
         });
@@ -348,47 +378,75 @@ describe("Add program steps", () => {
         // (The index is zero because the add nodes aren't expanded).
         const addNode = getAddNodeButtonAtPosition(wrapper, 0);
         addNode.simulate('click');
-    
+
         // Then the 'add' sound should be played
         expect(audioManagerMock.playSound.mock.calls.length).toBe(1);
         expect(audioManagerMock.playSound.mock.calls[0][0]).toBe('add');
-    
+
         // And the program should be changed
         expect(mockChangeProgramHandler.mock.calls.length).toBe(1);
         expect(mockChangeProgramHandler.mock.calls[0][0]).toStrictEqual(
-            ['left', 'forward', 'forward', 'forward', 'forward', 'forward']);
+            [
+                {commandName:'left', commandParameters: {angle: 90}},
+                {commandName:'forward', commandParameters: {distance: 100}},
+                {commandName:'forward', commandParameters: {distance: 100}},
+                {commandName:'forward', commandParameters: {distance: 100}},
+                {commandName:'forward', commandParameters: {distance: 100}},
+                {commandName:'forward', commandParameters: {distance: 100}}
+            ]);
     });
 
     test('We should be able to add a step in the middle of the program', () => {
         expect.assertions(4);
-    
+
         // Given a program of 5 forwards and 'left' as the selected command
         const { wrapper, audioManagerMock, mockChangeProgramHandler } = createMountProgramBlockEditor({
-            program: ['forward', 'forward', 'forward', 'forward', 'forward'],
+            program: [
+                {commandName:'forward', commandParameters: {distance: 100}},
+                {commandName:'forward', commandParameters: {distance: 100}},
+                {commandName:'forward', commandParameters: {distance: 100}},
+                {commandName:'forward', commandParameters: {distance: 100}},
+                {commandName:'forward', commandParameters: {distance: 100}}
+            ],
             selectedAction: 'left',
             addNodeExpandedMode: true
         });
-    
+
         // When 'left' is added to the middle of the program
         const addNode = getAddNodeButtonAtPosition(wrapper, 3);
         addNode.simulate('click');
-    
+
         // Then the 'add' sound should be played
         expect(audioManagerMock.playSound.mock.calls.length).toBe(1);
         expect(audioManagerMock.playSound.mock.calls[0][0]).toBe('add');
-    
+
         // And the program should be changed
         expect(mockChangeProgramHandler.mock.calls.length).toBe(1);
         expect(mockChangeProgramHandler.mock.calls[0][0]).toStrictEqual(
-            ['forward', 'forward', 'forward', "left", 'forward', 'forward']);
+            [
+                {commandName:'forward', commandParameters: {distance: 100}},
+                {commandName:'forward', commandParameters: {distance: 100}},
+                {commandName:'forward', commandParameters: {distance: 100}},
+                {commandName:'left', commandParameters: {angle: 90}},
+                {commandName:'forward', commandParameters: {distance: 100}},
+                {commandName:'forward', commandParameters: {distance: 100}}
+            ]);
     });
 });
 
 
 describe('Delete program steps', () => {
     test.each([
-        [ 0, ['left', 'forward', 'left']],
-        [ 3, ['forward', 'left', 'forward']]
+        [ 0, [
+            {commandName:'left', commandParameters: {angle: 90}},
+            {commandName:'forward', commandParameters: {distance: 100}},
+            {commandName:'left', commandParameters: {angle: 90}}
+        ]],
+        [ 3, [
+            {commandName:'forward', commandParameters: {distance: 100}},
+            {commandName:'left', commandParameters: {angle: 90}},
+            {commandName:'forward', commandParameters: {distance: 100}}
+        ]]
     ])('While the action panel is open, when block %i is clicked, then program should be updated',
         (stepNum, expectedProgram) => {
             const { wrapper, audioManagerMock, mockChangeProgramHandler, mockChangeActionPanelStepIndex } = createMountProgramBlockEditor();
@@ -420,8 +478,18 @@ describe('Delete program steps', () => {
 
 describe('Replace program steps', () => {
     test.each([
-        [ 0, ['right', 'left', 'forward', 'left'], 'right'],
-        [ 0, ['forward', 'left', 'forward', 'left'], null]
+        [ 0, [
+            {commandName:'right', commandParameters: {angle: 90}},
+            {commandName:'left', commandParameters: {angle: 90}},
+            {commandName:'forward', commandParameters: {distance: 100}},
+            {commandName:'left', commandParameters: {angle: 90}}],
+        'right'],
+        [ 0, [
+            {commandName:'forward', commandParameters: {distance: 100}},
+            {commandName:'left', commandParameters: {angle: 90}},
+            {commandName:'forward', commandParameters: {distance: 100}},
+            {commandName:'left', commandParameters: {angle: 90}}],
+        null]
     ]) ('Replace a program if selectedAction is not null',
         (stepNum, expectedProgram, selectedAction) => {
             expect.assertions(7);
@@ -461,8 +529,16 @@ describe('Replace program steps', () => {
 
 describe('Move to previous program step', () => {
     test.each([
-        [ 0, ['forward', 'left', 'forward', 'left']],
-        [ 2, ['forward', 'forward', 'left', 'left']]
+        [ 0, [
+            {commandName:'forward', commandParameters: {distance: 100}},
+            {commandName:'left', commandParameters: {angle: 90}},
+            {commandName:'forward', commandParameters: {distance: 100}},
+            {commandName:'left', commandParameters: {angle: 90}}]],
+        [ 2, [
+            {commandName:'forward', commandParameters: {distance: 100}},
+            {commandName:'forward', commandParameters: {distance: 100}},
+            {commandName:'left', commandParameters: {angle: 90}},
+            {commandName:'left', commandParameters: {angle: 90}}]]
     ]) ('Changes position with a step before, if there is a step',
         (stepNum, expectedProgram) => {
             const { wrapper, audioManagerMock, mockChangeProgramHandler, mockChangeActionPanelStepIndex } = createMountProgramBlockEditor();
@@ -501,8 +577,16 @@ describe('Move to previous program step', () => {
 
 describe('Move to next program step', () => {
     test.each([
-        [ 0, ['left', 'forward', 'forward', 'left']],
-        [ 3, ['forward', 'left', 'forward', 'left']]
+        [ 0, [
+            {commandName:'left', commandParameters: {angle: 90}},
+            {commandName:'forward', commandParameters: {distance: 100}},
+            {commandName:'forward', commandParameters: {distance: 100}},
+            {commandName:'left', commandParameters: {angle: 90}}]],
+        [ 3, [
+            {commandName:'forward', commandParameters: {distance: 100}},
+            {commandName:'left', commandParameters: {angle: 90}},
+            {commandName:'forward', commandParameters: {distance: 100}},
+            {commandName:'left', commandParameters: {angle: 90}}]]
     ]) ('Changes position with a step after, if there is a step',
         (stepNum, expectedProgram) => {
             const { wrapper, audioManagerMock, mockChangeProgramHandler, mockChangeActionPanelStepIndex } = createMountProgramBlockEditor();
@@ -601,7 +685,12 @@ test('The editor scrolls when a step is added to the end of the program', () => 
 
     // Given a program of 5 forwards and 'left' as the selected command
     const { wrapper, audioManagerMock, mockChangeProgramHandler } = createMountProgramBlockEditor({
-        program: ['forward', 'forward', 'forward', 'forward', 'forward'],
+        program: [
+            {commandName:'forward', commandParameters: {distance: 100}},
+            {commandName:'forward', commandParameters: {distance: 100}},
+            {commandName:'forward', commandParameters: {distance: 100}},
+            {commandName:'forward', commandParameters: {distance: 100}},
+            {commandName:'forward', commandParameters: {distance: 100}}],
         selectedAction: 'left'
     });
 
@@ -617,7 +706,13 @@ test('The editor scrolls when a step is added to the end of the program', () => 
     // And the program should be changed
     expect(mockChangeProgramHandler.mock.calls.length).toBe(1);
     expect(mockChangeProgramHandler.mock.calls[0][0]).toStrictEqual(
-        ['forward', 'forward', 'forward', 'forward', 'forward', 'left']);
+        [
+            {commandName:'forward', commandParameters: {distance: 100}},
+            {commandName:'forward', commandParameters: {distance: 100}},
+            {commandName:'forward', commandParameters: {distance: 100}},
+            {commandName:'forward', commandParameters: {distance: 100}},
+            {commandName:'forward', commandParameters: {distance: 100}},
+            {commandName:'left', commandParameters: {angle: 90}}]);
 
     // And updating the program triggers auto scroll
     wrapper.setProps({ program: mockChangeProgramHandler.mock.calls[0][0] });
