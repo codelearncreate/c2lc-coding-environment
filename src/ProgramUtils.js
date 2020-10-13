@@ -1,6 +1,6 @@
 // @flow
 
-import type {Program} from './types';
+import type {Program, ProgramCommand} from './types';
 
 function deleteStep(program: Program, index: number): Program {
     // Make a shallow copy before we modify it with splice()
@@ -9,7 +9,7 @@ function deleteStep(program: Program, index: number): Program {
     return program;
 };
 
-function expandProgram(program: Program, length: number, fill: string): Program {
+function expandProgram(program: Program, length: number, fill: ProgramCommand): Program {
     // Make a shallow copy before we add to the program
     program = program.slice();
     while (program.length < length) {
@@ -18,23 +18,23 @@ function expandProgram(program: Program, length: number, fill: string): Program 
     return program;
 };
 
-function insert(program: Program, index: number, command: string, fill: string): Program {
+function insert(program: Program, index: number, command: ProgramCommand, fill: ProgramCommand): Program {
     program = expandProgram(program, index, fill);
     program.splice(index, 0, command);
     return program;
 };
 
-function overwrite(program: Program, index: number, command: string, fill: string): Program {
+function overwrite(program: Program, index: number, command: ProgramCommand, fill: ProgramCommand): Program {
     program = expandProgram(program, index + 1, fill);
     program[index] = command;
     return program;
 };
 
-function trimEnd(program: Program, commandToTrim: string): Program {
+function trimEnd(program: Program, commandToTrim: ProgramCommand): Program {
     // Make a shallow copy before we trim
     program = program.slice();
     while ((program.length > 0)
-            && (program[program.length - 1] === commandToTrim)) {
+            && (program[program.length - 1].commandName === commandToTrim.commandName)) {
         program.pop();
     }
     return program;
