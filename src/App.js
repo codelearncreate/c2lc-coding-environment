@@ -97,16 +97,8 @@ export default class App extends React.Component<{}, AppState> {
         this.interpreter.addCommandHandler(
             'forward',
             'moveCharacter',
-            () => {
-                this.audioManager.playSound('forward');
-                this.setState((state) => {
-                    return {
-                        characterState: state.characterState.forward(
-                            state.sceneGridCellWidth,
-                            state.drawingEnabled
-                        )
-                    };
-                });
+            (interpreter, command) => {
+                this.handleCommandExecution(command);
                 return new Promise((resolve, reject) => {
                     setTimeout(() => {
                         resolve();
@@ -118,13 +110,8 @@ export default class App extends React.Component<{}, AppState> {
         this.interpreter.addCommandHandler(
             'left',
             'moveCharacter',
-            () => {
-                this.audioManager.playSound('left');
-                this.setState((state) => {
-                    return {
-                        characterState: state.characterState.turnLeft(90)
-                    };
-                });
+            (interpreter, command) => {
+                this.handleCommandExecution(command);
                 return new Promise((resolve, reject) => {
                     setTimeout(() => {
                         resolve();
@@ -136,13 +123,8 @@ export default class App extends React.Component<{}, AppState> {
         this.interpreter.addCommandHandler(
             'right',
             'moveCharacter',
-            () => {
-                this.audioManager.playSound('right');
-                this.setState((state) => {
-                    return {
-                        characterState: state.characterState.turnRight(90)
-                    };
-                });
+            (interpreter, command) => {
+                this.handleCommandExecution(command);
                 return new Promise((resolve, reject) => {
                     setTimeout(() => {
                         resolve();
@@ -302,6 +284,39 @@ export default class App extends React.Component<{}, AppState> {
         });
     }
 
+    handleCommandExecution = (command: any) => {
+        const commandName = command.commandName;
+        if (commandName === 'forward') {
+            this.audioManager.playSound('forward');
+            this.setState((state) => {
+                return {
+                    characterState: state.characterState.forward(
+                        command.commandParameters.distance,
+                        state.drawingEnabled
+                    )
+                };
+            });
+        } else if (commandName === 'right') {
+            this.audioManager.playSound('right');
+            this.setState((state) => {
+                return {
+                    characterState: state.characterState.turnRight(
+                        command.commandParameters.angle
+                    )
+                };
+            });
+        } else if (commandName === 'left') {
+            this.audioManager.playSound('left');
+            this.setState((state) => {
+                return {
+                    characterState: state.characterState.turnLeft(
+                        command.commandParameters.angle
+                    )
+                };
+            });
+        }
+    }
+
     render() {
         return (
             <IntlProvider
@@ -414,6 +429,7 @@ export default class App extends React.Component<{}, AppState> {
                                     audioManager={this.audioManager}
                                     focusTrapManager={this.focusTrapManager}
                                     addNodeExpandedMode={this.state.settings.addNodeExpandedMode}
+                                    sceneGridCellWidth={this.state.sceneGridCellWidth}
                                     onChangeProgram={this.handleChangeProgram}
                                     onChangeActionPanelStepIndex={this.handleChangeActionPanelStepIndex}
                                     onChangeAddNodeExpandedMode={this.handleChangeAddNodeExpandedMode}

@@ -1,7 +1,7 @@
 // @flow
 
 import * as ProgramUtils from './ProgramUtils';
-import type {Program} from './types';
+import type {Program, ProgramCommand} from './types';
 
 function checkProgramEdit(inputBefore: Program, expected: Program,
                           inputAfter: Program, result: Program) {
@@ -12,13 +12,31 @@ function checkProgramEdit(inputBefore: Program, expected: Program,
 test.each([
     [[], 0, []],
     [[], 2, []],
-    [['foo'], 0, []],
-    [['foo'], 1, ['foo']],
-    [['foo'], 2, ['foo']],
-    [['foo', 'bar', 'baz'], 0, ['bar', 'baz']],
-    [['foo', 'bar', 'baz'], 1, ['foo', 'baz']]
+    [[{commandName:'foo', commandParameters:{}}], 0, []],
+    [[{commandName:'foo', commandParameters:{}}], 1, [{commandName:'foo', commandParameters:{}}]],
+    [[{commandName:'foo', commandParameters:{}}], 2, [{commandName:'foo', commandParameters:{}}]],
+    [
+        [
+            {commandName:'foo', commandParameters:{}},
+            {commandName:'bar', commandParameters:{}},
+            {commandName:'baz', commandParameters:{}}
+        ], 0, [
+            {commandName:'bar', commandParameters:{}},
+            {commandName:'baz', commandParameters:{}}
+        ]
+    ],
+    [
+        [
+            {commandName:'foo', commandParameters:{}},
+            {commandName:'bar', commandParameters:{}},
+            {commandName:'baz', commandParameters:{}}
+        ], 1, [
+            {commandName:'foo', commandParameters:{}},
+            {commandName:'baz', commandParameters:{}}
+        ]
+    ]
 ])('deleteStep',
-    (input: Array<string>, index: number, expected: Array<string>) => {
+    (input: Array<ProgramCommand>, index: number, expected: Array<ProgramCommand>) => {
         expect.assertions(2);
         const inputValues = input.slice();
         const result = ProgramUtils.deleteStep(inputValues, index);
@@ -28,78 +46,190 @@ test.each([
 
 test.each([
     [[], 0, []],
-    [[], 1, ['fill1']],
-    [[], 2, ['fill1', 'fill1']],
-    [['foo'], 0, ['foo']],
-    [['foo'], 1, ['foo']],
-    [['foo'], 2, ['foo', 'fill1']],
-    [['foo'], 3, ['foo', 'fill1', 'fill1']]
+    [[], 1, [{commandName:'fill1', commandParameters:{}}]],
+    [[], 2, [{commandName:'fill1', commandParameters:{}}, {commandName:'fill1', commandParameters:{}}]],
+    [[{commandName:'foo', commandParameters:{}}], 0, [{commandName:'foo', commandParameters:{}}]],
+    [[{commandName:'foo', commandParameters:{}}], 1, [{commandName:'foo', commandParameters:{}}]],
+    [[{commandName:'foo', commandParameters:{}}], 2,
+        [
+            {commandName:'foo', commandParameters:{}},
+            {commandName:'fill1', commandParameters:{}}
+        ]
+    ],
+    [[{commandName:'foo', commandParameters:{}}], 3,
+        [
+            {commandName:'foo', commandParameters:{}},
+            {commandName:'fill1', commandParameters:{}},
+            {commandName:'fill1', commandParameters:{}}
+        ]
+    ]
 ])('expandProgram',
-    (input: Array<string>, length: number, expected: Array<string>) => {
+    (input: Array<ProgramCommand>, length: number, expected: Array<ProgramCommand>) => {
         expect.assertions(2);
         const inputValues = input.slice();
-        const result = ProgramUtils.expandProgram(inputValues, length, 'fill1');
+        const result = ProgramUtils.expandProgram(inputValues, length, {commandName:'fill1', commandParameters:{}});
         checkProgramEdit(input, expected, inputValues, result);
     }
 );
 
 test.each([
-    [[], 0, ['command1']],
-    [[], 2, ['fill1', 'fill1', 'command1']],
-    [['foo'], 0, ['command1', 'foo']],
-    [['foo'], 1, ['foo', 'command1']],
-    [['foo'], 2, ['foo', 'fill1', 'command1']],
-    [['foo', 'bar'], 1, ['foo', 'command1', 'bar']]
+    [[], 0, [{commandName:'command1', commandParameters:{}}]],
+    [[], 2,
+        [
+            {commandName:'fill1', commandParameters:{}},
+            {commandName:'fill1', commandParameters:{}},
+            {commandName:'command1', commandParameters:{}}
+        ]
+    ],
+    [[{commandName:'foo', commandParameters:{}}], 0,
+        [
+            {commandName:'command1', commandParameters:{}},
+            {commandName:'foo', commandParameters:{}}
+        ]
+    ],
+    [[{commandName:'foo', commandParameters:{}}], 1,
+        [
+            {commandName:'foo', commandParameters:{}},
+            {commandName:'command1', commandParameters:{}}
+        ]
+    ],
+    [[{commandName:'foo', commandParameters:{}}], 2,
+        [
+            {commandName:'foo', commandParameters:{}},
+            {commandName:'fill1', commandParameters:{}},
+            {commandName:'command1', commandParameters:{}}
+        ]
+    ],
+    [[{commandName:'foo', commandParameters:{}}, {commandName:'bar', commandParameters:{}}], 1,
+        [
+            {commandName:'foo', commandParameters:{}},
+            {commandName:'command1', commandParameters:{}},
+            {commandName:'bar', commandParameters:{}}
+        ]
+    ]
 ])('insert',
-    (input: Array<string>, index: number, expected: Array<string>) => {
+    (input: Array<ProgramCommand>, index: number, expected: Array<ProgramCommand>) => {
         expect.assertions(2);
         const inputValues = input.slice();
-        const result = ProgramUtils.insert(inputValues, index, 'command1', 'fill1');
+        const result = ProgramUtils.insert(inputValues, index,
+            {commandName:'command1', commandParameters:{}},
+            {commandName:'fill1', commandParameters:{}});
         checkProgramEdit(input, expected, inputValues, result);
     }
 );
 
 test.each([
-    [[], 0, ['command1']],
-    [[], 2, ['fill1', 'fill1', 'command1']],
-    [['foo'], 0, ['command1']],
-    [['foo'], 1, ['foo', 'command1']],
-    [['foo'], 2, ['foo', 'fill1', 'command1']],
-    [['foo', 'bar', 'baz'], 1, ['foo', 'command1', 'baz']]
+    [[], 0, [{commandName:'command1', commandParameters:{}}]],
+    [[], 2,
+        [
+            {commandName:'fill1', commandParameters:{}},
+            {commandName:'fill1', commandParameters:{}},
+            {commandName:'command1', commandParameters:{}}
+        ]
+    ],
+    [[{commandName:'foo', commandParameters:{}}], 0, [{commandName:'command1', commandParameters:{}}]],
+    [[{commandName:'foo', commandParameters:{}}], 1,
+        [
+            {commandName:'foo', commandParameters:{}},
+            {commandName:'command1', commandParameters:{}}
+        ]
+    ],
+    [[{commandName:'foo', commandParameters:{}}], 2,
+        [
+            {commandName:'foo', commandParameters:{}},
+            {commandName:'fill1', commandParameters:{}},
+            {commandName:'command1', commandParameters:{}}
+        ]
+    ],
+    [
+        [
+            {commandName:'foo', commandParameters:{}},
+            {commandName:'bar', commandParameters:{}},
+            {commandName:'baz', commandParameters:{}}
+        ], 1,
+        [
+            {commandName:'foo', commandParameters:{}},
+            {commandName:'command1', commandParameters:{}},
+            {commandName:'baz', commandParameters:{}}
+        ]
+    ]
 ])('overwrite',
-    (input: Array<string>, index: number, expected: Array<string>) => {
+    (input: Array<ProgramCommand>, index: number, expected: Array<ProgramCommand>) => {
         expect.assertions(2);
         const inputValues = input.slice();
-        const result = ProgramUtils.overwrite(inputValues, index, 'command1', 'fill1');
+        const result = ProgramUtils.overwrite(inputValues, index,
+            {commandName:'command1', commandParameters:{}},
+            {commandName:'fill1', commandParameters:{}});
         checkProgramEdit(input, expected, inputValues, result);
     }
 );
 
 test.each([
     [[], []],
-    [['foo'], ['foo']],
-    [['trim1'], []],
-    [['foo', 'trim1'], ['foo']],
-    [['trim1', 'trim1'], []],
-    [['trim1', 'foo'], ['trim1', 'foo']],
-    [['trim1', 'foo', 'trim1'], ['trim1', 'foo']]
+    [[{commandName:'foo', commandParameters:{}}], [{commandName:'foo', commandParameters:{}}]],
+    [[{commandName:'trim1', commandParameters:{}}], []],
+    [
+        [{commandName:'foo', commandParameters:{}}, {commandName:'trim1', commandParameters:{}}],
+        [{commandName:'foo', commandParameters:{}}]
+    ],
+    [[{commandName:'trim1', commandParameters:{}}, {commandName:'trim1', commandParameters:{}}], []],
+    [
+        [
+            {commandName:'trim1', commandParameters:{}},
+            {commandName:'foo', commandParameters:{}}
+        ],
+        [
+            {commandName:'trim1', commandParameters:{}},
+            {commandName:'foo', commandParameters:{}}
+        ]
+    ],
+    [
+        [
+            {commandName:'trim1', commandParameters:{}},
+            {commandName:'foo', commandParameters:{}},
+            {commandName:'trim1', commandParameters:{}}
+        ],
+        [
+            {commandName:'trim1', commandParameters:{}},
+            {commandName:'foo', commandParameters:{}}
+        ]
+    ]
 ])('trimEnd',
-    (input: Array<string>, expected: Array<string>) => {
+    (input: Array<ProgramCommand>, expected: Array<ProgramCommand>) => {
         expect.assertions(2);
         const inputValues = input.slice();
-        const result = ProgramUtils.trimEnd(inputValues, 'trim1');
+        const result = ProgramUtils.trimEnd(inputValues, {commandName:'trim1', commandParameters:{}});
         checkProgramEdit(input, expected, inputValues, result);
     }
 );
 
 test.each([
     [[], true],
-    [['none', 'none'], true],
-    [['command1', 'none'], false],
-    [['none', 'none', 'command1'], false],
-    [['command1', 'none', 'command1'], false]
+    [
+        [
+            {commandName:'command1', commandParameters: {}},
+            {commandName:'none', commandParameters: {}}
+        ],
+        false
+    ],
+    [
+        [
+            {commandName:'none', commandParameters: {}},
+            {commandName:'none', commandParameters: {}},
+            {commandName:'command1', commandParameters: {}}
+        ],
+        false
+    ],
+    [
+        [
+            {commandName:'command1', commandParameters: {}},
+            {commandName:'none', commandParameters: {}},
+            {commandName:'command1', commandParameters: {}}
+        ],
+        false
+    ]
 ])('programIsEmpty',
-    (input: Array<string>, expected: Array<string>) => {
+    (input: Array<ProgramCommand>, expected: Array<ProgramCommand>) => {
         expect.assertions(1);
         const result = ProgramUtils.programIsEmpty(input);
         expect(result).toBe(expected);
@@ -108,12 +238,33 @@ test.each([
 
 test.each([
     [[], 0, 2, []],
-    [['command1'], 0, 1, ['command1']],
-    [['command1', 'command2', 'command3'], 1, 2, ['command1', 'command3', 'command2' ]],
-    [['command1', 'command2', 'command3'], 0, 2, ['command3', 'command2', 'command1']]
-
+    [[{commandName:'command1', commandParameters: {}}], 0, 1, [{commandName:'command1', commandParameters: {}}]],
+    [
+        [
+            {commandName:'command1', commandParameters: {}},
+            {commandName:'command2', commandParameters: {}},
+            {commandName:'command3', commandParameters: {}}
+        ], 1, 2,
+        [
+            {commandName:'command1', commandParameters: {}},
+            {commandName:'command3', commandParameters: {}},
+            {commandName:'command2', commandParameters: {}}
+        ]
+    ],
+    [
+        [
+            {commandName:'command1', commandParameters: {}},
+            {commandName:'command2', commandParameters: {}},
+            {commandName:'command3', commandParameters: {}}
+        ], 0, 2,
+        [
+            {commandName:'command3', commandParameters: {}},
+            {commandName:'command2', commandParameters: {}},
+            {commandName:'command1', commandParameters: {}}
+        ]
+    ]
 ]) ('swapPosition',
-    (input: Array<string>, indexFrom: number, indexTo: number,  expected: Array<string>) => {
+    (input: Array<ProgramCommand>, indexFrom: number, indexTo: number,  expected: Array<ProgramCommand>) => {
         expect.assertions(2);
         const inputValues = input.slice();
         const result = ProgramUtils.swapPosition(inputValues, indexFrom, indexTo);

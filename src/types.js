@@ -6,7 +6,12 @@ export type DeviceConnectionStatus = 'notConnected' | 'connecting' | 'connected'
 
 export type EditorMode = 'text' | 'block';
 
-export type Program = Array<string>;
+export type Program = Array<ProgramCommand>;
+
+export type ProgramCommand = {
+    commandName: string,
+    commandParameters: any
+};
 
 export interface RobotDriver {
     connect(onDisconnected: () => void): Promise<void>;

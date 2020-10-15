@@ -22,7 +22,11 @@ function createMountActionPanel(props) {
                 {
                     focusedOptionName: null,
                     selectedCommandName: 'right',
-                    program: ['forward', 'left', 'right'],
+                    program: [
+                        {commandName: 'forward', commandParameters: {distance: 100}},
+                        {commandName: 'left', commandParameters: {angle: 90}},
+                        {commandName: 'right', commandParameters: {angle: 90}}
+                    ],
                     pressedStepIndex: 1,
                     position: {
                         top: 0,
