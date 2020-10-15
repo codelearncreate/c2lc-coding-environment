@@ -36,6 +36,7 @@
             "build/"
         ],
         "rules": {
+            "no-trailing-spaces": "error",
             "no-unused-vars": "error",
             "no-var": "error",
             "prefer-const": "error"

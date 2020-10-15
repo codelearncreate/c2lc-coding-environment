@@ -86,8 +86,8 @@ export default class App extends React.Component<{}, AppState> {
             isDraggingCommand: false,
             audioEnabled: true,
             actionPanelStepIndex: null,
-            sceneNumRows: 5,
-            sceneNumColumns: 9,
+            sceneNumRows: 9,
+            sceneNumColumns: 17,
             sceneGridCellWidth: 100,
             drawingEnabled: true
         };

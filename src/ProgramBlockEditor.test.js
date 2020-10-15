@@ -159,6 +159,10 @@ function getExpandAddNodeToggleSwitch(programBlockEditorWrapper) {
     return toggleSwitch.at(0);
 }
 
+function getProgramSequenceContainer(programBlockEditorWrapper) {
+    return programBlockEditorWrapper.find('.ProgramBlockEditor__program-sequence-scroll-container').get(0);
+}
+
 describe('Program rendering', () => {
     test('Blocks should be rendered for the test program', () => {
         expect.assertions(5);
@@ -645,35 +649,92 @@ describe('Delete All button can be disabled', () => {
     });
 });
 
-describe('Scroll to show the active program step', () => {
-    test.each([
-        1,
-        2
-    ])('When active program step number is set to %i, then the editor should scroll to the step',
-        (stepNum) => {
-            expect.assertions(4);
+describe('Autoscroll to show the active program step', () => {
+    test('When active program step number is 0, scroll to the beginning of the container', () => {
+        expect.assertions(3);
+        const mockScrollTo = jest.fn();
+        const { wrapper } = createMountProgramBlockEditor();
+        getProgramSequenceContainer(wrapper).ref.current.scrollTo = mockScrollTo;
 
-            const mockScrollIntoView = jest.fn();
+        wrapper.setProps({
+            activeProgramStepNum: 0
+        });
 
-            window.HTMLElement.prototype.scrollIntoView = mockScrollIntoView;
+        expect(mockScrollTo.mock.calls.length).toBe(1);
+        // mock.calls[0][0] for x position, [0][1] for y position
+        expect(mockScrollTo.mock.calls[0][0]).toBe(0);
+        expect(mockScrollTo.mock.calls[0][1]).toBe(0);
+    });
+    test('When active program block is outside of the container, on the right', () => {
+        expect.assertions(1);
 
-            const { wrapper } = createMountProgramBlockEditor();
+        const { wrapper } = createMountProgramBlockEditor();
 
-            wrapper.setProps({
-                activeProgramStepNum: stepNum
-            });
+        // Set the container ref object to a custom object with just enough
+        // of the DOM API implemented to support the scroll logic
+        const programSequenceContainer = getProgramSequenceContainer(wrapper);
+        programSequenceContainer.ref.current = {
+            getBoundingClientRect: () => {
+                return {
+                    left : 100
+                };
+            },
+            clientWidth: 1000,
+            scrollLeft: 200
+        };
 
-            expect(mockScrollIntoView.mock.calls.length).toBe(1);
-            expect(mockScrollIntoView.mock.calls[0][0]).toStrictEqual({
-                behavior: 'smooth',
-                block: 'nearest',
-                inline: 'nearest'
-            });
+        // Set the active block location
+        const activeProgramBlock = getProgramBlockAtPosition(wrapper, 3);
+        // $FlowFixMe: Flow complains that getBoundingClientRect is not writable
+        activeProgramBlock.getDOMNode().getBoundingClientRect = () => {
+            return {
+                left: 2000,
+                right: 2300
+            };
+        };
 
-            expect(mockScrollIntoView.mock.instances.length).toBe(1);
-            expect(mockScrollIntoView.mock.instances[0]).toBe(getProgramBlockAtPosition(wrapper, stepNum).getDOMNode());
-        }
-    );
+        // Trigger a scroll
+        wrapper.setProps({
+            activeProgramStepNum: 3
+        });
+
+        expect(programSequenceContainer.ref.current.scrollLeft).toBe(200 + 2300 - 100 - 1000);
+    });
+    test('When active program block is outside of the container, on the left', () => {
+        expect.assertions(1);
+
+        const { wrapper } = createMountProgramBlockEditor();
+
+        // Set the container ref object to a custom object with just enough
+        // of the DOM API implemented to support the scroll logic
+        const programSequenceContainer = getProgramSequenceContainer(wrapper);
+        programSequenceContainer.ref.current = {
+            getBoundingClientRect: () => {
+                return {
+                    left : 100
+                };
+            },
+            clientWidth: 1000,
+            scrollLeft: 2000
+        };
+
+        // Set the active block location
+        const activeProgramBlock = getProgramBlockAtPosition(wrapper, 3);
+        // $FlowFixMe: Flow complains that getBoundingClientRect is not writable
+        activeProgramBlock.getDOMNode().getBoundingClientRect = () => {
+            return {
+                left: -200,
+                right: -100
+            };
+        };
+
+        // Trigger a scroll
+        wrapper.setProps({
+            activeProgramStepNum: 3
+        });
+
+        expect(programSequenceContainer.ref.current.scrollLeft).toBe(2000 - 100 - 200);
+    });
 });
 
 test('The editor scrolls when a step is added to the end of the program', () => {
