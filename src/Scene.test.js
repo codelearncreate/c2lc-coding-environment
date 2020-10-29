@@ -65,6 +65,10 @@ function findRobotCharacterPath(sceneWrapper) {
     return sceneWrapper.find('.Scene__path-line');
 }
 
+function findGridCell(sceneWrapper) {
+    return sceneWrapper.find('.Scene__grid-cell');
+}
+
 function calculateGridDimensions(numRows, numColumns, gridCellWidth) {
     const width = numColumns * gridCellWidth;
     const height = numRows * gridCellWidth;
@@ -89,25 +93,27 @@ function calculateCharacterDimensions(gridCellWidth) {
 
 describe('When the Scene renders', () => {
     test('With numRows = 0, numColumns = 2, gridCellWidth = 5', () => {
-        expect.assertions(1);
+        expect.assertions(2);
         const numRows = 0;
         const numColumns = 2;
         const gridCellWidth = 5;
         const sceneWrapper = createMountScene({numRows, numColumns, gridCellWidth});
         expect(findGridLines(sceneWrapper).length).toBe(0);
+        expect(findGridCell(sceneWrapper).length).toBe(0);
     });
 
     test('With numRows = 2, numColumns = 0, gridCellWidth = 10', () => {
-        expect.assertions(1);
+        expect.assertions(2);
         const numRows = 2;
         const numColumns = 0;
         const gridCellWidth = 10;
         const sceneWrapper = createMountScene({numRows, numColumns, gridCellWidth});
         expect(findGridLines(sceneWrapper).length).toBe(0);
+        expect(findGridCell(sceneWrapper).length).toBe(0);
     });
 
     test('With numRows = 1, numColumns = 1, gridCellWidth = 100', () => {
-        expect.assertions(7);
+        expect.assertions(8);
         const numRows = 1;
         const numColumns = 1;
         const gridCellWidth = 100;
@@ -124,23 +130,27 @@ describe('When the Scene renders', () => {
 
         expect(findGridLabels(sceneWrapper).length).toBe(2);
 
+       // Column labels
+
+        expect(findGridLabels(sceneWrapper).get(0).props.x).toBe(0);
+        expect(findGridLabels(sceneWrapper).get(0).props.y).toBe(-50 - expectedLabelOffset);
+
         // Row labels
 
-        expect(findGridLabels(sceneWrapper).get(0).props.x).toBe(-50 - expectedLabelOffset);
-        expect(findGridLabels(sceneWrapper).get(0).props.y).toBe(0);
-
-        // Column labels
-
-        expect(findGridLabels(sceneWrapper).get(1).props.x).toBe(0);
-        expect(findGridLabels(sceneWrapper).get(1).props.y).toBe(-50 - expectedLabelOffset);
+        expect(findGridLabels(sceneWrapper).get(1).props.x).toBe(-50 - expectedLabelOffset);
+        expect(findGridLabels(sceneWrapper).get(1).props.y).toBe(0);
 
         // Grid lines
 
         expect(findGridLines(sceneWrapper).length).toBe(0);
+
+        // Grid cells
+
+        expect(findGridCell(sceneWrapper).length).toBe(1);
     });
 
-    test('With numRows = 2, numColumns = 2, gridCellWidth = 6', () => {
-        expect.assertions(19);
+    test('With numRows = 2, numColumns = 2, gridCellWidth = 100', () => {
+        expect.assertions(20);
         const numRows = 2;
         const numColumns = 2;
         const gridCellWidth = 100;
@@ -157,37 +167,41 @@ describe('When the Scene renders', () => {
 
         expect(findGridLabels(sceneWrapper).length).toBe(4);
 
-        // Row labels
-
-        expect(findGridLabels(sceneWrapper).get(0).props.x).toBe(-100 - expectedLabelOffset);
-        expect(findGridLabels(sceneWrapper).get(0).props.y).toBe(-50);
-        expect(findGridLabels(sceneWrapper).get(1).props.x).toBe(-100 - expectedLabelOffset);
-        expect(findGridLabels(sceneWrapper).get(1).props.y).toBe(50);
-
         // Column labels
 
-        expect(findGridLabels(sceneWrapper).get(2).props.x).toBe(-50);
-        expect(findGridLabels(sceneWrapper).get(2).props.y).toBe(-100 - expectedLabelOffset);
-        expect(findGridLabels(sceneWrapper).get(3).props.x).toBe(50);
-        expect(findGridLabels(sceneWrapper).get(3).props.y).toBe(-100 - expectedLabelOffset);
+        expect(findGridLabels(sceneWrapper).get(0).props.x).toBe(-50);
+        expect(findGridLabels(sceneWrapper).get(0).props.y).toBe(-100 - expectedLabelOffset);
+        expect(findGridLabels(sceneWrapper).get(1).props.x).toBe(50);
+        expect(findGridLabels(sceneWrapper).get(1).props.y).toBe(-100 - expectedLabelOffset);
+
+        // Row labels
+
+        expect(findGridLabels(sceneWrapper).get(2).props.x).toBe(-100 - expectedLabelOffset);
+        expect(findGridLabels(sceneWrapper).get(2).props.y).toBe(-50);
+        expect(findGridLabels(sceneWrapper).get(3).props.x).toBe(-100 - expectedLabelOffset);
+        expect(findGridLabels(sceneWrapper).get(3).props.y).toBe(50);
 
         // Grid lines
 
         expect(findGridLines(sceneWrapper).length).toBe(2);
 
-        // Grid rows
-
-        expect(findGridLines(sceneWrapper).get(0).props.x1).toBe(-100);
-        expect(findGridLines(sceneWrapper).get(0).props.y1).toBe(0);
-        expect(findGridLines(sceneWrapper).get(0).props.x2).toBe(100);
-        expect(findGridLines(sceneWrapper).get(0).props.y2).toBe(0);
-
         // Grid columns
 
-        expect(findGridLines(sceneWrapper).get(1).props.x1).toBe(0);
-        expect(findGridLines(sceneWrapper).get(1).props.y1).toBe(-100);
-        expect(findGridLines(sceneWrapper).get(1).props.x2).toBe(0);
-        expect(findGridLines(sceneWrapper).get(1).props.y2).toBe(100);
+        expect(findGridLines(sceneWrapper).get(0).props.x1).toBe(0);
+        expect(findGridLines(sceneWrapper).get(0).props.y1).toBe(-100);
+        expect(findGridLines(sceneWrapper).get(0).props.x2).toBe(0);
+        expect(findGridLines(sceneWrapper).get(0).props.y2).toBe(100);
+
+        // Grid rows
+
+        expect(findGridLines(sceneWrapper).get(1).props.x1).toBe(-100);
+        expect(findGridLines(sceneWrapper).get(1).props.y1).toBe(0);
+        expect(findGridLines(sceneWrapper).get(1).props.x2).toBe(100);
+        expect(findGridLines(sceneWrapper).get(1).props.y2).toBe(0);
+
+        // Grid cells
+
+        expect(findGridCell(sceneWrapper).length).toBe(4);
     });
 });
 
@@ -283,3 +297,21 @@ describe('When the Character has a path, it is drawn on the Scene', () => {
         expect(robotCharacterPath.get(1).props.y2).toBe(800);
     })
 })
+
+describe('When the scene renders', () => {
+    test('the robot character should be at the center by default', () => {
+        const numRows = 3;
+        const numColumns = 3;
+        const gridCellWidth = 100;
+        const sceneWrapper = createMountScene({numRows, numColumns, gridCellWidth});
+        expect(findGridCell(sceneWrapper).get(0).props['aria-label']).toBe('Cell A1 Background only');
+        expect(findGridCell(sceneWrapper).get(1).props['aria-label']).toBe('Cell B1 Background only');
+        expect(findGridCell(sceneWrapper).get(2).props['aria-label']).toBe('Cell C1 Background only');
+        expect(findGridCell(sceneWrapper).get(3).props['aria-label']).toBe('Cell A2 Background only');
+        expect(findGridCell(sceneWrapper).get(4).props['aria-label']).toBe('Cell B2 Robot Character');
+        expect(findGridCell(sceneWrapper).get(5).props['aria-label']).toBe('Cell C2 Background only');
+        expect(findGridCell(sceneWrapper).get(6).props['aria-label']).toBe('Cell A3 Background only');
+        expect(findGridCell(sceneWrapper).get(7).props['aria-label']).toBe('Cell B3 Background only');
+        expect(findGridCell(sceneWrapper).get(8).props['aria-label']).toBe('Cell C3 Background only');
+    });
+});
