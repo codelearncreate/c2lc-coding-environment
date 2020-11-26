@@ -419,6 +419,9 @@ export default class App extends React.Component<{}, AppState> {
     };
 
     handleRootClick = (e: SyntheticInputEvent<HTMLInputElement>) => {
+        // Ensure that the audio starts on any user interaction.
+        this.audioManager.startTone();
+
         let element = e.target;
         // Walk up the document tree until we hit the top, or we find that
         // we are within an action panel group area
@@ -436,6 +439,9 @@ export default class App extends React.Component<{}, AppState> {
     };
 
     handleRootKeyDown = (e: SyntheticKeyboardEvent<HTMLInputElement>) => {
+        // Ensure that the audio starts on any user interaction.
+        this.audioManager.startTone();
+
         this.focusTrapManager.handleKeyDown(e);
     };
 

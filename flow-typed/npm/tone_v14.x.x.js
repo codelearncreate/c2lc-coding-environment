@@ -1,4 +1,7 @@
 declare module "tone" {
+    // https://tonejs.github.io/docs/14.7.39/fn/start
+    declare export function start(): Promise<void>;
+
     // There are two things called "Frequency" in Tone.js
     //
     //       https://tonejs.github.io/docs/14.7.58/type/Frequency
@@ -13,7 +16,7 @@ declare module "tone" {
     }
 
     declare export function Frequency(value: TimeValue | FrequencyType ): FrequencyClass;
-
+    
     // https://tonejs.github.io/docs/14.7.58/type/InputNode
     declare type InputNode = ToneAudioNode;
 
