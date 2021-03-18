@@ -220,6 +220,10 @@ class Scene extends React.Component<SceneProps, {}> {
                         </g>
                     </svg>
                 </span>
+                <div className='Scene__resize-button-container'>
+                    <button className='Scene__resize-button' onClick={this.props.onClickExpandScene} > + </button>
+                    <button className='Scene__resize-button' onClick={this.props.onClickCollapseScene} > - </button>
+                </div>
             </div>
         );
     }

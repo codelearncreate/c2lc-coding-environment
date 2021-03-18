@@ -2,6 +2,7 @@
 
 // Grid for Scene-container is set in App.scss
 .Scene-container {
+    position: relative;
     height: 100%;
     overflow: scroll;
 }
@@ -27,4 +28,20 @@
     stroke: #222;
     stroke-width: 0.03;
     stroke-linecap: round;
+}
+
+.Scene__resize-button-container {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    top: 0;
+    right: 0;
+}
+
+.Scene__resize-button {
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 50%;
+    margin-top: 1rem;
+    margin-right: 1rem;
 }
