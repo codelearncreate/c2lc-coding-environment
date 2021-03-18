@@ -50,7 +50,8 @@ type AppContext = {
 type AppSettings = {
     language: string,
     addNodeExpandedMode: boolean,
-    theme: ThemeName
+    theme: ThemeName,
+    sceneMode: 'expanded'
 };
 
 type AppProps = {
@@ -103,7 +104,8 @@ export class App extends React.Component<AppProps, AppState> {
             settings: {
                 language: 'en',
                 addNodeExpandedMode: true,
-                theme: 'default'
+                theme: 'default',
+                sceneMode: 'default'
             },
             dashConnectionStatus: 'notConnected',
             showDashConnectionError: false,
@@ -551,6 +553,30 @@ export class App extends React.Component<AppProps, AppState> {
         this.setStateSettings({ theme });
     }
 
+    handleExpandScene = () => {
+        if (this.state.settings.sceneMode === 'collapsed') {
+            this.setStateSettings({
+                sceneMode: 'default'
+            });
+        } else if (this.state.settings.sceneMode === 'default') {
+            this.setStateSettings({
+                sceneMode: 'expanded'
+            });
+        }
+    }
+
+    handleCollapseScene = () => {
+        if (this.state.settings.sceneMode === 'expanded') {
+            this.setStateSettings({
+                sceneMode: 'default'
+            });
+        } else if (this.state.settings.sceneMode === 'default') {
+            this.setStateSettings({
+                sceneMode: 'collapsed'
+            });
+        }
+    }
+
     render() {
         return (
             <React.Fragment>
@@ -613,6 +639,8 @@ export class App extends React.Component<AppProps, AppState> {
                             dimensions={this.state.sceneDimensions}
                             characterState={this.state.characterState}
                             theme={this.state.settings.theme}
+                            onClickExpandScene={this.handleExpandScene}
+                            onClickCollapseScene={this.handleCollapseScene}
                         />
                         <div className='App__scene-controls'>
                             <div className='App__scene-controls-group'>
@@ -776,6 +804,16 @@ export class App extends React.Component<AppProps, AppState> {
                     >= this.state.programSequence.getProgramLength()) {
                 // All steps from the programCounter onward have been deleted
                 this.setState({ runningState: 'stopped' });
+            }
+        }
+
+        if (this.state.settings.sceneMode !== prevState.settings.sceneMode) {
+            if (document.body) {
+                if (this.state.settings.sceneMode === 'default') {
+                    document.body.className = '';
+                } else {
+                    document.body.className = `Scene-${this.state.settings.sceneMode}`;
+                }
             }
         }
 
