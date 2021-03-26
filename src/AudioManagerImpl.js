@@ -44,7 +44,8 @@ export default class AudioManagerImpl implements AudioManager {
     audioEnabled: boolean;
     panner: Panner;
     samplers: {
-        movement: Sampler,
+        backward: Sampler,
+        forward: Sampler,
         left: Sampler,
         right: Sampler
     };
@@ -92,7 +93,7 @@ export default class AudioManagerImpl implements AudioManager {
 
         this.samplers.right.connect(this.panner);
 
-        this.samplers.movement = new Sampler({
+        this.samplers.backward = new Sampler({
             urls: {
                 "C0": "C0.wav",
                 "C1": "C1.wav",
@@ -102,10 +103,26 @@ export default class AudioManagerImpl implements AudioManager {
                 "C5": "C5.wav",
                 "C6": "C6.wav"
             },
-            baseUrl: "/audio/long-bell/"
+            baseUrl: "/audio/backward/"
         });
 
-        this.samplers.movement.connect(this.panner);
+        this.samplers.backward.connect(this.panner);
+
+
+        this.samplers.forward = new Sampler({
+            urls: {
+                "C0": "C0.wav",
+                "C1": "C1.wav",
+                "C2": "C2.wav",
+                "C3": "C3.wav",
+                "C4": "C4.wav",
+                "C5": "C5.wav",
+                "C6": "C6.wav"
+            },
+            baseUrl: "/audio/forward/"
+        });
+
+        this.samplers.forward.connect(this.panner);
     }
 
     playAnnouncement(messageIdSuffix: string, intl: IntlShape, messagePayload: any) {

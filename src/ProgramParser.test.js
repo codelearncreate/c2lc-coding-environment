@@ -24,6 +24,18 @@ test('Parse 3', () => {
     expect((new ProgramParser()).parse('3')).toStrictEqual(['forward3']);
 });
 
+test('Parse 4', () => {
+    expect((new ProgramParser()).parse('4')).toStrictEqual(['backward1']);
+});
+
+test('Parse 5', () => {
+    expect((new ProgramParser()).parse('5')).toStrictEqual(['backward2']);
+});
+
+test('Parse 6', () => {
+    expect((new ProgramParser()).parse('6')).toStrictEqual(['backward3']);
+});
+
 test('Parse A', () => {
     expect((new ProgramParser()).parse('A')).toStrictEqual(['left45']);
 });
@@ -49,10 +61,13 @@ test('Parse d', () => {
 });
 
 test('Parse program with multiple commands', () => {
-    expect((new ProgramParser()).parse('123ABDabd')).toStrictEqual([
+    expect((new ProgramParser()).parse('123456ABDabd')).toStrictEqual([
         'forward1',
         'forward2',
         'forward3',
+        'backward1',
+        'backward2',
+        'backward3',
         'left45',
         'left90',
         'left180',

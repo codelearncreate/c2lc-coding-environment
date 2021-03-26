@@ -29,3 +29,17 @@ test('SceneDimensions.getBoundsStateY()', () => {
     expect(dimensions.getBoundsStateY(4)).toBe('outOfBoundsAbove');
     expect(dimensions.getBoundsStateY(-1.51)).toBe('outOfBoundsBelow');
 });
+
+test('SceneDimensions.isSceneEdgeX()', () => {
+    const dimensions = new SceneDimensions(5, 3);
+    expect(dimensions.isSceneEdgeX(1)).toBe(true);
+    expect(dimensions.isSceneEdgeX(5)).toBe(true);
+    expect(dimensions.isSceneEdgeX(2)).toBe(false);
+});
+
+test('SceneDimensions.isSceneEdgeY()', () => {
+    const dimensions = new SceneDimensions(5, 3);
+    expect(dimensions.isSceneEdgeY(1)).toBe(true);
+    expect(dimensions.isSceneEdgeY(3)).toBe(true);
+    expect(dimensions.isSceneEdgeY(2)).toBe(false);
+});

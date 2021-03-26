@@ -23,6 +23,15 @@ export default class ProgramSerializer {
                 case ('forward3') :
                     programText += '3';
                     break;
+                case ('backward1') :
+                    programText += '4';
+                    break;
+                case ('backward2') :
+                    programText += '5';
+                    break;
+                case ('backward3') :
+                    programText += '6';
+                    break;
                 case ('left45') :
                     programText += 'A'
                     break;

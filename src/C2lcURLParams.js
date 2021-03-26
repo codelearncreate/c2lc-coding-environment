@@ -22,4 +22,8 @@ export default class C2lcURLParams {
     getTheme() {
         return this.urlSearchParams.get('t');
     }
+
+    getWorld() {
+        return this.urlSearchParams.get('w');
+    }
 }

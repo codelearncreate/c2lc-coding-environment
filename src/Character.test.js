@@ -8,7 +8,7 @@ import Character from './Character';
 configure({ adapter: new Adapter() });
 
 const defaultCharacterProps = {
-    theme: 'default',
+    world: 'default',
     transform: '',
     width: 3
 };
@@ -40,12 +40,12 @@ describe('Right character should render based on theme props', () => {
     });
     test('forest', () => {
         expect.assertions(1);
-        const wrapper = createMountCharacter({theme: 'forest'});
+        const wrapper = createMountCharacter({world: 'forest'});
         expect(findCharacter(wrapper).get(0).type.render().props.children).toBe('Rabbit.svg');
     });
     test('space', () => {
         expect.assertions(1);
-        const wrapper = createMountCharacter({theme: 'space'});
+        const wrapper = createMountCharacter({world: 'space'});
         expect(findCharacter(wrapper).get(0).type.render().props.children).toBe('SpaceShip.svg');
     });
 })

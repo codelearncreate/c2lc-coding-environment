@@ -1,6 +1,6 @@
 // @flow
 
-import type { ThemeName } from './types';
+import type { ThemeName, WorldName } from './types';
 
 let idCounter: number = 0;
 
@@ -20,9 +20,8 @@ function makeDelayedPromise(timeMs: number): Promise<void> {
     });
 }
 
-function generateEncodedProgramURL(versionString: string, themeString: string, programString: string, characterStateString: string): string {
-    // return `?v=${encodeURIComponent(versionString)}&t=${themeString}&p=${encodeURIComponent(programString)}&c=${encodeURIComponent(characterStateString)}`;
-    return `?v=${encodeURIComponent(versionString)}&p=${encodeURIComponent(programString)}&c=${encodeURIComponent(characterStateString)}`;
+function generateEncodedProgramURL(versionString: string, themeString: string, worldString: string, programString: string, characterStateString: string): string {
+    return `?v=${encodeURIComponent(versionString)}&t=${themeString}&w=${worldString}&p=${encodeURIComponent(programString)}&c=${encodeURIComponent(characterStateString)}`;
 }
 
 function getThemeFromString(themeQuery: ?string, defaultThemeName: ThemeName): ThemeName {
@@ -33,4 +32,12 @@ function getThemeFromString(themeQuery: ?string, defaultThemeName: ThemeName): T
     }
 }
 
-export { generateId, makeDelayedPromise, generateEncodedProgramURL, getThemeFromString };
+function getWorldFromString(worldQuery: ?string, defaultWorldName: WorldName): ThemeName {
+    switch (worldQuery) {
+        case('space'): return 'space';
+        case('forest'): return 'forest';
+        default: return defaultWorldName;
+    }
+}
+
+export { generateId, makeDelayedPromise, generateEncodedProgramURL, getThemeFromString, getWorldFromString };

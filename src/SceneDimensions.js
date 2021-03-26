@@ -60,4 +60,18 @@ export default class SceneDimensions {
         }
         return 'inBounds';
     }
+
+    isSceneEdgeX(x: number): boolean {
+        if (x === 1 || x === this.#width) {
+            return true;
+        }
+        return false;
+    }
+
+    isSceneEdgeY(y: number): boolean {
+        if (y === 1 || y === this.#height) {
+            return true;
+        }
+        return false;
+    }
 };

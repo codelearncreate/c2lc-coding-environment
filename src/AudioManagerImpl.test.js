@@ -2,6 +2,7 @@
 
 import {getNoteForState} from './AudioManagerImpl';
 import CharacterState from './CharacterState';
+import SceneDimensions from './SceneDimensions';
 import {Frequency} from 'tone';
 
 function arrayToPaddedRowString (array: Array<any>) : string {
@@ -47,6 +48,8 @@ test("Returns a sensible note range for every supported character position.", ()
     // noteTable [row][col] = singlePitchString;
     const noteTable = [];
 
+    const sceneDimensions = new SceneDimensions(1, 1);
+
     for (let row = minRow; row <= maxRow; row++) {
         let maxPitch = 0;
         let minPitch = 127;
@@ -54,7 +57,7 @@ test("Returns a sensible note range for every supported character position.", ()
         noteTable.push(rowEntries);
 
         for (let col = minCol; col <= maxCol; col++) {
-            const noteForState = getNoteForState(new CharacterState(col, row, 0, []));
+            const noteForState = getNoteForState(new CharacterState(col, row, 0, [], sceneDimensions));
             rowEntries.push(noteForState);
 
             const midiNote: number = Frequency(noteForState).toMidi();

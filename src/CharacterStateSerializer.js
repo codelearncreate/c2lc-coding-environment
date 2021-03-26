@@ -1,8 +1,14 @@
 // @flow
 
 import CharacterState from './CharacterState';
+import SceneDimensions from './SceneDimensions';
 
 export default class CharacterStateSerializer {
+    sceneDimensions: SceneDimensions;
+
+    constructor(sceneDimensions: SceneDimensions) {
+        this.sceneDimensions = sceneDimensions;
+    }
     serialize(characterState: CharacterState): string {
         let pathParam = '' +
             this.encodePosition(characterState.xPos) +
@@ -35,7 +41,7 @@ export default class CharacterStateSerializer {
                 path.push({ x1, y1, x2, y2 });
             }
         }
-        return new CharacterState(xPos, yPos, direction, path);
+        return new CharacterState(xPos, yPos, direction, path, this.sceneDimensions);
     }
 
     encodeDirection(direction: number): string {

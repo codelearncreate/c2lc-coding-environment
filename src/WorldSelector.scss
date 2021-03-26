@@ -1,0 +1,49 @@
+@import 'variables';
+
+.WorldSelector {
+    position: relative;
+    top: 0.8rem;
+    background-color: #CCE6E2;
+    padding: 1rem;
+    border: 1px solid grey;
+    border-radius: 3px;
+    height: 100%;
+}
+
+.WorldSelector .HeaderIcon, .WorldSelector .WorldIcon {
+    display: block;
+    height: 4rem;
+    width: 4rem;
+    padding: 0.2rem;
+}
+
+.WorldSelector .HeaderIcon {
+    background: none;
+}
+
+.WorldSelector .WorldIcon {
+    box-shadow: inset 0 .1rem .2rem rgba(0, 0, 0, 0.25);
+    background-color: white;
+    border-radius: 5px;
+    margin-top: 0.8rem;
+    padding: 0.4rem;
+}
+
+.WorldSelector .WorldIcon svg {
+    width: 2.5rem;
+    height: 2.5rem;
+}
+
+.WorldSelector .WorldIcon--selected {
+    background: #88C3BC;
+}
+
+.WorldSelector button:focus {
+    box-shadow: 0 0 0 $c2lc-focus-indicator-width #299DCE;
+}
+
+.WorldSelector button.btn:hover {
+    padding-top: 0.25rem;
+    padding-left: 0.2rem;
+}
+

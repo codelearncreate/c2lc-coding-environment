@@ -3,6 +3,7 @@
 import type { Program } from './types';
 
 type ProgramToken = 'forward1' | 'forward2' | 'forward3' |
+                    'backward1' | 'backward2' | 'backward3' |
                     'left45' | 'left90' | 'left180' |
                     'right45' | 'right90' | 'right180' |
                     'eof';
@@ -44,6 +45,15 @@ export default class ProgramParser {
             case '3':
                 this.nextCh();
                 return 'forward3';
+            case '4':
+                this.nextCh();
+                return 'backward1';
+            case '5':
+                this.nextCh();
+                return 'backward2';
+            case '6':
+                this.nextCh();
+                return 'backward3';
             case 'A':
                 this.nextCh();
                 return 'left45';
@@ -67,15 +77,6 @@ export default class ProgramParser {
         }
     }
 
-    getInteger(): number {
-        let digits = '';
-        while (this.isDigit()) {
-            digits += this.ch;
-            this.nextCh();
-        }
-        return parseInt(digits, 10);
-    }
-
     nextCh() {
         if (this.textIndex >= this.text.length) {
             this.ch = 'eof';
@@ -83,9 +84,5 @@ export default class ProgramParser {
             this.ch = this.text.charAt(this.textIndex);
             this.textIndex += 1;
         }
-    }
-
-    isDigit(): boolean {
-        return (this.ch >= '0' && this.ch <= '9');
     }
 };

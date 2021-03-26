@@ -1,17 +1,80 @@
 @import 'variables';
 
 // Grid for Scene-container is set in App.scss
-.Scene-container {
+.Scene__container {
     position: relative;
+    z-index: 1;
     height: 100%;
-    overflow: scroll;
+    width: 100%;
+    display: grid;
+    grid-template-columns: 30px auto;
+    grid-template-rows: 30px auto;
+}
+
+.Scene__background {
+    position: absolute;
+    top: 0.8rem;
+    left: 0.5rem;
+    z-index: 0;
+    height: 100%;
+    width: 100%;
+    background-color: #CCE6E2;
 }
 
 .Scene {
+    grid-row-start: 2;
+    grid-row-end: 3;
+    grid-column-start: 2;
+    grid-column-end: 3;
+    overflow: scroll;
     background-color: #FFF;
     display: inline-block;
     box-sizing: border-box;
+}
+
+.Scene > svg {
     width: 1430px;
+}
+
+.Scene__row-header {
+    overflow: scroll;
+    fill: #CCE6E2;
+    grid-row-start: 2;
+    grid-row-end: 3;
+    grid-column-start: 1;
+    grid-column-end: 2;
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+}
+
+.Scene__row-header > svg {
+    width: 30px;
+    height: 900px;
+}
+
+.Scene__row-header::-webkit-scrollbar {
+    display: none;
+}
+
+.Scene__column-header {
+    fill: #CCE6E2;
+    grid-row-start: 1;
+    grid-row-end: 2;
+    grid-column-start: 2;
+    grid-column-end: 3;
+    overflow-y: hidden;
+    overflow-x: scroll;
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+}
+
+.Scene__column-header::-webkit-scrollbar {
+    display: none;
+}
+
+.Scene__column-header > svg {
+    width: 1450px;
+    height: 30px;
 }
 
 .Scene__grid-line {
@@ -21,7 +84,7 @@
 
 .Scene__grid-label {
     fill: #555;
-    font: bold 0.01em sans-serif;
+    font: bold 2.5px sans-serif;
 }
 
 .Scene__path-line {
@@ -34,7 +97,7 @@
     position: absolute;
     display: flex;
     flex-direction: column;
-    top: 0;
+    top: 2rem;
     right: 0;
 }
 
