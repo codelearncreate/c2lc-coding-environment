@@ -23,6 +23,18 @@ configure({ adapter: new Adapter()});
 
 // TODO: Mock the FocusTrapManager
 
+const mockAllowedActions = {
+    "forward1": true,
+    "forward2": true,
+    "forward3": true,
+    "left45": true,
+    "left90": true,
+    "left180": true,
+    "right45": true,
+    "right90": true,
+    "right180": true
+};
+
 const defaultProgramBlockEditorProps = {
     interpreterIsRunning: false,
     characterState: new CharacterState(1, 1, 2, [], new SceneDimensions(100, 100)),
@@ -35,6 +47,8 @@ const defaultProgramBlockEditorProps = {
     isDraggingCommand: false,
     focusTrapManager: new FocusTrapManager(),
     addNodeExpandedMode: false,
+    theme: 'default',
+    allowedActions: mockAllowedActions,
     world: 'default'
 };
 
@@ -47,7 +61,7 @@ function createShallowProgramBlockEditor(props) {
 
     // $FlowFixMe: Flow doesn't know about the Jest mock API
     AudioManagerImpl.mockClear();
-    const audioManagerInstance = new AudioManagerImpl(true);
+    const audioManagerInstance = new AudioManagerImpl(true, true);
     // $FlowFixMe: Flow doesn't know about the Jest mock API
     const audioManagerMock: any = AudioManagerImpl.mock.instances[0];
     const mockChangeProgramSequenceHandler = jest.fn();
@@ -89,7 +103,7 @@ function createShallowProgramBlockEditor(props) {
 function createMountProgramBlockEditor(props) {
     // $FlowFixMe: Flow doesn't know about the Jest mock API
     AudioManagerImpl.mockClear();
-    const audioManagerInstance = new AudioManagerImpl(true);
+    const audioManagerInstance = new AudioManagerImpl(true, true);
     // $FlowFixMe: Flow doesn't know about the Jest mock API
     const audioManagerMock = AudioManagerImpl.mock.instances[0];
 

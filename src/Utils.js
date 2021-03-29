@@ -20,8 +20,8 @@ function makeDelayedPromise(timeMs: number): Promise<void> {
     });
 }
 
-function generateEncodedProgramURL(versionString: string, themeString: string, worldString: string, programString: string, characterStateString: string): string {
-    return `?v=${encodeURIComponent(versionString)}&t=${themeString}&w=${worldString}&p=${encodeURIComponent(programString)}&c=${encodeURIComponent(characterStateString)}`;
+function generateEncodedProgramURL(versionString: string, themeString: string, worldString: string, programString: string, characterStateString: string, allowedActionsString: string): string {
+    return `?v=${encodeURIComponent(versionString)}&t=${themeString}&w=${worldString}&p=${encodeURIComponent(programString)}&c=${encodeURIComponent(characterStateString)}&a=${encodeURIComponent(allowedActionsString)}`;
 }
 
 function getThemeFromString(themeQuery: ?string, defaultThemeName: ThemeName): ThemeName {

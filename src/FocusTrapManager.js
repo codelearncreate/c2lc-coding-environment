@@ -30,7 +30,7 @@ export default class FocusTrapManager {
         this.returnElementSelector = null;
     }
 
-    handleKeyDown(e: SyntheticKeyboardEvent<HTMLInputElement>) {
+    handleKeyDown = (e: SyntheticKeyboardEvent<HTMLInputElement>) => {
         if (this.active) {
             if (e.key === tabKey) {
                 // Find the elements in our focus trap

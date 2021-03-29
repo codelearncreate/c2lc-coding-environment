@@ -62,7 +62,7 @@ body {
     margin-top: 0.5rem;
     margin-right: 0.5rem;
     grid-column-start: 3;
-    grid-column-end: 5;
+    grid-column-end: 4;
     grid-row-start: 1;
     grid-row-end: 3;
     min-height: 12rem;
@@ -92,13 +92,16 @@ body {
 }
 
 .App__world-selector-container {
+    position: relative;
+    top: 0.8rem;
     grid-column-start: 4;
     grid-column-end: 5;
     grid-row-start: 1;
     grid-row-end: 3;
     margin-right: 0.5rem;
     margin-top: 0.5rem;
-    margin-left: 1rem;
+    margin-left: 0.5rem;
+    overflow-y: scroll;
 }
 
 .App__command-palette {
@@ -109,7 +112,7 @@ body {
     grid-column-end: 3;
     grid-row-start: 2;
     grid-row-end: 4;
-    overflow: hidden;
+    overflow: visible;
 }
 
 .App__command-palette-heading {
@@ -135,7 +138,6 @@ body {
     display: flex;
     flex-direction: column;
     flex-wrap: wrap;
-    justify-content: space-around;
     align-items: center;
     margin-bottom: 4rem;
 }

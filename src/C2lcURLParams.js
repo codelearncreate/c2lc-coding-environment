@@ -23,6 +23,10 @@ export default class C2lcURLParams {
         return this.urlSearchParams.get('t');
     }
 
+    getAllowedActions() {
+        return this.urlSearchParams.get('a');
+    }
+
     getWorld() {
         return this.urlSearchParams.get('w');
     }

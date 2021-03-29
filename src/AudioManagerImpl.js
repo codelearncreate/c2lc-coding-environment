@@ -42,6 +42,7 @@ export function getNoteForState (characterState: CharacterState) : string {
 
 export default class AudioManagerImpl implements AudioManager {
     audioEnabled: boolean;
+    announcementsEnabled: boolean;
     panner: Panner;
     samplers: {
         backward: Sampler,
@@ -50,8 +51,9 @@ export default class AudioManagerImpl implements AudioManager {
         right: Sampler
     };
 
-    constructor(audioEnabled: boolean) {
+    constructor(audioEnabled: boolean, announcementsEnabled: boolean) {
         this.audioEnabled = audioEnabled;
+        this.announcementsEnabled = announcementsEnabled;
 
         this.panner = new Panner();
         this.panner.toDestination();
@@ -126,7 +128,7 @@ export default class AudioManagerImpl implements AudioManager {
     }
 
     playAnnouncement(messageIdSuffix: string, intl: IntlShape, messagePayload: any) {
-        if (this.audioEnabled) {
+        if (this.announcementsEnabled) {
             if (window.speechSynthesis.speaking || window.speechSynthesis.pending) {
                 window.speechSynthesis.cancel();
             }
@@ -163,6 +165,16 @@ export default class AudioManagerImpl implements AudioManager {
 
             // TODO: Consider making the timing configurable or tying it to the movement timing.
             this.panner.pan.rampTo(panningLevel, 0.5)
+        }
+    }
+
+    setAnnouncementsEnabled(announcementsEnabled: boolean) {
+        this.announcementsEnabled = announcementsEnabled;
+
+        if (!announcementsEnabled) {
+            if (window.speechSynthesis.speaking || window.speechSynthesis.pending) {
+                window.speechSynthesis.cancel();
+            }
         }
     }
 

@@ -3,6 +3,7 @@ import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import { injectIntl } from 'react-intl';
 import type {IntlShape} from 'react-intl';
+import AllowedActionsSerializer from './AllowedActionsSerializer';
 import AudioManagerImpl from './AudioManagerImpl';
 import CharacterState from './CharacterState';
 import CharacterStateSerializer from './CharacterStateSerializer';
@@ -26,8 +27,9 @@ import ProgramSequence from './ProgramSequence';
 import ProgramSpeedController from './ProgramSpeedController';
 import ProgramSerializer from './ProgramSerializer';
 import ShareButton from './ShareButton';
+import ActionsMenu from './ActionsMenu';
+import type { ActionToggleRegister, AudioManager, DeviceConnectionStatus, RobotDriver, RunningState, ThemeName, WorldName, SceneMode } from './types';
 import WorldSelector from './WorldSelector';
-import type { AudioManager, DeviceConnectionStatus, RobotDriver, RunningState, ThemeName, WorldName, SceneMode } from './types';
 import * as Utils from './Utils';
 import './App.scss';
 import './Themes.css';
@@ -51,8 +53,8 @@ type AppContext = {
 type AppSettings = {
     language: string,
     addNodeExpandedMode: boolean,
-    theme: ThemeName,
     sceneMode: SceneMode,
+    theme: ThemeName,
     world: WorldName
 };
 
@@ -70,10 +72,13 @@ type AppState = {
     selectedAction: ?string,
     isDraggingCommand: boolean,
     audioEnabled: boolean,
+    announcementsEnabled: boolean,
     actionPanelStepIndex: ?number,
     sceneDimensions: SceneDimensions,
     drawingEnabled: boolean,
-    runningState: RunningState
+    runningState: RunningState,
+    allowedActions: ActionToggleRegister,
+    usedActions: ActionToggleRegister
 };
 
 export class App extends React.Component<AppProps, AppState> {
@@ -87,6 +92,7 @@ export class App extends React.Component<AppProps, AppState> {
     startingCharacterState: CharacterState;
     programSerializer: ProgramSerializer;
     characterStateSerializer: CharacterStateSerializer;
+    allowedActionsSerializer: AllowedActionsSerializer;
     speedLookUp: Array<number>;
 
     constructor(props: any) {
@@ -103,27 +109,6 @@ export class App extends React.Component<AppProps, AppState> {
         // Begin facing East
         this.startingCharacterState = new CharacterState(1, 1, 2, [], this.sceneDimensions);
 
-        this.state = {
-            programSequence: new ProgramSequence([], 0),
-            characterState: this.startingCharacterState,
-            settings: {
-                language: 'en',
-                addNodeExpandedMode: true,
-                theme: 'default',
-                sceneMode: 'default',
-                world: 'default'
-            },
-            dashConnectionStatus: 'notConnected',
-            showDashConnectionError: false,
-            selectedAction: null,
-            isDraggingCommand: false,
-            audioEnabled: true,
-            actionPanelStepIndex: null,
-            sceneDimensions: this.sceneDimensions,
-            drawingEnabled: true,
-            runningState: 'stopped'
-        };
-
         this.interpreter = new Interpreter(1000, this);
 
         this.speedLookUp = [2000, 1500, 1000, 500, 250];
@@ -131,6 +116,8 @@ export class App extends React.Component<AppProps, AppState> {
         this.programSerializer = new ProgramSerializer();
 
         this.characterStateSerializer = new CharacterStateSerializer(this.sceneDimensions);
+
+        this.allowedActionsSerializer = new AllowedActionsSerializer();
 
         this.interpreter.addCommandHandler(
             'forward1',
@@ -380,6 +367,39 @@ export class App extends React.Component<AppProps, AppState> {
             }
         );
 
+        // We have to calculate the allowed commands and initialise the state here because this is the point at which
+        // the interpreter's commands are populated.
+
+        // TODO: Make this persist in the URL.
+        const allowedActions = {};
+        Object.keys(this.interpreter.commands).forEach((commandName) => {
+            allowedActions[commandName] = true;
+        });
+
+        this.state = {
+            programSequence: new ProgramSequence([], 0),
+            characterState: this.startingCharacterState,
+            settings: {
+                language: 'en',
+                addNodeExpandedMode: true,
+                sceneMode: 'default',
+                theme: 'default',
+                world: 'default'
+            },
+            dashConnectionStatus: 'notConnected',
+            showDashConnectionError: false,
+            selectedAction: null,
+            isDraggingCommand: false,
+            audioEnabled: true,
+            announcementsEnabled: true,
+            actionPanelStepIndex: null,
+            sceneDimensions: this.sceneDimensions,
+            drawingEnabled: true,
+            runningState: 'stopped',
+            allowedActions: allowedActions,
+            usedActions: {}
+        };
+
         // For FakeRobotDriver, replace with:
         // this.dashDriver = new FakeRobotDriver();
         this.dashDriver = new DashDriver();
@@ -388,7 +408,7 @@ export class App extends React.Component<AppProps, AppState> {
             this.audioManager = props.audioManager
         }
         else if (FeatureDetection.webAudioApiIsAvailable()) {
-            this.audioManager = new AudioManagerImpl(this.state.audioEnabled);
+            this.audioManager = new AudioManagerImpl(this.state.audioEnabled, this.state.announcementsEnabled);
         }
         else {
             this.audioManager = new FakeAudioManager();
@@ -443,10 +463,24 @@ export class App extends React.Component<AppProps, AppState> {
         }, callback);
     }
 
+
+    calculateUsedActions = (programSequence: ProgramSequence): ActionToggleRegister => {
+        // Calculate  "used actions".
+        const usedActions = {};
+        programSequence.program.forEach((commandName) => {
+            usedActions[commandName] = true;
+        });
+        return usedActions;
+    }
+
     // Handlers
 
     handleProgramSequenceChange = (programSequence: ProgramSequence) => {
-        this.setState({ programSequence });
+        const usedActions: ActionToggleRegister = this.calculateUsedActions(programSequence);
+        this.setState({
+            programSequence: programSequence,
+            usedActions: usedActions
+        });
     }
 
     handleClickPlay = () => {
@@ -565,9 +599,9 @@ export class App extends React.Component<AppProps, AppState> {
         this.focusTrapManager.handleKeyDown(e);
     };
 
-    handleToggleAudioFeedback = (audioEnabled: boolean) => {
+    handleToggleAudioFeedback = (announcementsEnabled: boolean) => {
         this.setState({
-            audioEnabled: audioEnabled
+            announcementsEnabled: announcementsEnabled
         });
     }
 
@@ -575,6 +609,18 @@ export class App extends React.Component<AppProps, AppState> {
         this.setState({
             drawingEnabled: drawingEnabled
         });
+    }
+
+    handleToggleAllowedCommand = (event: Event, commandName: string) => {
+        if (this.state.usedActions[commandName]) {
+            event.preventDefault();
+        }
+        else {
+            const newAllowedActions= Object.assign({}, this.state.allowedActions);
+            const currentIsAllowed = this.state.allowedActions[commandName];
+            newAllowedActions[commandName] = !currentIsAllowed;
+            this.setState({ allowedActions: newAllowedActions})
+        }
     }
 
     handleChangeProgramSpeed = (stepTimeMs: number) => {
@@ -591,17 +637,20 @@ export class App extends React.Component<AppProps, AppState> {
         const commandBlocks = [];
 
         for (const [index, value] of commandNames.entries()) {
-            commandBlocks.push(
-                <CommandPaletteCommand
-                    key={`CommandBlock-${index}`}
-                    commandName={value}
-                    selectedCommandName={this.getSelectedCommandName()}
-                    audioManager={this.audioManager}
-                    isDraggingCommand={this.state.isDraggingCommand}
-                    onChange={this.handleCommandFromCommandPalette}
-                    onDragStart={this.handleDragStartCommand}
-                    onDragEnd={this.handleDragEndCommand}/>
-            )
+            const isAllowed = this.state.allowedActions[value];
+            if (isAllowed) {
+                commandBlocks.push(
+                    <CommandPaletteCommand
+                        key={`CommandBlock-${index}`}
+                        commandName={value}
+                        selectedCommandName={this.getSelectedCommandName()}
+                        audioManager={this.audioManager}
+                        isDraggingCommand={this.state.isDraggingCommand}
+                        onChange={this.handleCommandFromCommandPalette}
+                        onDragStart={this.handleDragStartCommand}
+                        onDragEnd={this.handleDragEndCommand}/>
+                );
+            }
         }
 
         return commandBlocks;
@@ -710,7 +759,7 @@ export class App extends React.Component<AppProps, AppState> {
                             <div className='App__header-audio-toggle'>
                                 <div className='App__audio-toggle-switch'>
                                     <AudioFeedbackToggleSwitch
-                                        value={this.state.audioEnabled}
+                                        value={this.state.announcementsEnabled}
                                         onChange={this.handleToggleAudioFeedback} />
                                 </div>
                                 {/* Dash connection removed for version 0.5
@@ -739,6 +788,13 @@ export class App extends React.Component<AppProps, AppState> {
                     }
                     */}
                     <div className='App__command-palette'>
+                        <ActionsMenu
+                            allowedActions={this.state.allowedActions}
+                            changeHandler={this.handleToggleAllowedCommand}
+                            editingDisabled={this.state.runningState === 'running'}
+                            intl={this.props.intl}
+                            usedActions={this.state.usedActions}
+                        />
                         <h2 className='App__command-palette-heading App__commandpalette-heading-long'>
                             <FormattedMessage id='CommandPalette.movementsTitle' />
                         </h2>
@@ -844,13 +900,19 @@ export class App extends React.Component<AppProps, AppState> {
             const params = new C2lcURLParams(window.location.search);
             const programQuery = params.getProgram();
             const characterStateQuery = params.getCharacterState();
-            // const themeQuery = params.getTheme();
+            const allowedActionsQuery = params.getAllowedActions();
             const worldQuery = params.getWorld();
-            if (programQuery != null && characterStateQuery != null) {
+            // const themeQuery = params.getTheme();
+            if (programQuery != null && characterStateQuery != null && allowedActionsQuery != null) {
                 try {
+                    const programSequence: ProgramSequence = new ProgramSequence(this.programSerializer.deserialize(programQuery), 0);
+                    const usedActions: ActionToggleRegister = this.calculateUsedActions(programSequence);
+
                     this.setState({
-                        programSequence: new ProgramSequence(this.programSerializer.deserialize(programQuery), 0),
-                        characterState: this.characterStateSerializer.deserialize(characterStateQuery)
+                        programSequence: programSequence,
+                        characterState: this.characterStateSerializer.deserialize(characterStateQuery),
+                        allowedActions: this.allowedActionsSerializer.deserialize(allowedActionsQuery),
+                        usedActions: usedActions
                     });
                 } catch(err) {
                     console.log(`Error parsing program: ${programQuery} or characterState: ${characterStateQuery}`);
@@ -862,13 +924,18 @@ export class App extends React.Component<AppProps, AppState> {
         } else {
             const localProgram = window.localStorage.getItem('c2lc-program');
             const localCharacterState = window.localStorage.getItem('c2lc-characterState');
+            const localAllowedActions = window.localStorage.getItem('c2lc-allowedActions');
             // const localTheme = window.localStorage.getItem('c2lc-theme');
             const localWorld = window.localStorage.getItem('c2lc-world');
             if (localProgram != null && localCharacterState != null) {
                 try {
+                    const programSequence: ProgramSequence = new ProgramSequence(this.programSerializer.deserialize(localProgram), 0);
+                    const usedActions: ActionToggleRegister = this.calculateUsedActions(programSequence);
                     this.setState({
-                        programSequence: new ProgramSequence(this.programSerializer.deserialize(localProgram), 0),
-                        characterState: this.characterStateSerializer.deserialize(localCharacterState)
+                        programSequence: programSequence,
+                        characterState: this.characterStateSerializer.deserialize(localCharacterState),
+                        allowedActions: this.allowedActionsSerializer.deserialize(localAllowedActions),
+                        usedActions: usedActions
                     });
                 } catch(err) {
                     console.log(`Error parsing program: ${localProgram} or characterState: ${localCharacterState}`);
@@ -884,24 +951,32 @@ export class App extends React.Component<AppProps, AppState> {
         if (this.state.programSequence !== prevState.programSequence
             || this.state.characterState !== prevState.characterState
             || this.state.settings.theme !== prevState.settings.theme
+            || this.state.allowedActions !== prevState.allowedActions
             || this.state.settings.world !== prevState.settings.world) {
             const serializedProgram = this.programSerializer.serialize(this.state.programSequence.getProgram());
             const serializedCharacterState = this.characterStateSerializer.serialize(this.state.characterState);
+            const serializedAllowedActions = this.allowedActionsSerializer.serialize(this.state.allowedActions);
             window.history.pushState(
                 {
                     p: serializedProgram,
                     c: serializedCharacterState,
                     // t: this.state.settings.theme,
+                    a: serializedAllowedActions,
                     w: this.state.settings.world
                 },
                 '',
-                Utils.generateEncodedProgramURL(this.version, this.state.settings.theme, this.state.settings.world, serializedProgram, serializedCharacterState)
+                Utils.generateEncodedProgramURL(this.version, this.state.settings.theme, this.state.settings.world, serializedProgram, serializedCharacterState, serializedAllowedActions),
+                '',
             );
             window.localStorage.setItem('c2lc-version', this.version);
             window.localStorage.setItem('c2lc-program', serializedProgram);
             window.localStorage.setItem('c2lc-characterState', serializedCharacterState);
             // window.localStorage.setItem('c2lc-theme', this.state.settings.theme);
+            window.localStorage.setItem('c2lc-allowedActions', serializedAllowedActions);
             window.localStorage.setItem('c2lc-world', this.state.settings.world)
+        }
+        if (this.state.announcementsEnabled !== prevState.announcementsEnabled) {
+            this.audioManager.setAnnouncementsEnabled(this.state.announcementsEnabled);
         }
         if (this.state.audioEnabled !== prevState.audioEnabled) {
             this.audioManager.setAudioEnabled(this.state.audioEnabled);
