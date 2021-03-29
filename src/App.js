@@ -701,6 +701,7 @@ export class App extends React.Component<AppProps, AppState> {
                     role='main'
                     onClick={this.handleRootClick}
                     onKeyDown={this.handleRootKeyDown}>
+                    <div className='App__header-background' />
                     <header className='App__header'>
                         <div className='App__header-row'>
                             <h1 className='App__app-heading'>

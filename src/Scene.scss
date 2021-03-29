@@ -107,4 +107,44 @@
     border-radius: 50%;
     margin-top: 1rem;
     margin-right: 1rem;
+    background-color: $c2lc-primary-button-color;
+}
+
+.Scene__resize-button:focus {
+    outline: none;
+    box-shadow: 0 0 0 $c2lc-focus-indicator-width $c2lc-focus-indicator-color;
+}
+
+.Scene__resize-button:hover {
+    box-shadow: 0 0 0 $c2lc-hover-indicator-width $c2lc-focus-indicator-color;
+    background-color: #e5e5e5;
+}
+
+.Scene-collapsed .Scene__container {
+    grid-column-start: 1;
+    grid-column-end: 2;
+    height: 11rem;
+    max-width: 26rem;
+    grid-template-columns: 10px auto;
+    grid-template-rows: 20px auto;
+}
+
+.Scene-collapsed .Scene__background {
+    left: 0.15rem;
+    top: 0.75rem;
+    height: 10.5rem;
+}
+
+.Scene-collapsed .Scene > svg {
+    width: 26rem;
+}
+
+.Scene-collapsed .Scene__column-header > svg {
+    width: 26rem;
+    height: 20px;
+}
+
+.Scene-collapsed .Scene__row-header > svg {
+    width: 10px;
+    height: 16rem;
 }
