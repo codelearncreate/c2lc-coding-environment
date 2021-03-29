@@ -27,7 +27,7 @@ import ProgramSpeedController from './ProgramSpeedController';
 import ProgramSerializer from './ProgramSerializer';
 import ShareButton from './ShareButton';
 import WorldSelector from './WorldSelector';
-import type { AudioManager, DeviceConnectionStatus, RobotDriver, RunningState, ThemeName, WorldName } from './types';
+import type { AudioManager, DeviceConnectionStatus, RobotDriver, RunningState, ThemeName, WorldName, SceneMode } from './types';
 import * as Utils from './Utils';
 import './App.scss';
 import './Themes.css';
@@ -52,7 +52,7 @@ type AppSettings = {
     language: string,
     addNodeExpandedMode: boolean,
     theme: ThemeName,
-    sceneMode: 'expanded',
+    sceneMode: SceneMode,
     world: WorldName
 };
 

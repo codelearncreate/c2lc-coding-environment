@@ -17,7 +17,9 @@ export type SceneProps = {
     dimensions: SceneDimensions,
     characterState: CharacterState,
     world: WorldName,
-    intl: IntlShape
+    intl: IntlShape,
+    onClickCollapseScene: () => void,
+    onClickExpandScene: () => void
 };
 
 class Scene extends React.Component<SceneProps, {}> {

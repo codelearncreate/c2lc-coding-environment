@@ -16,6 +16,8 @@ export type ThemeName = 'default' | 'forest' | 'space';
 
 export type WorldName = 'default' | 'forest' | 'space';
 
+export type SceneMode = 'default' | 'expanded' | 'collapsed';
+
 export type Program = Array<string>;
 
 // use running, paused, stopped
