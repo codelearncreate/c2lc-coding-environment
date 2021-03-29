@@ -15,6 +15,10 @@ body {
     height: 100vh;
 }
 
+.App__header-background {
+    display: none;
+}
+
 .App__header {
     margin: 0.5rem 0.5rem 0 0.5rem;
     padding: 0 1rem;
@@ -229,4 +233,136 @@ body {
     body {
         overflow: scroll;
     }
+}
+
+.Scene-expanded .App__container {
+    grid-template-columns: 1fr auto 1fr;
+    grid-template-rows: min-content 1fr auto 1fr 90px;
+}
+
+.Scene-expanded .App__header {
+    grid-column-start: 2;
+    grid-column-end: 3;
+    grid-row-start: 1;
+    grid-row-end: 2;
+}
+
+.Scene-expanded .App__header-background {
+    display: block;
+    background-color: #000;
+    grid-column-start: 1;
+    grid-column-end: 4;
+    grid-row-start: 1;
+    grid-row-end: 2;
+}
+
+.Scene-expanded .App__header-row {
+    flex-direction: row;
+}
+
+.Scene-expanded .App__header-audio-toggle {
+    margin: auto 0 auto auto;
+}
+
+.Scene-expanded .App__scene-container {
+    margin: 0 0.5rem;
+    margin-right: 1rem;
+    grid-column-start: 2;
+    grid-column-end: 3;
+    grid-row-start: 3;
+    grid-row-end: 4;
+    max-width: 1500px;
+    max-height: 1000px;
+}
+
+.Scene-expanded .App__command-palette {
+    display: none;
+}
+
+.Scene-expanded .App__world-selector-container {
+    display: none;
+}
+
+.Scene-expanded .App__program-block-editor {
+    display: none;
+}
+
+.Scene-expanded .App__playAndShare-background {
+    grid-column-start: 1;
+    grid-column-end: 4;
+    grid-row-start: 5;
+    grid-row-end: 6;
+}
+
+.Scene-expanded .App__playAndShare-container {
+    grid-column-start: 2;
+    grid-column-end: 3;
+    grid-row-start: 5;
+    grid-row-end: 6;
+}
+
+.Scene-collapsed .App__container {
+    grid-template-columns: 1fr min-content minmax(auto, 30rem) minmax(auto, 55rem) 1fr;
+    grid-template-rows: 8rem 2rem 1fr 90px;
+}
+
+.Scene-collapsed .App__header {
+    margin: 0.5rem 0.5rem 0 0.5rem;
+    padding: 0 1rem;
+    background-color: #000;
+    color: #FFF;
+    grid-column-start: 2;
+    grid-column-end: 3;
+    grid-row-start: 1;
+    grid-row-end: 3;
+}
+
+.Scene-collapsed .App__scene-container {
+    position: relative;
+    margin-top: 0.5rem;
+    margin-right: 0.5rem;
+    grid-column-start: 3;
+    grid-column-end: 4;
+    grid-row-start: 1;
+    grid-row-end: 2;
+    display: grid;
+    grid-template-columns: auto 1fr;
+}
+
+.Scene-collapsed .App__scene-controls {
+    position: initial;
+    padding: 0;
+    margin: auto;
+    margin-left: 1rem;
+    grid-column-start: 2;
+    grid-column-end: 3;
+    display: grid;
+    grid-template-columns: 1fr;
+}
+
+.Scene-collapsed .App__world-selector-container {
+    grid-column-start: 4;
+    grid-column-end: 5;
+    grid-row-start: 1;
+    grid-row-end: 3;
+}
+
+.Scene-collapsed .App__command-palette {
+    background-color: #F1F1F1;
+    text-align: center;
+    margin: 0 0.5rem;
+    grid-column-start: 2;
+    grid-column-end: 3;
+    grid-row-start: 3;
+    grid-row-end: 4;
+    overflow: hidden;
+}
+
+.Scene-collapsed .App__program-block-editor {
+    margin-right: 0.5rem;
+    grid-column-start: 3;
+    grid-column-end: 5;
+    grid-row-start: 3;
+    grid-row-end: 4;
+    height: auto;
 }

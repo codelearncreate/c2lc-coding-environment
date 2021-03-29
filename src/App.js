@@ -28,7 +28,7 @@ import ProgramSpeedController from './ProgramSpeedController';
 import ProgramSerializer from './ProgramSerializer';
 import ShareButton from './ShareButton';
 import ActionsMenu from './ActionsMenu';
-import type { ActionToggleRegister, AudioManager, DeviceConnectionStatus, RobotDriver, RunningState, ThemeName, WorldName } from './types';
+import type { ActionToggleRegister, AudioManager, DeviceConnectionStatus, RobotDriver, RunningState, ThemeName, WorldName, SceneMode } from './types';
 import WorldSelector from './WorldSelector';
 import * as Utils from './Utils';
 import './App.scss';
@@ -53,6 +53,7 @@ type AppContext = {
 type AppSettings = {
     language: string,
     addNodeExpandedMode: boolean,
+    sceneMode: SceneMode,
     theme: ThemeName,
     world: WorldName
 };
@@ -381,6 +382,7 @@ export class App extends React.Component<AppProps, AppState> {
             settings: {
                 language: 'en',
                 addNodeExpandedMode: true,
+                sceneMode: 'default',
                 theme: 'default',
                 world: 'default'
             },
@@ -716,6 +718,30 @@ export class App extends React.Component<AppProps, AppState> {
         });
     }
 
+    handleExpandScene = () => {
+        if (this.state.settings.sceneMode === 'collapsed') {
+            this.setStateSettings({
+                sceneMode: 'default'
+            });
+        } else if (this.state.settings.sceneMode === 'default') {
+            this.setStateSettings({
+                sceneMode: 'expanded'
+            });
+        }
+    }
+
+    handleCollapseScene = () => {
+        if (this.state.settings.sceneMode === 'expanded') {
+            this.setStateSettings({
+                sceneMode: 'default'
+            });
+        } else if (this.state.settings.sceneMode === 'default') {
+            this.setStateSettings({
+                sceneMode: 'collapsed'
+            });
+        }
+    }
+
     render() {
         return (
             <React.Fragment>
@@ -724,6 +750,7 @@ export class App extends React.Component<AppProps, AppState> {
                     role='main'
                     onClick={this.handleRootClick}
                     onKeyDown={this.handleRootKeyDown}>
+                    <div className='App__header-background' />
                     <header className='App__header'>
                         <div className='App__header-row'>
                             <h1 className='App__app-heading'>
@@ -784,6 +811,8 @@ export class App extends React.Component<AppProps, AppState> {
                         <Scene
                             dimensions={this.state.sceneDimensions}
                             characterState={this.state.characterState}
+                            onClickExpandScene={this.handleExpandScene}
+                            onClickCollapseScene={this.handleCollapseScene}
                             world={this.state.settings.world}
                         />
                         <div className='App__scene-controls'>
@@ -987,6 +1016,16 @@ export class App extends React.Component<AppProps, AppState> {
                     >= this.state.programSequence.getProgramLength()) {
                 // All steps from the programCounter onward have been deleted
                 this.setState({ runningState: 'stopped' });
+            }
+        }
+
+        if (this.state.settings.sceneMode !== prevState.settings.sceneMode) {
+            if (document.body) {
+                if (this.state.settings.sceneMode === 'default') {
+                    document.body.className = '';
+                } else {
+                    document.body.className = `Scene-${this.state.settings.sceneMode}`;
+                }
             }
         }
 

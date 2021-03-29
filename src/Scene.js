@@ -6,6 +6,8 @@ import Character from './Character';
 import SceneDimensions from './SceneDimensions';
 import { injectIntl } from 'react-intl';
 import type {IntlShape} from 'react-intl';
+import { ReactComponent as ExpandIcon } from './svg/Expand.svg';
+import { ReactComponent as MinimizeIcon } from './svg/Minimize.svg';
 
 import './Scene.scss';
 
@@ -15,7 +17,9 @@ export type SceneProps = {
     dimensions: SceneDimensions,
     characterState: CharacterState,
     world: WorldName,
-    intl: IntlShape
+    intl: IntlShape,
+    onClickCollapseScene: () => void,
+    onClickExpandScene: () => void
 };
 
 class Scene extends React.Component<SceneProps, {}> {
@@ -268,6 +272,20 @@ class Scene extends React.Component<SceneProps, {}> {
                                 />
                             </g>
                         </svg>
+                    </div>
+                    <div className='Scene__resize-button-container'>
+                        <button
+                            className='Scene__resize-button'
+                            aria-label={this.props.intl.formatMessage({id: 'Scene.expand'})}
+                            onClick={this.props.onClickExpandScene} >
+                            <ExpandIcon />
+                        </button>
+                        <button
+                            className='Scene__resize-button'
+                            aria-label={this.props.intl.formatMessage({id: 'Scene.minimize'})}
+                            onClick={this.props.onClickCollapseScene} >
+                            <MinimizeIcon />
+                        </button>
                     </div>
                 </div>
             </React.Fragment>
