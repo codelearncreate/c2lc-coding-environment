@@ -100,6 +100,8 @@
         "AudioFeedbackToggleSwitch.audioFeedback": "Audio feedback",
         "Scene.inBounds": "Scene, {numColumns} by {numRows} grid with a character at column {xPos}, row {yPos} facing {direction}",
         "Scene.outOfBounds": "Scene, {numColumns} by {numRows} grid with a character outside of the scene {relativeDirection} the scene, facing {direction}",
+        "Scene.expand": "Expand the scene",
+        "Scene.minimize": "Minimize the scene",
         "StopButton": "Stop",
         "RefreshButton": "Refresh",
         "RelativeDirection.0": "above",
