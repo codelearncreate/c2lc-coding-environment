@@ -1,10 +1,12 @@
 // @flow
 
-import { Midi, Panner, Sampler} from 'tone';
+import { Panner, Sampler} from 'tone';
 import CharacterState from './CharacterState';
 import type {IntlShape} from 'react-intl';
 import {AudioManager} from './types';
 import SceneDimensions from './SceneDimensions';
+
+import tuning from './tuning.json';
 
 const SamplerDefs = {
     // The percussion instruments we use actually don't vary their pitch, so we use the same sample at different
@@ -155,38 +157,15 @@ const SamplerDefs = {
     }
 }
 
-function octaveModulo (rawPitch: number) : number {
-    const adjustedPitch = rawPitch % 12;
-    return adjustedPitch < 0 ? adjustedPitch + 12 : adjustedPitch;
-}
+// TODO: Make a file with the updated tuning as an X/Y lookup table and require
+// that here.
 
 // Modified "Tonnetz" tuning, see https://en.wikipedia.org/wiki/Tonnetz for explanation and diagrams.
 export function getNoteForState (characterState: CharacterState) : string {
-    // The centre note (xPos: 0, yPos: 0) is 440hz = A4 = 69.
-
-    // Every "column" is 7 tones from the next but stays within the same octave.  This results in a pattern that
-    // cycles through the full octave range every 12 squares.
-    const xPitchOffset = octaveModulo(7 * characterState.xPos);
-
-
-    // Every "row" is 4 tones from the next but stays within the same octave.  This results in a pattern of three
-    // notes that repeats every three rows.
-    const yPitchOffset = octaveModulo(4 * characterState.yPos);
-
-    const combinedPitchOffset = octaveModulo(xPitchOffset + yPitchOffset);
-
-    // To vary the range of notes without going too high or low, we use the repeating nature of the "row" pattern
-    // to divide the tuning into "octave bands" every three rows.  The middle band (yPos of -1, 0, or 1) is octave 3.
-    // The "band" above centre (yPos of 2, 3, or 4) is octave 4.  Anything higher is octave 5. The "band" below
-    // centre (yPos of -2, -3, or -4) is octave 2.  Anything lower is octave 1.
-    const octaveOffset = (Math.round(characterState.yPos / 3));
-    const boundedOctaveOffset = Math.max(Math.min(3, octaveOffset), -3);
-    const octave = 4 - boundedOctaveOffset;
-
-    // const midiNote = (12 * octave);
-    const midiNote = combinedPitchOffset + (12 * octave);
-    const noteName: string = Midi(midiNote).toNote();
-
+    // We use pentatonic tuning, C D F G A. The "center" note is the highest
+    // point in the row, all other notes descend from there. Every other row
+    // is unplayed, so we have tunings for a total of 8 rows.
+    const noteName = (tuning[characterState.yPos - 1] && tuning[characterState.yPos - 1][characterState.xPos - 1]) || "C-1";
     return noteName;
 }
 
@@ -250,7 +229,8 @@ export default class AudioManagerImpl implements AudioManager {
     }
 
     playSoundForCharacterState(samplerKey: string, releaseTimeInMs: number, characterState: CharacterState, sceneDimensions: SceneDimensions) {
-        if (this.audioEnabled) {
+        // There are no sounds for "even" rows.
+        if (this.audioEnabled && (characterState.yPos % 2)) {
             const releaseTime = releaseTimeInMs / 1000;
             const noteName = getNoteForState(characterState);
 
