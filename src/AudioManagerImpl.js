@@ -1,7 +1,7 @@
 // @flow
 
 // $FlowFixMe: We need to add a type definition for more stuff.
-import {Filter, FMSynth, MembraneSynth, MetalSynth, Panner, Reverb, Synth} from 'tone';
+import {Filter, FMSynth, MembraneSynth, MetalSynth, Panner, Reverb, Sequence, Synth, Transport} from 'tone';
 import CharacterState from './CharacterState';
 import type {IntlShape} from 'react-intl';
 import {AudioManager} from './types';
@@ -18,17 +18,38 @@ export function getNoteForState (characterState: CharacterState) : string {
     return noteName;
 }
 
+// TODO: Convert to Array<StepDef> once we have that.
+const sequences = {
+    forward1:  [{ instrumentKey: "drum", note: "C1"}],
+    forward2:  [{ instrumentKey: "drum", note: "C1"}, { instrumentKey: "drum", note: "C4"}],
+    forward3:  [{ instrumentKey: "drum", note: "C1"}, { instrumentKey: "drum", note: "C4"}, { instrumentKey: "cymbal", note: "C3"}],
+    backward1: [{ instrumentKey: "cymbal", note: "C3"}],
+    backward2: [{ instrumentKey: "cymbal", note: "C3"}, { instrumentKey: "drum", note: "C4"}],
+    backward3: [{ instrumentKey: "cymbal", note: "C3"}, { instrumentKey: "drum", note: "C4"}, { instrumentKey: "drum", note: "C1"}],
+    left45: [{ instrumentKey: "drum", note: "C6"}],
+    left90: [{ instrumentKey: "drum", note: "C6"}, { instrumentKey: "drum", note: "C5"}],
+    left180: [{ instrumentKey: "drum", note: "C6"}, { instrumentKey: "drum", note: "C5"}, { instrumentKey: "drum", note: "C4"}],
+    right45: [{ instrumentKey: "drum", note: "C4"}],
+    right90: [{ instrumentKey: "drum", note: "C4"}, { instrumentKey: "drum", note: "C5"}],
+    right180: [{ instrumentKey: "drum", note: "C4"}, { instrumentKey: "drum", note: "C5"}, { instrumentKey: "drum", note: "C6"}]
+};
+
 export default class AudioManagerImpl implements AudioManager {
     audioEnabled: boolean;
     announcementsEnabled: boolean;
     panner: Panner;
+    // $FlowFixMe: Add a type for sequence.
+    sequence: boolean | Sequence;
+
     orchestra: {
         // $FlowFixMe: we need to add type definitions for yet another thing.
-        forward1: Instrument,
+        bell: Instrument,
         // $FlowFixMe: we need to add type definitions for yet another thing.
-        forward2: Instrument,
+        cymbal: Instrument,
         // $FlowFixMe: we need to add type definitions for yet another thing.
-        forward3: Instrument
+        drum: Instrument,
+        // $FlowFixMe: we need to add type definitions for yet another thing.
+        marimba: Instrument
     };
 
     constructor(audioEnabled: boolean, announcementsEnabled: boolean) {
@@ -77,20 +98,11 @@ export default class AudioManagerImpl implements AudioManager {
 
         // const shake = new NoiseSynth().connect(shaker);
 
-        // TODO: Define sequences instead of using instruments directly for each action.
         this.orchestra = {
-            "backward1": bell,
-            "backward2": bell,
-            "backward3": bell,
-            "forward1":  marimba,
-            "forward2":  marimba,
-            "forward3":  marimba,
-            "left45":    drum,
-            "left90":    drum,
-            "left180":   drum,
-            "right45":   cymbal,
-            "right90":   cymbal,
-            "right180":  cymbal
+            bell: bell,
+            cymbal: cymbal,
+            drum: drum,
+            marimba: marimba,
         };
     }
 
@@ -115,26 +127,58 @@ export default class AudioManagerImpl implements AudioManager {
     }
 
     playSoundForCharacterState(actionKey: string, stepTimeInMs: number, characterState: CharacterState, sceneDimensions: SceneDimensions) {
-        // There are no sounds for "even" rows.
+        const releaseTime = stepTimeInMs / 4000;
+
+        // There are no "movement" sounds for even rows.
         if (this.audioEnabled && (characterState.yPos % 2)) {
-            const releaseTime = stepTimeInMs / 4000;
             const noteName = getNoteForState(characterState);
 
-            const instrument = this.orchestra[actionKey];
-            if (instrument) {
-                this.playPitchedNote(instrument, noteName, releaseTime);
-            }
+            // Use the marimba for the "pitched note";
+            this.playPitchedNote(this.orchestra.marimba, noteName, releaseTime);
+        }
 
-            // Pan left/right to suggest the relative horizontal position.
-            // We can discuss adjusting this once we have multiple
-            // sound-producing elements in the environment.
+        // Pan left/right to suggest the relative horizontal position.
+        // We can discuss adjusting this once we have multiple
+        // sound-producing elements in the environment.
 
-            // Limit the deviation from the centre so that there is always some sound in each speaker.
-            const midPoint = (sceneDimensions.getMinX() + sceneDimensions.getMaxX()) / 2;
-            const panningLevel = 0.75 * ((characterState.xPos - midPoint) / midPoint);
+        // Limit the deviation from the centre so that there is always some sound in each speaker.
+        const midPoint = (sceneDimensions.getMinX() + sceneDimensions.getMaxX()) / 2;
+        const panningLevel = 0.75 * ((characterState.xPos - midPoint) / midPoint);
 
-            // TODO: Consider making the timing configurable or tying it to the movement timing.
-            this.panner.pan.rampTo(panningLevel, 0);
+        // TODO: Consider making the timing configurable or tying it to the movement timing.
+        this.panner.pan.rampTo(panningLevel, 0);
+
+        this.playSequence(actionKey, releaseTime);
+    }
+
+    playSequence = (actionKey: string, releaseTime: number) => {
+        if (this.sequence) {
+            // $FlowFixMe: Add a type for sequence.
+            this.sequence.stop();
+            Transport.stop();
+        }
+
+        // $FlowFixMe: Define types for sequences (array of step defs).
+        const sequenceDef = sequences[actionKey];
+        if (sequenceDef) {
+            const notePlayTime = 0.2;
+            const timeBetweenSteps = (releaseTime / sequenceDef.length) - notePlayTime;
+            // $FlowFixMe: Define a type for step definitions.
+            const stepCallbackFn = (time: number, stepDef) => {
+                if (stepDef.note && stepDef.instrumentKey) {
+                    const instrument = this.orchestra[stepDef.instrumentKey];
+                    instrument.triggerAttackRelease(stepDef.note, notePlayTime);
+                }
+            };
+
+            this.sequence = new Sequence({
+                callback: stepCallbackFn,
+                events: sequenceDef,
+                subdivision: timeBetweenSteps,
+                loop: false
+            });
+            this.sequence.start(0);
+            Transport.start();
         }
     }
 
