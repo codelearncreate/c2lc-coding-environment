@@ -241,15 +241,16 @@ class ProgramBlockEditor extends React.Component<ProgramBlockEditorProps, Progra
     };
 
     handleActionPanelReplaceStep = (index: number) => {
-        const oldCommandString = this.props.intl.formatMessage({ id: "Announcement." + this.props.programSequence.getProgramStepAt(index)});
-        const newCommandString = this.props.intl.formatMessage({ id: "Announcement." + (this.props.selectedAction || "") });
-
-        this.props.audioManager.playAnnouncement('replace', this.props.intl, { oldCommand: oldCommandString, newCommand: newCommandString});
         if (this.props.selectedAction) {
-            if (
-                this.props.selectedAction &&
-                this.props.programSequence.getProgramStepAt(index) !== this.props.selectedAction) {
+            if (this.props.programSequence.getProgramStepAt(index) !== this.props.selectedAction) {
+                const oldCommandString = this.props.intl.formatMessage({ id: "Announcement." + this.props.programSequence.getProgramStepAt(index)});
+                //$FlowFixMe: Flow thinks `this.props.selectedAction` might be null even though we check it above.
+                const newCommandString = this.props.intl.formatMessage({ id: "Announcement." + this.props.selectedAction});
+
+                this.props.audioManager.playAnnouncement('replace', this.props.intl, { oldCommand: oldCommandString, newCommand: newCommandString});
+
                 this.props.onChangeProgramSequence(
+                    //$FlowFixMe: Flow thinks `this.props.selectedAction` might be null even though we check it above.
                     this.props.programSequence.overwriteStep(index, this.props.selectedAction)
                 );
                 this.setState({
@@ -263,6 +264,8 @@ class ProgramBlockEditor extends React.Component<ProgramBlockEditorProps, Progra
                 });
             }
         } else {
+            this.props.audioManager.playAnnouncement('noMovementSelected', this.props.intl);
+
             this.setState({
                 replaceIsActive: true
             });
@@ -590,45 +593,6 @@ class ProgramBlockEditor extends React.Component<ProgramBlockEditorProps, Progra
         )
     }
 
-    updateCharacterPositionAriaLive() {
-        const characterState = this.props.characterState;
-        const xPos = characterState.getColumnLabel();
-        const yPos = characterState.getRowLabel();
-        const direction = this.props.intl.formatMessage({id: `Direction.${characterState.direction}`});
-        const ariaLiveRegion = document.getElementById('character-position');
-        if (this.props.world === 'space') {
-            // $FlowFixMe: Flow doesn't know about character-position div
-            ariaLiveRegion.innerText=this.props.intl.formatMessage(
-                {id:'ProgramBlockEditor.spaceShipCharacter'},
-                {
-                    xPos,
-                    yPos,
-                    direction
-                }
-            );
-        } else if (this.props.world === 'forest') {
-            // $FlowFixMe: Flow doesn't know about character-position div
-            ariaLiveRegion.innerText=this.props.intl.formatMessage(
-                {id:'ProgramBlockEditor.rabbitCharacter'},
-                {
-                    xPos,
-                    yPos,
-                    direction
-                }
-            );
-        } else {
-            // $FlowFixMe: Flow doesn't know about character-position div
-            ariaLiveRegion.innerText=this.props.intl.formatMessage(
-                {id:'ProgramBlockEditor.robotCharacter'},
-                {
-                    xPos,
-                    yPos,
-                    direction
-                }
-            );
-        }
-    }
-
     getWorldCharacter() {
         const transform = `rotate(${this.props.characterState.getDirectionDegrees() - 90} 0 0)`;
         if (this.props.world === 'space') {
@@ -813,19 +777,7 @@ class ProgramBlockEditor extends React.Component<ProgramBlockEditorProps, Progra
         );
     }
 
-    componentDidUpdate(prevProps: ProgramBlockEditorProps) {
-        // Ensure updateCharacterPositionAriaLive gets called only once
-        if (prevProps.characterState !== this.props.characterState) {
-            if (this.props.runningState !== 'running') {
-                this.updateCharacterPositionAriaLive();
-            }
-        }  else if (prevProps.runningState !== this.props.runningState) {
-            if (this.props.runningState === 'pauseRequested' ||
-                this.props.runningState === 'stopRequested' ||
-                (prevProps.runningState === 'running' && this.props.runningState === 'stopped')) {
-                this.updateCharacterPositionAriaLive();
-            }
-        }
+    componentDidUpdate() {
         if (this.scrollToAddNodeIndex != null) {
             const element = this.addNodeRefs.get(this.scrollToAddNodeIndex);
             if (element && element.scrollIntoView) {

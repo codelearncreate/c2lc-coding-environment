@@ -180,6 +180,19 @@ button.btn.ProgramBlockEditor__program-deleteAll-button--pressed.ProgramBlockEdi
     stroke: #4C9990;
     width: 2.5rem;
     height: 2rem;
+
+    &:focus {
+        outline: $c2lc-focus-indicator-width solid $c2lc-focus-indicator-color;
+    }
+
+    &:not(.ProgramBlockEditor__character-position-button--disabled):hover {
+        path.filled {
+            fill: #F1AE5B;
+        }
+        path:not(.filled) {
+            stroke: #F1AE5B;
+        }
+    }
 }
 
 .ProgramBlockEditor__character-move-position-sides > svg {
@@ -198,10 +211,6 @@ button.btn.ProgramBlockEditor__program-deleteAll-button--pressed.ProgramBlockEdi
             fill: #818A98;
         }
     }
-}
-
-.ProgramBlockEditor__character-position-button:focus {
-    outline: $c2lc-focus-indicator-width solid $c2lc-focus-indicator-color;
 }
 
 .ProgramBlockEditor__character-position-button--disabled {

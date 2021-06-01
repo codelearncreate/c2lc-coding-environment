@@ -19,6 +19,15 @@ export type SceneProps = {
 };
 
 class Scene extends React.Component<SceneProps, {}> {
+    characterBackgroundRef: { current: null | Element };
+    sceneRef: { current: null | HTMLDivElement };
+
+    constructor (props: SceneProps) {
+        super(props);
+        this.characterBackgroundRef = React.createRef();
+        this.sceneRef = React.createRef();
+    }
+
     drawGrid(): any {
         const grid = [];
         const rowLabels = [];
@@ -170,6 +179,53 @@ class Scene extends React.Component<SceneProps, {}> {
         }
     }
 
+    componentDidUpdate = (prevProps) => {
+        // Required to avoid the lack of scrollIntoView on SVG elements in Safari.
+        /* istanbul ignore next */
+        if ((prevProps.characterState.xPos !== this.props.characterState.xPos ||
+            prevProps.characterState.yPos !== this.props.characterState.yPos) &&
+            this.sceneRef.current !== null && this.characterBackgroundRef.current !== null) {
+            const newCharacterBackgroundBounds = this.characterBackgroundRef.current.getBoundingClientRect();
+            if (newCharacterBackgroundBounds) {
+                // $FlowFixMe: Flow doesn't understand that the scene has this method.
+                const sceneBounds = this.sceneRef.current.getBoundingClientRect();
+
+                // Check to see if the character is visible. If not, scroll to bring it into view. We do this ourselves
+                // for two reasons:
+                //
+                // 1. On Safari, scrollIntoView doesn't work on SVG elements (C2LC-347).
+                // 2. On Firefox, scrollIntoView seems to scroll to the center of the character rather than bringing it
+                //    completely into view (C2LC-343).
+                //
+                // We add some padding to the position checking (0.5 times the
+                // width or height) to ensure that we always leave some room
+                // between the character and the edge of the scene (unless we
+                // are in the first or last row/col).
+                if (newCharacterBackgroundBounds.left - (0.5 * newCharacterBackgroundBounds.width) < sceneBounds.left) {
+                    // Scroll left.
+                    // $FlowFixMe: Flow doesn't understand that this element has a scrollLeft.
+                    this.sceneRef.current.scrollLeft -= (sceneBounds.left - newCharacterBackgroundBounds.left + newCharacterBackgroundBounds.width);
+                }
+                else if ((newCharacterBackgroundBounds.left + (1.5 * newCharacterBackgroundBounds.width)) > (sceneBounds.left + sceneBounds.width)) {
+                    // Scroll right.
+                    // $FlowFixMe: Flow doesn't understand that this element has a scrollLeft.
+                    this.sceneRef.current.scrollLeft += (newCharacterBackgroundBounds.left + newCharacterBackgroundBounds.width) - (sceneBounds.left + sceneBounds.width) + newCharacterBackgroundBounds.width;
+                }
+
+                if (newCharacterBackgroundBounds.top - (0.5 * newCharacterBackgroundBounds.height) < sceneBounds.top) {
+                    // Scroll up.  For whatever reason we have to overshoot on the scroll to avoid leaving the icon half out of bounds and constantly triggering scrolls.
+                    // $FlowFixMe: Flow doesn't understand that this element has a scrollTop.
+                    this.sceneRef.current.scrollTop -= (sceneBounds.top - newCharacterBackgroundBounds.top + newCharacterBackgroundBounds.height);
+                }
+                else if ((newCharacterBackgroundBounds.top + (1.5 * newCharacterBackgroundBounds.height)) > (sceneBounds.top + sceneBounds.height)) {
+                    // Scroll down.
+                    // $FlowFixMe: Flow doesn't understand that this element has a scrollTop.
+                    this.sceneRef.current.scrollTop += (newCharacterBackgroundBounds.top + newCharacterBackgroundBounds.height) - (sceneBounds.top + sceneBounds.height) + newCharacterBackgroundBounds.height;
+                }
+            }
+        }
+    }
+
     render() {
         const minX = this.props.dimensions.getMinX();
         const minY = this.props.dimensions.getMinY();
@@ -223,7 +279,8 @@ class Scene extends React.Component<SceneProps, {}> {
                         className='Scene'
                         role='img'
                         aria-label={this.generateAriaLabel()}
-                        onScroll={this.handleScrollScene}>
+                        onScroll={this.handleScrollScene}
+                        ref={this.sceneRef}>
                         <svg
                             xmlns='http://www.w3.org/2000/svg'
                             viewBox={`${minX} ${minY} ${width} ${height}`}>
@@ -241,6 +298,7 @@ class Scene extends React.Component<SceneProps, {}> {
                                     y={-0.5}
                                     height={1}
                                     width={1}
+                                    ref={this.characterBackgroundRef}
                                     transform={characterBackgroundTransform}
                                 />
                                 <Character

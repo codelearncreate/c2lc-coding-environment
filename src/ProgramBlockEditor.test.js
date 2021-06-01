@@ -114,11 +114,6 @@ function createMountProgramBlockEditor(props) {
     const mockChangeCharacterXPosition = jest.fn();
     const mockChangeCharacterYPosition = jest.fn();
 
-    const ariaLiveDiv = document.createElement('div');
-    ariaLiveDiv.setAttribute('id', 'character-position');
-    // $FlowFixMe: Flow doesn't know about document.body
-    document.body.appendChild(ariaLiveDiv);
-
     const wrapper = mount(
         React.createElement(
             ProgramBlockEditor,
@@ -498,15 +493,19 @@ describe('Replace program steps', () => {
             const replaceButton = getActionPanelActionButtons(wrapper).at(1);
             replaceButton.simulate('click');
 
-            // The 'replace' announcement should be played
+            // An announcement should be played.
             expect(audioManagerMock.playAnnouncement.mock.calls.length).toBe(1);
-            expect(audioManagerMock.playAnnouncement.mock.calls[0][0]).toBe('replace');
 
-            // The program should be updated
             if (selectedAction) {
+                expect(audioManagerMock.playAnnouncement.mock.calls[0][0]).toBe('replace');
+
+                // The program should be updated
                 expect(mockChangeProgramSequenceHandler.mock.calls.length).toBe(1);
                 expect(mockChangeProgramSequenceHandler.mock.calls[0][0].program).toStrictEqual(expectedProgram);
             } else {
+                expect(audioManagerMock.playAnnouncement.mock.calls[0][0]).toBe('noMovementSelected');
+
+                // The program should not be updated
                 expect(mockChangeProgramSequenceHandler.mock.calls.length).toBe(0);
                 expect(wrapper.props().programSequence.getProgram()).toStrictEqual(expectedProgram);
             }
@@ -810,20 +809,11 @@ describe('When runningState is running, stopRequested, or pauseRequested, and pr
         let currentStep = getProgramBlockAtPosition(wrapper, 0);
 
         expect(currentStep.get(0).props.className.includes('ProgramBlockEditor__program-block--active')).toBe(true);
-        wrapper.setProps({
-            runningState: 'stopRequested',
-            world: 'forest'
-        });
-        // $FlowFixMe: Flow doesn't know about character-position div
-        expect(document.getElementById('character-position').innerText).toBe('Rabbit character at column A, row 1 facing right');
+        wrapper.setProps({ runningState: 'stopRequested' });
         currentStep = getProgramBlockAtPosition(wrapper, 0);
         expect(currentStep.get(0).props.className.includes('ProgramBlockEditor__program-block--active')).toBe(true);
 
-        wrapper.setProps({
-            runningState: 'pauseRequested',
-            world: 'space'});
-        // $FlowFixMe: Flow doesn't know about character-position div
-        expect(document.getElementById('character-position').innerText).toBe('Space Ship character at column A, row 1 facing right');
+        wrapper.setProps({ runningState: 'pauseRequested' });
         currentStep = getProgramBlockAtPosition(wrapper, 0);
         expect(currentStep.get(0).props.className.includes('ProgramBlockEditor__program-block--active')).toBe(true);
 
@@ -941,21 +931,4 @@ describe('Using change character position by column/row labels', () => {
         expect(characterXPositionCoordinateBox.props.onChange).toBe(undefined);
         expect(characterYPositionCoordinateBox.props.onChange).toBe(undefined);
     });
-});
-
-describe('Character position gets updated on character-position div', () => {
-    test('When characterState prop is changed', () => {
-        const { wrapper } = createMountProgramBlockEditor();
-        wrapper.setProps({
-            characterState: new CharacterState(1, 1, 2, [], new SceneDimensions(1, 100, 1, 100))
-        });
-        // $FlowFixMe: Flow doesn't know about character-position div
-        expect(document.getElementById('character-position').innerText).toBe('Robot character at column A, row 1 facing right');
-        wrapper.setProps({world: 'forest', characterState: new CharacterState(2, 1, 2, [], new SceneDimensions(1, 100, 1, 100))});
-        // $FlowFixMe: Flow doesn't know about character-position div
-        expect(document.getElementById('character-position').innerText).toBe('Rabbit character at column B, row 1 facing right');
-        wrapper.setProps({world: 'space', characterState: new CharacterState(3, 1, 2, [], new SceneDimensions(1, 100, 1, 100))});
-        // $FlowFixMe: Flow doesn't know about character-position div
-        expect(document.getElementById('character-position').innerText).toBe('Space Ship character at column C, row 1 facing right');
-    })
 });

@@ -49,30 +49,3 @@ describe('Right character should render based on theme props', () => {
         expect(findCharacter(wrapper).get(0).type.render().props.children).toBe('SpaceShip.svg');
     });
 })
-
-test('Scene area scrolls so the character is visible on mount and transform propert changes', () => {
-    expect.assertions(4);
-    const mockScrollIntoView = jest.fn();
-
-    window.HTMLElement.prototype.scrollIntoView = mockScrollIntoView;
-
-    const wrapper = createMountCharacter();
-
-    // When the component mounts, call scrollIntoView
-    expect(mockScrollIntoView.mock.calls.length).toBe(1);
-    expect(mockScrollIntoView.mock.calls[0][0]).toStrictEqual({
-        behavior: 'auto',
-        block: 'nearest',
-        inline: 'nearest'
-    });
-
-    wrapper.setProps(
-        {transform: 'translate(0 0 rotate(90 0 0)'}
-    );
-    expect(mockScrollIntoView.mock.calls.length).toBe(2);
-    expect(mockScrollIntoView.mock.calls[1][0]).toStrictEqual({
-        behavior: 'auto',
-        block: 'nearest',
-        inline: 'nearest'
-    });
-});

@@ -17,16 +17,19 @@ export default class FakeRobotDriver implements RobotDriver {
     }
 
     forward(): Promise<void> {
+        // eslint-disable-next-line no-console
         console.log("FakeRobot: Forward");
         return this.fakeCommandImpl();
     }
 
     left(): Promise<void> {
+        // eslint-disable-next-line no-console
         console.log("FakeRobot: Left");
         return this.fakeCommandImpl();
     }
 
     right(): Promise<void> {
+        // eslint-disable-next-line no-console
         console.log("FakeRobot: Right");
         return this.fakeCommandImpl();
     }
