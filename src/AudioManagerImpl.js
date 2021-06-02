@@ -127,14 +127,13 @@ export default class AudioManagerImpl implements AudioManager {
     }
 
     playSoundForCharacterState(actionKey: string, stepTimeInMs: number, characterState: CharacterState, sceneDimensions: SceneDimensions) {
-        const releaseTime = stepTimeInMs / 4000;
-
         // There are no "movement" sounds for even rows.
         if (this.audioEnabled && (characterState.yPos % 2)) {
             const noteName = getNoteForState(characterState);
 
-            // Use the marimba for the "pitched note";
-            this.playPitchedNote(this.orchestra.marimba, noteName, releaseTime);
+            // Use the marimba for the "pitched note".
+            const noteDuration = stepTimeInMs / 4000;
+            this.playPitchedNote(this.orchestra.marimba, noteName, noteDuration);
         }
 
         // Pan left/right to suggest the relative horizontal position.
@@ -148,10 +147,11 @@ export default class AudioManagerImpl implements AudioManager {
         // TODO: Consider making the timing configurable or tying it to the movement timing.
         this.panner.pan.rampTo(panningLevel, 0);
 
-        this.playSequence(actionKey, releaseTime);
+        const stepTimeInSeconds = stepTimeInMs / 1000;
+        this.playSequence(actionKey, stepTimeInSeconds);
     }
 
-    playSequence = (actionKey: string, releaseTime: number) => {
+    playSequence = (actionKey: string, stepTimeInSeconds: number) => {
         if (this.sequence) {
             // $FlowFixMe: Add a type for sequence.
             this.sequence.stop();
@@ -161,22 +161,22 @@ export default class AudioManagerImpl implements AudioManager {
         // $FlowFixMe: Define types for sequences (array of step defs).
         const sequenceDef = sequences[actionKey];
         if (sequenceDef) {
-            const notePlayTime = 0.2;
-            const timeBetweenSteps = (releaseTime / sequenceDef.length) - notePlayTime;
+            const halfBeatTime = (stepTimeInSeconds / sequenceDef.length) / 2;
             // $FlowFixMe: Define a type for step definitions.
             const stepCallbackFn = (time: number, stepDef) => {
                 if (stepDef.note && stepDef.instrumentKey) {
                     const instrument = this.orchestra[stepDef.instrumentKey];
-                    instrument.triggerAttackRelease(stepDef.note, notePlayTime);
+                    instrument.triggerAttackRelease(stepDef.note, halfBeatTime);
                 }
             };
 
             this.sequence = new Sequence({
                 callback: stepCallbackFn,
                 events: sequenceDef,
-                subdivision: timeBetweenSteps,
+                subdivision: halfBeatTime,
                 loop: false
             });
+
             this.sequence.start(0);
             Transport.start();
         }
