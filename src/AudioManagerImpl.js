@@ -1,14 +1,13 @@
 // @flow
 
 // $FlowFixMe: We need to add a type definition for more stuff.
-import {Filter, FMSynth, MembraneSynth, MetalSynth, Panner, Reverb, Sequence, Synth, Transport} from 'tone';
+import {Filter, FMSynth, Instrument, MembraneSynth, MetalSynth, Panner, Reverb, Sequence, Synth, Transport} from 'tone';
 import CharacterState from './CharacterState';
 import type {IntlShape} from 'react-intl';
 import {AudioManager} from './types';
 import SceneDimensions from './SceneDimensions';
 
 import tuning from './tuning.json';
-import { Instrument } from 'tone/build/esm/instrument/Instrument';
 
 // We use pentatonic tuning, C D F G A. The "center" note is the highest
 // point in the row, all other notes descend from there. Every other row
