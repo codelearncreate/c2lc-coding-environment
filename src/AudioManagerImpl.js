@@ -1,7 +1,7 @@
 // @flow
 
 // $FlowFixMe: We need to add a type definition for more stuff.
-import {Filter, FMSynth, Instrument, MembraneSynth, MetalSynth, Panner, Reverb, Sequence, Synth, Transport} from 'tone';
+import {Filter, FMSynth, Instrument, MembraneSynth, MetalSynth, NoiseSynth, Panner, Reverb, Sequence, Synth, Transport} from 'tone';
 import CharacterState from './CharacterState';
 import type {IntlShape} from 'react-intl';
 import {AudioManager} from './types';
@@ -28,9 +28,9 @@ const sequences = {
     left45: [{ instrumentKey: "drum", note: "C6"}],
     left90: [{ instrumentKey: "drum", note: "C6"}, { instrumentKey: "drum", note: "C5"}],
     left180: [{ instrumentKey: "drum", note: "C6"}, { instrumentKey: "drum", note: "C5"}, { instrumentKey: "drum", note: "C4"}],
-    right45: [{ instrumentKey: "drum", note: "C4"}],
-    right90: [{ instrumentKey: "drum", note: "C4"}, { instrumentKey: "drum", note: "C5"}],
-    right180: [{ instrumentKey: "drum", note: "C4"}, { instrumentKey: "drum", note: "C5"}, { instrumentKey: "drum", note: "C6"}]
+    right45:  [{ instrumentKey: "shaker"}],
+    right90:  [{ instrumentKey: "shaker"}, {}, { instrumentKey: "shaker"}],
+    right180: [{ instrumentKey: "shaker"}, {}, { instrumentKey: "shaker"}, {}, { instrumentKey: "shaker"}]
 };
 
 export default class AudioManagerImpl implements AudioManager {
@@ -63,6 +63,10 @@ export default class AudioManagerImpl implements AudioManager {
             envelope :  {attack:0, decay:0, Sustain:1, Release:1 }
         }).connect(this.panner);
 
+        const highPass = new Filter({
+            frequency: 9000, type:"highpass"
+        }).connect(this.panner);
+
         const lowPass = new Filter({
             frequency: 2000, type:"lowpass"
         }).connect(this.panner);
@@ -84,7 +88,17 @@ export default class AudioManagerImpl implements AudioManager {
             octaves:4, pitchDecay:0.2
         }).connect(this.panner);
 
+        const otherDrum = new MembraneSynth({
+            octaves: 1, pitchDecay: 0.2
+        }).connect(this.panner);
+
         const cymbal = new MetalSynth().connect(lowPass);
+
+        // const feedbackDelay = new FeedbackDelay({
+        //     delayTime:0.1, feedback:0.25
+        // }).connect(highPass);
+
+        const shaker = new NoiseSynth().connect(highPass);
 
         // TODO: The NoiseSynth doesn't seem to work for us.  Revisit.
         // const highPass = new Filter({
@@ -101,7 +115,9 @@ export default class AudioManagerImpl implements AudioManager {
             bell: bell,
             cymbal: cymbal,
             drum: drum,
+            otherDrum: otherDrum,
             marimba: marimba,
+            shaker: shaker
         };
     }
 
@@ -126,28 +142,37 @@ export default class AudioManagerImpl implements AudioManager {
     }
 
     playSoundForCharacterState(actionKey: string, stepTimeInMs: number, characterState: CharacterState, sceneDimensions: SceneDimensions) {
+        // We only play "positional" sounds when the location (and not
+        // orientation) changes.
+        const isTurn = ["left45","leftt90","left180", "right45","right90","right180"].indexOf(actionKey) !== -1;
+
         // There are no "movement" sounds for even rows.
-        if (this.audioEnabled && (characterState.yPos % 2)) {
-            const noteName = getNoteForState(characterState);
+        if (this.audioEnabled) {
+            if ((characterState.yPos % 2) && !isTurn) {
+                const noteName = getNoteForState(characterState);
 
-            // Use the marimba for the "pitched note".
-            const noteDuration = stepTimeInMs / 4000;
-            this.playPitchedNote(this.orchestra.marimba, noteName, noteDuration);
+                // Use the marimba for the "pitched note".
+                const noteDuration = stepTimeInMs / 4000;
+                // TODO: We need something more sophisticated here so that we don't
+                // need to use the same instrument across the whole range.  We might
+                // also choose to use a different instrument per action.
+                this.playPitchedNote(this.orchestra.marimba, noteName, noteDuration);
+            }
+
+            // Pan left/right to suggest the relative horizontal position.
+            // We can discuss adjusting this once we have multiple
+            // sound-producing elements in the environment.
+
+            // Limit the deviation from the centre so that there is always some sound in each speaker.
+            const midPoint = (sceneDimensions.getMinX() + sceneDimensions.getMaxX()) / 2;
+            const panningLevel = 0.75 * ((characterState.xPos - midPoint) / midPoint);
+
+            // TODO: Consider making the timing configurable or tying it to the movement timing.
+            this.panner.pan.rampTo(panningLevel, 0);
+
+            const stepTimeInSeconds = stepTimeInMs / 1000;
+            this.playSequence(actionKey, stepTimeInSeconds);
         }
-
-        // Pan left/right to suggest the relative horizontal position.
-        // We can discuss adjusting this once we have multiple
-        // sound-producing elements in the environment.
-
-        // Limit the deviation from the centre so that there is always some sound in each speaker.
-        const midPoint = (sceneDimensions.getMinX() + sceneDimensions.getMaxX()) / 2;
-        const panningLevel = 0.75 * ((characterState.xPos - midPoint) / midPoint);
-
-        // TODO: Consider making the timing configurable or tying it to the movement timing.
-        this.panner.pan.rampTo(panningLevel, 0);
-
-        const stepTimeInSeconds = stepTimeInMs / 1000;
-        this.playSequence(actionKey, stepTimeInSeconds);
     }
 
     playSequence = (actionKey: string, stepTimeInSeconds: number) => {
@@ -160,19 +185,30 @@ export default class AudioManagerImpl implements AudioManager {
         // $FlowFixMe: Define types for sequences (array of step defs).
         const sequenceDef = sequences[actionKey];
         if (sequenceDef) {
-            const halfBeatTime = (stepTimeInSeconds / sequenceDef.length) / 2;
+            const fullBeatTime = (stepTimeInSeconds / sequenceDef.length);
+            const noteTime = fullBeatTime * 0.5;
+            const betweenNoteTime = fullBeatTime - noteTime;
             // $FlowFixMe: Define a type for step definitions.
             const stepCallbackFn = (time: number, stepDef) => {
-                if (stepDef.note && stepDef.instrumentKey) {
+                if (stepDef.instrumentKey) {
                     const instrument = this.orchestra[stepDef.instrumentKey];
-                    instrument.triggerAttackRelease(stepDef.note, halfBeatTime);
+                    // Some Tone synths don't allow a note, so we construct an
+                    // array of the common arguments supported by all
+                    // synths, i.e. note duration, and start time, and then
+                    // choose to add the note if the instrument supports it.
+                    const attackReleaseArgs = [noteTime, time];
+                    if (stepDef.note) {
+                        attackReleaseArgs.unshift(stepDef.note);
+                    }
+
+                    instrument.triggerAttackRelease.apply(instrument, attackReleaseArgs);
                 }
             };
 
             this.sequence = new Sequence({
                 callback: stepCallbackFn,
                 events: sequenceDef,
-                subdivision: halfBeatTime,
+                subdivision: betweenNoteTime,
                 loop: false
             });
 
