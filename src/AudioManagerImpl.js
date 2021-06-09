@@ -100,17 +100,6 @@ export default class AudioManagerImpl implements AudioManager {
 
         const shaker = new NoiseSynth().connect(highPass);
 
-        // TODO: The NoiseSynth doesn't seem to work for us.  Revisit.
-        // const highPass = new Filter({
-        //     frequency: 9000, type:"highpass"
-        // }).connect(this.panner);
-
-        // const shaker = new FeedbackDelay({
-        //     delayTime:0.1, feedback:0.25
-        // }).connect(highPass);
-
-        // const shake = new NoiseSynth().connect(shaker);
-
         this.orchestra = {
             bell: bell,
             cymbal: cymbal,
