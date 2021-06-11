@@ -1,7 +1,7 @@
 // @flow
 
 // $FlowFixMe: We need to add a type definition for more stuff.
-import {Filter, FMSynth, Instrument, MembraneSynth, MetalSynth, NoiseSynth, Panner, Reverb, Sequence, Synth, Transport} from 'tone';
+import {Filter, FMSynth, Instrument, MembraneSynth, MetalSynth, Noise, NoiseSynth, Panner, Reverb, Sequence, Signal, Synth, Transport} from 'tone';
 import CharacterState from './CharacterState';
 import type {IntlShape} from 'react-intl';
 import {AudioManager} from './types';
@@ -25,12 +25,14 @@ const sequences = {
     backward1: [{ instrumentKey: "cymbal", note: "C3"}],
     backward2: [{ instrumentKey: "cymbal", note: "C3"}, { instrumentKey: "drum", note: "C4"}],
     backward3: [{ instrumentKey: "cymbal", note: "C3"}, { instrumentKey: "drum", note: "C4"}, { instrumentKey: "drum", note: "C1"}],
-    left45: [{ instrumentKey: "drum", note: "C6"}],
-    left90: [{ instrumentKey: "drum", note: "C6"}, { instrumentKey: "drum", note: "C5"}],
-    left180: [{ instrumentKey: "drum", note: "C6"}, { instrumentKey: "drum", note: "C5"}, { instrumentKey: "drum", note: "C4"}],
-    right45:  [{ instrumentKey: "shaker"}],
-    right90:  [{ instrumentKey: "shaker"}, {}, { instrumentKey: "shaker"}],
-    right180: [{ instrumentKey: "shaker"}, {}, { instrumentKey: "shaker"}, {}, { instrumentKey: "shaker"}]
+    // TODO: Reconcile this so that we can have complex single notes like the turns
+    // and also simple patterns of individual notes.
+    // left45: [{ instrumentKey: "sweeper", note: "C2", endNote: "C3"}],
+    // left90: [{ instrumentKey: "sweeper", note: "C2", endNote: "C3"}],
+    // left180: [{ instrumentKey: "sweeper", note: "C2", endNote: "C3"}],
+    // right45:  [{ instrumentKey: "sweeper", note: "C2", endNote: "C3"}],
+    // right90:  [{ instrumentKey: "sweeper", note: "C2", endNote: "C3"}],
+    // right180: [{ instrumentKey: "sweeper", note: "C2", endNote: "C3"}]
 };
 
 export default class AudioManagerImpl implements AudioManager {
@@ -48,7 +50,11 @@ export default class AudioManagerImpl implements AudioManager {
         // $FlowFixMe: we need to add type definitions for yet another thing.
         drum: Instrument,
         // $FlowFixMe: we need to add type definitions for yet another thing.
-        marimba: Instrument
+        marimba: Instrument,
+        // $FlowFixMe: we need to add type definitions for yet another thing.
+        sweepNoise: Noise,
+        // $FlowFixMe: we need to add type definitions for yet another thing.
+        sweepSignal: Signal
     };
 
     constructor(audioEnabled: boolean, announcementsEnabled: boolean) {
@@ -70,6 +76,19 @@ export default class AudioManagerImpl implements AudioManager {
         const lowPass = new Filter({
             frequency: 2000, type:"lowpass"
         }).connect(this.panner);
+
+        const sweepBandPass = new Filter({
+            type: "bandpass",
+            frequency: 440
+        }).connect(this.panner);
+
+        /* eslint-disable no-unused-vars */
+        const sweepSignal = new Signal({
+            value: 4000,
+            units: "frequency"
+        }).connect(sweepBandPass.frequency);
+
+        const sweepNoise = new Noise({ type: "white" }).connect(sweepBandPass);
 
         const bellVerb = new Reverb({
             preDelay:0 , decay:2, wet:0.25
@@ -106,7 +125,9 @@ export default class AudioManagerImpl implements AudioManager {
             drum: drum,
             otherDrum: otherDrum,
             marimba: marimba,
-            shaker: shaker
+            shaker: shaker,
+            sweepNoise: sweepNoise,
+            sweepSignal: sweepSignal
         };
     }
 
@@ -203,6 +224,43 @@ export default class AudioManagerImpl implements AudioManager {
 
             this.sequence.start(0);
             Transport.start();
+        }
+        // The turn sounds are triggered programatically
+        else {
+            const rampDefs = {
+                right45: {
+                    start: 125,
+                    stop: 500
+                },
+                right90: {
+                    start: 125,
+                    stop: 2000
+                },
+                right180: {
+                    start: 125,
+                    stop: 8000
+                },
+                left45: {
+                    start: 8000,
+                    stop: 2000
+                },
+                left90: {
+                    start: 8000,
+                    stop: 500
+                },
+                left180: {
+                    start: 8000,
+                    stop: 125
+                }
+            }
+            const rampDef = rampDefs[actionKey];
+            if (rampDef) {
+                // TODO: Make our own class for this that makes it easier to start/stop, control the freq.
+                this.orchestra.sweepSignal.rampTo(rampDef.start, 0);
+                this.orchestra.sweepNoise.start();
+                this.orchestra.sweepSignal.rampTo(rampDef.stop, stepTimeInSeconds / 2);
+                this.orchestra.sweepNoise.stop("+" + (stepTimeInSeconds/2));
+            }
         }
     }
 
