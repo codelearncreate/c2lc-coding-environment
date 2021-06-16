@@ -69,6 +69,7 @@ class ProgramBlockEditor extends React.Component<ProgramBlockEditorProps, Progra
     focusCommandBlockIndex: ?number;
     focusAddNodeIndex: ?number;
     scrollToAddNodeIndex: ?number;
+    updatedCommandBlockIndex: ?number;
     programSequenceContainerRef: { current: null | HTMLDivElement };
     lastCalculatedClosestAddNode: number;
 
@@ -79,6 +80,7 @@ class ProgramBlockEditor extends React.Component<ProgramBlockEditorProps, Progra
         this.focusCommandBlockIndex = null;
         this.focusAddNodeIndex = null;
         this.scrollToAddNodeIndex = null;
+        this.updatedCommandBlockIndex = null;
         this.programSequenceContainerRef = React.createRef();
         this.lastCalculatedClosestAddNode = Date.now();
         this.state = {
@@ -131,12 +133,25 @@ class ProgramBlockEditor extends React.Component<ProgramBlockEditorProps, Progra
         return this.props.selectedAction != null;
     }
 
+    setUpdatedCommandBlock(index: number) {
+        this.updatedCommandBlockIndex = index;
+        // Remove the animation class, if it exists, from the current
+        // block at the index, to ensure that the animation (re)starts from
+        // the beginning.
+        const element = this.commandBlockRefs.get(index);
+        if (element) {
+            element.classList.remove('ProgramBlockEditor__program-block--updated');
+        }
+    }
+
     insertSelectedCommandIntoProgram(index: number) {
-        if (this.props.selectedAction) {
+        const selectedAction = this.props.selectedAction;
+        if (selectedAction) {
             this.focusCommandBlockIndex = index;
             this.scrollToAddNodeIndex = index + 1;
+            this.setUpdatedCommandBlock(index);
             this.props.onChangeProgramSequence(
-                this.props.programSequence.insertStep(index, this.props.selectedAction)
+                this.props.programSequence.insertStep(index, selectedAction)
             );
         }
     }
@@ -258,6 +273,7 @@ class ProgramBlockEditor extends React.Component<ProgramBlockEditorProps, Progra
                 });
                 this.focusCommandBlockIndex = index;
                 this.scrollToAddNodeIndex = index + 1;
+                this.setUpdatedCommandBlock(index);
             } else {
                 this.setState({
                     replaceIsActive: true
@@ -310,6 +326,10 @@ class ProgramBlockEditor extends React.Component<ProgramBlockEditorProps, Progra
             // Otherwise, open it
             this.props.onChangeActionPanelStepIndex(index);
         }
+    };
+
+    handleProgramCommandBlockAnimationEnd = (e: SyntheticEvent<HTMLButtonElement>) => {
+        e.currentTarget.classList.remove('ProgramBlockEditor__program-block--updated');
     };
 
     handleClickAddNode = (stepNumber: number) => {
@@ -499,6 +519,7 @@ class ProgramBlockEditor extends React.Component<ProgramBlockEditorProps, Progra
                 aria-expanded={hasActionPanelControl}
                 disabled={this.props.editingDisabled}
                 onClick={this.handleClickStep}
+                onAnimationEnd={this.handleProgramCommandBlockAnimationEnd}
             />
         );
     }
@@ -574,11 +595,12 @@ class ProgramBlockEditor extends React.Component<ProgramBlockEditorProps, Progra
     }
 
     makeEndOfProgramAddNodeSection(programStepNumber: number) {
+        const isEmptyProgram = this.props.programSequence.getProgramLength() === 0;
         return (
             <React.Fragment key={'endOfProgramAddNodeSection'}>
                 <div className='ProgramBlockEditor__program-block-connector'/>
                 <AddNode
-                    aria-label={this.makeAddNodeAriaLabel(programStepNumber, true)}
+                    aria-label={this.makeAddNodeAriaLabel(programStepNumber, !isEmptyProgram)}
                     ref={ (element) => this.setAddNodeRef(programStepNumber, element) }
                     expandedMode={true}
                     isDraggingCommand={this.props.isDraggingCommand}
@@ -660,7 +682,7 @@ class ProgramBlockEditor extends React.Component<ProgramBlockEditorProps, Progra
                     <div className='ProgramBlockEditor__character-turn-positions'>
                         <TurnPositionLeft
                             className={characterPositionButtonClassName}
-                            aria-label={this.props.intl.formatMessage({id:'ProgramBlockEditor.editPosition.trunLeft'})}
+                            aria-label={this.props.intl.formatMessage({id:'ProgramBlockEditor.editPosition.turnLeft'})}
                             aria-disabled={this.props.editingDisabled}
                             role='button'
                             tabIndex='0'
@@ -669,7 +691,7 @@ class ProgramBlockEditor extends React.Component<ProgramBlockEditorProps, Progra
                             onClick={!this.props.editingDisabled ? this.handleClickCharacterPosition : undefined} />
                         <TurnPositionRight
                             className={characterPositionButtonClassName}
-                            aria-label={this.props.intl.formatMessage({id:'ProgramBlockEditor.editPosition.trunRight'})}
+                            aria-label={this.props.intl.formatMessage({id:'ProgramBlockEditor.editPosition.turnRight'})}
                             aria-disabled={this.props.editingDisabled}
                             role='button'
                             tabIndex='0'
@@ -798,6 +820,13 @@ class ProgramBlockEditor extends React.Component<ProgramBlockEditorProps, Progra
                 addNode.focus();
             }
             this.focusAddNodeIndex = null;
+        }
+        if (this.updatedCommandBlockIndex != null) {
+            const element = this.commandBlockRefs.get(this.updatedCommandBlockIndex);
+            if (element) {
+                element.classList.add('ProgramBlockEditor__program-block--updated');
+            }
+            this.updatedCommandBlockIndex = null;
         }
         if (this.props.runningState === 'running') {
             const activeProgramStepNum = this.props.programSequence.getProgramCounter();

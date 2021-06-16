@@ -42,3 +42,14 @@ $c2lc-action-panel-height: 3rem;
 $c2lc-scene-border-width: 0.1rem;
 $c2lc-scene-border-color: #CCE6E2;
 $c2lc-scene-border-style: solid;
+
+/* mixins */
+
+@mixin updatedProgramAnimation($color, $commandName, $theme) {
+    @keyframes updatedAnimation-#{$commandName}-#{$theme} {
+        0% {box-shadow: 0 0 0 1rem $color;}
+        100% {box-shadow: 0 0 0 0 $color;}
+    }
+    animation: updatedAnimation-#{$commandName}-#{$theme} 1.5s;
+    animation-timing-function: ease;
+};

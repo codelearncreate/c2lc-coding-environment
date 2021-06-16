@@ -15,43 +15,50 @@ type CharacterAriaLiveProps = {
 };
 
 class CharacterAriaLive extends React.Component<CharacterAriaLiveProps, {}> {
+    getCharacterAriaLabel() {
+        if (this.props.world === 'space') {
+            return this.props.intl.formatMessage(
+                {id:'CharacterAriaLive.spaceShipCharacter'}
+            );
+        } else if (this.props.world === 'forest') {
+            return this.props.intl.formatMessage(
+                {id:'CharacterAriaLive.rabbitCharacter'}
+            );
+        } else {
+            return this.props.intl.formatMessage(
+                {id:'CharacterAriaLive.robotCharacter'}
+            );
+        }
+    }
+
+    setCharacterMovingAriaLive() {
+        const ariaLiveRegion = document.getElementById(this.props.ariaLiveRegionId);
+        const character = this.getCharacterAriaLabel();
+
+        // $FlowFixMe: Flow doesn't know that elements have innerText.
+        ariaLiveRegion.innerText=this.props.intl.formatMessage(
+            {id:'CharacterAriaLive.movementAriaLabel'},
+            { character }
+        );
+    }
+
     updateCharacterPositionAriaLive() {
         const characterState = this.props.characterState;
         const xPos = characterState.getColumnLabel();
         const yPos = characterState.getRowLabel();
         const direction = this.props.intl.formatMessage({id: `Direction.${characterState.direction}`});
         const ariaLiveRegion = document.getElementById(this.props.ariaLiveRegionId);
-        if (this.props.world === 'space') {
-            // $FlowFixMe: Flow doesn't know about character-position div
-            ariaLiveRegion.innerText=this.props.intl.formatMessage(
-                {id:'ProgramBlockEditor.spaceShipCharacter'},
-                {
-                    xPos,
-                    yPos,
-                    direction
-                }
-            );
-        } else if (this.props.world === 'forest') {
-            // $FlowFixMe: Flow doesn't know about character-position div
-            ariaLiveRegion.innerText=this.props.intl.formatMessage(
-                {id:'ProgramBlockEditor.rabbitCharacter'},
-                {
-                    xPos,
-                    yPos,
-                    direction
-                }
-            );
-        } else {
-            // $FlowFixMe: Flow doesn't know about character-position div
-            ariaLiveRegion.innerText=this.props.intl.formatMessage(
-                {id:'ProgramBlockEditor.robotCharacter'},
-                {
-                    xPos,
-                    yPos,
-                    direction
-                }
-            );
-        }
+        const character = this.getCharacterAriaLabel();
+        // $FlowFixMe: Flow doesn't know that elements have innerText.
+        ariaLiveRegion.innerText=this.props.intl.formatMessage(
+            {id:'CharacterAriaLive.positionAriaLabel'},
+            {
+                character,
+                xPos,
+                yPos,
+                direction
+            }
+        );
     }
 
     render() {
@@ -61,7 +68,7 @@ class CharacterAriaLive extends React.Component<CharacterAriaLiveProps, {}> {
     }
 
     componentDidUpdate(prevProps: CharacterAriaLiveProps) {
-    // Ensure updateCharacterPositionAriaLive gets called only once
+        // Ensure updateCharacterPositionAriaLive gets called only once
         if (prevProps.characterState !== this.props.characterState) {
             if (this.props.runningState !== 'running') {
                 this.updateCharacterPositionAriaLive();
@@ -71,6 +78,9 @@ class CharacterAriaLive extends React.Component<CharacterAriaLiveProps, {}> {
                 this.props.runningState === 'stopRequested' ||
                 (prevProps.runningState === 'running' && this.props.runningState === 'stopped')) {
                 this.updateCharacterPositionAriaLive();
+            }
+            else if (this.props.runningState === "running") {
+                this.setCharacterMovingAriaLive();
             }
         }
     }

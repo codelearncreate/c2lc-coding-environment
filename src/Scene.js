@@ -32,16 +32,16 @@ class Scene extends React.Component<SceneProps, {}> {
         const grid = [];
         const rowLabels = [];
         const columnLabels = [];
-        let yOffset = this.props.dimensions.getMinY();
+        let yOffset = this.props.dimensions.getMinY() - 0.5;
         for (let i=1; i < this.props.dimensions.getHeight() + 1; i++) {
             yOffset += 1;
             if (i < this.props.dimensions.getHeight()) {
                 grid.push(<line
                     className='Scene__grid-line'
                     key={`grid-cell-row-${i}`}
-                    x1={this.props.dimensions.getMinX()}
+                    x1={this.props.dimensions.getMinX() - 0.5}
                     y1={yOffset}
-                    x2={this.props.dimensions.getMaxX() + 1}
+                    x2={this.props.dimensions.getMaxX() + 0.5}
                     y2={yOffset} />);
             }
             rowLabels.push(
@@ -58,7 +58,7 @@ class Scene extends React.Component<SceneProps, {}> {
                 </text>
             )
         }
-        let xOffset = this.props.dimensions.getMinX();
+        let xOffset = this.props.dimensions.getMinX() - 0.5;
         for (let i=1; i < this.props.dimensions.getWidth() + 1; i++) {
             xOffset += 1;
             if (i < this.props.dimensions.getWidth()) {
@@ -66,9 +66,9 @@ class Scene extends React.Component<SceneProps, {}> {
                     className='Scene__grid-line'
                     key={`grid-cell-column-${i}`}
                     x1={xOffset}
-                    y1={this.props.dimensions.getMinY()}
+                    y1={this.props.dimensions.getMinY() - 0.5}
                     x2={xOffset}
-                    y2={this.props.dimensions.getMaxY() + 1} />);
+                    y2={this.props.dimensions.getMaxY() + 0.5} />);
             }
             columnLabels.push(
                 <text
@@ -90,10 +90,10 @@ class Scene extends React.Component<SceneProps, {}> {
             return <line
                 className='Scene__path-line'
                 key={`path-${i}`}
-                x1={pathSegment.x1 + 0.5}
-                y1={pathSegment.y1 + 0.5}
-                x2={pathSegment.x2 + 0.5}
-                y2={pathSegment.y2 + 0.5} />
+                x1={pathSegment.x1}
+                y1={pathSegment.y1}
+                x2={pathSegment.x2}
+                y2={pathSegment.y2} />
         });
     }
 
@@ -227,24 +227,20 @@ class Scene extends React.Component<SceneProps, {}> {
     }
 
     render() {
-        const minX = this.props.dimensions.getMinX();
-        const minY = this.props.dimensions.getMinY();
+        const minX = this.props.dimensions.getMinX() - 0.5;
+        const minY = this.props.dimensions.getMinY() - 0.5;
         const width = this.props.dimensions.getWidth();
         const height = this.props.dimensions.getHeight();
         const grid = this.drawGrid().grid;
         const rowLabels = this.drawGrid().rowLabels;
         const columnLabels = this.drawGrid().columnLabels;
 
-        // The x and y positions need to be adjusted by half a cell to centre the character.
-        const translatedXPos = this.props.characterState.xPos + 0.5;
-        const translatedYPos = this.props.characterState.yPos + 0.5;
-
         // Subtract 90 degrees from the character bearing as the character
         // image is drawn upright when it is facing East
-        const characterTransform = `translate(${translatedXPos} ${translatedYPos}) rotate(${this.props.characterState.getDirectionDegrees() - 90} 0 0)`;
+        const characterTransform = `translate(${this.props.characterState.xPos} ${this.props.characterState.yPos}) rotate(${this.props.characterState.getDirectionDegrees() - 90} 0 0)`;
 
         // For the background, use the same translation, but skip the rotate.
-        const characterBackgroundTransform = `translate(${translatedXPos} ${translatedYPos})`;
+        const characterBackgroundTransform = `translate(${this.props.characterState.xPos} ${this.props.characterState.yPos})`;
 
         return (
             <React.Fragment>
