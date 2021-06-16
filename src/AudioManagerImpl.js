@@ -20,11 +20,11 @@ export function getNoteForState (characterState: CharacterState) : string {
 // TODO: Convert to Array<StepDef> once we have that.
 const sequences = {
     forward1:  [{ instrumentKey: "drum", note: "C1"}],
-    forward2:  [{ instrumentKey: "drum", note: "C1"}, { instrumentKey: "drum", note: "C4"}],
-    forward3:  [{ instrumentKey: "drum", note: "C1"}, { instrumentKey: "drum", note: "C4"}, { instrumentKey: "cymbal", note: "C3"}],
+    forward2:  [{ instrumentKey: "drum", note: "C1"}, {}, { instrumentKey: "cymbal", note: "C3"}],
+    forward3:  [{ instrumentKey: "drum", note: "C1"}, {}, { instrumentKey: "cymbal", note: "C3"}, {}, { instrumentKey: "cymbal", note: "C3"}],
     backward1: [{ instrumentKey: "cymbal", note: "C3"}],
-    backward2: [{ instrumentKey: "cymbal", note: "C3"}, { instrumentKey: "drum", note: "C4"}],
-    backward3: [{ instrumentKey: "cymbal", note: "C3"}, { instrumentKey: "drum", note: "C4"}, { instrumentKey: "drum", note: "C1"}],
+    backward2: [{ instrumentKey: "cymbal", note: "C3"}, {}, { instrumentKey: "drum", note: "C1"}],
+    backward3: [{ instrumentKey: "cymbal", note: "C3"}, {}, { instrumentKey: "drum", note: "C1"}, {},{ instrumentKey: "drum", note: "C1"}],
     // TODO: Reconcile this so that we can have complex single notes like the turns
     // and also simple patterns of individual notes.
     // left45: [{ instrumentKey: "sweeper", note: "C2", endNote: "C3"}],
@@ -104,11 +104,7 @@ export default class AudioManagerImpl implements AudioManager {
         }).connect(bellVerb);
 
         const drum = new MembraneSynth({
-            octaves:4, pitchDecay:0.2
-        }).connect(this.panner);
-
-        const otherDrum = new MembraneSynth({
-            octaves: 1, pitchDecay: 0.2
+            octaves: 1, pitchDecay:0.2
         }).connect(this.panner);
 
         const cymbal = new MetalSynth().connect(lowPass);
@@ -123,7 +119,6 @@ export default class AudioManagerImpl implements AudioManager {
             bell: bell,
             cymbal: cymbal,
             drum: drum,
-            otherDrum: otherDrum,
             marimba: marimba,
             shaker: shaker,
             sweepNoise: sweepNoise,
