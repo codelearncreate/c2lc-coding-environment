@@ -757,7 +757,7 @@ class ProgramBlockEditor extends React.Component<ProgramBlockEditorProps, Progra
                             size='2'
                             type='text'
                             value={this.state.characterColumnLabel}
-                            onChange={!this.props.editingDisabled ? this.handleChangeCharacterPositionLabel : undefined}
+                            onChange={!this.props.editingDisabled ? this.handleChangeCharacterPositionLabel : () => {}}
                             onKeyDown={this.handleUpdateCharacterPosition}
                             onBlur={this.handleBlurCharacterPositionBox} />
                         <input
@@ -769,7 +769,7 @@ class ProgramBlockEditor extends React.Component<ProgramBlockEditorProps, Progra
                             size='2'
                             type='text'
                             value={this.state.characterRowLabel}
-                            onChange={!this.props.editingDisabled ? this.handleChangeCharacterPositionLabel : undefined}
+                            onChange={!this.props.editingDisabled ? this.handleChangeCharacterPositionLabel : () => {}}
                             onKeyDown={this.handleUpdateCharacterPosition}
                             onBlur={this.handleBlurCharacterPositionBox} />
                     </div>

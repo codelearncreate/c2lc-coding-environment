@@ -7,11 +7,11 @@ import App from './App';
 import { IntlProvider } from 'react-intl';
 import messages from './messages.json';
 import { mount, configure } from 'enzyme';
-import AudioManagerImpl from './AudioManagerImpl';
+import FakeAudioManager from './FakeAudioManager';
 
 
 // Mocks
-jest.mock('./AudioManagerImpl');
+jest.mock('./FakeAudioManager');
 
 configure({ adapter: new Adapter()});
 
@@ -22,9 +22,9 @@ it('renders without crashing', () => {
 });
 
 it('Should play a sound when selectedCommandName changes', () => {
-    const audioManagerInstance = new AudioManagerImpl(true, true);
+    const audioManagerInstance = new FakeAudioManager();
     // $FlowFixMe: Flow doesn't know about the Jest mock API
-    const audioManagerMock = AudioManagerImpl.mock.instances[0];
+    const audioManagerMock = FakeAudioManager.mock.instances[0];
 
     const wrapper = mount(
         <App audioManager={audioManagerInstance}/>,

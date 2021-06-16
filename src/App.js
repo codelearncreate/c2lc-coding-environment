@@ -4,7 +4,6 @@ import { FormattedMessage } from 'react-intl';
 import { injectIntl } from 'react-intl';
 import type {IntlShape} from 'react-intl';
 import AllowedActionsSerializer from './AllowedActionsSerializer';
-import AudioManagerImpl from './AudioManagerImpl';
 import CharacterAriaLive from './CharacterAriaLive';
 import CharacterState from './CharacterState';
 import CharacterStateSerializer from './CharacterStateSerializer';
@@ -396,11 +395,14 @@ export class App extends React.Component<AppProps, AppState> {
         if (props.audioManager) {
             this.audioManager = props.audioManager
         }
-        else if (FeatureDetection.webAudioApiIsAvailable()) {
-            this.audioManager = new AudioManagerImpl(this.state.audioEnabled, this.state.announcementsEnabled);
-        }
         else {
             this.audioManager = new FakeAudioManager();
+            if (FeatureDetection.webAudioApiIsAvailable()) {
+                // We dynamically import this to avoid tone startup messages in most tests.
+                import('./AudioManagerImpl').then((AudioManagerImpl) => {
+                    this.audioManager = new AudioManagerImpl.default(this.state.audioEnabled, this.state.announcementsEnabled);
+                });
+            }
         }
 
         this.focusTrapManager = new FocusTrapManager();

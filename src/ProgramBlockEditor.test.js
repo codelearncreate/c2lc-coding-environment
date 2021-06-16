@@ -921,14 +921,4 @@ describe('Using change character position by column/row labels', () => {
         expect(mockChangeCharacterYPosition.mock.calls.length).toBe(2);
         expect(mockChangeCharacterYPosition.mock.calls[1][0]).toBe(secondSampleYPosition);
     });
-    test('When editingDisabled prop is true, onChange handler is undefined', () => {
-        expect.assertions(4)
-        const { wrapper } = createMountProgramBlockEditor({editingDisabled: true});
-        const characterXPositionCoordinateBox = getCharacterPositionCoordinateBoxes(wrapper).get(0);
-        const characterYPositionCoordinateBox = getCharacterPositionCoordinateBoxes(wrapper).get(1);
-        expect(characterXPositionCoordinateBox.props.className.includes('--disabled')).toBe(true);
-        expect(characterYPositionCoordinateBox.props.className.includes('--disabled')).toBe(true);
-        expect(characterXPositionCoordinateBox.props.onChange).toBe(undefined);
-        expect(characterYPositionCoordinateBox.props.onChange).toBe(undefined);
-    });
 });
