@@ -1,12 +1,13 @@
 # About These Files
 
-These sounds were recorded for this project, see the LICENSE.txt file for terms of use.  The patch used is from the
-Arturia V Collection, and is a CS-80 patch called "Kitten Run".  The arpeggiation for that patch plays a note and then
-an octave lower, for these sounds I had to turn off the arpeggiation and play an octave lower and then the note for
-which the file is named.
+These sounds were recorded for this project, see the LICENSE.txt file for terms
+of use. The patch used is from the Arturia V Collection, and is a CS-80 patch
+called "Kitten Run". The arpeggiation for that patch plays a note and then an
+octave lower, for these sounds I had to turn off the arpeggiation and play an
+octave lower and then the note for which the file is named.
 
-Each filename corresponds to the pitch of the note.  The individual sounds are meant to be sped up and slowed down to
-simulate a fuller range of pitches.
+Each filename corresponds to the pitch of the note. The individual sounds are
+meant to be sped up and slowed down to simulate a fuller range of pitches.
 
 ## Timing
 
