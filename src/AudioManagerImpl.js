@@ -149,7 +149,7 @@ export default class AudioManagerImpl implements AudioManager {
     playSoundForCharacterState(actionKey: string, stepTimeInMs: number, characterState: CharacterState, sceneDimensions: SceneDimensions) {
         // We only play "positional" sounds when the location (and not
         // orientation) changes.
-        const isTurn = ["left45","leftt90","left180", "right45","right90","right180"].indexOf(actionKey) !== -1;
+        const isTurn = ["left45","left90","left180", "right45","right90","right180"].indexOf(actionKey) !== -1;
 
         // There are no "movement" sounds for even rows.
         if (this.audioEnabled) {
