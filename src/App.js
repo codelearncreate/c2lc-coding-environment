@@ -590,12 +590,15 @@ export class App extends React.Component<AppProps, AppState> {
         this.focusTrapManager.handleKeyDown(e);
     };
 
-    handleRootFocus = (e) => {
+    handleRootFocus = (e: SyntheticKeyboardEvent<HTMLElement>) => {
+        // $FlowFixMe classList is missing in event target
         if (e.target.classList.contains('focus-announcement')) {
+            // $FlowFixMe getAttribute is missing in event target
             const ariaLabel = e.target.getAttribute('aria-label');
             if (ariaLabel) {
                 this.audioManager.playStringMessage(ariaLabel);
             } else {
+                // $FlowFixMe innerText is missing in event target
                 const innerText = e.target.innerText;
                 if (innerText) {
                     this.audioManager.playStringMessage(innerText);
