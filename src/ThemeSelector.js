@@ -20,21 +20,21 @@ class ThemeSelector extends React.Component<ThemeSelectorProps, {}> {
                     /* $FlowFixMe
                         Cannot get Dropdown.Item because property Item is missing in statics of Dropdown
                     */
-                    <Dropdown.Item eventKey='mixed'>{this.props.intl.formatMessage({id:'ThemeSelector.theme.mixed'})}</Dropdown.Item>
+                    <Dropdown.Item className='focus-announcement' eventKey='mixed'>{this.props.intl.formatMessage({id:'ThemeSelector.theme.mixed'})}</Dropdown.Item>
                 }
                 {
                     // $FlowFixMe
-                    <Dropdown.Item eventKey='light'>{this.props.intl.formatMessage({id:'ThemeSelector.theme.light'})}</Dropdown.Item>
+                    <Dropdown.Item className='focus-announcement' eventKey='light'>{this.props.intl.formatMessage({id:'ThemeSelector.theme.light'})}</Dropdown.Item>
                 }
 
                 { // $FlowFixMe
-                    <Dropdown.Item eventKey='dark'>{this.props.intl.formatMessage({id:'ThemeSelector.theme.dark'})}</Dropdown.Item>
+                    <Dropdown.Item className='focus-announcement' eventKey='dark'>{this.props.intl.formatMessage({id:'ThemeSelector.theme.dark'})}</Dropdown.Item>
                 }
                 { // $FlowFixMe
-                    <Dropdown.Item eventKey='gray'>{this.props.intl.formatMessage({id:'ThemeSelector.theme.gray'})}</Dropdown.Item>
+                    <Dropdown.Item className='focus-announcement' eventKey='gray'>{this.props.intl.formatMessage({id:'ThemeSelector.theme.gray'})}</Dropdown.Item>
                 }
                 { // $FlowFixMe
-                    <Dropdown.Item eventKey='contrast'>{this.props.intl.formatMessage({id:'ThemeSelector.theme.contrast'})}</Dropdown.Item>
+                    <Dropdown.Item className='focus-announcement' eventKey='contrast'>{this.props.intl.formatMessage({id:'ThemeSelector.theme.contrast'})}</Dropdown.Item>
                 }
             </DropdownButton>
         );

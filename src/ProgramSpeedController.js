@@ -28,7 +28,7 @@ class ProgramSpeedController extends React.Component<ProgramSpeedControllerProps
                     */
                     <Form.Control
                         aria-label={`${this.props.intl.formatMessage({id:'ProgramSpeedController.slider'})}`}
-                        className='ProgramSpeedController__slider'
+                        className='ProgramSpeedController__slider focus-announcement'
                         type='range'
                         min='1'
                         max={this.props.values.length}

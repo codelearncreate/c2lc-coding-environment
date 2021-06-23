@@ -46,7 +46,7 @@ class ShareButton extends React.Component<ShareButtonProps, ShareButtonState> {
             <React.Fragment>
                 <Button
                     variant="light"
-                    className='ShareButton'
+                    className='ShareButton focus-announcement'
                     onClick={this.handleClickShareButton}
                 >
                     {this.props.intl.formatMessage({id:'ShareButton'})}

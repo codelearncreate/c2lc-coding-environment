@@ -22,7 +22,7 @@ class PenDownToggleSwitch extends React.Component<PenDownToggleSwitchProps, {}> 
                 contentsTrue={<PenDownIcon />}
                 contentsFalse={<PenDownIcon />}
                 onChange={this.props.onChange}
-                className='PenDownToggleSwitch'/>
+                className='PenDownToggleSwitch focus-announcement'/>
         );
     }
 };

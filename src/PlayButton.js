@@ -23,7 +23,8 @@ class PlayButton extends React.Component<PlayButtonProps, {}> {
             this.props.className,
             'PlayButton',
             this.props.interpreterIsRunning && 'PlayButton--pause',
-            !this.props.interpreterIsRunning && 'PlayButton--play'
+            !this.props.interpreterIsRunning && 'PlayButton--play',
+            'focus-announcement'
         );
         return (
             <AriaDisablingButton

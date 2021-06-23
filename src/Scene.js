@@ -272,7 +272,7 @@ class Scene extends React.Component<SceneProps, {}> {
                     </div>
                     <div
                         id='scene'
-                        className='Scene'
+                        className='Scene focus-announcement'
                         role='img'
                         aria-label={this.generateAriaLabel()}
                         onScroll={this.handleScrollScene}

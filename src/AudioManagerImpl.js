@@ -233,6 +233,16 @@ export default class AudioManagerImpl implements AudioManager {
         }
     }
 
+    playStringMessage(message: string) {
+        if (this.announcementsEnabled) {
+            if (window.speechSynthesis.speaking || window.speechSynthesis.pending) {
+                window.speechSynthesis.cancel();
+            }
+            const utterance = new SpeechSynthesisUtterance(message);
+            window.speechSynthesis.speak(utterance);
+        }
+    }
+
     // TODO: Add a better type for pitch.
     // TODO: Make this private, as it doesn't respect the audioEnabled setting.
     playPitchedSample(sampler: Sampler, pitch: string, releaseTime: number) {

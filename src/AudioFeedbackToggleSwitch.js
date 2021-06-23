@@ -24,7 +24,7 @@ class AudioFeedbackToggleSwitch extends React.Component<AudioFeedbackToggleSwitc
                 contentsTrue={<AudioOnIcon />}
                 contentsFalse={<AudioOffIcon />}
                 onChange={this.props.onChange}
-                className='AudioFeedbackToggleSwitch'/>
+                className='AudioFeedbackToggleSwitch focus-announcement'/>
         );
     }
 };

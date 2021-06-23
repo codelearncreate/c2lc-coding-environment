@@ -590,6 +590,20 @@ export class App extends React.Component<AppProps, AppState> {
         this.focusTrapManager.handleKeyDown(e);
     };
 
+    handleRootFocus = (e) => {
+        if (e.target.classList.contains('focus-announcement')) {
+            const ariaLabel = e.target.getAttribute('aria-label');
+            if (ariaLabel) {
+                this.audioManager.playStringMessage(ariaLabel);
+            } else {
+                const innerText = e.target.innerText;
+                if (innerText) {
+                    this.audioManager.playStringMessage(innerText);
+                }
+            }
+        }
+    }
+
     handleToggleAudioFeedback = (announcementsEnabled: boolean) => {
         this.setState({
             announcementsEnabled: announcementsEnabled
@@ -723,7 +737,8 @@ export class App extends React.Component<AppProps, AppState> {
                     className='App__container'
                     role='main'
                     onClick={this.handleRootClick}
-                    onKeyDown={this.handleRootKeyDown}>
+                    onKeyDown={this.handleRootKeyDown}
+                    onFocus={this.handleRootFocus}>
                     <header className='App__header'>
                         <div className='App__header-row'>
                             <h1 className='App__app-heading'>
