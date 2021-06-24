@@ -19,8 +19,7 @@ class StopButton extends React.Component<StopButtonProps, {}> {
     render() {
         const classes = classNames(
             this.props.className,
-            'StopButton',
-            'focus-announcement'
+            'StopButton'
         );
         return (
             <AriaDisablingButton

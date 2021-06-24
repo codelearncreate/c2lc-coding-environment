@@ -60,7 +60,7 @@ class WorldSelector extends React.Component<WorldSelectorProps, {}> {
                 <AriaDisablingButton
                     aria-label={this.props.intl.formatMessage({id:'WorldSelector.world.default'})}
                     aria-pressed={this.props.world === 'default'}
-                    className={"focus-announcement WorldIcon" + (this.props.world === 'default' ? " WorldIcon--selected" : "") }
+                    className={"WorldIcon" + (this.props.world === 'default' ? " WorldIcon--selected" : "") }
                     disabled={this.props.disabled}
                     disabledClassName='WorldIcon--disabled'
                     onClick={this.handleCharacterClick}
@@ -72,7 +72,7 @@ class WorldSelector extends React.Component<WorldSelectorProps, {}> {
                 <AriaDisablingButton
                     aria-label={this.props.intl.formatMessage({id:'WorldSelector.world.forest'})}
                     aria-pressed={this.props.world === 'forest'}
-                    className={"focus-announcement WorldIcon" + (this.props.world === 'forest' ? " WorldIcon--selected" : "") }
+                    className={"WorldIcon" + (this.props.world === 'forest' ? " WorldIcon--selected" : "") }
                     disabled={this.props.disabled}
                     disabledClassName='WorldIcon--disabled'
                     onClick={this.handleCharacterClick}
@@ -84,7 +84,7 @@ class WorldSelector extends React.Component<WorldSelectorProps, {}> {
                 <AriaDisablingButton
                     aria-label={this.props.intl.formatMessage({id:'WorldSelector.world.space'})}
                     aria-pressed={this.props.world === 'space'}
-                    className={"focus-announcement WorldIcon" + (this.props.world === 'space' ? " WorldIcon--selected" : "") }
+                    className={"WorldIcon" + (this.props.world === 'space' ? " WorldIcon--selected" : "") }
                     disabled={this.props.disabled}
                     disabledClassName='WorldIcon--disabled'
                     onClick={this.handleCharacterClick}

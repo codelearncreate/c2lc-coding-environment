@@ -36,7 +36,7 @@ class ActionsMenuToggle extends React.Component<ActionsMenuToggleProps, {}> {
                 aria-label={this.props.intl.formatMessage({id:'ActionsMenu.toggleActionsMenu'})}
                 aria-expanded={this.props.showMenu}
                 tabIndex='0'
-                className='ActionsMenu__toggle-button focus-trap-ActionsMenu__toggle-button focus-announcement'
+                className='ActionsMenu__toggle-button focus-trap-ActionsMenu__toggle-button'
                 disabled={this.props.editingDisabled}
                 onClick={this.onClick}
                 onKeyDown={this.handleKeyDown}

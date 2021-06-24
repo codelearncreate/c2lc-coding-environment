@@ -494,8 +494,7 @@ class ProgramBlockEditor extends React.Component<ProgramBlockEditorProps, Progra
             'ProgramBlockEditor__program-block',
             active && 'ProgramBlockEditor__program-block--active',
             hasActionPanelControl && 'focus-trap-action-panel__program-block',
-            paused && 'ProgramBlockEditor__program-block--paused',
-            'focus-announcement'
+            paused && 'ProgramBlockEditor__program-block--paused'
         );
         const ariaLabel = this.props.intl.formatMessage(
             { id: 'ProgramBlockEditor.command' },
@@ -640,14 +639,12 @@ class ProgramBlockEditor extends React.Component<ProgramBlockEditorProps, Progra
 
         const characterPositionButtonClassName = classNames(
             'ProgramBlockEditor__character-position-button',
-            this.props.editingDisabled && 'ProgramBlockEditor__character-position-button--disabled',
-            'focus-announcement'
+            this.props.editingDisabled && 'ProgramBlockEditor__character-position-button--disabled'
         );
 
         const characterPositionTextInputClassName = classNames(
             'ProgramBlock__character-position-coordinate-box',
-            this.props.editingDisabled && 'ProgramBlock__character-position-coordinate-box--disabled',
-            'focus-announcement'
+            this.props.editingDisabled && 'ProgramBlock__character-position-coordinate-box--disabled'
         );
 
         contents.push(this.makeEndOfProgramAddNodeSection(this.props.programSequence.getProgramLength()));
@@ -665,12 +662,12 @@ class ProgramBlockEditor extends React.Component<ProgramBlockEditorProps, Progra
                             onChange={this.props.onChangeAddNodeExpandedMode}
                             contentsTrue={<AddIcon />}
                             contentsFalse={<AddIcon />}
-                            className='ProgramBlockEditor__add-node-toggle-switch focus-announcement'
+                            className='ProgramBlockEditor__add-node-toggle-switch'
                         />
                         <span className='ProgramBlockEditor__program-deleteAll'>
                             <AriaDisablingButton
                                 aria-label={this.props.intl.formatMessage({id:'ProgramBlockEditor.program.deleteAll'})}
-                                className='ProgramBlockEditor__program-deleteAll-button focus-announcement'
+                                className='ProgramBlockEditor__program-deleteAll-button'
                                 disabledClassName='ProgramBlockEditor__program-deleteAll-button--disabled'
                                 disabled={this.props.editingDisabled}
                                 onClick={this.handleClickDeleteAll}
