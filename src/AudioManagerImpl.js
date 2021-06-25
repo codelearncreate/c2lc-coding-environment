@@ -2,7 +2,6 @@
 
 import { Midi, Panner, Sampler} from 'tone';
 import CharacterState from './CharacterState';
-import type {IntlShape} from 'react-intl';
 import {AudioManager} from './types';
 import SceneDimensions from './SceneDimensions';
 
@@ -221,26 +220,27 @@ export default class AudioManagerImpl implements AudioManager {
         });
     }
 
-    playAnnouncement(messageIdSuffix: string, intl: IntlShape, messagePayload: any) {
+    playFeedbackAnnouncement(message: string) {
         if (this.announcementsEnabled) {
             if (window.speechSynthesis.speaking || window.speechSynthesis.pending) {
                 window.speechSynthesis.cancel();
             }
-            const messageId = "Announcement." + messageIdSuffix;
-            const toAnnounce = intl.formatMessage({ id: messageId}, messagePayload);
-            const utterance = new SpeechSynthesisUtterance(toAnnounce);
-            window.speechSynthesis.speak(utterance);
+            this.playStringMessage(message);
+        }
+    }
+
+    playPreviewAnnouncement(message: string) {
+        if (this.announcementsEnabled) {
+            if (window.speechSynthesis.speaking || window.speechSynthesis.pending) {
+                window.speechSynthesis.cancel();
+            }
+            this.playStringMessage(message);
         }
     }
 
     playStringMessage(message: string) {
-        if (this.announcementsEnabled) {
-            if (window.speechSynthesis.speaking || window.speechSynthesis.pending) {
-                window.speechSynthesis.cancel();
-            }
-            const utterance = new SpeechSynthesisUtterance(message);
-            window.speechSynthesis.speak(utterance);
-        }
+        const utterance = new SpeechSynthesisUtterance(message);
+        window.speechSynthesis.speak(utterance);
     }
 
     // TODO: Add a better type for pitch.
