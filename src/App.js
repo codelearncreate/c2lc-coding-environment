@@ -382,7 +382,7 @@ export class App extends React.Component<AppProps, AppState> {
             isDraggingCommand: false,
             audioEnabled: true,
             announcementsEnabled: true,
-            // Keep utteranceRate in the state, which later have a controller to change
+            // Keep utteranceRate in the state, so that we can add controls to change it later
             audioUtteranceRate: 0.8,
             actionPanelStepIndex: null,
             sceneDimensions: this.sceneDimensions,
