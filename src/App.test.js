@@ -22,7 +22,7 @@ it('renders without crashing', () => {
 });
 
 it('Should play a sound when selectedCommandName changes', () => {
-    const audioManagerInstance = new AudioManagerImpl(true, true);
+    const audioManagerInstance = new AudioManagerImpl(true, true, 1);
     // $FlowFixMe: Flow doesn't know about the Jest mock API
     const audioManagerMock = AudioManagerImpl.mock.instances[0];
 

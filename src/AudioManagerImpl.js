@@ -189,6 +189,7 @@ export default class AudioManagerImpl implements AudioManager {
     audioEnabled: boolean;
     announcementsEnabled: boolean;
     panner: Panner;
+    utteranceRate: number;
     samplers: {
         backward1: Sampler,
         backward2: Sampler,
@@ -204,7 +205,7 @@ export default class AudioManagerImpl implements AudioManager {
         right180: Sampler
     };
 
-    constructor(audioEnabled: boolean, announcementsEnabled: boolean) {
+    constructor(audioEnabled: boolean, announcementsEnabled: boolean, utteranceRate: number) {
         this.audioEnabled = audioEnabled;
         this.announcementsEnabled = announcementsEnabled;
 
@@ -212,6 +213,7 @@ export default class AudioManagerImpl implements AudioManager {
         this.panner.toDestination();
 
         this.samplers = {};
+        this.utteranceRate = utteranceRate;
 
         Object.keys(SamplerDefs).forEach((samplerKey) => {
             const samplerDef = SamplerDefs[samplerKey];
@@ -229,6 +231,7 @@ export default class AudioManagerImpl implements AudioManager {
             const messageId = "Announcement." + messageIdSuffix;
             const toAnnounce = intl.formatMessage({ id: messageId}, messagePayload);
             const utterance = new SpeechSynthesisUtterance(toAnnounce);
+            utterance.rate = this.utteranceRate;
             window.speechSynthesis.speak(utterance);
         }
     }
