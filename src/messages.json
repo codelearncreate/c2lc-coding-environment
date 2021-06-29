@@ -40,6 +40,8 @@
         "App.run": "Run",
         "App.speechRecognition": "Speech Recognition",
         "App.textMode": "Text",
+        "AudioToggle.preview": "Audio preview toggle",
+        "AudioToggle.feedback": "Audio feedback toggle",
         "BluetoothApiWarning.errorIconLabel": "Warning",
         "BluetoothApiWarning.message": "The Dash robot connection currently only works in Chrome.",
         "CharacterAriaLive.movementAriaLabel": "{character} is moving",

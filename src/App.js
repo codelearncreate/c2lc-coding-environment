@@ -753,16 +753,14 @@ export class App extends React.Component<AppProps, AppState> {
                                 <FormattedMessage id='App.appHeading'/>
                             </h1>
                             <div className='App__header-audio-toggle'>
-                                <div className='App__audio-toggle-switch'>
-                                    <AudioToggleButton
-                                        className='AudioPreview'
-                                        toggleOn={this.state.audioPreviewEnabled}
-                                        onClick={this.hanldeToggleAudioPreview}/>
-                                    <AudioToggleButton
-                                        className='AudioFeedback'
-                                        toggleOn={this.state.audioFeedbackEnabled}
-                                        onClick={this.handleToggleAudioFeedback}/>
-                                </div>
+                                <AudioToggleButton
+                                    audioType='preview'
+                                    toggleOn={this.state.audioPreviewEnabled}
+                                    onClick={this.hanldeToggleAudioPreview}/>
+                                <AudioToggleButton
+                                    audioType='feedback'
+                                    toggleOn={this.state.audioFeedbackEnabled}
+                                    onClick={this.handleToggleAudioFeedback}/>
                                 {/* Dash connection removed for version 0.5
                                 <DeviceConnectControl
                                     disabled={
