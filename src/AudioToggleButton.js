@@ -2,6 +2,7 @@
 
 import * as React from 'react';
 import classNames from 'classnames';
+import type {IntlShape} from 'react-intl';
 import { injectIntl } from 'react-intl';
 import { ReactComponent as FeedbackEnabled } from './svg/FeedbackEnabled.svg';
 import { ReactComponent as FeedbackDisabled } from './svg/FeedbackDisabled.svg';
@@ -10,9 +11,10 @@ import { ReactComponent as PreviewDisabled } from './svg/PreviewDisabled.svg';
 import './AudioToggleButton.scss';
 
 type AudioToggleButtonProps = {
+    intl: IntlShape,
     audioType: string,
     toggleOn: boolean,
-    onClick: (evt: SyntheticEvent<HTMLButtonElement>) => void
+    onClick: (value: boolean) => void
 };
 
 class AudioToggleButton extends React.Component<AudioToggleButtonProps, {}> {
@@ -39,7 +41,6 @@ class AudioToggleButton extends React.Component<AudioToggleButtonProps, {}> {
                 aria-label={this.props.intl.formatMessage({id:`AudioToggle.${this.props.audioType}`})}
                 aria-pressed={!this.props.toggleOn}
                 className={classes}
-                disabled={this.props.disabled}
                 onClick={this.onClickToggleButton}
             >
                 {this.getDisplayIcon()}

@@ -555,6 +555,27 @@ body.gray-theme {
         color: #000;
     }
 
+    .AudioToggleButton {
+        background-color: #F1F2F4;
+    }
+
+    .AudioToggleButton--off {
+        background-color: #F1F2F4;
+        svg {
+            opacity: 50%;
+        }
+    }
+
+    .AudioToggleButton,
+    .AudioToggleButton--off {
+        &:hover {
+            background-color: #505862;
+            svg path {
+                fill: white;
+            }
+        }
+    }
+
     .ThemeSelector {
         button.btn {
             background-color: #F1F2F4;
@@ -826,7 +847,7 @@ body.gray-theme {
         &:focus {
             outline: $c2lc-focus-indicator-width solid $c2lc-focus-indicator-color;
         }
-    
+
         &:hover:not(.ProgramBlockEditor__character-position-button--disabled) {
             path.filled {
                 fill: #505862;
@@ -1214,6 +1235,33 @@ body.contrast-theme {
         color: white;
     }
 
+    .AudioToggleButton {
+        background-color: white;
+    }
+
+    .AudioToggleButton--off {
+        background-color: #505862;
+        svg {
+            opacity: 0.5;
+        }
+    }
+
+    .AudioToggleButton,
+    .AudioToggleButton--off {
+        border: 2px solid white;
+        &:hover {
+            background-color: black;
+            border: 2px solid white;
+            svg path {
+                fill: white;
+            }
+        }
+        &:focus {
+            border: 2px solid black;
+            box-shadow: 0 0 0 0.2rem white;
+        }
+    }
+
     .ThemeSelector {
         button.btn {
             background-color: white;
@@ -1548,7 +1596,7 @@ body.contrast-theme {
     .ProgramBlockEditor__character-position-button {
         &:focus {
             outline: $c2lc-focus-indicator-width solid white;
-        }        
+        }
     }
 
     .ProgramBlockEditor__character-position-button:not(.ProgramBlockEditor__character-position-button--disabled) {

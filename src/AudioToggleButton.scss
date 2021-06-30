@@ -13,6 +13,10 @@
         0 0 0 0.1rem white,
         0 0 0 $c2lc-focus-indicator-width black;
     }
+
+    &:hover {
+        background-color: #F5C58A;
+    }
 }
 
 
