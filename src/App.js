@@ -127,7 +127,7 @@ export class App extends React.Component<AppProps, AppState> {
             'moveCharacter',
             (stepTimeMs) => {
                 // TODO: Enable announcements again.
-                // this.audioManager.playAnnouncement('forward1', this.props.intl);
+                // this.audioManager.playFeedbackAnnouncement(this.props.intl.formatMessage({id: 'Announcement.forward1'}));
                 this.setState((state) => {
                     const newCharacterState = state.characterState.forward(1, state.drawingEnabled);
 
@@ -147,7 +147,7 @@ export class App extends React.Component<AppProps, AppState> {
             'moveCharacter',
             (stepTimeMs) => {
                 // TODO: Enable announcements again.
-                // this.audioManager.playAnnouncement('forward2', this.props.intl);
+                // this.audioManager.playFeedbackAnnouncement(this.props.intl.formatMessage({id: 'Announcement.forward2'}));
                 this.setState((state) => {
                     const newCharacterState = state.characterState.forward(2, state.drawingEnabled);
 
@@ -167,7 +167,7 @@ export class App extends React.Component<AppProps, AppState> {
             'moveCharacter',
             (stepTimeMs) => {
                 // TODO: Enable announcements again.
-                // this.audioManager.playAnnouncement('forward3', this.props.intl);
+                // this.audioManager.playFeedbackAnnouncement(this.props.intl.formatMessage({id: 'Announcement.forward3'}));
                 this.setState((state) => {
                     const newCharacterState = state.characterState.forward(3, state.drawingEnabled);
 
@@ -186,7 +186,7 @@ export class App extends React.Component<AppProps, AppState> {
             'moveCharacter',
             (stepTimeMs) => {
                 // TODO: Enable announcements again.
-                // this.audioManager.playAnnouncement('backward1');
+                // this.audioManager.playFeedbackAnnouncement(this.props.intl.formatMessage({id: 'Announcement.backward1'}));
                 this.setState((state) => {
                     const newCharacterState = state.characterState.backward(1, state.drawingEnabled);
 
@@ -205,7 +205,7 @@ export class App extends React.Component<AppProps, AppState> {
             'moveCharacter',
             (stepTimeMs) => {
                 // TODO: Enable announcements again.
-                // this.audioManager.playAnnouncement('backward2');
+                // this.audioManager.playFeedbackAnnouncement(this.props.intl.formatMessage({id: 'Announcement.backward2'}));
                 this.setState((state) => {
                     const newCharacterState = state.characterState.backward(2, state.drawingEnabled);
 
@@ -224,7 +224,7 @@ export class App extends React.Component<AppProps, AppState> {
             'moveCharacter',
             (stepTimeMs) => {
                 // TODO: Enable announcements again.
-                // this.audioManager.playAnnouncement('backward3');
+                // this.audioManager.playFeedbackAnnouncement(this.props.intl.formatMessage({id: 'Announcement.backward3'}));
                 this.setState((state) => {
                     const newCharacterState = state.characterState.backward(3, state.drawingEnabled);
 
@@ -243,7 +243,7 @@ export class App extends React.Component<AppProps, AppState> {
             'moveCharacter',
             (stepTimeMs) => {
                 // TODO: Enable announcements again.
-                // this.audioManager.playAnnouncement('left45', this.props.intl);
+                // this.audioManager.playFeedbackAnnouncement(this.props.intl.formatMessage({id: 'Announcement.left45'}));
                 this.setState((state) => {
                     const newCharacterState = state.characterState.turnLeft(1);
 
@@ -263,7 +263,7 @@ export class App extends React.Component<AppProps, AppState> {
             'moveCharacter',
             (stepTimeMs) => {
                 // TODO: Enable announcements again.
-                // this.audioManager.playAnnouncement('left90', this.props.intl);
+                // this.audioManager.playFeedbackAnnouncement(this.props.intl.formatMessage({id: 'Announcement.left90'}));
                 this.setState((state) => {
                     const newCharacterState = state.characterState.turnLeft(2);
 
@@ -283,7 +283,7 @@ export class App extends React.Component<AppProps, AppState> {
             'moveCharacter',
             (stepTimeMs) => {
                 // TODO: Enable announcements again.
-                // this.audioManager.playAnnouncement('left180', this.props.intl);
+                // this.audioManager.playFeedbackAnnouncement(this.props.intl.formatMessage({id: 'Announcement.left180'}));
                 this.setState((state) => {
                     const newCharacterState = state.characterState.turnLeft(4);
 
@@ -303,7 +303,7 @@ export class App extends React.Component<AppProps, AppState> {
             'moveCharacter',
             (stepTimeMs) => {
                 // TODO: Enable announcements again.
-                // this.audioManager.playAnnouncement('right45', this.props.intl);
+                // this.audioManager.playFeedbackAnnouncement(this.props.intl.formatMessage({id: 'Announcement.right45'}));
                 this.setState((state) => {
                     const newCharacterState = state.characterState.turnRight(1);
 
@@ -323,7 +323,7 @@ export class App extends React.Component<AppProps, AppState> {
             'moveCharacter',
             (stepTimeMs) => {
                 // TODO: Enable announcements again.
-                // this.audioManager.playAnnouncement('right90', this.props.intl);
+                // this.audioManager.playFeedbackAnnouncement(this.props.intl.formatMessage({id: 'Announcement.right90'}));
                 this.setState((state) => {
                     const newCharacterState = state.characterState.turnRight(2);
 
@@ -343,7 +343,7 @@ export class App extends React.Component<AppProps, AppState> {
             'moveCharacter',
             (stepTimeMs) => {
                 // TODO: Enable announcements again.
-                // this.audioManager.playAnnouncement('right180', this.props.intl);
+                // this.audioManager.playFeedbackAnnouncement(this.props.intl.formatMessage({id: 'Announcement.right180'}));
                 this.setState((state) => {
                     const newCharacterState = state.characterState.turnRight(4);
 
@@ -596,12 +596,12 @@ export class App extends React.Component<AppProps, AppState> {
         // $FlowFixMe getAttribute is missing in event target
         const ariaLabel = e.target.getAttribute('aria-label');
         if (ariaLabel) {
-            this.audioManager.playStringMessage(ariaLabel);
+            this.audioManager.playPreviewAnnouncement(ariaLabel);
         } else {
             // $FlowFixMe innerText is missing in event target
             const innerText = e.target.innerText;
             if (innerText) {
-                this.audioManager.playStringMessage(innerText);
+                this.audioManager.playPreviewAnnouncement(innerText);
             }
         }
     }
@@ -1090,8 +1090,12 @@ export class App extends React.Component<AppProps, AppState> {
                 });
                 messagePayload.command = commandString;
             }
-            this.audioManager.playAnnouncement(announcementKey,
-                    this.props.intl, messagePayload);
+            this.audioManager.playFeedbackAnnouncement(
+                this.props.intl.formatMessage(
+                    {id: `Announcement.${announcementKey}`},
+                    messagePayload
+                )
+            );
         }
 
         if (this.state.programSequence !== prevState.programSequence) {

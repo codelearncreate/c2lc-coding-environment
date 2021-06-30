@@ -349,8 +349,8 @@ describe('Delete All button', () => {
         const deleteAllButton = getProgramDeleteAllButton(wrapper).at(0);
         deleteAllButton.simulate('click');
         // Then the 'deleteAll' announcement should be played
-        expect(audioManagerMock.playAnnouncement.mock.calls.length).toBe(1);
-        expect(audioManagerMock.playAnnouncement.mock.calls[0][0]).toBe('deleteAll');
+        expect(audioManagerMock.playFeedbackAnnouncement.mock.calls.length).toBe(1);
+        expect(audioManagerMock.playFeedbackAnnouncement.mock.calls[0][0]).toBe('delete all movements?');
         // And the dialog should be shown
         expect(wrapper.state().showConfirmDeleteAll).toBe(true);
     });
@@ -372,8 +372,8 @@ describe("Add program steps", () => {
         addNode.simulate('click');
 
         // Then the 'add' sound should be played
-        expect(audioManagerMock.playAnnouncement.mock.calls.length).toBe(1);
-        expect(audioManagerMock.playAnnouncement.mock.calls[0][0]).toBe('add');
+        expect(audioManagerMock.playFeedbackAnnouncement.mock.calls.length).toBe(1);
+        expect(audioManagerMock.playFeedbackAnnouncement.mock.calls[0][0]).toBe('added movement turn left 45 degrees');
 
         // And the program should be changed
         expect(mockChangeProgramSequenceHandler.mock.calls.length).toBe(1);
@@ -398,8 +398,8 @@ describe("Add program steps", () => {
         addNode.simulate('click');
 
         // Then the 'add' announcement should be played
-        expect(audioManagerMock.playAnnouncement.mock.calls.length).toBe(1);
-        expect(audioManagerMock.playAnnouncement.mock.calls[0][0]).toBe('add');
+        expect(audioManagerMock.playFeedbackAnnouncement.mock.calls.length).toBe(1);
+        expect(audioManagerMock.playFeedbackAnnouncement.mock.calls[0][0]).toBe('added movement turn left 45 degrees');
 
         // And the program should be changed
         expect(mockChangeProgramSequenceHandler.mock.calls.length).toBe(1);
@@ -423,8 +423,8 @@ describe("Add program steps", () => {
         addNode.simulate('click');
 
         // Then the 'add' announcement should be played
-        expect(audioManagerMock.playAnnouncement.mock.calls.length).toBe(1);
-        expect(audioManagerMock.playAnnouncement.mock.calls[0][0]).toBe('add');
+        expect(audioManagerMock.playFeedbackAnnouncement.mock.calls.length).toBe(1);
+        expect(audioManagerMock.playFeedbackAnnouncement.mock.calls[0][0]).toBe('added movement turn left 45 degrees');
 
         // And the program should be changed
         expect(mockChangeProgramSequenceHandler.mock.calls.length).toBe(1);
@@ -437,10 +437,10 @@ describe("Add program steps", () => {
 
 describe('Delete program steps', () => {
     test.each([
-        [ 0, ['left45', 'forward1', 'left45']],
-        [ 3, ['forward1', 'left45', 'forward1']]
+        [ 0, ['left45', 'forward1', 'left45'], 'forward 1 square'],
+        [ 3, ['forward1', 'left45', 'forward1'], 'turn left 45 degrees']
     ])('While the action panel is open, when block %i is clicked, then program should be updated',
-        (stepNum, expectedProgram) => {
+        (stepNum, expectedProgram, deletedCommand) => {
             const { wrapper, audioManagerMock, mockChangeProgramSequenceHandler, mockChangeActionPanelStepIndex } = createMountProgramBlockEditor();
             const programBlock = getProgramBlockAtPosition(wrapper, stepNum);
             programBlock.simulate('click');
@@ -458,8 +458,8 @@ describe('Delete program steps', () => {
             deleteStepButton.simulate('click');
 
             // The 'delete' announcement should be played
-            expect(audioManagerMock.playAnnouncement.mock.calls.length).toBe(1);
-            expect(audioManagerMock.playAnnouncement.mock.calls[0][0]).toBe('delete');
+            expect(audioManagerMock.playFeedbackAnnouncement.mock.calls.length).toBe(1);
+            expect(audioManagerMock.playFeedbackAnnouncement.mock.calls[0][0]).toBe(`deleted movement ${deletedCommand}`);
 
             // The program should be updated
             expect(mockChangeProgramSequenceHandler.mock.calls.length).toBe(1);
@@ -494,16 +494,16 @@ describe('Replace program steps', () => {
             replaceButton.simulate('click');
 
             // An announcement should be played.
-            expect(audioManagerMock.playAnnouncement.mock.calls.length).toBe(1);
+            expect(audioManagerMock.playFeedbackAnnouncement.mock.calls.length).toBe(1);
 
             if (selectedAction) {
-                expect(audioManagerMock.playAnnouncement.mock.calls[0][0]).toBe('replace');
+                expect(audioManagerMock.playFeedbackAnnouncement.mock.calls[0][0]).toBe('movement forward 1 square replaced with turn right 45 degrees');
 
                 // The program should be updated
                 expect(mockChangeProgramSequenceHandler.mock.calls.length).toBe(1);
                 expect(mockChangeProgramSequenceHandler.mock.calls[0][0].program).toStrictEqual(expectedProgram);
             } else {
-                expect(audioManagerMock.playAnnouncement.mock.calls[0][0]).toBe('noMovementSelected');
+                expect(audioManagerMock.playFeedbackAnnouncement.mock.calls[0][0]).toBe('no movement selected');
 
                 // The program should not be updated
                 expect(mockChangeProgramSequenceHandler.mock.calls.length).toBe(0);
@@ -537,14 +537,14 @@ describe('Move to previous program step', () => {
 
             if (stepNum > 0) {
                 // The 'mockToPrevious' announcement should be played
-                expect(audioManagerMock.playAnnouncement.mock.calls.length).toBe(1);
-                expect(audioManagerMock.playAnnouncement.mock.calls[0][0]).toBe('moveToPrevious');
+                expect(audioManagerMock.playFeedbackAnnouncement.mock.calls.length).toBe(1);
+                expect(audioManagerMock.playFeedbackAnnouncement.mock.calls[0][0]).toBe('moved to left');
                 // The program should be updated
                 expect(mockChangeProgramSequenceHandler.mock.calls.length).toBe(1);
                 expect(mockChangeProgramSequenceHandler.mock.calls[0][0].program).toStrictEqual(expectedProgram);
             } else {
                 // No sound should be played
-                expect(audioManagerMock.playAnnouncement.mock.calls.length).toBe(0);
+                expect(audioManagerMock.playFeedbackAnnouncement.mock.calls.length).toBe(0);
                 // The program should not be updated
                 expect(mockChangeProgramSequenceHandler.mock.calls.length).toBe(0);
                 expect(wrapper.props().programSequence.getProgram()).toStrictEqual(expectedProgram);
@@ -577,14 +577,14 @@ describe('Move to next program step', () => {
 
             if (stepNum < 3) {
                 // The 'mockToNext' announcement should be played
-                expect(audioManagerMock.playAnnouncement.mock.calls.length).toBe(1);
-                expect(audioManagerMock.playAnnouncement.mock.calls[0][0]).toBe('moveToNext');
+                expect(audioManagerMock.playFeedbackAnnouncement.mock.calls.length).toBe(1);
+                expect(audioManagerMock.playFeedbackAnnouncement.mock.calls[0][0]).toBe('moved to right');
                 // The program should be updated
                 expect(mockChangeProgramSequenceHandler.mock.calls.length).toBe(1);
                 expect(mockChangeProgramSequenceHandler.mock.calls[0][0].program).toStrictEqual(expectedProgram);
             } else {
                 // No announcement should be played
-                expect(audioManagerMock.playAnnouncement.mock.calls.length).toBe(0);
+                expect(audioManagerMock.playFeedbackAnnouncement.mock.calls.length).toBe(0);
                 // The program should not be updated
                 expect(mockChangeProgramSequenceHandler.mock.calls.length).toBe(0);
                 expect(wrapper.props().programSequence.getProgram()).toStrictEqual(expectedProgram);
@@ -760,8 +760,8 @@ test('The editor scrolls when a step is added to the end of the program', () => 
     addNode.simulate('click');
 
     // Then the 'add' announcement should be played
-    expect(audioManagerMock.playAnnouncement.mock.calls.length).toBe(1);
-    expect(audioManagerMock.playAnnouncement.mock.calls[0][0]).toBe('add');
+    expect(audioManagerMock.playFeedbackAnnouncement.mock.calls.length).toBe(1);
+    expect(audioManagerMock.playFeedbackAnnouncement.mock.calls[0][0]).toBe('added movement turn left 45 degrees');
 
     // And the program should be changed
     expect(mockChangeProgramSequenceHandler.mock.calls.length).toBe(1);
