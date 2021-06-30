@@ -399,7 +399,7 @@ export class App extends React.Component<AppProps, AppState> {
             this.audioManager = props.audioManager
         }
         else if (FeatureDetection.webAudioApiIsAvailable()) {
-            this.audioManager = new AudioManagerImpl(this.state.audioEnabled, this.state.audioFeedbackEnabled);
+            this.audioManager = new AudioManagerImpl(this.state.audioEnabled, this.state.audioPreviewEnabled, this.state.audioFeedbackEnabled);
         }
         else {
             this.audioManager = new FakeAudioManager();
@@ -1069,8 +1069,11 @@ export class App extends React.Component<AppProps, AppState> {
             window.localStorage.setItem('c2lc-world', this.state.settings.world)
         }
 
+        if (this.state.audioPreviewEnabled !== prevState.audioPreviewEnabled) {
+            this.audioManager.setAudioPreviewEnabled(this.state.audioPreviewEnabled);
+        }
         if (this.state.audioFeedbackEnabled !== prevState.audioFeedbackEnabled) {
-            this.audioManager.setAnnouncementsEnabled(this.state.audioFeedbackEnabled);
+            this.audioManager.setAudioFeedbackEnabled(this.state.audioFeedbackEnabled);
         }
         if (this.state.audioEnabled !== prevState.audioEnabled) {
             this.audioManager.setAudioEnabled(this.state.audioEnabled);

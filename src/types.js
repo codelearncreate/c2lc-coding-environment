@@ -55,7 +55,9 @@ export interface AudioManager {
     playPreviewAnnouncement(message: string): void;
     playStringMessage(message: string): void;
     playSoundForCharacterState(samplerKey: string, releaseTimeInMs: number, characterState: CharacterState, sceneDimension: SceneDimensions) : void;
-    setAnnouncementsEnabled(value: boolean) : void;
+    setAudioPreviewEnabled(value: boolean) : void;
+    setAudioFeedbackEnabled(value: boolean) : void;
+    cancelSpeech() : void;
     setAudioEnabled(value: boolean) : void;
 }
 

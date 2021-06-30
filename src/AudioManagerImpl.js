@@ -186,7 +186,8 @@ export function getNoteForState (characterState: CharacterState) : string {
 
 export default class AudioManagerImpl implements AudioManager {
     audioEnabled: boolean;
-    announcementsEnabled: boolean;
+    audioPreviewEnabled: boolean;
+    audioFeedbackEnabled: boolean;
     panner: Panner;
     samplers: {
         backward1: Sampler,
@@ -203,9 +204,10 @@ export default class AudioManagerImpl implements AudioManager {
         right180: Sampler
     };
 
-    constructor(audioEnabled: boolean, announcementsEnabled: boolean) {
+    constructor(audioEnabled: boolean, audioPreviewEnabled: boolean, audioFeedbackEnabled: boolean) {
         this.audioEnabled = audioEnabled;
-        this.announcementsEnabled = announcementsEnabled;
+        this.audioPreviewEnabled = audioPreviewEnabled
+        this.audioFeedbackEnabled = audioFeedbackEnabled;
 
         this.panner = new Panner();
         this.panner.toDestination();
@@ -221,19 +223,15 @@ export default class AudioManagerImpl implements AudioManager {
     }
 
     playFeedbackAnnouncement(message: string) {
-        if (this.announcementsEnabled) {
-            if (window.speechSynthesis.speaking || window.speechSynthesis.pending) {
-                window.speechSynthesis.cancel();
-            }
+        if (this.audioFeedbackEnabled) {
+            this.cancelSpeech();
             this.playStringMessage(message);
         }
     }
 
     playPreviewAnnouncement(message: string) {
-        if (this.announcementsEnabled) {
-            if (window.speechSynthesis.speaking || window.speechSynthesis.pending) {
-                window.speechSynthesis.cancel();
-            }
+        if (this.audioPreviewEnabled) {
+            this.cancelSpeech();
             this.playStringMessage(message);
         }
     }
@@ -277,13 +275,23 @@ export default class AudioManagerImpl implements AudioManager {
         }
     }
 
-    setAnnouncementsEnabled(announcementsEnabled: boolean) {
-        this.announcementsEnabled = announcementsEnabled;
+    setAudioPreviewEnabled(audioPreviewEnabled: boolean) {
+        this.audioPreviewEnabled = audioPreviewEnabled;
+        if(!audioPreviewEnabled) {
+            this.cancelSpeech();
+        }
+    }
 
-        if (!announcementsEnabled) {
-            if (window.speechSynthesis.speaking || window.speechSynthesis.pending) {
-                window.speechSynthesis.cancel();
-            }
+    setAudioFeedbackEnabled(audioFeedbackEnabled: boolean) {
+        this.audioFeedbackEnabled = audioFeedbackEnabled;
+        if(!audioFeedbackEnabled) {
+            this.cancelSpeech();
+        }
+    }
+
+    cancelSpeech() {
+        if (window.speechSynthesis.speaking || window.speechSynthesis.pending) {
+            window.speechSynthesis.cancel();
         }
     }
 
