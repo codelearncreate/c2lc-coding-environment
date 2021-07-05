@@ -34,6 +34,7 @@
         "Announcement.right90": "turn right 90 degrees",
         "Announcement.right180": "turn right 180 degrees",
         "App.appHeading": "Weavly",
+        "App.appHeading.link": "Weavly, learn more about Weavly at Weavly dot org",
         "App.blockMode": "Block",
         "App.changeMode": "Change Mode",
         "App.connectToDash": "Connect to Dash",
