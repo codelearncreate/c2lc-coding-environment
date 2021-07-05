@@ -38,8 +38,9 @@ class AudioToggleButton extends React.Component<AudioToggleButtonProps, {}> {
         );
         return (
             <button
+                role='switch'
                 aria-label={this.props.intl.formatMessage({id:`AudioToggle.${this.props.audioType}`})}
-                aria-pressed={!this.props.toggleOn}
+                aria-checked={this.props.toggleOn}
                 className={classes}
                 onClick={this.onClickToggleButton}
             >
