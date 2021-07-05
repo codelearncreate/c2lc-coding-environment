@@ -555,14 +555,20 @@ body.gray-theme {
     .AudioToggleButton--off {
         background-color: #F1F2F4;
         svg {
-            opacity: 50%;
+            opacity: 0.5;
         }
     }
 
     .AudioToggleButton,
     .AudioToggleButton--off {
+        svg path {
+            fill: #818A98;
+        }
         &:hover {
             background-color: #505862;
+            svg {
+                opacity: 1.0;
+            }
             svg path {
                 fill: white;
             }
