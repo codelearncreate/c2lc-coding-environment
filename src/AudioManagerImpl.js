@@ -1,7 +1,7 @@
 // @flow
 
 // $FlowFixMe: We need to add a type definition for more stuff.
-import {Filter, FMSynth, Instrument, MembraneSynth, MetalSynth, Noise, NoiseSynth, Panner, Reverb, Sequence, Signal, Synth, Transport} from 'tone';
+import {Filter, FMSynth, Gain, Instrument, MembraneSynth, MetalSynth, Noise, NoiseSynth, Panner, Reverb, Sequence, Signal, Synth, Transport} from 'tone';
 import CharacterState from './CharacterState';
 import type {IntlShape} from 'react-intl';
 import {AudioManager} from './types';
@@ -38,6 +38,12 @@ const sequences = {
 export default class AudioManagerImpl implements AudioManager {
     audioEnabled: boolean;
     announcementsEnabled: boolean;
+
+    // $FlowFixMe: Add a type for gain.
+    fullGain: Gain;
+    // $FlowFixMe: Add a type for gain.
+    halfGain: Gain;
+
     panner: Panner;
     // $FlowFixMe: Add a type for sequence.
     sequence: boolean | Sequence;
@@ -64,23 +70,26 @@ export default class AudioManagerImpl implements AudioManager {
         this.panner = new Panner();
         this.panner.toDestination();
 
+        this.fullGain = new Gain().connect(this.panner);
+        this.halfGain = new Gain(0.5).connect(this.panner);
+
         const marimba = new FMSynth({
             harmonicity: 8,
             envelope :  {attack:0, decay:0, Sustain:1, Release:1 }
-        }).connect(this.panner);
+        }).connect(this.fullGain);
 
         const highPass = new Filter({
             frequency: 9000, type:"highpass"
-        }).connect(this.panner);
+        }).connect(this.fullGain);
 
         const lowPass = new Filter({
             frequency: 2000, type:"lowpass"
-        }).connect(this.panner);
+        }).connect(this.fullGain);
 
         const sweepBandPass = new Filter({
             type: "bandpass",
             frequency: 440
-        }).connect(this.panner);
+        }).connect(this.halfGain);
 
         /* eslint-disable no-unused-vars */
         const sweepSignal = new Signal({
@@ -105,7 +114,7 @@ export default class AudioManagerImpl implements AudioManager {
 
         const drum = new MembraneSynth({
             octaves: 1, pitchDecay:0.2
-        }).connect(this.panner);
+        }).connect(this.fullGain);
 
         const cymbal = new MetalSynth().connect(lowPass);
 
