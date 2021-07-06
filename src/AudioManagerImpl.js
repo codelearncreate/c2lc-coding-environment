@@ -41,6 +41,10 @@ export default class AudioManagerImpl implements AudioManager {
 
     // $FlowFixMe: Add a type for gain.
     fullGain: Gain;
+
+    // $FlowFixMe: Add a type for gain.
+    threeQuarterGain: Gain;
+
     // $FlowFixMe: Add a type for gain.
     halfGain: Gain;
 
@@ -71,6 +75,7 @@ export default class AudioManagerImpl implements AudioManager {
         this.panner.toDestination();
 
         this.fullGain = new Gain().connect(this.panner);
+        this.threeQuarterGain = new Gain(0.75).connect(this.panner);
         this.halfGain = new Gain(0.5).connect(this.panner);
 
         const marimba = new FMSynth({
@@ -80,11 +85,11 @@ export default class AudioManagerImpl implements AudioManager {
 
         const highPass = new Filter({
             frequency: 9000, type:"highpass"
-        }).connect(this.halfGain);
+        }).connect(this.threeQuarterGain);
 
         const lowPass = new Filter({
             frequency: 2000, type:"lowpass"
-        }).connect(this.halfGain);
+        }).connect(this.threeQuarterGain);
 
         const sweepBandPass = new Filter({
             type: "bandpass",
@@ -114,7 +119,7 @@ export default class AudioManagerImpl implements AudioManager {
 
         const drum = new MembraneSynth({
             octaves: 1, pitchDecay:0.2
-        }).connect(this.halfGain);
+        }).connect(this.threeQuarterGain);
 
         const cymbal = new MetalSynth().connect(lowPass);
 
@@ -156,118 +161,113 @@ export default class AudioManagerImpl implements AudioManager {
     }
 
     playSoundForCharacterState(actionKey: string, stepTimeInMs: number, characterState: CharacterState, sceneDimensions: SceneDimensions) {
+        const stepTimeInSeconds = stepTimeInMs / 1000;
+
         // We only play "positional" sounds when the location (and not
         // orientation) changes.
         const isTurn = ["left45","left90","left180", "right45","right90","right180"].indexOf(actionKey) !== -1;
 
         // There are no "movement" sounds for even rows.
         if (this.audioEnabled) {
-            if ((characterState.yPos % 2) && !isTurn) {
-                const noteName = getNoteForState(characterState);
-
-                // Use the marimba for the "pitched note".
-                const noteDuration = stepTimeInMs / 4000;
-                // TODO: We need something more sophisticated here so that we don't
-                // need to use the same instrument across the whole range.  We might
-                // also choose to use a different instrument per action.
-                this.playPitchedNote(this.orchestra.marimba, noteName, noteDuration);
+            if (isTurn) {
+                this.playSweep(actionKey, stepTimeInSeconds);
             }
+            else {
+                const sequence = sequences[actionKey].slice();
 
-            // Pan left/right to suggest the relative horizontal position.
-            // We can discuss adjusting this once we have multiple
-            // sound-producing elements in the environment.
+                if ((characterState.yPos % 2)) {
+                    const noteName = getNoteForState(characterState);
+                    sequence[0] = { instrumentKey: "marimba", note: noteName};
+                }
 
-            // Limit the deviation from the centre so that there is always some sound in each speaker.
-            const midPoint = (sceneDimensions.getMinX() + sceneDimensions.getMaxX()) / 2;
-            const panningLevel = 0.75 * ((characterState.xPos - midPoint) / midPoint);
+                // Pan left/right to suggest the relative horizontal position.
+                // We can discuss adjusting this once we have multiple
+                // sound-producing elements in the environment.
 
-            // TODO: Consider making the timing configurable or tying it to the movement timing.
-            this.panner.pan.rampTo(panningLevel, 0);
+                // Limit the deviation from the centre so that there is always some sound in each speaker.
+                const midPoint = (sceneDimensions.getMinX() + sceneDimensions.getMaxX()) / 2;
+                const panningLevel = 0.75 * ((characterState.xPos - midPoint) / midPoint);
 
-            const stepTimeInSeconds = stepTimeInMs / 1000;
-            this.playSequence(actionKey, stepTimeInSeconds);
+                // TODO: Consider making the timing configurable or tying it to the movement timing.
+                this.panner.pan.rampTo(panningLevel, 0);
+                this.playSequence(sequence, stepTimeInSeconds);
+            }
         }
     }
 
-    playSequence = (actionKey: string, stepTimeInSeconds: number) => {
+    // $FlowFixMe: Add a type for arrays of stepdefs.
+    playSequence = (sequenceDef, stepTimeInSeconds: number) => {
         if (this.sequence) {
             // $FlowFixMe: Add a type for sequence.
             this.sequence.stop(0);
             Transport.stop();
         }
 
-        // $FlowFixMe: Define types for sequences (array of step defs).
-        const sequenceDef = sequences[actionKey];
-        if (sequenceDef) {
-            // stepTimeInSeconds varies from 2 -> 1.5 -> 1 -> 0.5 -> 0.25.  We
-            // group these into speeds to control the duration of the note and
-            // pauses between.
-            const fullBeatTime = (stepTimeInSeconds / sequenceDef.length);
-            const noteTime = fullBeatTime * 0.5;
-            const betweenNoteTime = fullBeatTime - noteTime;
-            // $FlowFixMe: Define a type for step definitions.
-            const stepCallbackFn = (time: number, stepDef) => {
-                if (stepDef.instrumentKey) {
-                    const instrument = this.orchestra[stepDef.instrumentKey];
-                    // Some Tone synths don't allow a note, so we construct an
-                    // array of the common arguments supported by all
-                    // synths, i.e. note duration, and start time, and then
-                    // choose to add the note if the instrument supports it.
-                    const attackReleaseArgs = [noteTime, time];
-                    if (stepDef.note) {
-                        attackReleaseArgs.unshift(stepDef.note);
-                    }
-
-                    instrument.triggerAttackRelease.apply(instrument, attackReleaseArgs);
+        const fullBeatTime = (stepTimeInSeconds / sequenceDef.length);
+        const noteTime = fullBeatTime * 0.5;
+        const betweenNoteTime = fullBeatTime - noteTime;
+        // $FlowFixMe: Define a type for step definitions.
+        const stepCallbackFn = (time: number, stepDef) => {
+            if (stepDef.instrumentKey) {
+                const instrument = this.orchestra[stepDef.instrumentKey];
+                // Some Tone synths don't allow a note, so we construct an
+                // array of the common arguments supported by all
+                // synths, i.e. note duration, and start time, and then
+                // choose to add the note if the instrument supports it.
+                const attackReleaseArgs = [noteTime, time];
+                if (stepDef.note) {
+                    attackReleaseArgs.unshift(stepDef.note);
                 }
-            };
 
-            this.sequence = new Sequence({
-                callback: stepCallbackFn,
-                events: sequenceDef,
-                subdivision: betweenNoteTime,
-                loop: false
-            });
+                instrument.triggerAttackRelease.apply(instrument, attackReleaseArgs);
+            }
+        };
 
-            this.sequence.start(0);
-            Transport.start();
+        this.sequence = new Sequence({
+            callback: stepCallbackFn,
+            events: sequenceDef,
+            subdivision: betweenNoteTime,
+            loop: false
+        });
+
+        this.sequence.start(0);
+        Transport.start();
+    }
+
+    playSweep = (actionKey: string, stepTimeInSeconds: number) => {
+        const rampDefs = {
+            right45: {
+                start: 125,
+                stop: 500
+            },
+            right90: {
+                start: 125,
+                stop: 2000
+            },
+            right180: {
+                start: 125,
+                stop: 8000
+            },
+            left45: {
+                start: 8000,
+                stop: 2000
+            },
+            left90: {
+                start: 8000,
+                stop: 500
+            },
+            left180: {
+                start: 8000,
+                stop: 125
+            }
         }
-        // The turn sounds are triggered programatically
-        else {
-            const rampDefs = {
-                right45: {
-                    start: 125,
-                    stop: 500
-                },
-                right90: {
-                    start: 125,
-                    stop: 2000
-                },
-                right180: {
-                    start: 125,
-                    stop: 8000
-                },
-                left45: {
-                    start: 8000,
-                    stop: 2000
-                },
-                left90: {
-                    start: 8000,
-                    stop: 500
-                },
-                left180: {
-                    start: 8000,
-                    stop: 125
-                }
-            }
-            const rampDef = rampDefs[actionKey];
-            if (rampDef) {
-                // TODO: Make our own class for this that makes it easier to start/stop, control the freq.
-                this.orchestra.sweepSignal.rampTo(rampDef.start, 0);
-                this.orchestra.sweepNoise.start();
-                this.orchestra.sweepSignal.rampTo(rampDef.stop, stepTimeInSeconds / 2);
-                this.orchestra.sweepNoise.stop("+" + (stepTimeInSeconds/2));
-            }
+        const rampDef = rampDefs[actionKey];
+        if (rampDef) {
+            // TODO: Make our own class for this that makes it easier to start/stop, control the freq.
+            this.orchestra.sweepSignal.rampTo(rampDef.start, 0);
+            this.orchestra.sweepNoise.start();
+            this.orchestra.sweepSignal.rampTo(rampDef.stop, stepTimeInSeconds / 2);
+            this.orchestra.sweepNoise.stop("+" + (stepTimeInSeconds/2));
         }
     }
 
