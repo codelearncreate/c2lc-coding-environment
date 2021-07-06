@@ -1,207 +1,70 @@
 // @flow
 
-import { Midi, Panner, Sampler} from 'tone';
+// $FlowFixMe: We need to add a type definition for more stuff.
+import {Filter, FMSynth, Gain, Instrument, MembraneSynth, MetalSynth, Noise, NoiseSynth, Panner, Reverb, Sequence, Signal, Synth, Transport} from 'tone';
 import CharacterState from './CharacterState';
 import type {IntlShape} from 'react-intl';
 import {AudioManager} from './types';
 import SceneDimensions from './SceneDimensions';
 
-const SamplerDefs = {
-    // The percussion instruments we use actually don't vary their pitch, so we use the same sample at different
-    // pitches so that we can scale relative to the octave without ending up with wildy different tempos.
-    left45: {
-        urls: {
-            "C0": "C6.mp3",
-            "C1": "C6.mp3",
-            "C2": "C6.mp3",
-            "C3": "C6.mp3",
-            "C4": "C6.mp3",
-            "C5": "C6.mp3",
-            "C6": "C6.mp3"
-        },
-        baseUrl: "/audio/left/45/"
-    },
-    left90: {
-        urls: {
-            "C0": "C6.mp3",
-            "C1": "C6.mp3",
-            "C2": "C6.mp3",
-            "C3": "C6.mp3",
-            "C4": "C6.mp3",
-            "C5": "C6.mp3",
-            "C6": "C6.mp3"
-        },
-        baseUrl: "/audio/left/90/"
-    },
-    left180: {
-        urls: {
-            "C0": "C6.mp3",
-            "C1": "C6.mp3",
-            "C2": "C6.mp3",
-            "C3": "C6.mp3",
-            "C4": "C6.mp3",
-            "C5": "C6.mp3",
-            "C6": "C6.mp3"
-        },
-        baseUrl: "/audio/left/180/"
-    },
-    right45: {
-        urls: {
-            "C0": "C6.mp3",
-            "C1": "C6.mp3",
-            "C2": "C6.mp3",
-            "C3": "C6.mp3",
-            "C4": "C6.mp3",
-            "C5": "C6.mp3",
-            "C6": "C6.mp3"
-        },
-        baseUrl: "/audio/right/45/"
-    },
-    right90: {
-        urls: {
-            "C0": "C6.mp3",
-            "C1": "C6.mp3",
-            "C2": "C6.mp3",
-            "C3": "C6.mp3",
-            "C4": "C6.mp3",
-            "C5": "C6.mp3",
-            "C6": "C6.mp3"
-        },
-        baseUrl: "/audio/right/90/"
-    },
-    right180: {
-        urls: {
-            "C0": "C6.mp3",
-            "C1": "C6.mp3",
-            "C2": "C6.mp3",
-            "C3": "C6.mp3",
-            "C4": "C6.mp3",
-            "C5": "C6.mp3",
-            "C6": "C6.mp3"
-        },
-        baseUrl: "/audio/right/180/"
-    },
-    backward1: {
-        urls: {
-            "C0": "C0.mp3",
-            "C1": "C1.mp3",
-            "C2": "C2.mp3",
-            "C3": "C3.mp3",
-            "C4": "C4.mp3",
-            "C5": "C5.mp3",
-            "C6": "C6.mp3"
-        },
-        baseUrl: "/audio/backward/1/"
-    },
-    backward2: {
-        urls: {
-            "C0": "C0.mp3",
-            "C1": "C1.mp3",
-            "C2": "C2.mp3",
-            "C3": "C3.mp3",
-            "C4": "C4.mp3",
-            "C5": "C5.mp3",
-            "C6": "C6.mp3"
-        },
-        baseUrl: "/audio/backward/2/"
-    },
-    backward3: {
-        urls: {
-            "C0": "C0.mp3",
-            "C1": "C1.mp3",
-            "C2": "C2.mp3",
-            "C3": "C3.mp3",
-            "C4": "C4.mp3",
-            "C5": "C5.mp3",
-            "C6": "C6.mp3"
-        },
-        baseUrl: "/audio/backward/3/"
-    },
-    forward1: {
-        urls: {
-            "C0": "C0.mp3",
-            "C1": "C1.mp3",
-            "C2": "C2.mp3",
-            "C3": "C3.mp3",
-            "C4": "C4.mp3",
-            "C5": "C5.mp3",
-            "C6": "C6.mp3"
-        },
-        baseUrl: "/audio/forward/1/"
-    },
-    forward2: {
-        urls: {
-            "C0": "C0.mp3",
-            "C1": "C1.mp3",
-            "C2": "C2.mp3",
-            "C3": "C3.mp3",
-            "C4": "C4.mp3",
-            "C5": "C5.mp3",
-            "C6": "C6.mp3"
-        },
-        baseUrl: "/audio/forward/2/"
-    },
-    forward3: {
-        urls: {
-            "C0": "C0.mp3",
-            "C1": "C1.mp3",
-            "C2": "C2.mp3",
-            "C3": "C3.mp3",
-            "C4": "C4.mp3",
-            "C5": "C5.mp3",
-            "C6": "C6.mp3"
-        },
-        baseUrl: "/audio/forward/3/"
-    }
-}
+import tuning from './tuning.json';
 
-function octaveModulo (rawPitch: number) : number {
-    const adjustedPitch = rawPitch % 12;
-    return adjustedPitch < 0 ? adjustedPitch + 12 : adjustedPitch;
-}
-
-// Modified "Tonnetz" tuning, see https://en.wikipedia.org/wiki/Tonnetz for explanation and diagrams.
+// We use pentatonic tuning, C D F G A. The "center" note is the highest
+// point in the row, all other notes descend from there. Every other row
+// is unplayed, so we have tunings for a total of 8 rows.
 export function getNoteForState (characterState: CharacterState) : string {
-    // Every "column" is 7 tones from the next but stays within the same octave.  This results in a pattern that
-    // cycles through the full octave range every 12 squares.
-    const xPitchOffset = octaveModulo(7 * characterState.xPos);
-
-
-    // Every "row" is 4 tones from the next.
-    const yPitchOffset = octaveModulo(4 * characterState.yPos);
-
-    const combinedPitchOffset = octaveModulo(xPitchOffset + yPitchOffset);
-
-    // To vary the range of notes without going too high or low, we use the repeating nature of the "row" pattern
-    // to divide the tuning into "octave bands" every three rows.  The top band (yPos of 1, 2, or 3) is C5, the bottom
-    // band (yPos of 16) is C0.
-    const octaveOffset = (Math.floor((characterState.yPos - 1)/ 3));
-    const octave = 6 - octaveOffset;
-
-    // const midiNote = (12 * octave);
-    const midiNote = combinedPitchOffset + (12 * octave);
-    const noteName: string = Midi(midiNote).toNote();
-
+    const noteName = (tuning[characterState.yPos - 1] && tuning[characterState.yPos - 1][characterState.xPos - 1]) || "C-1";
     return noteName;
 }
+
+// TODO: Convert to Array<StepDef> once we have that.
+const sequences = {
+    forward1:  [{ instrumentKey: "drum", note: "C1"}],
+    forward2:  [{ instrumentKey: "drum", note: "C1"}, {}, { instrumentKey: "cymbal", note: "C3"}],
+    forward3:  [{ instrumentKey: "drum", note: "C1"}, {}, { instrumentKey: "cymbal", note: "C3"}, {}, { instrumentKey: "cymbal", note: "C3"}],
+    backward1: [{ instrumentKey: "cymbal", note: "C3"}],
+    backward2: [{ instrumentKey: "cymbal", note: "C3"}, {}, { instrumentKey: "drum", note: "C1"}],
+    backward3: [{ instrumentKey: "cymbal", note: "C3"}, {}, { instrumentKey: "drum", note: "C1"}, {},{ instrumentKey: "drum", note: "C1"}],
+    // TODO: Reconcile this so that we can have complex single notes like the turns
+    // and also simple patterns of individual notes.
+    // left45: [{ instrumentKey: "sweeper", note: "C2", endNote: "C3"}],
+    // left90: [{ instrumentKey: "sweeper", note: "C2", endNote: "C3"}],
+    // left180: [{ instrumentKey: "sweeper", note: "C2", endNote: "C3"}],
+    // right45:  [{ instrumentKey: "sweeper", note: "C2", endNote: "C3"}],
+    // right90:  [{ instrumentKey: "sweeper", note: "C2", endNote: "C3"}],
+    // right180: [{ instrumentKey: "sweeper", note: "C2", endNote: "C3"}]
+};
 
 export default class AudioManagerImpl implements AudioManager {
     audioEnabled: boolean;
     announcementsEnabled: boolean;
+
+    // $FlowFixMe: Add a type for gain.
+    fullGain: Gain;
+
+    // $FlowFixMe: Add a type for gain.
+    threeQuarterGain: Gain;
+
+    // $FlowFixMe: Add a type for gain.
+    halfGain: Gain;
+
     panner: Panner;
-    samplers: {
-        backward1: Sampler,
-        backward2: Sampler,
-        backward3: Sampler,
-        forward1: Sampler,
-        forward2: Sampler,
-        forward3: Sampler,
-        left45: Sampler,
-        left90: Sampler,
-        left180: Sampler,
-        right45: Sampler,
-        right90: Sampler,
-        right180: Sampler
+    // $FlowFixMe: Add a type for sequence.
+    sequence: boolean | Sequence;
+
+    orchestra: {
+        // $FlowFixMe: we need to add type definitions for yet another thing.
+        bell: Instrument,
+        // $FlowFixMe: we need to add type definitions for yet another thing.
+        cymbal: Instrument,
+        // $FlowFixMe: we need to add type definitions for yet another thing.
+        drum: Instrument,
+        // $FlowFixMe: we need to add type definitions for yet another thing.
+        marimba: Instrument,
+        // $FlowFixMe: we need to add type definitions for yet another thing.
+        sweepNoise: Noise,
+        // $FlowFixMe: we need to add type definitions for yet another thing.
+        sweepSignal: Signal
     };
 
     constructor(audioEnabled: boolean, announcementsEnabled: boolean) {
@@ -211,14 +74,70 @@ export default class AudioManagerImpl implements AudioManager {
         this.panner = new Panner();
         this.panner.toDestination();
 
-        this.samplers = {};
+        this.fullGain = new Gain().connect(this.panner);
+        this.threeQuarterGain = new Gain(0.75).connect(this.panner);
+        this.halfGain = new Gain(0.5).connect(this.panner);
 
-        Object.keys(SamplerDefs).forEach((samplerKey) => {
-            const samplerDef = SamplerDefs[samplerKey];
-            const sampler = new Sampler(samplerDef);
-            sampler.connect(this.panner);
-            this.samplers[samplerKey] = sampler;
-        });
+        const marimba = new FMSynth({
+            harmonicity: 8,
+            envelope :  {attack:0, decay:0, Sustain:1, Release:1 }
+        }).connect(this.fullGain);
+
+        const highPass = new Filter({
+            frequency: 9000, type:"highpass"
+        }).connect(this.threeQuarterGain);
+
+        const lowPass = new Filter({
+            frequency: 2000, type:"lowpass"
+        }).connect(this.threeQuarterGain);
+
+        const sweepBandPass = new Filter({
+            type: "bandpass",
+            frequency: 440
+        }).connect(this.halfGain);
+
+        /* eslint-disable no-unused-vars */
+        const sweepSignal = new Signal({
+            value: 4000,
+            units: "frequency"
+        }).connect(sweepBandPass.frequency);
+
+        const sweepNoise = new Noise({ type: "white" }).connect(sweepBandPass);
+
+        const bellVerb = new Reverb({
+            preDelay:0 , decay:2, wet:0.25
+        }).connect(lowPass);
+
+        const bell = new Synth({
+            oscillator: {
+                type: 'fmsine',
+                modulationType: 'sine',
+                harmonicity: 2,
+                modulationIndex: 8,
+            }
+        }).connect(bellVerb);
+
+        const drum = new MembraneSynth({
+            octaves: 1, pitchDecay:0.2
+        }).connect(this.threeQuarterGain);
+
+        const cymbal = new MetalSynth().connect(lowPass);
+
+        // const feedbackDelay = new FeedbackDelay({
+        //     delayTime:0.1, feedback:0.25
+        // }).connect(highPass);
+
+        const shaker = new NoiseSynth().connect(highPass);
+
+        this.orchestra = {
+            bell: bell,
+            cymbal: cymbal,
+            drum: drum,
+            marimba: marimba,
+            shaker: shaker,
+            sweepNoise: sweepNoise,
+            sweepSignal: sweepSignal
+        };
     }
 
     playAnnouncement(messageIdSuffix: string, intl: IntlShape, messagePayload: any) {
@@ -234,36 +153,121 @@ export default class AudioManagerImpl implements AudioManager {
     }
 
     // TODO: Add a better type for pitch.
-    // TODO: Make this private, as it doesn't respect the audioEnabled setting.
-    playPitchedSample(sampler: Sampler, pitch: string, releaseTime: number) {
+    // $FlowFixMe: Add a type for instrument.
+    playPitchedNote(instrument: Instrument, pitch: string, releaseTime: number) {
         if (this.audioEnabled) {
-            // We can only play the sound if it's already loaded.
-            if (sampler.loaded) {
-                sampler.triggerAttackRelease([pitch], releaseTime);
+            instrument.triggerAttackRelease(pitch, releaseTime);
+        }
+    }
+
+    playSoundForCharacterState(actionKey: string, stepTimeInMs: number, characterState: CharacterState, sceneDimensions: SceneDimensions) {
+        const stepTimeInSeconds = stepTimeInMs / 1000;
+
+        // We only play "positional" sounds when the location (and not
+        // orientation) changes.
+        const isTurn = ["left45","left90","left180", "right45","right90","right180"].indexOf(actionKey) !== -1;
+
+        // There are no "movement" sounds for even rows.
+        if (this.audioEnabled) {
+            if (isTurn) {
+                this.playSweep(actionKey, stepTimeInSeconds);
+            }
+            else {
+                const sequence = sequences[actionKey].slice();
+
+                if ((characterState.yPos % 2)) {
+                    const noteName = getNoteForState(characterState);
+                    sequence[0] = { instrumentKey: "marimba", note: noteName};
+                }
+
+                // Pan left/right to suggest the relative horizontal position.
+                // We can discuss adjusting this once we have multiple
+                // sound-producing elements in the environment.
+
+                // Limit the deviation from the centre so that there is always some sound in each speaker.
+                const midPoint = (sceneDimensions.getMinX() + sceneDimensions.getMaxX()) / 2;
+                const panningLevel = 0.75 * ((characterState.xPos - midPoint) / midPoint);
+
+                // TODO: Consider making the timing configurable or tying it to the movement timing.
+                this.panner.pan.rampTo(panningLevel, 0);
+                this.playSequence(sequence, stepTimeInSeconds);
             }
         }
     }
 
-    playSoundForCharacterState(samplerKey: string, releaseTimeInMs: number, characterState: CharacterState, sceneDimensions: SceneDimensions) {
-        if (this.audioEnabled) {
-            const releaseTime = releaseTimeInMs / 1000;
-            const noteName = getNoteForState(characterState);
+    // $FlowFixMe: Add a type for arrays of stepdefs.
+    playSequence = (sequenceDef, stepTimeInSeconds: number) => {
+        if (this.sequence) {
+            // $FlowFixMe: Add a type for sequence.
+            this.sequence.stop(0);
+            Transport.stop();
+        }
 
-            const sampler: Sampler = this.samplers[samplerKey];
+        const fullBeatTime = (stepTimeInSeconds / sequenceDef.length);
+        const noteTime = fullBeatTime * 0.5;
+        const betweenNoteTime = fullBeatTime - noteTime;
+        // $FlowFixMe: Define a type for step definitions.
+        const stepCallbackFn = (time: number, stepDef) => {
+            if (stepDef.instrumentKey) {
+                const instrument = this.orchestra[stepDef.instrumentKey];
+                // Some Tone synths don't allow a note, so we construct an
+                // array of the common arguments supported by all
+                // synths, i.e. note duration, and start time, and then
+                // choose to add the note if the instrument supports it.
+                const attackReleaseArgs = [noteTime, time];
+                if (stepDef.note) {
+                    attackReleaseArgs.unshift(stepDef.note);
+                }
 
-            this.playPitchedSample(sampler, noteName, releaseTime);
+                instrument.triggerAttackRelease.apply(instrument, attackReleaseArgs);
+            }
+        };
 
-            // Pan left/right to suggest the relative horizontal position.
-            // As we use a single Sampler grade, our best option for panning is
-            // to pan all sounds.  We can discuss adjusting this once we have
-            // multiple sound-producing elements in the environment.
+        this.sequence = new Sequence({
+            callback: stepCallbackFn,
+            events: sequenceDef,
+            subdivision: betweenNoteTime,
+            loop: false
+        });
 
-            // Limit the deviation from the centre so that there is always some sound in each speaker.
-            const midPoint = (sceneDimensions.getMinX() + sceneDimensions.getMaxX()) / 2;
-            const panningLevel = 0.75 * ((characterState.xPos - midPoint) / midPoint);
+        this.sequence.start(0);
+        Transport.start();
+    }
 
-            // TODO: Consider making the timing configurable or tying it to the movement timing.
-            this.panner.pan.rampTo(panningLevel, 0);
+    playSweep = (actionKey: string, stepTimeInSeconds: number) => {
+        const rampDefs = {
+            right45: {
+                start: 125,
+                stop: 500
+            },
+            right90: {
+                start: 125,
+                stop: 2000
+            },
+            right180: {
+                start: 125,
+                stop: 8000
+            },
+            left45: {
+                start: 8000,
+                stop: 2000
+            },
+            left90: {
+                start: 8000,
+                stop: 500
+            },
+            left180: {
+                start: 8000,
+                stop: 125
+            }
+        }
+        const rampDef = rampDefs[actionKey];
+        if (rampDef) {
+            // TODO: Make our own class for this that makes it easier to start/stop, control the freq.
+            this.orchestra.sweepSignal.rampTo(rampDef.start, 0);
+            this.orchestra.sweepNoise.start();
+            this.orchestra.sweepSignal.rampTo(rampDef.stop, stepTimeInSeconds / 2);
+            this.orchestra.sweepNoise.stop("+" + (stepTimeInSeconds/2));
         }
     }
 

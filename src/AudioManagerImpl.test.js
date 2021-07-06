@@ -66,10 +66,6 @@ test("Returns a sensible note range for every supported character position.", ()
             maxPitch = Math.max(maxPitch, midiNote);
             minPitch = Math.min(minPitch, midiNote);
 
-            const pitchRange = maxPitch - minPitch;
-            expect(pitchRange).toBeGreaterThanOrEqual(0);
-            expect(pitchRange).toBeLessThanOrEqual(12);
-
             expect(midiNote).toBeGreaterThanOrEqual(0);
             expect(midiNote).toBeLessThanOrEqual(127);
         }
