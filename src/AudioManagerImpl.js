@@ -80,11 +80,11 @@ export default class AudioManagerImpl implements AudioManager {
 
         const highPass = new Filter({
             frequency: 9000, type:"highpass"
-        }).connect(this.fullGain);
+        }).connect(this.halfGain);
 
         const lowPass = new Filter({
             frequency: 2000, type:"lowpass"
-        }).connect(this.fullGain);
+        }).connect(this.halfGain);
 
         const sweepBandPass = new Filter({
             type: "bandpass",
@@ -114,7 +114,7 @@ export default class AudioManagerImpl implements AudioManager {
 
         const drum = new MembraneSynth({
             octaves: 1, pitchDecay:0.2
-        }).connect(this.fullGain);
+        }).connect(this.halfGain);
 
         const cymbal = new MetalSynth().connect(lowPass);
 
@@ -192,13 +192,16 @@ export default class AudioManagerImpl implements AudioManager {
     playSequence = (actionKey: string, stepTimeInSeconds: number) => {
         if (this.sequence) {
             // $FlowFixMe: Add a type for sequence.
-            this.sequence.stop();
+            this.sequence.stop(0);
             Transport.stop();
         }
 
         // $FlowFixMe: Define types for sequences (array of step defs).
         const sequenceDef = sequences[actionKey];
         if (sequenceDef) {
+            // stepTimeInSeconds varies from 2 -> 1.5 -> 1 -> 0.5 -> 0.25.  We
+            // group these into speeds to control the duration of the note and
+            // pauses between.
             const fullBeatTime = (stepTimeInSeconds / sequenceDef.length);
             const noteTime = fullBeatTime * 0.5;
             const betweenNoteTime = fullBeatTime - noteTime;
