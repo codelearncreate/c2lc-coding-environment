@@ -101,7 +101,8 @@ body {
     margin-left: 1.5rem;
 }
 
-.App__world-selector-container {
+.App__world-container {
+    display: grid;
     grid-column-start: 4;
     grid-column-end: 5;
     grid-row-start: 1;
@@ -109,7 +110,8 @@ body {
     border-radius: 3px;
     margin-right: 0.5rem;
     margin-top: 0.25rem;
-    overflow-y: scroll;
+    grid-template-rows: 1fr min-content;
+    background-color: #CCE6E2;
 }
 
 .App__command-palette {
@@ -217,7 +219,19 @@ body {
     .App__playAndShare-container {
         padding-bottom: 2rem;
     }
+}
 
+@media only screen and (max-height: 800px) {
+    .WorldSelector {
+        height: calc(80vh - 19rem);
+    }
+}
+
+// For iPad landscape orientation
+@media all and (device-width: 768px) and (device-height: 1024px) and (orientation:landscape) {
+    .WorldSelector {
+        height: calc(80vh - 21rem);
+    }
 }
 
 @media only screen and (max-width: 414px) {

@@ -17,7 +17,7 @@ body.mixed-theme {
     }
 
     .WorldSelector button.btn.WorldIcon--disabled {
-        background-color: #505862;
+        background-color: #B9BEC6;
     }
 
     .WorldSelector .WorldIcon--selected:not(:hover) {
@@ -164,6 +164,15 @@ body.light-theme {
     .ProgramBlockEditor__character-column {
         background-color: #EBFAF8;
         border-right: 2px solid #D3E7EC;
+    }
+
+    .ProgramBlockEditor__character-column-character-container {
+        box-sizing: border-box;
+        height: 45px;
+        width: 45px;
+        background-color: #EBFAF8;
+        border: 2px solid #818A98;
+        border-radius: 4px;
     }
 
     .ProgramBlockEditor__program-sequence-scroll-container {
@@ -365,6 +374,10 @@ body.dark-theme {
         color: white;
     }
 
+    .App__world-container {
+        background-color: #33717F;
+    }
+
 
     button.btn.command-block.command-block--pressed,
     button.btn.command-block.command-block--pressed:hover,
@@ -425,9 +438,35 @@ body.dark-theme {
         fill: #4C9990;
     }
 
+    .CharacterPositionController__character-column {
+        background-color: #33717F;
+        border-top: 1px solid #19282F;
+    }
+
+    .CharacterPositionController__character-turn-positions {
+        svg path.filled {
+            fill: #22343C;
+            stroke: none;
+        }
+
+        .CharacterPositionController__character-position-button--disabled {
+            path.filled {
+                fill: #505862;
+            }
+        }
+    }
+
+    .CharacterPositionController__character-position-button {
+        stroke: #22343C;
+    }
+
+    .CharacterPositionController__character-position-button--disabled {
+        cursor: default;
+        stroke: #505862;
+    }
+
     .WorldSelector {
         background-color: #33717F;
-        border: 1px solid #33717F;
     }
 
     .WorldSelector .WorldIcon {
@@ -573,6 +612,8 @@ body.gray-theme {
                 fill: white;
             }
         }
+    .App__world-container {
+        background-color: #D5D8DD;
     }
 
     .ThemeSelector {
@@ -725,6 +766,50 @@ body.gray-theme {
         fill: #818A98;
     }
 
+    .CharacterPositionController__character-column {
+        border-top: 1px solid #9DA4AF;
+    }
+
+    .CharacterPositionController__character-position-button {
+        stroke: #67717E;
+
+        &:focus {
+            outline: $c2lc-focus-indicator-width solid $c2lc-focus-indicator-color;
+        }
+
+        &:hover:not(.CharacterPositionController__character-position-button--disabled) {
+            path.filled {
+                fill: #3A3F46;
+
+            }
+            path:not(.filled) {
+                stroke: #3A3F46;
+            }
+        }
+    }
+
+    .CharacterPositionController__character-turn-positions {
+        svg path.filled {
+            fill: #67717E;
+        }
+    }
+
+    .CharacterPositionController__character-column{
+        background-color: #D5D8DD;
+    }
+
+    .CharacterPositionController__character-position-button--disabled {
+        stroke: #B9BEC6;
+    }
+
+    .CharacterPositionController__character-turn-positions {
+        .CharacterPositionController__character-position-button--disabled {
+            path.filled {
+                fill: #B9BEC6;
+            }
+        }
+    }
+
     .Scene__container {
         background-color: #D5D8DD;
         border: 2px solid #D5D8DD;
@@ -805,7 +890,6 @@ body.gray-theme {
 
     .WorldSelector {
         background-color: #D5D8DD;
-        border: 1px solid #D5D8DD;
     }
 
     .WorldSelector svg.HeaderIcon {
@@ -838,30 +922,6 @@ body.gray-theme {
 
     .WorldSelector button.btn.WorldIcon--disabled {
         background-color: #F1F2F4;
-    }
-
-    .ProgramBlockEditor__character-position-button {
-        stroke: #818A98;
-
-        &:focus {
-            outline: $c2lc-focus-indicator-width solid $c2lc-focus-indicator-color;
-        }
-
-        &:hover:not(.ProgramBlockEditor__character-position-button--disabled) {
-            path.filled {
-                fill: #505862;
-
-            }
-            path:not(.filled) {
-                stroke: #505862;
-            }
-        }
-    }
-
-    .ProgramBlockEditor__character-turn-positions {
-        svg path.filled {
-            fill: #818A98;
-        }
     }
 
     .AddNode__collapsed-icon {
@@ -967,19 +1027,14 @@ body.gray-theme {
 
     .ProgramBlockEditor__character-column {
         background-color: #F1F2F4;
-        border-right: 1px solid #9DA4AF;
     }
 
-    .ProgramBlockEditor__character-position-button--disabled {
-        stroke: #B9BEC6;
-    }
-
-    .ProgramBlockEditor__character-turn-positions {
-        .ProgramBlockEditor__character-position-button--disabled {
-            path.filled {
-                fill: #B9BEC6;
-            }
-        }
+    .ProgramBlockEditor__character-column-character-container {
+        box-sizing: border-box;
+        height: 45px;
+        width: 45px;
+        background-color: #F1F2F4;
+        border-radius: 4px;
     }
 
     .ProgramBlockEditor__program-sequence-scroll-container {
@@ -1461,6 +1516,68 @@ body.contrast-theme {
         color: white;
     }
 
+    .App__world-container {
+        border: 1px solid white;
+    }
+
+    .CharacterPositionController__character-column {
+        background-color: black;
+        border-top: 1px solid white;
+    }
+
+    .CharacterPositionController__character-position-button {
+        &:focus {
+            outline: $c2lc-focus-indicator-width solid white;
+        }
+    }
+
+    .CharacterPositionController__character-position-button:not(.CharacterPositionController__character-position-button--disabled) {
+        stroke: white;
+
+        &:hover {
+            path:not(.inner):not(.filled) {
+                stroke: white;
+                stroke-width: 4px;
+            }
+            path.inner {
+                stroke: black;
+            }
+        }
+    }
+
+    .CharacterPositionController__character-turn-positions {
+        .CharacterPositionController__character-position-button{
+            path.filled {
+                fill: white;
+                stroke: white;
+            }
+        }
+
+        .CharacterPositionController__character-position-button:not(.CharacterPositionController__character-position-button--disabled) path.filled {
+            fill: white;
+        }
+
+        .CharacterPositionController__character-position-button--disabled {
+            path.filled {
+                fill: #505862;
+                stroke: #505862;
+            }
+        }
+
+        .CharacterPositionController__character-position-button:not(.CharacterPositionController__character-position-button--disabled) {
+            &:hover {
+                path.filled {
+                    fill: black;
+                    stroke: white;
+                }
+            }
+        }
+    }
+
+    .CharacterPositionController__character-position-button--disabled {
+        stroke: #505862;
+    }
+
     .Scene__container {
         background-color: white;
         border: 2px solid white;
@@ -1557,7 +1674,6 @@ body.contrast-theme {
 
     .WorldSelector {
         background-color: black;
-        border: 1px solid white;
 
         svg.HeaderIcon {
             circle {
@@ -1593,59 +1709,6 @@ body.contrast-theme {
     .ProgramBlockEditor__header {
         background-color: white;
         color: black;
-    }
-
-    .ProgramBlockEditor__character-position-button {
-        &:focus {
-            outline: $c2lc-focus-indicator-width solid white;
-        }
-    }
-
-    .ProgramBlockEditor__character-position-button:not(.ProgramBlockEditor__character-position-button--disabled) {
-        stroke: white;
-
-        &:hover {
-            path:not(.inner):not(.filled) {
-                stroke: white;
-                stroke-width: 4px;
-            }
-            path.inner {
-                stroke: black;
-            }
-        }
-    }
-
-    .ProgramBlockEditor__character-turn-positions {
-        .ProgramBlockEditor__character-position-button{
-            path.filled {
-                fill: white;
-                stroke: white;
-            }
-        }
-
-        .ProgramBlockEditor__character-position-button:not(.ProgramBlockEditor__character-position-button--disabled) path.filled {
-            fill: white;
-        }
-
-        .ProgramBlockEditor__character-position-button--disabled {
-            path.filled {
-                fill: #505862;
-                stroke: #505862;
-            }
-        }
-
-        .ProgramBlockEditor__character-position-button:not(.ProgramBlockEditor__character-position-button--disabled) {
-            &:hover {
-                path.filled {
-                    fill: black;
-                    stroke: white;
-                }
-            }
-        }
-    }
-
-    .ProgramBlockEditor__character-position-button--disabled {
-        stroke: #505862;
     }
 
     .ProgramBlockEditor__add-node-toggle-switch, div.ProgramBlockEditor__add-node-toggle-switch.ToggleSwitch--checked:hover {
