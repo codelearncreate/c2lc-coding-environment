@@ -70,6 +70,7 @@
             "!src/FakeAudioManager.js",
             "!src/FeatureDetection.js",
             "!src/FocusTrapManager.js",
+            "!src/TestUtils.js",
             "!src/index.js",
             "!src/serviceWorker.js",
             "!src/vendor/**/*"
