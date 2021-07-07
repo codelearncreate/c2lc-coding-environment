@@ -224,19 +224,18 @@ export default class AudioManagerImpl implements AudioManager {
 
     playFeedbackAnnouncement(message: string) {
         if (this.audioFeedbackEnabled) {
-            this.cancelSpeech();
             this.playStringMessage(message);
         }
     }
 
     playPreviewAnnouncement(message: string) {
         if (this.audioPreviewEnabled) {
-            this.cancelSpeech();
             this.playStringMessage(message);
         }
     }
 
     playStringMessage(message: string) {
+        this.cancelSpeech();
         const utterance = new SpeechSynthesisUtterance(message);
         window.speechSynthesis.speak(utterance);
     }
