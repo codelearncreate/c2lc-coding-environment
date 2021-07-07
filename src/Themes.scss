@@ -587,6 +587,32 @@ body.gray-theme {
         background-color: #FFF;
     }
 
+    .AudioToggleButton {
+        background-color: #F1F2F4;
+    }
+
+    .AudioToggleButton--off {
+        background-color: #F1F2F4;
+        svg {
+            opacity: 0.5;
+        }
+    }
+
+    .AudioToggleButton,
+    .AudioToggleButton--off {
+        svg path {
+            fill: #818A98;
+        }
+        &:hover {
+            background-color: #505862;
+            svg {
+                opacity: 1.0;
+            }
+            svg path {
+                fill: white;
+            }
+        }
+    }
     .App__world-container {
         background-color: #D5D8DD;
     }
@@ -1265,6 +1291,33 @@ body.contrast-theme {
 
     .App__app-heading > a {
         color: white;
+    }
+
+    .AudioToggleButton {
+        background-color: white;
+    }
+
+    .AudioToggleButton--off {
+        background-color: #505862;
+        svg {
+            opacity: 0.5;
+        }
+    }
+
+    .AudioToggleButton,
+    .AudioToggleButton--off {
+        border: 2px solid white;
+        &:hover {
+            background-color: black;
+            border: 2px solid white;
+            svg path {
+                fill: white;
+            }
+        }
+        &:focus {
+            border: 2px solid black;
+            box-shadow: 0 0 0 0.2rem white;
+        }
     }
 
     .ThemeSelector {
