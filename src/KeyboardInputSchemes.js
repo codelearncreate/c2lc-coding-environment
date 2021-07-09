@@ -15,6 +15,7 @@ export type ActionName =
     // Single Key Commands
     | "addCommandToBeginning"
     | "addCommandToEnd"
+    | "deleteCurrentStep"
     | "announceScene"
     | "decreaseProgramSpeed"
     | "increaseProgramSpeed"
@@ -60,6 +61,9 @@ export type ActionName =
     | "selectRobotCharacter"
     | "selectRabbitCharacter"
     | "selectRocketCharacter"
+
+    // Update Program
+    | "deleteAll"
     ;
 
 type ActionKeyStep = {
@@ -238,6 +242,11 @@ const ExtendedKeyboardSequences: KeyboardInputScheme = {
                     actionName: "turnCharacterRight"
                 }
             }
+        },
+
+        deleteAll: {
+            keyDef: { code: "KeyD" },
+            actionName: "deleteAll"
         }
     }
 }
@@ -250,6 +259,10 @@ const VoiceOverInputScheme: KeyboardInputScheme = Object.assign({
     addCommandToEnd: {
         keyDef: { code: "KeyE", altKey: true},
         actionName: "addCommandToEnd"
+    },
+    deleteCurrentStep: {
+        keyDef: { code: "KeyD", altKey: true},
+        actionName: "deleteCurrentStep"
     },
     announceScene: {
         keyDef: { code: "KeyI", altKey: true},
@@ -307,6 +320,10 @@ const NvdaInputScheme = Object.assign({
     addCommandToEnd: {
         keyDef: { code: "KeyE", altKey: true, ctrlKey: true},
         actionName: "addCommandToEnd"
+    },
+    deleteCurrentStep: {
+        keyDef: { code: "KeyD", altKey: true, ctrlKey: true},
+        actionName: "deleteCurrentStep"
     },
     announceScene: {
         keyDef: {code: "KeyI", altKey: true, ctrlKey: true},

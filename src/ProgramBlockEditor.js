@@ -116,6 +116,16 @@ class ProgramBlockEditor extends React.Component<ProgramBlockEditorProps, Progra
         }
     }
 
+    setFocusAfterDelete(indexToDelete: number) {
+        // If there are steps following the one being deleted, focus the
+        // next step. Otherwise, focus the final add node.
+        if (indexToDelete < this.props.programSequence.getProgramLength() - 1) {
+            this.focusCommandBlockIndex = indexToDelete;
+        } else {
+            this.focusAddNodeIndex = indexToDelete;
+        }
+    }
+
     insertSelectedCommandIntoProgram(index: number) {
         const selectedAction = this.props.selectedAction;
         if (selectedAction) {
@@ -214,13 +224,7 @@ class ProgramBlockEditor extends React.Component<ProgramBlockEditorProps, Progra
         const commandString = this.props.intl.formatMessage({ id: "Announcement." + this.props.programSequence.getProgramStepAt(index)});
 
         this.props.audioManager.playAnnouncement('delete', this.props.intl, { command: commandString});
-        // If there are steps following the one being deleted, focus the
-        // next step. Otherwise, focus the final add node.
-        if (index < this.props.programSequence.getProgramLength() - 1) {
-            this.focusCommandBlockIndex = index;
-        } else {
-            this.focusAddNodeIndex = index;
-        }
+        this.setFocusAfterDelete(index);
         this.props.onChangeProgramSequence(
             this.props.programSequence.deleteStep(index)
         );
@@ -436,6 +440,7 @@ class ProgramBlockEditor extends React.Component<ProgramBlockEditorProps, Progra
                 ref={ (element) => { this.setCommandBlockRef(programStepNumber, element) } }
                 key={`${programStepNumber}-${command}`}
                 data-stepnumber={programStepNumber}
+                data-controltype='programStep'
                 data-command={command}
                 data-actionpanelgroup={true}
                 className={classes}
@@ -688,4 +693,4 @@ class ProgramBlockEditor extends React.Component<ProgramBlockEditorProps, Progra
     }
 }
 
-export default injectIntl(ProgramBlockEditor);
+export default injectIntl(ProgramBlockEditor, { forwardRef: true });
