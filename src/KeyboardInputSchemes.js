@@ -55,6 +55,11 @@ export type ActionName =
     | "moveCharacterDown"
     | "turnCharacterLeft"
     | "turnCharacterRight"
+
+    // Select World Character
+    | "selectRobotCharacter"
+    | "selectRabbitCharacter"
+    | "selectRocketCharacter"
     ;
 
 type ActionKeyStep = {
@@ -182,6 +187,22 @@ const ExtendedKeyboardSequences: KeyboardInputScheme = {
                     keyDef: { key: "3"},
                     actionName: "selectRight180"
                 }
+            }
+        },
+
+        selectWorldCharacter: {
+            keyDef: { code: "KeyW"},
+            robotCharacter: {
+                keyDef: { key: "1"},
+                actionName: "selectRobotCharacter"
+            },
+            rabbitCharacter: {
+                keyDef: { key: "2"},
+                actionName: "selectRabbitCharacter"
+            },
+            rocketCharacter: {
+                keyDef: { key: "3"},
+                actionName: "selectRocketCharacter"
             }
         },
 
