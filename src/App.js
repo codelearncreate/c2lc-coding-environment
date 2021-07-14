@@ -656,6 +656,8 @@ export class App extends React.Component<AppProps, AppState> {
                             if (this.state.selectedAction) {
                                 const newProgramSequence = this.state.programSequence.insertStep(0, this.state.selectedAction);
                                 this.handleProgramSequenceChange(newProgramSequence);
+                                const commandString = this.props.intl.formatMessage({ id: "Announcement." + (this.state.selectedAction || "") });
+                                this.audioManager.playAnnouncement('add', this.props.intl, { command: commandString});
                             }
                             break;
                         case("addCommandToEnd"):
@@ -663,6 +665,8 @@ export class App extends React.Component<AppProps, AppState> {
                                 // $FlowFixMe: Flow doesn't understand that we've already ensured that this.state.selectedAction shouldn't be null.
                                 const newProgramSequence = this.state.programSequence.insertStep(this.state.programSequence.getProgramLength(), this.state.selectedAction);
                                 this.handleProgramSequenceChange(newProgramSequence);
+                                const commandString = this.props.intl.formatMessage({ id: "Announcement." + (this.state.selectedAction || "") });
+                                this.audioManager.playAnnouncement('add', this.props.intl, { command: commandString});
                             }
                             break;
                         case("deleteCurrentStep"):
@@ -677,6 +681,9 @@ export class App extends React.Component<AppProps, AppState> {
                                         }
                                         const newProgramSequence = this.state.programSequence.deleteStep(index);
                                         this.handleProgramSequenceChange(newProgramSequence);
+
+                                        const commandString = this.props.intl.formatMessage({ id: "Announcement." + this.state.programSequence.getProgramStepAt(index)});
+                                        this.audioManager.playAnnouncement('delete', this.props.intl, { command: commandString});
                                     }
                                 }
                             }
