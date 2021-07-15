@@ -91,3 +91,21 @@ it('Should not change showKeyboardModal when key bindings are disabled and quest
 
     expect(app.state().showKeyboardModal).toBe(false);
 });
+
+it('Should be able to handle escaping out of a sequence', () => {
+    const { app } = mountApp({});
+
+    const sequenceWithEscape = [
+        new KeyboardEvent('keydown', { code: "KeyX", ctrlKey: true, altKey: true }),
+        new KeyboardEvent('keydown', { code: "KeyA" }),
+        new KeyboardEvent('keydown', { key: "Escape" }),
+        new KeyboardEvent('keydown', { code: "KeyX", ctrlKey: true, altKey: true }),
+        new KeyboardEvent('keydown', { code: "KeyX" }),
+    ];
+
+    for (const keyboardEvent of sequenceWithEscape) {
+        window.document.dispatchEvent(keyboardEvent);
+    }
+
+    expect(app.state().announcementsEnabled).toBe(false);
+});

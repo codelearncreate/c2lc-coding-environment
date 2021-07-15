@@ -624,6 +624,11 @@ export class App extends React.Component<AppProps, AppState> {
     // TODO: Convert to use keyboardEventMatchesKeyDef for each command in turn.
     handleDocumentKeyDown = (e: KeyboardEvent) => {
         if (this.state.keyBindingsEnabled) {
+            if (e.key === 'Escape') {
+                this.sequenceInProgress = [];
+                return;
+            }
+
             const isOnlyModifier = ["Shift", "Control", "Alt"].indexOf(e.key) !== -1;
             let isRepeat = false;
             if (this.sequenceInProgress.length) {

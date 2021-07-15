@@ -426,12 +426,14 @@ export function findKeyboardEventSequenceMatches (events: Array<KeyboardEvent>, 
     const keyboardInputScheme = KeyboardInputSchemes[keyboardInputSchemeName];
     let match = false;
 
-    for (const singleKeySequence of Object.values(keyboardInputScheme)) {
-        if (match === false || match === "partial") {
-            // $FlowFixMe: Flow doesn't believe this matches our "or"ed set of allowed inputs.
-            const keySequenceMatch = matchSingleInputSchemeLevel(events, singleKeySequence, 0);
-            if (keySequenceMatch !== false) {
-                match = keySequenceMatch;
+    if (events.length) {
+        for (const singleKeySequence of Object.values(keyboardInputScheme)) {
+            if (match === false || match === "partial") {
+                // $FlowFixMe: Flow doesn't believe this matches our "or"ed set of allowed inputs.
+                const keySequenceMatch = matchSingleInputSchemeLevel(events, singleKeySequence, 0);
+                if (keySequenceMatch !== false) {
+                    match = keySequenceMatch;
+                }
             }
         }
     }
