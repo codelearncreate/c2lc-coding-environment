@@ -206,7 +206,7 @@ const ExtendedKeyboardSequences: KeyboardInputScheme = {
         },
 
         selectWorldCharacter: {
-            keyDef: { code: "KeyW"},
+            keyDef: { code: "KeyW", key: "w"},
             robotCharacter: {
                 keyDef: { key: "1"},
                 actionName: "selectRobotCharacter"
