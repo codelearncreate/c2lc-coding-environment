@@ -819,6 +819,21 @@ export class App extends React.Component<AppProps, AppState> {
                                 this.handleChangeCharacterPosition('turnRight');
                             }
                             break;
+                        case("changeToDefaultTheme"):
+                            this.setStateSettings({theme: "mixed"});
+                            break;
+                        case("changeToLightTheme"):
+                            this.setStateSettings({theme: "light"});
+                            break;
+                        case("changeToDarkTheme"):
+                            this.setStateSettings({theme: "dark"});
+                            break;
+                        case("changeToGrayscaleTheme"):
+                            this.setStateSettings({theme: "gray"});
+                            break;
+                        case("changeToHighContrastTheme"):
+                            this.setStateSettings({theme: "contrast"});
+                            break;
                         default:
                             break;
                     }

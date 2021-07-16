@@ -65,6 +65,11 @@ follows.
 | Ctrl + Alt + x, f, x | focusCharacterColumnInput |
 | Ctrl + Alt + x, f, y | focusCharacterRowInput |
 | Ctrl + Alt + x, f, w | focusWorldSelector |
+| Ctrl + Alt + x, t, 1 | changeToDefaultTheme |
+| Ctrl + Alt + x, t, 2 | changeToLightTheme |
+| Ctrl + Alt + x, t, 3 | changeToDarkTheme |
+| Ctrl + Alt + x, t, 4 | changeToGrayscaleTheme |
+| Ctrl + Alt + x, t, 5 | changeToHighContrastTheme |
 | Ctrl + Alt + x, x | toggleFeedbackAnnouncements |
 
 ## VoiceOver Key Bindings
@@ -114,4 +119,9 @@ with the starting key of a sequence.  Those key bindings are as follows:
 | Alt + x, f, x | focusCharacterColumnInput |
 | Alt + x, f, y | focusCharacterRowInput |
 | Alt + x, f, w | focusWorldSelector |
+| Alt + x, t, 1 | changeToDefaultTheme |
+| Alt + x, t, 2 | changeToLightTheme |
+| Alt + x, t, 3 | changeToDarkTheme |
+| Alt + x, t, 4 | changeToGrayscaleTheme |
+| Alt + x, t, 5 | changeToHighContrastTheme |
 | Alt + x, x | toggleFeedbackAnnouncements |
