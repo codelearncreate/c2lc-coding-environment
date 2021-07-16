@@ -59,6 +59,11 @@ export type ActionName =
     | "turnCharacterLeft"
     | "turnCharacterRight"
 
+    // Select World Character
+    | "selectRobotCharacter"
+    | "selectRabbitCharacter"
+    | "selectRocketCharacter"
+
     // Update Program
     | "deleteAll"
     ;
@@ -197,6 +202,22 @@ const ExtendedKeyboardSequences: KeyboardInputScheme = {
                     keyDef: { key: "3"},
                     actionName: "selectRight180"
                 }
+            }
+        },
+
+        selectWorldCharacter: {
+            keyDef: { code: "KeyW", key: "w"},
+            robotCharacter: {
+                keyDef: { key: "1"},
+                actionName: "selectRobotCharacter"
+            },
+            rabbitCharacter: {
+                keyDef: { key: "2"},
+                actionName: "selectRabbitCharacter"
+            },
+            rocketCharacter: {
+                keyDef: { key: "3"},
+                actionName: "selectRocketCharacter"
             }
         },
 
