@@ -1,105 +1,123 @@
 # Key Bindings
 
-Weavly supports several key binding schemes.  These can be configured (or turned
-off) using the keyboard input menu, which is displayed by default when the
-question mark key is pressed, or when the keyboard icon is clicked.
+Weavly supports two sets of keyboard shortcuts.  A keyboard shortcut provides
+fast access to a range of Weavly's features using one or more key presses.
+Keyboard shortcuts can be configured (or turned off) using the keyboard input
+menu, which is displayed by default when the question mark key is pressed, or
+when the keyboard icon is clicked.
 
-## Default Key Bindings
+The most basic shortcuts are activated by holding a key like alt, or holding
+control and alt at the same time, and then pressing a particular letter.  Longer
+shortcuts involve hitting a combination of keys to start a sequence, and then
+entering additional letters.
 
-The default key bindings are as follows:
-
-| Keys | Command |
-| ---- | ------- |
-| Alt + B | addCommandToBeginning |
-| Alt + D | deleteCurrentStep |
-| Alt + E | addCommandToEnd |
-| Alt + I | announceScene |
-| Alt + P | playPauseProgram |
-| Alt + R | refreshScene |
-| Alt + S | stopProgram |
-| < | decreaseProgramSpeed |
-| > | increaseProgramSpeed |
-| ? | showHide |
-| Alt + X, A, B, 1 | selectBackward1 |
-| Alt + X, A, B, 2 | selectBackward2 |
-| Alt + X, A, B, 3 | selectBackward3 |
-| Alt + X, A, F, 1 | selectForward1 |
-| Alt + X, A, F, 2 | selectForward2 |
-| Alt + X, A, F, 3 | selectForward3 |
-| Alt + X, A, L, 1 | selectLeft45 |
-| Alt + X, A, L, 2 | selectLeft90 |
-| Alt + X, A, L, 3 | selectLeft180 |
-| Alt + X, A, R, 1 | selectRight45 |
-| Alt + X, A, R, 2 | selectRight90 |
-| Alt + X, A, R, 3 | selectRight180 |
-| Alt + X, C, M, D | moveCharacterDown |
-| Alt + X, C, M, L | moveCharacterLeft |
-| Alt + X, C, M, R | moveCharacterRight |
-| Alt + X, C, M, U | moveCharacterUp |
-| Alt + X, C, T, L | turnCharacterLeft |
-| Alt + X, C, T, R | turnCharacterRight |
-| Alt + X, D | deleteAll |
-| Alt + X, F, A | focusActions |
-| Alt + X, F, C | focusCharacterPositionControls |
-| Alt + X, F, H | focusAppHeader |
-| Alt + X, F, P | focusPlayShare |
-| Alt + X, F, Q | focusProgramSequence |
-| Alt + X, F, S | focusScene |
-| Alt + X, F, T | focusAddNodeToggle |
-| Alt + X, F, W | focusWorldSelector |
-| Alt + X, W, 1 | selectRobotCharacter |
-| Alt + X, W, 2 | selectRabbitCharacter |
-| Alt + X, W, 3 | selectRocketCharacter |
-| Alt + X, X | toggleFeedbackAnnouncements |
-
-
+In the instructions below, keys that need to be held at the same time are
+indicated using plus signs, and keys that need to be entered separately are
+divided using commas. For example, the shortcut `Ctrl + Alt + x, x` is
+activated by holding control, alt, and x at the same time, releasing all keys,
+and then hitting the x key again by itself.
 
 ## NVDA Key Bindings
 
-As NVDA makes use of many keys in combination with the alt key, an alternate
-key binding scheme is provided as well.  Those key bindings are as follows.
-
+NVDA has many commands that make use of the alt key, to avoid conflicting with
+these, the default keyboard input scheme uses the control and alt keys in
+combination with the starting key of a sequence. Those key bindings are as
+follows.
 
 | Keys | Command |
 | ---- | ------- |
-| Ctrl + Alt + B | addCommandToBeginning |
-| Ctrl + Alt + D | deleteCurrentStep |
-| Ctrl + Alt + E | addCommandToEnd |
-| Ctrl + Alt + I | announceScene |
-| Ctrl + Alt + P | playPauseProgram |
-| Ctrl + Alt + R | refreshScene |
-| Ctrl + Alt + S | stopProgram |
+| Ctrl + Alt + b | addCommandToBeginning |
+| Ctrl + Alt + e | addCommandToEnd |
+| Ctrl + Alt + d | deleteCurrentStep |
+| Ctrl + Alt + i | announceScene |
+| Ctrl + Alt + p | playPauseProgram |
+| Ctrl + Alt + r | refreshScene |
+| Ctrl + Alt + s | stopProgram |
 | < | decreaseProgramSpeed |
 | > | increaseProgramSpeed |
 | ? | showHide |
-| Ctrl + Alt + X, A, B, 1 | selectBackward1 |
-| Ctrl + Alt + X, A, B, 2 | selectBackward2 |
-| Ctrl + Alt + X, A, B, 3 | selectBackward3 |
-| Ctrl + Alt + X, A, F, 1 | selectForward1 |
-| Ctrl + Alt + X, A, F, 2 | selectForward2 |
-| Ctrl + Alt + X, A, F, 3 | selectForward3 |
-| Ctrl + Alt + X, A, L, 1 | selectLeft45 |
-| Ctrl + Alt + X, A, L, 2 | selectLeft90 |
-| Ctrl + Alt + X, A, L, 3 | selectLeft180 |
-| Ctrl + Alt + X, A, R, 1 | selectRight45 |
-| Ctrl + Alt + X, A, R, 2 | selectRight90 |
-| Ctrl + Alt + X, A, R, 3 | selectRight180 |
-| Ctrl + Alt + X, C, M, D | moveCharacterDown |
-| Ctrl + Alt + X, C, M, L | moveCharacterLeft |
-| Ctrl + Alt + X, C, M, R | moveCharacterRight |
-| Ctrl + Alt + X, C, M, U | moveCharacterUp |
-| Ctrl + Alt + X, C, T, L | turnCharacterLeft |
-| Ctrl + Alt + X, C, T, R | turnCharacterRight |
-| Ctrl + Alt + X, D | deleteAll |
-| Ctrl + Alt + X, F, A | focusActions |
-| Ctrl + Alt + X, F, C | focusCharacterPositionControls |
-| Ctrl + Alt + X, F, H | focusAppHeader |
-| Ctrl + Alt + X, F, P | focusPlayShare |
-| Ctrl + Alt + X, F, Q | focusProgramSequence |
-| Ctrl + Alt + X, F, S | focusScene |
-| Ctrl + Alt + X, F, T | focusAddNodeToggle |
-| Ctrl + Alt + X, F, W | focusWorldSelector |
-| Ctrl + Alt + X, W, 1 | selectRobotCharacter |
-| Ctrl + Alt + X, W, 2 | selectRabbitCharacter |
-| Ctrl + Alt + X, W, 3 | selectRocketCharacter |
-| Ctrl + Alt + X, X | toggleFeedbackAnnouncements |
+| Ctrl + Alt + x, a, b, 1 | selectBackward1 |
+| Ctrl + Alt + x, a, b, 2 | selectBackward2 |
+| Ctrl + Alt + x, a, b, 3 | selectBackward3 |
+| Ctrl + Alt + x, a, f, 1 | selectForward1 |
+| Ctrl + Alt + x, a, f, 2 | selectForward2 |
+| Ctrl + Alt + x, a, f, 3 | selectForward3 |
+| Ctrl + Alt + x, a, l, 1 | selectLeft45 |
+| Ctrl + Alt + x, a, l, 2 | selectLeft90 |
+| Ctrl + Alt + x, a, l, 3 | selectLeft180 |
+| Ctrl + Alt + x, a, r, 1 | selectRight45 |
+| Ctrl + Alt + x, a, r, 2 | selectRight90 |
+| Ctrl + Alt + x, a, r, 3 | selectRight180 |
+| Ctrl + Alt + x, c, m, d | moveCharacterDown |
+| Ctrl + Alt + x, c, m, l | moveCharacterLeft |
+| Ctrl + Alt + x, c, m, r | moveCharacterRight |
+| Ctrl + Alt + x, c, m, u | moveCharacterUp |
+| Ctrl + Alt + x, c, t, l | turnCharacterLeft |
+| Ctrl + Alt + x, c, t, r | turnCharacterRight |
+| Ctrl + Alt + x, d | deleteAll |
+| Ctrl + Alt + x, f, a | focusActions |
+| Ctrl + Alt + x, f, c | focusCharacterPositionControls |
+| Ctrl + Alt + x, f, h | focusAppHeader |
+| Ctrl + Alt + x, f, p | focusPlayShare |
+| Ctrl + Alt + x, f, q | focusProgramSequence |
+| Ctrl + Alt + x, f, s | focusScene |
+| Ctrl + Alt + x, f, t | focusAddNodeToggle |
+| Ctrl + Alt + x, f, x | focusCharacterColumnInput |
+| Ctrl + Alt + x, f, y | focusCharacterRowInput |
+| Ctrl + Alt + x, f, w | focusWorldSelector |
+| Ctrl + Alt + x, w, 1 | selectRobotCharacter |
+| Ctrl + Alt + x, w, 2 | selectRabbitCharacter |
+| Ctrl + Alt + x, w, 3 | selectRocketCharacter |
+| Ctrl + Alt + x, x | toggleFeedbackAnnouncements |
+
+## VoiceOver Key Bindings
+
+VoiceOver uses ctrl+alt for many of its commands, to avoid conflicting with
+those, there is a keyboard input scheme whichg uses the alt key in combination
+with the starting key of a sequence.  Those key bindings are as follows:
+
+| Keys | Command |
+| ---- | ------- |
+| Alt + b | addCommandToBeginning |
+| Alt + e | addCommandToEnd |
+| Alt + d | deleteCurrentStep |
+| Alt + i | announceScene |
+| Alt + p | playPauseProgram |
+| Alt + r | refreshScene |
+| Alt + s | stopProgram |
+| < | decreaseProgramSpeed |
+| > | increaseProgramSpeed |
+| ? | showHide |
+| Alt + x, a, b, 1 | selectBackward1 |
+| Alt + x, a, b, 2 | selectBackward2 |
+| Alt + x, a, b, 3 | selectBackward3 |
+| Alt + x, a, f, 1 | selectForward1 |
+| Alt + x, a, f, 2 | selectForward2 |
+| Alt + x, a, f, 3 | selectForward3 |
+| Alt + x, a, l, 1 | selectLeft45 |
+| Alt + x, a, l, 2 | selectLeft90 |
+| Alt + x, a, l, 3 | selectLeft180 |
+| Alt + x, a, r, 1 | selectRight45 |
+| Alt + x, a, r, 2 | selectRight90 |
+| Alt + x, a, r, 3 | selectRight180 |
+| Alt + x, c, m, d | moveCharacterDown |
+| Alt + x, c, m, l | moveCharacterLeft |
+| Alt + x, c, m, r | moveCharacterRight |
+| Alt + x, c, m, u | moveCharacterUp |
+| Alt + x, c, t, l | turnCharacterLeft |
+| Alt + x, c, t, r | turnCharacterRight |
+| Alt + x, d | deleteAll |
+| Alt + x, f, a | focusActions |
+| Alt + x, f, c | focusCharacterPositionControls |
+| Alt + x, f, h | focusAppHeader |
+| Alt + x, f, p | focusPlayShare |
+| Alt + x, f, q | focusProgramSequence |
+| Alt + x, f, s | focusScene |
+| Alt + x, f, t | focusAddNodeToggle |
+| Alt + x, f, x | focusCharacterColumnInput |
+| Alt + x, f, y | focusCharacterRowInput |
+| Alt + x, f, w | focusWorldSelector |
+| Alt + x, w, 1 | selectRobotCharacter |
+| Alt + x, w, 2 | selectRabbitCharacter |
+| Alt + x, w, 3 | selectRocketCharacter |
+| Alt + x, x | toggleFeedbackAnnouncements |

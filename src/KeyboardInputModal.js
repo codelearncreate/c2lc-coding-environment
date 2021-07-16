@@ -80,6 +80,7 @@ class KeyboardInputModal extends React.Component<KeyboardInputModalProps, Keyboa
             "showHide",
             "addCommandToBeginning",
             "addCommandToEnd",
+            "deleteCurrentStep",
             "announceScene",
             "playPauseProgram",
             "refreshScene",

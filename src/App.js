@@ -653,16 +653,22 @@ export class App extends React.Component<AppProps, AppState> {
                             });
                             break;
                         case("addCommandToBeginning"):
-                            if (this.state.selectedAction) {
-                                const newProgramSequence = this.state.programSequence.insertStep(0, this.state.selectedAction);
-                                this.handleProgramSequenceChange(newProgramSequence);
+                            if (!this.editingIsDisabled()) {
+                                if (this.state.selectedAction) {
+                                    if (this.programBlockEditorRef.current) {
+                                        this.programBlockEditorRef.current.insertSelectedCommandIntoProgram(0);
+                                    }
+                                }
                             }
                             break;
                         case("addCommandToEnd"):
-                            if (this.state.selectedAction) {
-                                // $FlowFixMe: Flow doesn't understand that we've already ensured that this.state.selectedAction shouldn't be null.
-                                const newProgramSequence = this.state.programSequence.insertStep(this.state.programSequence.getProgramLength(), this.state.selectedAction);
-                                this.handleProgramSequenceChange(newProgramSequence);
+                            if (!this.editingIsDisabled()) {
+                                if (this.state.selectedAction) {
+                                    const index = this.state.programSequence.getProgramLength();
+                                    if (this.programBlockEditorRef.current) {
+                                        this.programBlockEditorRef.current.insertSelectedCommandIntoProgram(index);
+                                    }
+                                }
                             }
                             break;
                         case("deleteCurrentStep"):
@@ -673,10 +679,8 @@ export class App extends React.Component<AppProps, AppState> {
                                     const index = parseInt(currentElement.dataset.stepnumber, 10);
                                     if (index != null) {
                                         if (this.programBlockEditorRef.current) {
-                                            this.programBlockEditorRef.current.setFocusAfterDelete(index);
+                                            this.programBlockEditorRef.current.deleteProgramStep(index);
                                         }
-                                        const newProgramSequence = this.state.programSequence.deleteStep(index);
-                                        this.handleProgramSequenceChange(newProgramSequence);
                                     }
                                 }
                             }
@@ -767,6 +771,12 @@ export class App extends React.Component<AppProps, AppState> {
                         case("focusCharacterPositionControls"):
                             focusOnFirstElementWithClass("CharacterPositionController__character-position-button");
                             break;
+                        case("focusCharacterColumnInput"):
+                            focusOnFirstElementWithClass("ProgramBlock__character-position-coordinate-box-column");
+                            break;
+                        case("focusCharacterRowInput"):
+                            focusOnFirstElementWithClass("ProgramBlock__character-position-coordinate-box-row");
+                            break;
                         case("focusPlayShare"):
                             focusOnFirstElementWithClass("PlayButton--play");
                             break;
@@ -780,22 +790,34 @@ export class App extends React.Component<AppProps, AppState> {
                             focusOnFirstElementWithClass("WorldIcon");
                             break;
                         case("moveCharacterLeft"):
-                            this.handleChangeCharacterPosition('left');
+                            if (!this.editingIsDisabled()) {
+                                this.handleChangeCharacterPosition('left');
+                            }
                             break;
                         case("moveCharacterRight"):
-                            this.handleChangeCharacterPosition('right');
+                            if (!this.editingIsDisabled()) {
+                                this.handleChangeCharacterPosition('right');
+                            }
                             break;
                         case("moveCharacterUp"):
-                            this.handleChangeCharacterPosition('up');
+                            if (!this.editingIsDisabled()) {
+                                this.handleChangeCharacterPosition('up');
+                            }
                             break;
                         case("moveCharacterDown"):
-                            this.handleChangeCharacterPosition('down');
+                            if (!this.editingIsDisabled()) {
+                                this.handleChangeCharacterPosition('down');
+                            }
                             break;
                         case("turnCharacterLeft"):
-                            this.handleChangeCharacterPosition('turnLeft');
+                            if (!this.editingIsDisabled()) {
+                                this.handleChangeCharacterPosition('turnLeft');
+                            }
                             break;
                         case("turnCharacterRight"):
-                            this.handleChangeCharacterPosition('turnRight');
+                            if (!this.editingIsDisabled()) {
+                                this.handleChangeCharacterPosition('turnRight');
+                            }
                             break;
                         case("selectRobotCharacter"):
                             this.setStateSettings({world: "default"});

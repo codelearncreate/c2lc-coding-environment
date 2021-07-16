@@ -44,6 +44,8 @@ export type ActionName =
     | "focusAppHeader"
     | "focusAddNodeToggle"
     | "focusCharacterPositionControls"
+    | "focusCharacterColumnInput"
+    | "focusCharacterRowInput"
     | "focusPlayShare"
     | "focusProgramSequence"
     | "focusScene"
@@ -110,8 +112,16 @@ const ExtendedKeyboardSequences: KeyboardInputScheme = {
                 actionName: "focusAddNodeToggle"
             },
             characterPositionControls: {
-                keyDef: { code: "KeyC", key: "c", hidden: true},
+                keyDef: { code: "KeyC", key: "c" },
                 actionName: "focusCharacterPositionControls"
+            },
+            characterPositionColumnInput: {
+                keyDef: { code: "KeyX", key: "x" },
+                actionName: "focusCharacterColumnInput"
+            },
+            characterPositionRowInput: {
+                keyDef: { code: "KeyX", key: "y" },
+                actionName: "focusCharacterRowInput"
             },
             playShare: {
                 keyDef: { code: "KeyP", key: "p" },
@@ -364,6 +374,7 @@ export const KeyboardInputSchemes:KeyboardInputSchemesType = {
 const labelMessageKeysByCode = {
     "KeyA": "KeyboardInputModal.KeyLabels.A",
     "KeyB": "KeyboardInputModal.KeyLabels.B",
+    "KeyD": "KeyboardInputModal.KeyLabels.D",
     "KeyE": "KeyboardInputModal.KeyLabels.E",
     "KeyI": "KeyboardInputModal.KeyLabels.I",
     "KeyP": "KeyboardInputModal.KeyLabels.P",
@@ -392,6 +403,7 @@ export function getLabelMessageKeyFromKeyDef (keyDef: KeyDef) {
 const iconMessageKeysByCode = {
     "KeyA": "KeyboardInputModal.KeyIcons.A",
     "KeyB": "KeyboardInputModal.KeyIcons.B",
+    "KeyD": "KeyboardInputModal.KeyIcons.D",
     "KeyE": "KeyboardInputModal.KeyIcons.E",
     "KeyI": "KeyboardInputModal.KeyIcons.I",
     "KeyP": "KeyboardInputModal.KeyIcons.P",

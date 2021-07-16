@@ -121,8 +121,16 @@ class CharacterPositionController extends React.Component<CharacterPositionContr
             this.props.editingDisabled && 'CharacterPositionController__character-position-button--disabled'
         );
 
-        const characterPositionTextInputClassName = classNames(
+        const characterPositionColumnTextInputClassName = classNames(
             'ProgramBlock__character-position-coordinate-box',
+            'ProgramBlock__character-position-coordinate-box-column',
+            this.props.editingDisabled && 'ProgramBlock__character-position-coordinate-box--disabled'
+        );
+
+
+        const characterPositionRowTextInputClassName = classNames(
+            'ProgramBlock__character-position-coordinate-box',
+            'ProgramBlock__character-position-coordinate-box-row',
             this.props.editingDisabled && 'ProgramBlock__character-position-coordinate-box--disabled'
         );
 
@@ -199,7 +207,7 @@ class CharacterPositionController extends React.Component<CharacterPositionContr
                 <div className='CharacterPositionController__character-move-position-coordinate'>
                     <input
                         name='xPosition'
-                        className={characterPositionTextInputClassName}
+                        className={characterPositionColumnTextInputClassName}
                         aria-label={this.props.intl.formatMessage({id:'CharacterPositionController.editPosition.columnPosition'})}
                         aria-disabled={this.props.editingDisabled}
                         maxLength='1'
@@ -211,7 +219,7 @@ class CharacterPositionController extends React.Component<CharacterPositionContr
                         onBlur={this.handleBlurCharacterPositionLabel} />
                     <input
                         name='yPosition'
-                        className={characterPositionTextInputClassName}
+                        className={characterPositionRowTextInputClassName}
                         aria-label={this.props.intl.formatMessage({id:'CharacterPositionController.editPosition.rowPosition'})}
                         aria-disabled={this.props.editingDisabled}
                         maxLength='2'
