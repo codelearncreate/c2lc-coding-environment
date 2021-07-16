@@ -60,6 +60,8 @@ export type ActionName =
     | "turnCharacterRight"
 
     // Update Program
+    | "swapCurrentStepWithPreviousStep"
+    | "swapCurrentStepWithNextStep"
     | "deleteAll"
     ;
 
@@ -231,6 +233,18 @@ const ExtendedKeyboardSequences: KeyboardInputScheme = {
                     keyDef: { code: "KeyR", key: "r" },
                     actionName: "turnCharacterRight"
                 }
+            }
+        },
+
+        swapProgramStep: {
+            keyDef: { code: "KeyS", key: 's' },
+            left: {
+                keyDef: { code: "KeyL", key: 'l' },
+                actionName: "swapCurrentStepWithPreviousStep"
+            },
+            right: {
+                keyDef: { code: "KeyR", key: 'r' },
+                actionName: "swapCurrentStepWithNextStep"
             }
         },
 

@@ -65,6 +65,8 @@ follows.
 | Ctrl + Alt + x, f, x | focusCharacterColumnInput |
 | Ctrl + Alt + x, f, y | focusCharacterRowInput |
 | Ctrl + Alt + x, f, w | focusWorldSelector |
+| Ctrl + Alt + x, s, l | swapCurrentStepWithPreviousStep |
+| Ctrl + Alt + x, s, r | swapCurrentStepWithNextStep |
 | Ctrl + Alt + x, x | toggleFeedbackAnnouncements |
 
 ## VoiceOver Key Bindings
@@ -114,4 +116,6 @@ with the starting key of a sequence.  Those key bindings are as follows:
 | Alt + x, f, x | focusCharacterColumnInput |
 | Alt + x, f, y | focusCharacterRowInput |
 | Alt + x, f, w | focusWorldSelector |
+| Alt + x, s, l | swapCurrentStepWithPreviousStep |
+| Alt + x, s, r | swapCurrentStepWithNextStep |
 | Alt + x, x | toggleFeedbackAnnouncements |

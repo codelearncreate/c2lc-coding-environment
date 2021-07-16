@@ -789,6 +789,24 @@ export class App extends React.Component<AppProps, AppState> {
                         case("focusWorldSelector"):
                             focusOnFirstElementWithClass("WorldIcon");
                             break;
+                        case("swapCurrentStepWithPreviousStep"):
+                            if (!this.editingIsDisabled()) {
+                                if (this.state.actionPanelStepIndex != null) {
+                                    if (this.programBlockEditorRef.current) {
+                                        this.programBlockEditorRef.current.handleActionPanelMoveToPreviousStep(this.state.actionPanelStepIndex);
+                                    }
+                                }
+                            }
+                            break;
+                        case("swapCurrentStepWithNextStep"):
+                            if (!this.editingIsDisabled()) {
+                                if (this.state.actionPanelStepIndex != null) {
+                                    if (this.programBlockEditorRef.current) {
+                                        this.programBlockEditorRef.current.handleActionPanelMoveToNextStep(this.state.actionPanelStepIndex);
+                                    }
+                                }
+                            }
+                            break;
                         case("moveCharacterLeft"):
                             if (!this.editingIsDisabled()) {
                                 this.handleChangeCharacterPosition('left');

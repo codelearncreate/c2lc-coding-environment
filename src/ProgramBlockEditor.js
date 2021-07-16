@@ -190,6 +190,11 @@ class ProgramBlockEditor extends React.Component<ProgramBlockEditorProps, Progra
         this.props.onChangeActionPanelStepIndex(null);
     }
 
+    updateActionPanelPosition(actionPanelOptionName: string, index: number) {
+        this.setState({ focusedActionPanelOptionName: actionPanelOptionName });
+        this.props.onChangeActionPanelStepIndex(index);
+    }
+
     setCommandBlockRef(programStepNumber: number, element: ?HTMLElement) {
         if (element) {
             this.commandBlockRefs.set(programStepNumber, element);
@@ -294,10 +299,7 @@ class ProgramBlockEditor extends React.Component<ProgramBlockEditorProps, Progra
         this.props.audioManager.playAnnouncement('moveToPrevious', this.props.intl);
         if (this.props.programSequence.getProgramStepAt(index - 1) != null) {
             const previousStepIndex = index - 1;
-            this.setState({
-                focusedActionPanelOptionName: 'moveToPreviousStep'
-            });
-            this.props.onChangeActionPanelStepIndex(previousStepIndex);
+            this.updateActionPanelPosition('moveToPreviousStep', previousStepIndex)
             this.props.onChangeProgramSequence(
                 this.props.programSequence.swapStep(index, previousStepIndex)
             );
@@ -308,10 +310,7 @@ class ProgramBlockEditor extends React.Component<ProgramBlockEditorProps, Progra
         this.props.audioManager.playAnnouncement('moveToNext', this.props.intl);
         if (this.props.programSequence.getProgramStepAt(index + 1) != null) {
             const nextStepIndex = index + 1;
-            this.setState({
-                focusedActionPanelOptionName: 'moveToNextStep'
-            });
-            this.props.onChangeActionPanelStepIndex(nextStepIndex);
+            this.updateActionPanelPosition('moveToNextStep', nextStepIndex);
             this.props.onChangeProgramSequence(
                 this.props.programSequence.swapStep(index, nextStepIndex)
             );
