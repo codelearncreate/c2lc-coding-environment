@@ -652,6 +652,26 @@ export class App extends React.Component<AppProps, AppState> {
                                 return { announcementsEnabled: !(currentState.announcementsEnabled) };
                             });
                             break;
+                        case("addCommand"): {
+                            if (!this.editingIsDisabled()) {
+                                if (this.state.selectedAction) {
+                                    const currentElement = document.activeElement;
+                                    // $FlowFixMe: Not all elements have dataset property
+                                    if (currentElement.dataset.controltype === 'programStep' ||
+                                        currentElement.dataset.controltype === 'addNode') {
+                                        const index = currentElement.dataset.controltype === 'programStep' ?
+                                            parseInt(currentElement.dataset.stepnumber, 10) + 1:
+                                            parseInt(currentElement.dataset.stepnumber, 10);
+                                        if (index != null) {
+                                            if (this.programBlockEditorRef.current) {
+                                                this.programBlockEditorRef.current.insertSelectedCommandIntoProgram(index);
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                            break;
+                        }
                         case("addCommandToBeginning"):
                             if (!this.editingIsDisabled()) {
                                 if (this.state.selectedAction) {

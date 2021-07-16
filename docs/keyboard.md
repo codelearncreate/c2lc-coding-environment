@@ -26,6 +26,7 @@ follows.
 
 | Keys | Command |
 | ---- | ------- |
+| Ctrl + Alt + a | addCommand |
 | Ctrl + Alt + b | addCommandToBeginning |
 | Ctrl + Alt + e | addCommandToEnd |
 | Ctrl + Alt + d | deleteCurrentStep |
@@ -75,6 +76,7 @@ with the starting key of a sequence.  Those key bindings are as follows:
 
 | Keys | Command |
 | ---- | ------- |
+| Alt + a | addCommand |
 | Alt + b | addCommandToBeginning |
 | Alt + e | addCommandToEnd |
 | Alt + d | deleteCurrentStep |

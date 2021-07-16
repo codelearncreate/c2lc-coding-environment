@@ -53,7 +53,7 @@ it('Should be able to handle a complete valid sequence', () => {
 
 it('Should be able to handle a complete invalid sequence', () => {
     const completeInvalidSequence = [
-        new KeyboardEvent('keydown', { code: "KeyA", altKey: true}),
+        new KeyboardEvent('keydown', { code: "KeyZ", altKey: true}),
         new KeyboardEvent('keydown', { code: "KeyX"})
     ];
     const result = findKeyboardEventSequenceMatches(completeInvalidSequence, "voiceover");
