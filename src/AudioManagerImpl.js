@@ -187,6 +187,7 @@ export function getNoteForState (characterState: CharacterState) : string {
 export default class AudioManagerImpl implements AudioManager {
     audioEnabled: boolean;
     announcementsEnabled: boolean;
+    feedbackIsPlaying: boolean;
     panner: Panner;
     samplers: {
         backward1: Sampler,
@@ -206,6 +207,7 @@ export default class AudioManagerImpl implements AudioManager {
     constructor(audioEnabled: boolean, announcementsEnabled: boolean) {
         this.audioEnabled = audioEnabled;
         this.announcementsEnabled = announcementsEnabled;
+        this.feedbackIsPlaying = false;
 
         this.panner = new Panner();
         this.panner.toDestination();
@@ -218,6 +220,10 @@ export default class AudioManagerImpl implements AudioManager {
             sampler.connect(this.panner);
             this.samplers[samplerKey] = sampler;
         });
+    }
+
+    getFeedbackIsPlaying() {
+        return this.feedbackIsPlaying;
     }
 
     playFeedbackAnnouncement(message: string) {
@@ -289,5 +295,9 @@ export default class AudioManagerImpl implements AudioManager {
 
     setAudioEnabled(value: boolean) {
         this.audioEnabled = value;
+    }
+
+    setFeedbackIsPlaying(value: boolean) {
+        this.feedbackIsPlaying = value;
     }
 };
