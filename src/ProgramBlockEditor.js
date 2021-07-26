@@ -116,17 +116,71 @@ class ProgramBlockEditor extends React.Component<ProgramBlockEditorProps, Progra
         }
     }
 
+    // *************************************
+    // BEGIN Methods to make program changes
+    //
+    // These methods are used by both the ProgramBlockEditor and the keyboard
+    // shortcut handlers in App to:
+    //
+    // * Make the announcement for the program change
+    //
+    // * Set up focus, scrolling, and animations following the change
+    //
+    // * Make the change to the program
+
+    // TODO: Is ProgramBlockEditor the best place for these methods?
+
+    deleteProgramStep(index: number) {
+        // Play the announcement
+        const commandString = this.props.intl.formatMessage({ id: "Announcement." + this.props.programSequence.getProgramStepAt(index)});
+        this.props.audioManager.playFeedbackAnnouncement(
+            this.props.intl.formatMessage(
+                {id: 'Announcement.delete'},
+                {command: commandString}
+            )
+        );
+        this.props.audioManager.setFeedbackIsPlaying(true);
+
+        // If there are steps following the one being deleted, focus the
+        // next step. Otherwise, focus the final add node.
+        if (index < this.props.programSequence.getProgramLength() - 1) {
+            this.focusCommandBlockIndex = index;
+        } else {
+            this.focusAddNodeIndex = index;
+        }
+
+        // Make the change
+        this.props.onChangeProgramSequence(
+            this.props.programSequence.deleteStep(index)
+        );
+    }
+
     insertSelectedCommandIntoProgram(index: number) {
+        // Play the announcement
         const selectedAction = this.props.selectedAction;
+        const commandString = this.props.intl.formatMessage({ id: "Announcement." + (selectedAction || "") });
+        this.props.audioManager.playFeedbackAnnouncement(
+            this.props.intl.formatMessage(
+                {id: 'Announcement.add'},
+                {command: commandString}
+            )
+        );
+        this.props.audioManager.setFeedbackIsPlaying(true);
+
         if (selectedAction) {
+            // Set up focus, scrolling, and animation
             this.focusCommandBlockIndex = index;
             this.scrollToAddNodeIndex = index + 1;
             this.setUpdatedCommandBlock(index);
+            // Make the change
             this.props.onChangeProgramSequence(
                 this.props.programSequence.insertStep(index, selectedAction)
             );
         }
     }
+
+    // END Methods to make program changes
+    // ***********************************
 
     programStepIsActive(programStepNumber: number) {
         if (this.props.runningState === 'running'
@@ -211,19 +265,7 @@ class ProgramBlockEditor extends React.Component<ProgramBlockEditorProps, Progra
     };
 
     handleActionPanelDeleteStep = (index: number) => {
-        const commandString = this.props.intl.formatMessage({ id: "Announcement." + this.props.programSequence.getProgramStepAt(index)});
-
-        this.props.audioManager.playFeedbackAnnouncement(this.props.intl.formatMessage({id: 'Announcement.delete'}, {command: commandString}));
-        // If there are steps following the one being deleted, focus the
-        // next step. Otherwise, focus the final add node.
-        if (index < this.props.programSequence.getProgramLength() - 1) {
-            this.focusCommandBlockIndex = index;
-        } else {
-            this.focusAddNodeIndex = index;
-        }
-        this.props.onChangeProgramSequence(
-            this.props.programSequence.deleteStep(index)
-        );
+        this.deleteProgramStep(index);
         this.closeActionPanel();
     };
 
@@ -310,14 +352,6 @@ class ProgramBlockEditor extends React.Component<ProgramBlockEditorProps, Progra
     };
 
     handleClickAddNode = (stepNumber: number) => {
-        const commandString = this.props.intl.formatMessage({ id: "Announcement." + (this.props.selectedAction || "") });
-
-        this.props.audioManager.playFeedbackAnnouncement(
-            this.props.intl.formatMessage(
-                {id: 'Announcement.add'},
-                { command: commandString}
-            )
-        );
         this.insertSelectedCommandIntoProgram(stepNumber);
     };
 
@@ -385,15 +419,6 @@ class ProgramBlockEditor extends React.Component<ProgramBlockEditorProps, Progra
             });
 
             const closestAddNodeIndex = this.findAddNodeClosestToEvent(event);
-
-            const commandString = this.props.intl.formatMessage({ id: "Announcement." + (this.props.selectedAction || "") });
-            this.props.audioManager.playFeedbackAnnouncement(
-                this.props.intl.formatMessage(
-                    {id: 'Announcement.add'},
-                    {command: commandString}
-                )
-            );
-
             this.insertSelectedCommandIntoProgram(closestAddNodeIndex);
         }
     }
@@ -451,6 +476,7 @@ class ProgramBlockEditor extends React.Component<ProgramBlockEditorProps, Progra
                 ref={ (element) => { this.setCommandBlockRef(programStepNumber, element) } }
                 key={`${programStepNumber}-${command}`}
                 data-stepnumber={programStepNumber}
+                data-controltype='programStep'
                 data-command={command}
                 data-actionpanelgroup={true}
                 className={classes}
@@ -703,4 +729,4 @@ class ProgramBlockEditor extends React.Component<ProgramBlockEditorProps, Progra
     }
 }
 
-export default injectIntl(ProgramBlockEditor);
+export default injectIntl(ProgramBlockEditor, { forwardRef: true });

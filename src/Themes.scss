@@ -325,6 +325,12 @@ body.dark-theme {
         }
     }
 
+    .App__header-keyboardMenuIcon {    
+        &:focus {
+            box-shadow: 0 0 0 $c2lc-focus-indicator-width white;
+        }
+    }
+
     .App__header {
         background-color: #18252C;
     }
@@ -445,19 +451,28 @@ body.dark-theme {
 
     .CharacterPositionController__character-turn-positions {
         svg path.filled {
-            fill: #22343C;
+            fill: white;
             stroke: none;
         }
-
         .CharacterPositionController__character-position-button--disabled {
             path.filled {
                 fill: #505862;
             }
         }
+        &:focus {
+            outline: $c2lc-focus-indicator-width solid white;
+        }
     }
 
     .CharacterPositionController__character-position-button {
-        stroke: #22343C;
+        stroke: white;
+        &:focus {
+            outline: $c2lc-focus-indicator-width solid white;
+        }
+    }
+
+    .ProgramBlock__character-position-coordinate-box:focus {
+        outline: $c2lc-focus-indicator-width solid white;
     }
 
     .CharacterPositionController__character-position-button--disabled {
@@ -637,6 +652,80 @@ body.gray-theme {
 
     .App__command-palette-heading {
         color: #818A98;
+    }
+
+    .App__header-keyboardMenuIcon {    
+        background-color: #818A98;
+        svg path {
+            fill: white;
+        }
+
+        &:hover {
+            background-color: #505862;
+        }
+    
+        &:focus {
+            box-shadow: 0 0 0 $c2lc-focus-indicator-width #505862;
+        }
+    }
+
+    .KeyboardInputModal__content__toggle {
+        background-color: #B9BEC6;
+
+        &:focus {
+            box-shadow: 0 0 0 $c2lc-focus-indicator-width #505862;
+        }
+
+        &.ToggleSwitch--checked{
+            background-color: #818A98;
+        }
+
+        &:hover {
+            background-color: #505862;
+            .ToggleSwitch__switch-inner-circle {
+                background-color: #B9BEC6;
+            }
+        }
+    }
+
+    button.btn.KeyboardInputModal__content__cancelButton,
+    button.btn.KeyboardInputModal__content__doneButton {
+        background-color: #aaa;
+        color: black;
+
+        &:hover {
+            background-color:#D5D8DD;
+        }
+
+        &:focus {
+            box-shadow:
+                0 0 0 0.15rem #d5d8dd,
+                0 0 0 0.25rem #505862;
+        }
+    }
+
+    .KeyboardInputModal__content__toggle.ToggleSwitch {
+        background-color: #B9BEC6;
+
+        &:focus {
+            box-shadow: 0 0 0 $c2lc-focus-indicator-width #505862;
+        }
+
+        &:hover {
+            background-color: #505862;
+            .ToggleSwitch__switch-inner-circle {
+                background-color: #B9BEC6;
+            }
+        }
+
+        .ToggleSwitch__switch-inner-circle {
+            height: 1.9rem;
+            width: 1.9rem;
+        }
+    }
+    
+    .KeyboardInputModal__content__toggle.ToggleSwitch--checked {
+        background-color: #818A98;
     }
 
     .AudioFeedbackToggleSwitch {
@@ -1296,6 +1385,110 @@ body.contrast-theme {
         }
     }
 
+    .App__header-keyboardMenuIcon {    
+        background-color: white;
+        border: 2px solid white;
+
+        svg path {
+            fill: black;
+        }
+
+        &:hover {
+            background-color: black;
+
+            svg path {
+                fill: white;
+            }
+        }
+    
+        &:focus {
+            box-shadow: 0 0 0 $c2lc-focus-indicator-width white;
+            border: 2px solid black;
+        }
+    }
+
+    .KeyboardInputModal__content__toggle {
+        background-color: white;
+        border: 2px solid black;
+        padding: 0.2rem;
+        color: white;
+
+        &:focus {
+            box-shadow: 0 0 0 $c2lc-focus-indicator-width white;
+            border: 2px solid black;
+        }
+
+        .ToggleSwitch__switch-inner-circle {
+            background-color: black;
+        }
+
+
+        &.ToggleSwitch--checked:not(:hover), &:hover {
+            background-color: black;
+            color: black;
+            .ToggleSwitch__switch-inner-circle {
+                background-color: white;
+            }
+        }
+    }
+
+    button.btn.KeyboardInputModal__content__cancelButton,
+    button.btn.KeyboardInputModal__content__doneButton {
+        background-color: black;
+        color: white;
+
+        &:focus {
+            box-shadow:
+                0 0 0 0.1rem white,
+                0 0 0 0.2rem black;
+        }
+
+        &:hover {
+            background-color: white;
+            color: black;
+            box-shadow: 0 0 0 0.1rem black;
+        }
+
+        &:hover:focus {
+            box-shadow: 0 0 0 0.2rem black;
+        }        
+    }
+
+    .KeyboardInputModal__content__toggle.ToggleSwitch {
+        background-color: black;
+        border: 2px solid white;
+        padding: 0.2rem;
+
+        &:hover {
+            border: 2px solid black;
+            background-color: white;
+
+            .ToggleSwitch__switch-inner-circle {
+                background-color: black;
+                svg {
+                    path {
+                        fill: white;
+                    }
+                }
+            }
+    
+        }
+
+        &:focus {
+            box-shadow: 0 0 0 $c2lc-focus-indicator-width white;
+            border: 2px solid black;
+        }
+
+        .ToggleSwitch__switch-inner-circle {
+            background-color: white;
+            svg {
+                path {
+                    fill: black;
+                }
+            }
+        }
+    }
+
     .AudioFeedbackToggleSwitch {
         background-color: black;
         border: 2px solid white;
@@ -1362,6 +1555,10 @@ body.contrast-theme {
             background-color: black;
             border: 2px solid white;
         }
+    }
+
+    .App__world-container {
+        background-color: black;
     }
 
     // Use both IDs and classnames here to overpower styles inherited from react-bootstrap's $theme-colors
@@ -1524,6 +1721,10 @@ body.contrast-theme {
 
     .CharacterPositionController__character-position-button--disabled {
         stroke: #505862;
+    }
+
+    .ProgramBlock__character-position-coordinate-box:focus {
+        outline: $c2lc-focus-indicator-width solid white;
     }
 
     .Scene__container {
@@ -1910,8 +2111,6 @@ body.contrast-theme {
             }
         }
     }
-
-
 
     button.btn.PlayButton--play.PlayButton--disabled, button.btn.StopButton--disabled {
         svg {

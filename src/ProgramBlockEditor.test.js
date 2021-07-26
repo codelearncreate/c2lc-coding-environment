@@ -2,9 +2,9 @@
 
 import React from 'react';
 import Adapter from 'enzyme-adapter-react-16';
-import { configure, mount, shallow } from 'enzyme';
+import { configure, mount } from 'enzyme';
 import { Button } from 'react-bootstrap';
-import { createIntl, IntlProvider } from 'react-intl';
+import { IntlProvider } from 'react-intl';
 import AudioManagerImpl from './AudioManagerImpl';
 import ActionPanel from './ActionPanel';
 import AriaDisablingButton from './AriaDisablingButton';
@@ -51,54 +51,6 @@ const defaultProgramBlockEditorProps = {
     allowedActions: mockAllowedActions,
     world: 'default'
 };
-
-function createShallowProgramBlockEditor(props) {
-    const intl = createIntl({
-        locale: 'en',
-        defaultLocale: 'en',
-        messages: messages.en
-    });
-
-    // $FlowFixMe: Flow doesn't know about the Jest mock API
-    AudioManagerImpl.mockClear();
-    const audioManagerInstance = new AudioManagerImpl(true, true);
-    // $FlowFixMe: Flow doesn't know about the Jest mock API
-    const audioManagerMock: any = AudioManagerImpl.mock.instances[0];
-    const mockChangeProgramSequenceHandler = jest.fn();
-    const mockChangeAddNodeExpandedModeHandler = jest.fn();
-    const mockChangeCharacterPosition = jest.fn();
-    const mockChangeCharacterXPosition = jest.fn();
-    const mockChangeCharacterYPosition = jest.fn();
-
-    const wrapper: $FlowIgnoreType = shallow(
-        React.createElement(
-            ProgramBlockEditor.WrappedComponent,
-            Object.assign(
-                {},
-                defaultProgramBlockEditorProps,
-                {
-                    intl: intl,
-                    audioManager: audioManagerInstance,
-                    onChangeProgramSequence: mockChangeProgramSequenceHandler,
-                    onChangeAddNodeExpandedMode: mockChangeAddNodeExpandedModeHandler,
-                    onChangeCharacterPosition: mockChangeCharacterPosition,
-                    onChangeCharacterXPosition: mockChangeCharacterXPosition,
-                    onChangeCharacterYPosition: mockChangeCharacterYPosition
-                },
-                props
-            )
-        )
-    );
-
-    return {
-        wrapper,
-        audioManagerMock,
-        mockChangeProgramSequenceHandler,
-        mockChangeAddNodeExpandedModeHandler,
-        mockChangeCharacterXPosition,
-        mockChangeCharacterYPosition,
-    };
-}
 
 function createMountProgramBlockEditor(props) {
     // $FlowFixMe: Flow doesn't know about the Jest mock API
@@ -153,6 +105,10 @@ function createMountProgramBlockEditor(props) {
         mockChangeCharacterXPosition,
         mockChangeCharacterYPosition
     };
+}
+
+function confirmDeleteAllModalIsOpen(programBlockEditorWrapper): boolean {
+    return programBlockEditorWrapper.exists('.ConfirmDeleteAllModal');
 }
 
 function getProgramDeleteAllButton(programBlockEditorWrapper) {
@@ -333,10 +289,10 @@ describe('Delete All button', () => {
     test('When the Delete All button is clicked, then the dialog shoud be shown', () => {
         expect.assertions(4);
 
-        const { wrapper, audioManagerMock } = createShallowProgramBlockEditor();
+        const { wrapper, audioManagerMock } = createMountProgramBlockEditor();
 
         // Initially, check that the modal is not showing
-        expect(wrapper.state().showConfirmDeleteAll).toBe(false);
+        expect(confirmDeleteAllModalIsOpen(wrapper)).toBe(false);
         // When the Delete All button is clicked
         const deleteAllButton = getProgramDeleteAllButton(wrapper).at(0);
         deleteAllButton.simulate('click');
@@ -344,7 +300,7 @@ describe('Delete All button', () => {
         expect(audioManagerMock.playFeedbackAnnouncement.mock.calls.length).toBe(1);
         expect(audioManagerMock.playFeedbackAnnouncement.mock.calls[0][0]).toBe('delete all movements?');
         // And the dialog should be shown
-        expect(wrapper.state().showConfirmDeleteAll).toBe(true);
+        expect(confirmDeleteAllModalIsOpen(wrapper)).toBe(true);
     });
 });
 
