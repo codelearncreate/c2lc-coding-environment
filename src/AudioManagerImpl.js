@@ -232,6 +232,7 @@ export default class AudioManagerImpl implements AudioManager {
                 window.speechSynthesis.cancel();
             }
             this.playStringMessage(message);
+            this.feedbackIsPlaying = true;
         }
     }
 

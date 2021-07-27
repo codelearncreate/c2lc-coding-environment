@@ -139,7 +139,6 @@ class ProgramBlockEditor extends React.Component<ProgramBlockEditorProps, Progra
                 {command: commandString}
             )
         );
-        this.props.audioManager.setFeedbackIsPlaying(true);
 
         // If there are steps following the one being deleted, focus the
         // next step. Otherwise, focus the final add node.
@@ -165,7 +164,6 @@ class ProgramBlockEditor extends React.Component<ProgramBlockEditorProps, Progra
                 {command: commandString}
             )
         );
-        this.props.audioManager.setFeedbackIsPlaying(true);
 
         if (selectedAction) {
             // Set up focus, scrolling, and animation
