@@ -819,6 +819,9 @@ export class App extends React.Component<AppProps, AppState> {
                                 this.handleChangeCharacterPosition('turnRight');
                             }
                             break;
+                        case("shareEnvironment"):
+                            this.handleShareButtonShortcut();
+                            break;
                         default:
                             break;
                     }
@@ -1004,6 +1007,11 @@ export class App extends React.Component<AppProps, AppState> {
 
     handleChangeKeyBindingsEnabled = (keyBindingsEnabled: boolean) => {
         this.setState({keyBindingsEnabled: keyBindingsEnabled});
+    }
+
+    handleShareButtonShortcut = () => {
+        const currentUrl = document.location.href;
+        return navigator.clipboard.writeText(currentUrl);
     }
 
     render() {
