@@ -16,6 +16,7 @@ export type ActionName =
     | "addCommandToBeginning"
     | "addCommandToEnd"
     | "deleteCurrentStep"
+    | "expandAddNode"
     | "announceScene"
     | "decreaseProgramSpeed"
     | "increaseProgramSpeed"
