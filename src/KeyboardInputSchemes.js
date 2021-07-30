@@ -281,6 +281,10 @@ const VoiceOverInputScheme: KeyboardInputScheme = Object.assign({
     stopProgram: {
         keyDef: { code: "KeyS", key: "s", altKey: true},
         actionName: "stopProgram"
+    },
+    expandAddNode: {
+        keyDef: { key: "+"},
+        actionName: "expandAddNode"
     }
 }, ExtendedKeyboardSequences);
 
@@ -343,6 +347,10 @@ const NvdaInputScheme = Object.assign({
         keyDef: {code: "KeyS", key: "s", altKey: true, ctrlKey: true},
         actionName: "stopProgram"
     },
+    expandAddNode: {
+        keyDef: { key: "+", shiftKey: true},
+        actionName: "expandAddNode"
+    }
 }, NvdaExtendedKeyboardSequences);
 
 export const KeyboardInputSchemes:KeyboardInputSchemesType = {

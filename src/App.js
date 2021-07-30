@@ -819,6 +819,10 @@ export class App extends React.Component<AppProps, AppState> {
                                 this.handleChangeCharacterPosition('turnRight');
                             }
                             break;
+                        case("expandAddNode"):
+                            const currentAddNodeState = this.state.settings.addNodeExpandedMode;
+                            this.handleChangeAddNodeExpandedMode(!currentAddNodeState);
+                            break;
                         default:
                             break;
                     }
