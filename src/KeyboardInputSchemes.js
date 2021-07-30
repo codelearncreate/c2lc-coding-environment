@@ -19,6 +19,7 @@ export type ActionName =
     | "announceScene"
     | "decreaseProgramSpeed"
     | "increaseProgramSpeed"
+    | "penDownToggle"
     | "playPauseProgram"
     | "refreshScene"
     | "showHide"
@@ -281,6 +282,10 @@ const VoiceOverInputScheme: KeyboardInputScheme = Object.assign({
     stopProgram: {
         keyDef: { code: "KeyS", key: "s", altKey: true},
         actionName: "stopProgram"
+    },
+    penDownToggle: {
+        keyDef: { code: "KeyN", key: "n", altKey: true},
+        actionName: "penDownToggle"
     }
 }, ExtendedKeyboardSequences);
 
@@ -343,6 +348,10 @@ const NvdaInputScheme = Object.assign({
         keyDef: {code: "KeyS", key: "s", altKey: true, ctrlKey: true},
         actionName: "stopProgram"
     },
+    penDownToggle: {
+        keyDef: { code: "KeyN", key: "n", altKey: true, ctrlKey: true},
+        actionName: "penDownToggle"
+    }
 }, NvdaExtendedKeyboardSequences);
 
 export const KeyboardInputSchemes:KeyboardInputSchemesType = {

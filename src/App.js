@@ -819,6 +819,10 @@ export class App extends React.Component<AppProps, AppState> {
                                 this.handleChangeCharacterPosition('turnRight');
                             }
                             break;
+                        case("penDownToggle"):
+                            const currentPendownState = this.state.drawingEnabled;
+                            this.handleTogglePenDown(!currentPendownState);
+                            break;
                         default:
                             break;
                     }
