@@ -9,25 +9,27 @@ import messages from './messages.json';
 import { mount, configure } from 'enzyme';
 import AudioManagerImpl from './AudioManagerImpl';
 
-
 // Mocks
 jest.mock('./AudioManagerImpl');
 
 configure({ adapter: new Adapter()});
 
-it('renders without crashing', () => {
-    const div = document.createElement('div');
-    ReactDOM.render(<IntlContainer />, div);
-    ReactDOM.unmountComponentAtNode(div);
-});
-
-it('Should play a sound when selectedCommandName changes', () => {
+function mountApp(props) {
+    // $FlowFixMe: Flow doesn't know about the Jest mock API
+    AudioManagerImpl.mockClear();
     const audioManagerInstance = new AudioManagerImpl(true, true, true);
+
     // $FlowFixMe: Flow doesn't know about the Jest mock API
     const audioManagerMock = AudioManagerImpl.mock.instances[0];
 
     const wrapper = mount(
-        <App audioManager={audioManagerInstance}/>,
+        React.createElement(
+            App,
+            Object.assign(
+                { audioManager: audioManagerInstance},
+                props
+            )
+        ),
         {
             wrappingComponent: IntlProvider,
             wrappingComponentProps: {
@@ -40,6 +42,18 @@ it('Should play a sound when selectedCommandName changes', () => {
 
     const app = wrapper.children().at(0);
 
+    return {app, audioManagerMock};
+};
+
+it('renders without crashing', () => {
+    const div = document.createElement('div');
+    ReactDOM.render(<IntlContainer />, div);
+    ReactDOM.unmountComponentAtNode(div);
+});
+
+it('Should play a sound when selectedCommandName changes', () => {
+    const { app, audioManagerMock} = mountApp({});
+
     // Update the selectedAction
     app.setState({ selectedAction: "forward1"}, function () {
         expect(audioManagerMock.playFeedbackAnnouncement.mock.calls.length).toBe(1);
@@ -50,4 +64,27 @@ it('Should play a sound when selectedCommandName changes', () => {
         expect(audioManagerMock.playFeedbackAnnouncement.mock.calls.length).toBe(2);
         expect(audioManagerMock.playFeedbackAnnouncement.mock.calls[1][0]).toBe('no movement selected');
     });
+});
+
+it('Should change showKeyboardModal when key bindings are enabled and question mark is pressed.', () => {
+    const { app } = mountApp({});
+
+    // window.document lacks a simulate method, so we trigger a keypress this way.
+    window.document.dispatchEvent(new KeyboardEvent('keydown', { key: "?"}))
+
+    expect(app.state().showKeyboardModal).toBe(true);
+
+    window.document.dispatchEvent(new KeyboardEvent('keydown', { key: "?"}))
+
+    expect(app.state().showKeyboardModal).toBe(false);
+});
+
+it('Should not change showKeyboardModal when key bindings are disabled and question mark is pressed.', () => {
+    const { app } = mountApp({});
+
+    app.setState({ keyBindingsEnabled: false});
+
+    window.document.dispatchEvent(new KeyboardEvent('keydown', { key: "?"}))
+
+    expect(app.state().showKeyboardModal).toBe(false);
 });

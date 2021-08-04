@@ -1,6 +1,6 @@
 // @flow
 
-import { generateEncodedProgramURL, getThemeFromString, getWorldFromString } from './Utils.js';
+import { extend, generateEncodedProgramURL, getThemeFromString, getWorldFromString } from './Utils.js';
 
 test('Test URL encoding', () => {
     expect(generateEncodedProgramURL('version=5', 'light', 'default', 'f1=f2=f3', '0ab', 'f1=f2=f3')).toBe('?v=version%3D5&t=light&w=default&p=f1%3Df2%3Df3&c=0ab&a=f1%3Df2%3Df3');
@@ -23,4 +23,10 @@ test('Test getWorldFromString', () => {
     expect(getWorldFromString('default', 'default')).toBe('default');
     expect(getWorldFromString('space', 'default')).toBe('space');
     expect(getWorldFromString('forest', 'default')).toBe('forest');
+});
+
+test('Test extend', () => {
+    expect(extend({})).toEqual({});
+    expect(extend({ a: 0 }, {b: 1}, { c: 2})).toEqual({ a: 0, b: 1, c: 2});
+    expect(extend({ foo: { bar: { baz: true }}}, { foo: { new: true, bar: { new: true, baz: false}}})).toEqual({ foo: { new: true, bar: { new: true, baz: false}}});
 });

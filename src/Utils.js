@@ -51,4 +51,28 @@ function getWorldFromString(worldQuery: ?string, defaultWorldName: WorldName): W
     }
 }
 
-export { generateId, makeDelayedPromise, generateEncodedProgramURL, getThemeFromString, getWorldFromString };
+/**
+ * A simplified pure JS equivalent of jQuery.extend that always performs a
+ * "deep" merge.
+ *
+ * @param  {...Object} toMerge - One or more objects to be merged together from left to right.
+ * @returns {Object} - The merged object.
+ *
+ */
+function extend(...toMerge:Object) {
+    const merged = {};
+    for (const singleEntryToMerge of toMerge) {
+        for (const [key, value] of Object.entries(singleEntryToMerge)) {
+            if (typeof value === "object" && !Array.isArray(value) && (typeof merged[key] === "object" && !Array.isArray(merged[key]) && merged[key] !== null)) {
+                merged[key] = extend(merged[key], value);
+            }
+            else {
+                merged[key] = value;
+            }
+        }
+    }
+    return merged;
+}
+
+
+export { extend, generateId, makeDelayedPromise, generateEncodedProgramURL, getThemeFromString, getWorldFromString };
