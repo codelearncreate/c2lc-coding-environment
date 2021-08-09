@@ -61,6 +61,9 @@ export type ActionName =
 
     // Update Program
     | "deleteAll"
+
+    // Share Environment
+    | "shareEnvironment"
     ;
 
 type ActionKeyStep = {
@@ -274,6 +277,10 @@ const VoiceOverInputScheme: KeyboardInputScheme = Object.assign({
         keyDef: { code: "KeyR", key: "r", altKey: true},
         actionName: "refreshScene"
     },
+    shareEnvironment: {
+        keyDef: { code: "KeyZ", key: "z", altKey: true},
+        actionName: "shareEnvironment"
+    },
     showHide: {
         keyDef: { key: "?"},
         actionName: "showHide"
@@ -334,6 +341,10 @@ const NvdaInputScheme = Object.assign({
     refreshScene: {
         keyDef: { code: "KeyR", key: "r", altKey: true, ctrlKey: true },
         actionName: "refreshScene"
+    },
+    shareEnvironment: {
+        keyDef: { code: "KeyZ", key: "z", altKey: true, ctrlKey: true },
+        actionName: "shareEnvironment"
     },
     showHide: {
         keyDef: { key: "?", shiftKey: true },
