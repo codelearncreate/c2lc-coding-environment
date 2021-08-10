@@ -1,6 +1,5 @@
 // @flow
 import CharacterState from './CharacterState';
-import type {IntlShape} from 'react-intl';
 import SceneDimensions from './SceneDimensions';
 
 export type CommandName =
@@ -52,9 +51,13 @@ export type ArrayLike<T> = {
 export type AudioContext = any;
 
 export interface AudioManager {
-    playAnnouncement(messageIdSuffix: string, intl: IntlShape, messagePayload?: any) : void;
+    playFeedbackAnnouncement(message: string) : void;
+    playPreviewAnnouncement(message: string): void;
+    playStringMessage(message: string): void;
     playSoundForCharacterState(samplerKey: string, releaseTimeInMs: number, characterState: CharacterState, sceneDimension: SceneDimensions) : void;
-    setAnnouncementsEnabled(value: boolean) : void;
+    setAudioPreviewEnabled(value: boolean) : void;
+    setAudioFeedbackEnabled(value: boolean) : void;
+    cancelSpeech() : void;
     setAudioEnabled(value: boolean) : void;
 }
 

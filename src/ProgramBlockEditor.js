@@ -133,7 +133,13 @@ class ProgramBlockEditor extends React.Component<ProgramBlockEditorProps, Progra
     deleteProgramStep(index: number) {
         // Play the announcement
         const commandString = this.props.intl.formatMessage({ id: "Announcement." + this.props.programSequence.getProgramStepAt(index)});
-        this.props.audioManager.playAnnouncement('delete', this.props.intl, { command: commandString});
+        this.props.audioManager.playFeedbackAnnouncement(
+            this.props.intl.formatMessage(
+                {id: 'Announcement.delete'},
+                {command: commandString}
+            )
+        );
+
 
         // If there are steps following the one being deleted, focus the
         // next step. Otherwise, focus the final add node.
@@ -153,7 +159,12 @@ class ProgramBlockEditor extends React.Component<ProgramBlockEditorProps, Progra
         // Play the announcement
         const selectedAction = this.props.selectedAction;
         const commandString = this.props.intl.formatMessage({ id: "Announcement." + (selectedAction || "") });
-        this.props.audioManager.playAnnouncement('add', this.props.intl, { command: commandString});
+        this.props.audioManager.playFeedbackAnnouncement(
+            this.props.intl.formatMessage(
+                {id: 'Announcement.add'},
+                {command: commandString}
+            )
+        );
 
         if (selectedAction) {
             // Set up focus, scrolling, and animation
@@ -231,7 +242,7 @@ class ProgramBlockEditor extends React.Component<ProgramBlockEditorProps, Progra
     // Handlers
 
     handleClickDeleteAll = () => {
-        this.props.audioManager.playAnnouncement('deleteAll', this.props.intl);
+        this.props.audioManager.playFeedbackAnnouncement(this.props.intl.formatMessage({id: 'Announcement.deleteAll'}));
         this.setState({
             showConfirmDeleteAll : true
         });
@@ -264,7 +275,12 @@ class ProgramBlockEditor extends React.Component<ProgramBlockEditorProps, Progra
                 //$FlowFixMe: Flow thinks `this.props.selectedAction` might be null even though we check it above.
                 const newCommandString = this.props.intl.formatMessage({ id: "Announcement." + this.props.selectedAction});
 
-                this.props.audioManager.playAnnouncement('replace', this.props.intl, { oldCommand: oldCommandString, newCommand: newCommandString});
+                this.props.audioManager.playFeedbackAnnouncement(
+                    this.props.intl.formatMessage(
+                        {id: 'Announcement.replace'},
+                        { oldCommand: oldCommandString, newCommand: newCommandString}
+                    )
+                );
 
                 this.props.onChangeProgramSequence(
                     //$FlowFixMe: Flow thinks `this.props.selectedAction` might be null even though we check it above.
@@ -282,7 +298,7 @@ class ProgramBlockEditor extends React.Component<ProgramBlockEditorProps, Progra
                 });
             }
         } else {
-            this.props.audioManager.playAnnouncement('noMovementSelected', this.props.intl);
+            this.props.audioManager.playFeedbackAnnouncement(this.props.intl.formatMessage({id: 'Announcement.noMovementSelected'}));
 
             this.setState({
                 replaceIsActive: true
@@ -291,7 +307,7 @@ class ProgramBlockEditor extends React.Component<ProgramBlockEditorProps, Progra
     };
 
     handleActionPanelMoveToPreviousStep = (index: number) => {
-        this.props.audioManager.playAnnouncement('moveToPrevious', this.props.intl);
+        this.props.audioManager.playFeedbackAnnouncement(this.props.intl.formatMessage({id: 'Announcement.moveToPrevious'}));
         if (this.props.programSequence.getProgramStepAt(index - 1) != null) {
             const previousStepIndex = index - 1;
             this.setState({
@@ -305,7 +321,7 @@ class ProgramBlockEditor extends React.Component<ProgramBlockEditorProps, Progra
     };
 
     handleActionPanelMoveToNextStep = (index: number) => {
-        this.props.audioManager.playAnnouncement('moveToNext', this.props.intl);
+        this.props.audioManager.playFeedbackAnnouncement(this.props.intl.formatMessage({id: 'Announcement.moveToNext'}));
         if (this.props.programSequence.getProgramStepAt(index + 1) != null) {
             const nextStepIndex = index + 1;
             this.setState({

@@ -2,7 +2,6 @@
 
 import { Midi, Panner, Sampler} from 'tone';
 import CharacterState from './CharacterState';
-import type {IntlShape} from 'react-intl';
 import {AudioManager} from './types';
 import SceneDimensions from './SceneDimensions';
 
@@ -187,7 +186,8 @@ export function getNoteForState (characterState: CharacterState) : string {
 
 export default class AudioManagerImpl implements AudioManager {
     audioEnabled: boolean;
-    announcementsEnabled: boolean;
+    audioPreviewEnabled: boolean;
+    audioFeedbackEnabled: boolean;
     panner: Panner;
     samplers: {
         backward1: Sampler,
@@ -204,9 +204,10 @@ export default class AudioManagerImpl implements AudioManager {
         right180: Sampler
     };
 
-    constructor(audioEnabled: boolean, announcementsEnabled: boolean) {
+    constructor(audioEnabled: boolean, audioPreviewEnabled: boolean, audioFeedbackEnabled: boolean) {
         this.audioEnabled = audioEnabled;
-        this.announcementsEnabled = announcementsEnabled;
+        this.audioPreviewEnabled = audioPreviewEnabled
+        this.audioFeedbackEnabled = audioFeedbackEnabled;
 
         this.panner = new Panner();
         this.panner.toDestination();
@@ -221,16 +222,22 @@ export default class AudioManagerImpl implements AudioManager {
         });
     }
 
-    playAnnouncement(messageIdSuffix: string, intl: IntlShape, messagePayload: any) {
-        if (this.announcementsEnabled) {
-            if (window.speechSynthesis.speaking || window.speechSynthesis.pending) {
-                window.speechSynthesis.cancel();
-            }
-            const messageId = "Announcement." + messageIdSuffix;
-            const toAnnounce = intl.formatMessage({ id: messageId}, messagePayload);
-            const utterance = new SpeechSynthesisUtterance(toAnnounce);
-            window.speechSynthesis.speak(utterance);
+    playFeedbackAnnouncement(message: string) {
+        if (this.audioFeedbackEnabled) {
+            this.playStringMessage(message);
         }
+    }
+
+    playPreviewAnnouncement(message: string) {
+        if (this.audioPreviewEnabled) {
+            this.playStringMessage(message);
+        }
+    }
+
+    playStringMessage(message: string) {
+        this.cancelSpeech();
+        const utterance = new SpeechSynthesisUtterance(message);
+        window.speechSynthesis.speak(utterance);
     }
 
     // TODO: Add a better type for pitch.
@@ -267,13 +274,23 @@ export default class AudioManagerImpl implements AudioManager {
         }
     }
 
-    setAnnouncementsEnabled(announcementsEnabled: boolean) {
-        this.announcementsEnabled = announcementsEnabled;
+    setAudioPreviewEnabled(audioPreviewEnabled: boolean) {
+        this.audioPreviewEnabled = audioPreviewEnabled;
+        if(!audioPreviewEnabled) {
+            this.cancelSpeech();
+        }
+    }
 
-        if (!announcementsEnabled) {
-            if (window.speechSynthesis.speaking || window.speechSynthesis.pending) {
-                window.speechSynthesis.cancel();
-            }
+    setAudioFeedbackEnabled(audioFeedbackEnabled: boolean) {
+        this.audioFeedbackEnabled = audioFeedbackEnabled;
+        if(!audioFeedbackEnabled) {
+            this.cancelSpeech();
+        }
+    }
+
+    cancelSpeech() {
+        if (window.speechSynthesis.speaking || window.speechSynthesis.pending) {
+            window.speechSynthesis.cancel();
         }
     }
 

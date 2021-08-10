@@ -5,6 +5,7 @@ import { injectIntl } from 'react-intl';
 import type {IntlShape} from 'react-intl';
 import AllowedActionsSerializer from './AllowedActionsSerializer';
 import AudioManagerImpl from './AudioManagerImpl';
+import AudioToggleButton from './AudioToggleButton';
 import CharacterAriaLive from './CharacterAriaLive';
 import CharacterState from './CharacterState';
 import CharacterStateSerializer from './CharacterStateSerializer';
@@ -23,7 +24,6 @@ import RefreshButton from './RefreshButton';
 import Scene from './Scene';
 import SceneDimensions from './SceneDimensions';
 import StopButton from './StopButton';
-import AudioFeedbackToggleSwitch from './AudioFeedbackToggleSwitch';
 import PenDownToggleSwitch from './PenDownToggleSwitch';
 import ProgramSequence from './ProgramSequence';
 import ProgramSpeedController from './ProgramSpeedController';
@@ -86,7 +86,8 @@ type AppState = {
     selectedAction: ?string,
     isDraggingCommand: boolean,
     audioEnabled: boolean,
-    announcementsEnabled: boolean,
+    audioPreviewEnabled: boolean,
+    audioFeedbackEnabled: boolean,
     actionPanelStepIndex: ?number,
     sceneDimensions: SceneDimensions,
     drawingEnabled: boolean,
@@ -149,7 +150,7 @@ export class App extends React.Component<AppProps, AppState> {
             'moveCharacter',
             (stepTimeMs) => {
                 // TODO: Enable announcements again.
-                // this.audioManager.playAnnouncement('forward1', this.props.intl);
+                // this.audioManager.playFeedbackAnnouncement(this.props.intl.formatMessage({id: 'Announcement.forward1'}));
                 this.setState((state) => {
                     const newCharacterState = state.characterState.forward(1, state.drawingEnabled);
 
@@ -169,7 +170,7 @@ export class App extends React.Component<AppProps, AppState> {
             'moveCharacter',
             (stepTimeMs) => {
                 // TODO: Enable announcements again.
-                // this.audioManager.playAnnouncement('forward2', this.props.intl);
+                // this.audioManager.playFeedbackAnnouncement(this.props.intl.formatMessage({id: 'Announcement.forward2'}));
                 this.setState((state) => {
                     const newCharacterState = state.characterState.forward(2, state.drawingEnabled);
 
@@ -189,7 +190,7 @@ export class App extends React.Component<AppProps, AppState> {
             'moveCharacter',
             (stepTimeMs) => {
                 // TODO: Enable announcements again.
-                // this.audioManager.playAnnouncement('forward3', this.props.intl);
+                // this.audioManager.playFeedbackAnnouncement(this.props.intl.formatMessage({id: 'Announcement.forward3'}));
                 this.setState((state) => {
                     const newCharacterState = state.characterState.forward(3, state.drawingEnabled);
 
@@ -208,7 +209,7 @@ export class App extends React.Component<AppProps, AppState> {
             'moveCharacter',
             (stepTimeMs) => {
                 // TODO: Enable announcements again.
-                // this.audioManager.playAnnouncement('backward1');
+                // this.audioManager.playFeedbackAnnouncement(this.props.intl.formatMessage({id: 'Announcement.backward1'}));
                 this.setState((state) => {
                     const newCharacterState = state.characterState.backward(1, state.drawingEnabled);
 
@@ -227,7 +228,7 @@ export class App extends React.Component<AppProps, AppState> {
             'moveCharacter',
             (stepTimeMs) => {
                 // TODO: Enable announcements again.
-                // this.audioManager.playAnnouncement('backward2');
+                // this.audioManager.playFeedbackAnnouncement(this.props.intl.formatMessage({id: 'Announcement.backward2'}));
                 this.setState((state) => {
                     const newCharacterState = state.characterState.backward(2, state.drawingEnabled);
 
@@ -246,7 +247,7 @@ export class App extends React.Component<AppProps, AppState> {
             'moveCharacter',
             (stepTimeMs) => {
                 // TODO: Enable announcements again.
-                // this.audioManager.playAnnouncement('backward3');
+                // this.audioManager.playFeedbackAnnouncement(this.props.intl.formatMessage({id: 'Announcement.backward3'}));
                 this.setState((state) => {
                     const newCharacterState = state.characterState.backward(3, state.drawingEnabled);
 
@@ -265,7 +266,7 @@ export class App extends React.Component<AppProps, AppState> {
             'moveCharacter',
             (stepTimeMs) => {
                 // TODO: Enable announcements again.
-                // this.audioManager.playAnnouncement('left45', this.props.intl);
+                // this.audioManager.playFeedbackAnnouncement(this.props.intl.formatMessage({id: 'Announcement.left45'}));
                 this.setState((state) => {
                     const newCharacterState = state.characterState.turnLeft(1);
 
@@ -285,7 +286,7 @@ export class App extends React.Component<AppProps, AppState> {
             'moveCharacter',
             (stepTimeMs) => {
                 // TODO: Enable announcements again.
-                // this.audioManager.playAnnouncement('left90', this.props.intl);
+                // this.audioManager.playFeedbackAnnouncement(this.props.intl.formatMessage({id: 'Announcement.left90'}));
                 this.setState((state) => {
                     const newCharacterState = state.characterState.turnLeft(2);
 
@@ -305,7 +306,7 @@ export class App extends React.Component<AppProps, AppState> {
             'moveCharacter',
             (stepTimeMs) => {
                 // TODO: Enable announcements again.
-                // this.audioManager.playAnnouncement('left180', this.props.intl);
+                // this.audioManager.playFeedbackAnnouncement(this.props.intl.formatMessage({id: 'Announcement.left180'}));
                 this.setState((state) => {
                     const newCharacterState = state.characterState.turnLeft(4);
 
@@ -325,7 +326,7 @@ export class App extends React.Component<AppProps, AppState> {
             'moveCharacter',
             (stepTimeMs) => {
                 // TODO: Enable announcements again.
-                // this.audioManager.playAnnouncement('right45', this.props.intl);
+                // this.audioManager.playFeedbackAnnouncement(this.props.intl.formatMessage({id: 'Announcement.right45'}));
                 this.setState((state) => {
                     const newCharacterState = state.characterState.turnRight(1);
 
@@ -345,7 +346,7 @@ export class App extends React.Component<AppProps, AppState> {
             'moveCharacter',
             (stepTimeMs) => {
                 // TODO: Enable announcements again.
-                // this.audioManager.playAnnouncement('right90', this.props.intl);
+                // this.audioManager.playFeedbackAnnouncement(this.props.intl.formatMessage({id: 'Announcement.right90'}));
                 this.setState((state) => {
                     const newCharacterState = state.characterState.turnRight(2);
 
@@ -365,7 +366,7 @@ export class App extends React.Component<AppProps, AppState> {
             'moveCharacter',
             (stepTimeMs) => {
                 // TODO: Enable announcements again.
-                // this.audioManager.playAnnouncement('right180', this.props.intl);
+                // this.audioManager.playFeedbackAnnouncement(this.props.intl.formatMessage({id: 'Announcement.right180'}));
                 this.setState((state) => {
                     const newCharacterState = state.characterState.turnRight(4);
 
@@ -403,7 +404,8 @@ export class App extends React.Component<AppProps, AppState> {
             selectedAction: null,
             isDraggingCommand: false,
             audioEnabled: true,
-            announcementsEnabled: true,
+            audioPreviewEnabled: true,
+            audioFeedbackEnabled: true,
             actionPanelStepIndex: null,
             sceneDimensions: this.sceneDimensions,
             drawingEnabled: true,
@@ -423,7 +425,7 @@ export class App extends React.Component<AppProps, AppState> {
             this.audioManager = props.audioManager
         }
         else if (FeatureDetection.webAudioApiIsAvailable()) {
-            this.audioManager = new AudioManagerImpl(this.state.audioEnabled, this.state.announcementsEnabled);
+            this.audioManager = new AudioManagerImpl(this.state.audioEnabled, this.state.audioPreviewEnabled, this.state.audioFeedbackEnabled);
         }
         else {
             this.audioManager = new FakeAudioManager();
@@ -649,7 +651,7 @@ export class App extends React.Component<AppProps, AppState> {
                         case("toggleFeedbackAnnouncements"):
                             // We have to use the function form here as our change is based on the current state.
                             this.setState((currentState) => {
-                                return { announcementsEnabled: !(currentState.announcementsEnabled) };
+                                return { audioFeedbackEnabled: !(currentState.audioFeedbackEnabled) };
                             });
                             break;
                         case("addCommandToBeginning"):
@@ -851,9 +853,29 @@ export class App extends React.Component<AppProps, AppState> {
         this.focusTrapManager.handleKeyDown(e);
     }
 
-    handleToggleAudioFeedback = (announcementsEnabled: boolean) => {
+    handleRootFocus = (e: SyntheticKeyboardEvent<HTMLElement>) => {
+        // $FlowFixMe getAttribute is missing in event target
+        const ariaLabel = e.target.getAttribute('aria-label');
+        if (ariaLabel) {
+            this.audioManager.playPreviewAnnouncement(ariaLabel);
+        } else {
+            // $FlowFixMe innerText is missing in event target
+            const innerText = e.target.innerText;
+            if (innerText) {
+                this.audioManager.playPreviewAnnouncement(innerText);
+            }
+        }
+    }
+
+    hanldeToggleAudioPreview = (audioPreviewEnabled: boolean) => {
         this.setState({
-            announcementsEnabled: announcementsEnabled
+            audioPreviewEnabled
+        });
+    }
+
+    handleToggleAudioFeedback = (audioFeedbackEnabled: boolean) => {
+        this.setState({
+            audioFeedbackEnabled
         });
     }
 
@@ -1013,7 +1035,8 @@ export class App extends React.Component<AppProps, AppState> {
                     className='App__container'
                     role='main'
                     onClick={this.handleRootClick}
-                    onKeyDown={this.handleRootKeyDown}>
+                    onKeyDown={this.handleRootKeyDown}
+                    onFocus={this.handleRootFocus}>
                     <header className='App__header'>
                         <div className='App__header-row'>
                             <h1 className='App__app-heading'>
@@ -1034,11 +1057,14 @@ export class App extends React.Component<AppProps, AppState> {
                                 <KeyboardModalToggleIcon/>
                             </div>
                             <div className='App__header-audio-toggle'>
-                                <div className='App__audio-toggle-switch'>
-                                    <AudioFeedbackToggleSwitch
-                                        value={this.state.announcementsEnabled}
-                                        onChange={this.handleToggleAudioFeedback} />
-                                </div>
+                                <AudioToggleButton
+                                    audioType='preview'
+                                    toggleOn={this.state.audioPreviewEnabled}
+                                    onClick={this.hanldeToggleAudioPreview}/>
+                                <AudioToggleButton
+                                    audioType='feedback'
+                                    toggleOn={this.state.audioFeedbackEnabled}
+                                    onClick={this.handleToggleAudioFeedback}/>
                                 {/* Dash connection removed for version 0.5
                                 <DeviceConnectControl
                                     disabled={
@@ -1355,8 +1381,11 @@ export class App extends React.Component<AppProps, AppState> {
             window.localStorage.setItem('c2lc-world', this.state.settings.world)
         }
 
-        if (this.state.announcementsEnabled !== prevState.announcementsEnabled) {
-            this.audioManager.setAnnouncementsEnabled(this.state.announcementsEnabled);
+        if (this.state.audioPreviewEnabled !== prevState.audioPreviewEnabled) {
+            this.audioManager.setAudioPreviewEnabled(this.state.audioPreviewEnabled);
+        }
+        if (this.state.audioFeedbackEnabled !== prevState.audioFeedbackEnabled) {
+            this.audioManager.setAudioFeedbackEnabled(this.state.audioFeedbackEnabled);
         }
         if (this.state.audioEnabled !== prevState.audioEnabled) {
             this.audioManager.setAudioEnabled(this.state.audioEnabled);
@@ -1376,8 +1405,12 @@ export class App extends React.Component<AppProps, AppState> {
                 });
                 messagePayload.command = commandString;
             }
-            this.audioManager.playAnnouncement(announcementKey,
-                    this.props.intl, messagePayload);
+            this.audioManager.playFeedbackAnnouncement(
+                this.props.intl.formatMessage(
+                    {id: `Announcement.${announcementKey}`},
+                    messagePayload
+                )
+            );
         }
 
         if (this.state.programSequence !== prevState.programSequence) {
