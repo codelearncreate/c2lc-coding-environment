@@ -1,6 +1,5 @@
 // @flow
 
-// $FlowFixMe: We need to add a type definition for more stuff.
 import {Filter, FMSynth, Gain, Instrument, MembraneSynth, MetalSynth, Noise, NoiseSynth, Panner, Reverb, Sequence, Signal, Synth, Transport} from 'tone';
 import CharacterState from './CharacterState';
 import type {IntlShape} from 'react-intl';
@@ -80,7 +79,7 @@ export default class AudioManagerImpl implements AudioManager {
 
         const marimba = new FMSynth({
             harmonicity: 8,
-            envelope :  {attack:0, decay:0, Sustain:1, Release:1 }
+            envelope :  { attack:0, decay:0, sustain:1, release:1 }
         }).connect(this.fullGain);
 
         const highPass = new Filter({
@@ -100,12 +99,15 @@ export default class AudioManagerImpl implements AudioManager {
         const sweepSignal = new Signal({
             value: 4000,
             units: "frequency"
+        // $FlowFixMe: Can't get flow to admit that frequency exists.
         }).connect(sweepBandPass.frequency);
 
+        // $FlowFixMe: Can't get flow to admit that bellVerb is a ToneAudioNode.
         const sweepNoise = new Noise({ type: "white" }).connect(sweepBandPass);
 
         const bellVerb = new Reverb({
             preDelay:0 , decay:2, wet:0.25
+        // $FlowFixMe: Can't get flow to admit that lowPass is a ToneAudioNode.
         }).connect(lowPass);
 
         const bell = new Synth({
@@ -115,27 +117,36 @@ export default class AudioManagerImpl implements AudioManager {
                 harmonicity: 2,
                 modulationIndex: 8,
             }
+        // $FlowFixMe: Can't get flow to admit that bellVerb is a ToneAudioNode.
         }).connect(bellVerb);
 
         const drum = new MembraneSynth({
             octaves: 1, pitchDecay:0.2
         }).connect(this.threeQuarterGain);
 
+        // $FlowFixMe: Can't get flow to admit that lowPass is a ToneAudioNode.
         const cymbal = new MetalSynth().connect(lowPass);
 
         // const feedbackDelay = new FeedbackDelay({
         //     delayTime:0.1, feedback:0.25
         // }).connect(highPass);
 
+        // $FlowFixMe: Can't get flow to admit that highPass is a ToneAudioNode.
         const shaker = new NoiseSynth().connect(highPass);
 
         this.orchestra = {
+            // $FlowFixMe: Can't get flow to accept the way in which we assign orchestra members.
             bell: bell,
+            // $FlowFixMe: Can't get flow to accept the way in which we assign orchestra members.
             cymbal: cymbal,
+            // $FlowFixMe: Can't get flow to accept the way in which we assign orchestra members.
             drum: drum,
+            // $FlowFixMe: Can't get flow to accept the way in which we assign orchestra members.
             marimba: marimba,
             shaker: shaker,
+            // $FlowFixMe: Can't get flow to accept the way in which we assign orchestra members.
             sweepNoise: sweepNoise,
+            // $FlowFixMe: Can't get flow to accept the way in which we assign orchestra members.
             sweepSignal: sweepSignal
         };
     }
