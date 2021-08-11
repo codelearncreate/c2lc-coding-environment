@@ -1,10 +1,10 @@
 /* Colors for default 'Mixed' theme. */
 $c2lc-primary-button-color: #FFFFFF;
 
-$c2lc-forward-command-color: #88C3BC;
-$c2lc-forward-command-hover-color: #66B2A9;
+$c2lc-forward-command-color: #52BDA4;
+$c2lc-forward-command-hover-color: #4C9990;
 
-$c2lc-backward-command-color: #80BECC;
+$c2lc-backward-command-color: #5CBCD1;
 $c2lc-backward-command-hover-color: #4292A4;
 
 $c2lc-left-command-color: #F5C58A;
@@ -42,6 +42,10 @@ $c2lc-action-panel-height: 3rem;
 $c2lc-scene-border-width: 0.1rem;
 $c2lc-scene-border-color: #CCE6E2;
 $c2lc-scene-border-style: solid;
+
+/* Add Node */
+
+$c2lc-add-node-expanded-border-width: 2px;
 
 /* mixins */
 

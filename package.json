@@ -1,6 +1,6 @@
 {
     "name": "c2lc-coding-environment",
-    "version": "0.8.0",
+    "version": "0.9.0",
     "private": true,
     "dependencies": {
         "bootstrap": "4.6.0",
@@ -24,7 +24,9 @@
         "start": "react-scripts start",
         "build": "react-scripts build",
         "test": "react-scripts test",
-        "eject": "react-scripts eject"
+        "eject": "react-scripts eject",
+        "prenetlify-build": "npm rebuild",
+        "netlify-build": "react-scripts build"
     },
     "eslintConfig": {
         "extends": "react-app",
@@ -70,6 +72,7 @@
             "!src/FakeAudioManager.js",
             "!src/FeatureDetection.js",
             "!src/FocusTrapManager.js",
+            "!src/TestUtils.js",
             "!src/index.js",
             "!src/serviceWorker.js",
             "!src/vendor/**/*"

@@ -24,17 +24,42 @@ body {
 
 .App__header {
     background-color: #FFF;
-    color: #000;
     grid-column-start: 2;
     grid-column-end: 3;
     grid-row-start: 1;
     grid-row-end: 2;
-    margin: 0.5rem 0.25rem 0 0.5rem;
+    margin: 0.5rem 0.25rem 0.5rem 0.5rem;
 }
 
 .App__header-row {
     display: flex;
     flex-direction: column;
+}
+
+.App__header-keyboardMenuIcon {    
+    align-content: center;    
+    align-self: center;
+    border-radius: 50%;
+    background-color: #4C9990;
+    font-size: 1.6rem;
+    text-align: center;
+    vertical-align: middle;
+    margin-bottom: 0.5rem;
+    height: 2.6rem;
+    width: 2.6rem;
+
+    &:hover {
+        background-color: #F1AE5B;
+    }
+
+    &:focus {
+        box-shadow: 0 0 0 $c2lc-focus-indicator-width black;
+        outline: none;
+    }
+}
+
+.App__header-keyboardMenuIcon--disabled {    
+    background-color: #B9BEC6;
 }
 
 .App__header-audio-toggle {
@@ -50,6 +75,13 @@ body {
     font-size: 1.3rem;
     margin: 1rem 1rem;
     padding: 0 1rem;
+}
+
+.App__app-heading > a {
+    color: black;
+    &:hover {
+        text-decoration: none;
+    }
 }
 
 /* Dash connection removed for version 0.5
@@ -95,7 +127,8 @@ body {
     margin-left: 1.5rem;
 }
 
-.App__world-selector-container {
+.App__world-container {
+    display: grid;
     grid-column-start: 4;
     grid-column-end: 5;
     grid-row-start: 1;
@@ -103,7 +136,8 @@ body {
     border-radius: 3px;
     margin-right: 0.5rem;
     margin-top: 0.25rem;
-    overflow-y: scroll;
+    grid-template-rows: 1fr min-content;
+    background-color: #CCE6E2;
 }
 
 .App__command-palette {
@@ -211,7 +245,19 @@ body {
     .App__playAndShare-container {
         padding-bottom: 2rem;
     }
+}
 
+@media only screen and (max-height: 800px) {
+    .WorldSelector {
+        height: calc(80vh - 19rem);
+    }
+}
+
+// For iPad landscape orientation
+@media all and (device-width: 768px) and (device-height: 1024px) and (orientation:landscape) {
+    .WorldSelector {
+        height: calc(80vh - 21rem);
+    }
 }
 
 @media only screen and (max-width: 414px) {

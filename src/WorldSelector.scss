@@ -1,14 +1,21 @@
 @import 'variables';
 
 .WorldSelector {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     background-color: #CCE6E2;
     padding: 1rem;
-    min-height: 100%;
+    grid-row-start: 1;
+    grid-row-end: 2;
+    overflow-y: auto;
+    min-height: 5rem;
+    border-radius: 3px 3px 0 0;
 }
 
 .WorldSelector .HeaderIcon, .WorldSelector .WorldIcon {
     display: block;
-    height: 4rem;
+    min-height: 4rem;
     width: 4rem;
     padding: 0.2rem;
 }

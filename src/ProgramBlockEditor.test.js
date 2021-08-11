@@ -2,9 +2,9 @@
 
 import React from 'react';
 import Adapter from 'enzyme-adapter-react-16';
-import { configure, mount, shallow } from 'enzyme';
+import { configure, mount } from 'enzyme';
 import { Button } from 'react-bootstrap';
-import { createIntl, IntlProvider } from 'react-intl';
+import { IntlProvider } from 'react-intl';
 import AudioManagerImpl from './AudioManagerImpl';
 import ActionPanel from './ActionPanel';
 import AriaDisablingButton from './AriaDisablingButton';
@@ -51,54 +51,6 @@ const defaultProgramBlockEditorProps = {
     allowedActions: mockAllowedActions,
     world: 'default'
 };
-
-function createShallowProgramBlockEditor(props) {
-    const intl = createIntl({
-        locale: 'en',
-        defaultLocale: 'en',
-        messages: messages.en
-    });
-
-    // $FlowFixMe: Flow doesn't know about the Jest mock API
-    AudioManagerImpl.mockClear();
-    const audioManagerInstance = new AudioManagerImpl(true, true);
-    // $FlowFixMe: Flow doesn't know about the Jest mock API
-    const audioManagerMock: any = AudioManagerImpl.mock.instances[0];
-    const mockChangeProgramSequenceHandler = jest.fn();
-    const mockChangeAddNodeExpandedModeHandler = jest.fn();
-    const mockChangeCharacterPosition = jest.fn();
-    const mockChangeCharacterXPosition = jest.fn();
-    const mockChangeCharacterYPosition = jest.fn();
-
-    const wrapper: $FlowIgnoreType = shallow(
-        React.createElement(
-            ProgramBlockEditor.WrappedComponent,
-            Object.assign(
-                {},
-                defaultProgramBlockEditorProps,
-                {
-                    intl: intl,
-                    audioManager: audioManagerInstance,
-                    onChangeProgramSequence: mockChangeProgramSequenceHandler,
-                    onChangeAddNodeExpandedMode: mockChangeAddNodeExpandedModeHandler,
-                    onChangeCharacterPosition: mockChangeCharacterPosition,
-                    onChangeCharacterXPosition: mockChangeCharacterXPosition,
-                    onChangeCharacterYPosition: mockChangeCharacterYPosition
-                },
-                props
-            )
-        )
-    );
-
-    return {
-        wrapper,
-        audioManagerMock,
-        mockChangeProgramSequenceHandler,
-        mockChangeAddNodeExpandedModeHandler,
-        mockChangeCharacterXPosition,
-        mockChangeCharacterYPosition,
-    };
-}
 
 function createMountProgramBlockEditor(props) {
     // $FlowFixMe: Flow doesn't know about the Jest mock API
@@ -155,6 +107,10 @@ function createMountProgramBlockEditor(props) {
     };
 }
 
+function confirmDeleteAllModalIsOpen(programBlockEditorWrapper): boolean {
+    return programBlockEditorWrapper.exists('.ConfirmDeleteAllModal');
+}
+
 function getProgramDeleteAllButton(programBlockEditorWrapper) {
     return programBlockEditorWrapper.find(AriaDisablingButton)
         .filter('.ProgramBlockEditor__program-deleteAll-button');
@@ -191,14 +147,6 @@ function getExpandAddNodeToggleSwitch(programBlockEditorWrapper) {
 
 function getProgramSequenceContainer(programBlockEditorWrapper) {
     return programBlockEditorWrapper.find('.ProgramBlockEditor__program-sequence-scroll-container').get(0);
-}
-
-function getCharacterPositionButton(programBlockEditorWrapper, directionName) {
-    return programBlockEditorWrapper.find('.ProgramBlockEditor__character-position-button').filter({value: directionName}).at(0);
-}
-
-function getCharacterPositionCoordinateBoxes(programBlockEditorWrapper) {
-    return programBlockEditorWrapper.find('.ProgramBlock__character-position-coordinate-box');
 }
 
 describe('Program rendering', () => {
@@ -341,10 +289,10 @@ describe('Delete All button', () => {
     test('When the Delete All button is clicked, then the dialog shoud be shown', () => {
         expect.assertions(4);
 
-        const { wrapper, audioManagerMock } = createShallowProgramBlockEditor();
+        const { wrapper, audioManagerMock } = createMountProgramBlockEditor();
 
         // Initially, check that the modal is not showing
-        expect(wrapper.state().showConfirmDeleteAll).toBe(false);
+        expect(confirmDeleteAllModalIsOpen(wrapper)).toBe(false);
         // When the Delete All button is clicked
         const deleteAllButton = getProgramDeleteAllButton(wrapper).at(0);
         deleteAllButton.simulate('click');
@@ -352,7 +300,7 @@ describe('Delete All button', () => {
         expect(audioManagerMock.playAnnouncement.mock.calls.length).toBe(1);
         expect(audioManagerMock.playAnnouncement.mock.calls[0][0]).toBe('deleteAll');
         // And the dialog should be shown
-        expect(wrapper.state().showConfirmDeleteAll).toBe(true);
+        expect(confirmDeleteAllModalIsOpen(wrapper)).toBe(true);
     });
 });
 
@@ -824,111 +772,5 @@ describe('When runningState is running, stopRequested, or pauseRequested, and pr
         wrapper.setProps({ runningState: 'stopped'});
         currentStep = getProgramBlockAtPosition(wrapper, 0);
         expect(currentStep.get(0).props.className.includes('ProgramBlockEditor__program-block--active')).toBe(false);
-    });
-});
-
-describe('Using change character position buttons', () => {
-    test.each([
-        'turnLeft', 'turnRight', 'up', 'right', 'down', 'left'
-    ])('Click/Press %s button ', (directionName) => {
-        expect.assertions(4);
-        const { wrapper, mockChangeCharacterPosition } = createMountProgramBlockEditor();
-        const characterPositionButton = getCharacterPositionButton(wrapper, directionName);
-
-        characterPositionButton.simulate('click');
-        expect(mockChangeCharacterPosition.mock.calls.length).toBe(1);
-        expect(mockChangeCharacterPosition.mock.calls[0][0]).toBe(directionName);
-
-        characterPositionButton.simulate('keydown', { key: ' ' });
-        expect(mockChangeCharacterPosition.mock.calls.length).toBe(2);
-        expect(mockChangeCharacterPosition.mock.calls[1][0]).toBe(directionName);
-    });
-    test.each([
-        'turnLeft', 'turnRight', 'up', 'right', 'down', 'left'
-    ])('Click/Press %s button when editingDisabled Prop is true', (directionName) => {
-        expect.assertions(3);
-        const { wrapper, mockChangeCharacterPosition } = createMountProgramBlockEditor({editingDisabled: true});
-        const characterPositionButton = getCharacterPositionButton(wrapper, directionName);
-        expect(characterPositionButton.get(0).props.className.includes('--disabled')).toBe(true);
-
-        characterPositionButton.simulate('click');
-        expect(mockChangeCharacterPosition.mock.calls.length).toBe(0);
-        characterPositionButton.simulate('keydown', { key: ' ' });
-        expect(mockChangeCharacterPosition.mock.calls.length).toBe(0);
-    });
-});
-
-describe('Using change character position by column/row labels', () => {
-    test('Changing x position', () => {
-        expect.assertions(6);
-        const { wrapper, mockChangeCharacterXPosition } = createShallowProgramBlockEditor();
-        const characterXPositionCoordinateBox = getCharacterPositionCoordinateBoxes(wrapper).at(0);
-        const sampleXPosition = 'X';
-        const secondSampleXPosition = 'A';
-        const eventObject = (value) => (
-            {
-                key: 'Enter',
-                preventDefault: () =>  {},
-                currentTarget:
-                    { name: 'xPosition', value }
-            }
-        );
-
-        characterXPositionCoordinateBox.simulate('change', eventObject(sampleXPosition));
-        wrapper.update();
-        expect(wrapper.instance().state.characterColumnLabel).toBe(sampleXPosition);
-
-        characterXPositionCoordinateBox.simulate('blur', eventObject());
-        expect(mockChangeCharacterXPosition.mock.calls.length).toBe(1);
-        expect(mockChangeCharacterXPosition.mock.calls[0][0]).toBe(sampleXPosition);
-
-        characterXPositionCoordinateBox.simulate('change', eventObject(secondSampleXPosition));
-        wrapper.update();
-        expect(wrapper.instance().state.characterColumnLabel).toBe(secondSampleXPosition);
-
-        characterXPositionCoordinateBox.simulate('keyDown', eventObject());
-        expect(mockChangeCharacterXPosition.mock.calls.length).toBe(2);
-        expect(mockChangeCharacterXPosition.mock.calls[1][0]).toBe(secondSampleXPosition);
-    });
-    test('Changing y position', () => {
-        expect.assertions(6);
-        const { wrapper, mockChangeCharacterYPosition } = createShallowProgramBlockEditor();
-        const characterYPositionCoordinateBox = getCharacterPositionCoordinateBoxes(wrapper).at(1);
-        const sampleYPosition = '2';
-        const secondSampleYPosition = '8';
-        const eventObject = (value) => (
-            {
-                key: 'Enter',
-                preventDefault: () =>  {},
-                currentTarget:
-                    { name: 'yPosition', value }
-            }
-        );
-
-        characterYPositionCoordinateBox.simulate('change', eventObject(sampleYPosition));
-        wrapper.update();
-        expect(wrapper.instance().state.characterRowLabel).toBe(sampleYPosition);
-
-        characterYPositionCoordinateBox.simulate('blur', eventObject());
-        expect(mockChangeCharacterYPosition.mock.calls.length).toBe(1);
-        expect(mockChangeCharacterYPosition.mock.calls[0][0]).toBe(sampleYPosition);
-
-        characterYPositionCoordinateBox.simulate('change', eventObject(secondSampleYPosition));
-        wrapper.update();
-        expect(wrapper.instance().state.characterRowLabel).toBe(secondSampleYPosition);
-
-        characterYPositionCoordinateBox.simulate('keyDown', eventObject());
-        expect(mockChangeCharacterYPosition.mock.calls.length).toBe(2);
-        expect(mockChangeCharacterYPosition.mock.calls[1][0]).toBe(secondSampleYPosition);
-    });
-    test('When editingDisabled prop is true, onChange handler is undefined', () => {
-        expect.assertions(4)
-        const { wrapper } = createMountProgramBlockEditor({editingDisabled: true});
-        const characterXPositionCoordinateBox = getCharacterPositionCoordinateBoxes(wrapper).get(0);
-        const characterYPositionCoordinateBox = getCharacterPositionCoordinateBoxes(wrapper).get(1);
-        expect(characterXPositionCoordinateBox.props.className.includes('--disabled')).toBe(true);
-        expect(characterYPositionCoordinateBox.props.className.includes('--disabled')).toBe(true);
-        expect(characterXPositionCoordinateBox.props.onChange).toBe(undefined);
-        expect(characterYPositionCoordinateBox.props.onChange).toBe(undefined);
     });
 });

@@ -8,6 +8,7 @@ import AudioManagerImpl from './AudioManagerImpl';
 import CharacterAriaLive from './CharacterAriaLive';
 import CharacterState from './CharacterState';
 import CharacterStateSerializer from './CharacterStateSerializer';
+import CharacterPositionController from './CharacterPositionController';
 import CommandPaletteCommand from './CommandPaletteCommand';
 import C2lcURLParams from './C2lcURLParams';
 import DashConnectionErrorModal from './DashConnectionErrorModal';
@@ -37,6 +38,20 @@ import './Themes.scss';
 import './vendor/dragdroptouch/DragDropTouch.js';
 import ThemeSelector from './ThemeSelector';
 import { ReactComponent as HiddenBlock } from './svg/Hidden.svg';
+import KeyboardInputModal from './KeyboardInputModal';
+
+import type {ActionName, KeyboardInputSchemeName} from './KeyboardInputSchemes';
+import {findKeyboardEventSequenceMatches, isRepeatedEvent} from './KeyboardInputSchemes';
+import { ReactComponent as KeyboardModalToggleIcon} from './svg/Keyboard.svg'
+
+// Convenience function to focus on the first element with a given class, used
+// for keyboard shortcuts.
+function focusOnFirstElementWithClass (className) {
+    const elements = document.getElementsByClassName(className);
+    if (elements.length) {
+        elements[0].focus();
+    }
+}
 
 /* Dash connection removed for version 0.5
 import BluetoothApiWarning from './BluetoothApiWarning';
@@ -77,7 +92,10 @@ type AppState = {
     drawingEnabled: boolean,
     runningState: RunningState,
     allowedActions: ActionToggleRegister,
-    usedActions: ActionToggleRegister
+    usedActions: ActionToggleRegister,
+    keyBindingsEnabled: boolean,
+    keyboardInputSchemeName: KeyboardInputSchemeName;
+    showKeyboardModal: boolean
 };
 
 export class App extends React.Component<AppProps, AppState> {
@@ -94,11 +112,14 @@ export class App extends React.Component<AppProps, AppState> {
     allowedActionsSerializer: AllowedActionsSerializer;
     speedLookUp: Array<number>;
     pushStateTimeoutID: ?TimeoutID;
+    speedControlRef: { current: null | HTMLElement };
+    programBlockEditorRef: { current: any };
+    sequenceInProgress: Array<KeyboardEvent>;
 
     constructor(props: any) {
         super(props);
 
-        this.version = '0.8';
+        this.version = '0.9';
 
         this.appContext = {
             bluetoothApiIsAvailable: FeatureDetection.bluetoothApiIsAvailable()
@@ -120,6 +141,8 @@ export class App extends React.Component<AppProps, AppState> {
         this.allowedActionsSerializer = new AllowedActionsSerializer();
 
         this.pushStateTimeoutID = null;
+
+        this.sequenceInProgress = [];
 
         this.interpreter.addCommandHandler(
             'forward1',
@@ -386,7 +409,10 @@ export class App extends React.Component<AppProps, AppState> {
             drawingEnabled: true,
             runningState: 'stopped',
             allowedActions: allowedActions,
-            usedActions: {}
+            usedActions: {},
+            keyBindingsEnabled: true,
+            showKeyboardModal: false,
+            keyboardInputSchemeName: "nvda"
         };
 
         // For FakeRobotDriver, replace with:
@@ -404,6 +430,9 @@ export class App extends React.Component<AppProps, AppState> {
         }
 
         this.focusTrapManager = new FocusTrapManager();
+
+        this.speedControlRef = React.createRef();
+        this.programBlockEditorRef = React.createRef();
     }
 
     setStateSettings(settings: $Shape<AppSettings>) {
@@ -442,6 +471,11 @@ export class App extends React.Component<AppProps, AppState> {
 
     getRunningState(): RunningState {
         return this.state.runningState;
+    }
+
+    editingIsDisabled(): boolean {
+        return !(this.state.runningState === 'stopped'
+            || this.state.runningState === 'paused');
     }
 
     incrementProgramCounter(callback: () => void): void {
@@ -586,9 +620,236 @@ export class App extends React.Component<AppProps, AppState> {
         });
     };
 
+    // Global shortcut handling.
+    // TODO: Convert to use keyboardEventMatchesKeyDef for each command in turn.
+    handleDocumentKeyDown = (e: KeyboardEvent) => {
+        if (this.state.keyBindingsEnabled) {
+            const isOnlyModifier = ["Shift", "Control", "Alt"].indexOf(e.key) !== -1;
+            let isRepeat = false;
+            if (this.sequenceInProgress.length) {
+                isRepeat = isRepeatedEvent(this.sequenceInProgress[this.sequenceInProgress.length - 1], e);
+            }
+
+            if (!isOnlyModifier && !isRepeat) {
+                this.sequenceInProgress.push(e);
+
+                const matchingKeyboardAction: ActionName | "partial" | false = findKeyboardEventSequenceMatches(this.sequenceInProgress, this.state.keyboardInputSchemeName);
+                if (matchingKeyboardAction === false || matchingKeyboardAction !== "partial") {
+                    this.sequenceInProgress = [];
+                }
+
+                if (matchingKeyboardAction !== false) {
+                    e.preventDefault();
+                    switch (matchingKeyboardAction) {
+                        case("showHide"):
+                            this.setState((currentState) => {
+                                return { showKeyboardModal: !(currentState.showKeyboardModal) };
+                            });
+                            break;
+                        case("toggleFeedbackAnnouncements"):
+                            // We have to use the function form here as our change is based on the current state.
+                            this.setState((currentState) => {
+                                return { announcementsEnabled: !(currentState.announcementsEnabled) };
+                            });
+                            break;
+                        case("addCommandToBeginning"):
+                            if (!this.editingIsDisabled()) {
+                                if (this.state.selectedAction) {
+                                    if (this.programBlockEditorRef.current) {
+                                        this.programBlockEditorRef.current.insertSelectedCommandIntoProgram(0);
+                                    }
+                                }
+                            }
+                            break;
+                        case("addCommandToEnd"):
+                            if (!this.editingIsDisabled()) {
+                                if (this.state.selectedAction) {
+                                    const index = this.state.programSequence.getProgramLength();
+                                    if (this.programBlockEditorRef.current) {
+                                        this.programBlockEditorRef.current.insertSelectedCommandIntoProgram(index);
+                                    }
+                                }
+                            }
+                            break;
+                        case("deleteCurrentStep"):
+                            if (!this.editingIsDisabled()) {
+                                const currentElement = document.activeElement;
+                                // $FlowFixMe: Not all elements have dataset property
+                                if (currentElement.dataset.controltype === 'programStep') {
+                                    const index = parseInt(currentElement.dataset.stepnumber, 10);
+                                    if (index != null) {
+                                        if (this.programBlockEditorRef.current) {
+                                            this.programBlockEditorRef.current.deleteProgramStep(index);
+                                        }
+                                    }
+                                }
+                            }
+                            break;
+                        case("deleteAll"): {
+                            if (!this.editingIsDisabled()) {
+                                const newProgramSequence = this.state.programSequence.updateProgram([]);
+                                this.handleProgramSequenceChange(newProgramSequence);
+                            }
+                            break;
+                        }
+                        case("announceScene"):
+                            const ariaLiveRegion = document.getElementById('character-position');
+                            if (ariaLiveRegion) {
+                                if (window.speechSynthesis.speaking || window.speechSynthesis.pending) {
+                                    window.speechSynthesis.cancel();
+                                }
+                                const utterance = new SpeechSynthesisUtterance(ariaLiveRegion.innerText);
+                                window.speechSynthesis.speak(utterance);
+                            }
+                            break;
+                        case("playPauseProgram"):
+                            if (this.state.programSequence.getProgramLength() > 0) {
+                                this.handleClickPlay();
+                            }
+                            break;
+                        case("refreshScene"):
+                            if (!this.editingIsDisabled()) {
+                                this.handleRefresh();
+                            }
+                            break;
+                        case("stopProgram"):
+                            if (this.state.runningState !== 'stopped' && this.state.runningState !== 'stopRequested') {
+                                this.handleClickStop();
+                            }
+                            break;
+                        case("decreaseProgramSpeed"):
+                            this.changeProgramSpeedIndex(this.speedLookUp.indexOf(this.interpreter.stepTimeMs) - 1);
+                            break;
+                        case("increaseProgramSpeed"):
+                            this.changeProgramSpeedIndex(this.speedLookUp.indexOf(this.interpreter.stepTimeMs) + 1);
+                            break;
+                        case("selectForward1"):
+                            this.setState({ "selectedAction": "forward1" });
+                            break;
+                        case("selectForward2"):
+                            this.setState({ "selectedAction": "forward2" });
+                            break;
+                        case("selectForward3"):
+                            this.setState({ "selectedAction": "forward3" });
+                            break;
+                        case("selectBackward1"):
+                            this.setState({ "selectedAction": "backward1" });
+                            break;
+                        case("selectBackward2"):
+                            this.setState({ "selectedAction": "backward2" });
+                            break;
+                        case("selectBackward3"):
+                            this.setState({ "selectedAction": "backward3" });
+                            break;
+                        case("selectLeft45"):
+                            this.setState({ "selectedAction": "left45" });
+                            break;
+                        case("selectLeft90"):
+                            this.setState({ "selectedAction": "left90" });
+                            break;
+                        case("selectLeft180"):
+                            this.setState({ "selectedAction": "left180" });
+                            break;
+                        case("selectRight45"):
+                            this.setState({ "selectedAction": "right45" });
+                            break;
+                        case("selectRight90"):
+                            this.setState({ "selectedAction": "right90" });
+                            break;
+                        case("selectRight180"):
+                            this.setState({ "selectedAction": "right180" });
+                            break;
+                        case("focusActions"):
+                            focusOnFirstElementWithClass("command-block");
+                            break;
+                        case("focusAppHeader"):
+                            focusOnFirstElementWithClass("App__header-keyboardMenuIcon");
+                            break;
+                        case("focusAddNodeToggle"):
+                            focusOnFirstElementWithClass("ProgramBlockEditor__add-node-toggle-switch");
+                            break;
+                        case("focusCharacterPositionControls"):
+                            focusOnFirstElementWithClass("CharacterPositionController__character-position-button");
+                            break;
+                        case("focusCharacterColumnInput"):
+                            focusOnFirstElementWithClass("ProgramBlock__character-position-coordinate-box-column");
+                            break;
+                        case("focusCharacterRowInput"):
+                            focusOnFirstElementWithClass("ProgramBlock__character-position-coordinate-box-row");
+                            break;
+                        case("focusPlayShare"):
+                            focusOnFirstElementWithClass("PlayButton--play");
+                            break;
+                        case("focusProgramSequence"):
+                            focusOnFirstElementWithClass("AddNode__expanded-button");
+                            break;
+                        case("focusScene"):
+                            focusOnFirstElementWithClass("PenDownToggleSwitch");
+                            break;
+                        case("focusWorldSelector"):
+                            focusOnFirstElementWithClass("WorldIcon");
+                            break;
+                        case("moveCharacterLeft"):
+                            if (!this.editingIsDisabled()) {
+                                this.handleChangeCharacterPosition('left');
+                            }
+                            break;
+                        case("moveCharacterRight"):
+                            if (!this.editingIsDisabled()) {
+                                this.handleChangeCharacterPosition('right');
+                            }
+                            break;
+                        case("moveCharacterUp"):
+                            if (!this.editingIsDisabled()) {
+                                this.handleChangeCharacterPosition('up');
+                            }
+                            break;
+                        case("moveCharacterDown"):
+                            if (!this.editingIsDisabled()) {
+                                this.handleChangeCharacterPosition('down');
+                            }
+                            break;
+                        case("turnCharacterLeft"):
+                            if (!this.editingIsDisabled()) {
+                                this.handleChangeCharacterPosition('turnLeft');
+                            }
+                            break;
+                        case("turnCharacterRight"):
+                            if (!this.editingIsDisabled()) {
+                                this.handleChangeCharacterPosition('turnRight');
+                            }
+                            break;
+                        default:
+                            break;
+                    }
+                }
+            }
+            else if (isRepeat) {
+                e.preventDefault();
+            }
+        }
+    };
+
+    handleKeyboardMenuIconKeydown = (event: KeyboardEvent) => {
+        if (event.key === "Enter" || event.key === " ") {
+            this.handleKeyboardModalToggle();
+        }
+    }
+
+    handleKeyboardModalClose = () => {
+        this.setState({showKeyboardModal: false});
+    };
+
+    handleKeyboardModalToggle = () => {
+        this.setState((currentState: AppState) => {
+            return { showKeyboardModal: !currentState.showKeyboardModal};
+        });
+    }
+
+    // Focus trap escape key handling.
     handleRootKeyDown = (e: SyntheticKeyboardEvent<HTMLInputElement>) => {
         this.focusTrapManager.handleKeyDown(e);
-    };
+    }
 
     handleToggleAudioFeedback = (announcementsEnabled: boolean) => {
         this.setState({
@@ -611,6 +872,16 @@ export class App extends React.Component<AppProps, AppState> {
             const currentIsAllowed = this.state.allowedActions[commandName];
             newAllowedActions[commandName] = !currentIsAllowed;
             this.setState({ allowedActions: newAllowedActions})
+        }
+    }
+
+    changeProgramSpeedIndex = (newSpeedIndex: number) => {
+        if (newSpeedIndex >= 0 && newSpeedIndex <= (this.speedLookUp.length - 1)) {
+            this.interpreter.setStepTime(this.speedLookUp[newSpeedIndex]);
+            if (this.speedControlRef.current) {
+                // $FlowFixMe: Flow doesn't believe that we have sufficiently ensured that current !== null.
+                this.speedControlRef.current.value = (newSpeedIndex + 1).toString();
+            }
         }
     }
 
@@ -665,36 +936,47 @@ export class App extends React.Component<AppProps, AppState> {
     }
 
     handleChangeCharacterPosition = (positionName: ?string) => {
-        const currentCharacterState = this.state.characterState;
         switch(positionName) {
             case 'turnLeft':
-                this.setState({
-                    characterState: currentCharacterState.turnLeft(1)
+                this.setState((state) => {
+                    return {
+                        characterState: state.characterState.turnLeft(1)
+                    }
                 });
                 break;
             case 'turnRight':
-                this.setState({
-                    characterState: currentCharacterState.turnRight(1)
+                this.setState((state) => {
+                    return {
+                        characterState: state.characterState.turnRight(1)
+                    }
                 });
                 break;
             case 'up':
-                this.setState({
-                    characterState: currentCharacterState.moveUpPosition()
+                this.setState((state) => {
+                    return {
+                        characterState: state.characterState.moveUpPosition()
+                    }
                 });
                 break;
             case 'right':
-                this.setState({
-                    characterState: currentCharacterState.moveRightPosition()
+                this.setState((state) => {
+                    return {
+                        characterState: state.characterState.moveRightPosition()
+                    }
                 });
                 break;
             case 'down':
-                this.setState({
-                    characterState: currentCharacterState.moveDownPosition()
+                this.setState((state) => {
+                    return {
+                        characterState: state.characterState.moveDownPosition()
+                    }
                 });
                 break;
             case 'left':
-                this.setState({
-                    characterState: currentCharacterState.moveLeftPosition()
+                this.setState((state) => {
+                    return {
+                        characterState: state.characterState.moveLeftPosition()
+                    }
                 });
                 break;
             default:
@@ -716,6 +998,14 @@ export class App extends React.Component<AppProps, AppState> {
         });
     }
 
+    handleChangeKeyboardInputScheme = (keyboardInputSchemeName: KeyboardInputSchemeName) => {
+        this.setState({keyboardInputSchemeName});
+    }
+
+    handleChangeKeyBindingsEnabled = (keyBindingsEnabled: boolean) => {
+        this.setState({keyBindingsEnabled: keyBindingsEnabled});
+    }
+
     render() {
         return (
             <React.Fragment>
@@ -727,8 +1017,22 @@ export class App extends React.Component<AppProps, AppState> {
                     <header className='App__header'>
                         <div className='App__header-row'>
                             <h1 className='App__app-heading'>
-                                <FormattedMessage id='App.appHeading'/>
+                                <a href='https://weavly.org'
+                                    aria-label={this.props.intl.formatMessage({id: 'App.appHeading.link'})}
+                                    target='_blank'
+                                    rel='noopener noreferrer'>
+                                    <FormattedMessage id='App.appHeading'/>
+                                </a>
                             </h1>
+                            <div
+                                className={"App__header-keyboardMenuIcon" + (this.state.keyBindingsEnabled ? "" : " App__header-keyboardMenuIcon--disabled")}
+                                tabIndex={0}
+                                aria-label={this.props.intl.formatMessage({ id: 'KeyboardInputModal.ShowHide.AriaLabel' })}
+                                onClick={this.handleKeyboardModalToggle}
+                                onKeyDown={this.handleKeyboardMenuIconKeydown}
+                            >
+                                <KeyboardModalToggleIcon/>
+                            </div>
                             <div className='App__header-audio-toggle'>
                                 <div className='App__audio-toggle-switch'>
                                     <AudioFeedbackToggleSwitch
@@ -758,11 +1062,52 @@ export class App extends React.Component<AppProps, AppState> {
                         </Row>
                     }
                     */}
+                    <div className='App__scene-container'>
+                        <h2 className='sr-only' >
+                            <FormattedMessage id='Scene.heading' />
+                        </h2>
+                        <Scene
+                            dimensions={this.state.sceneDimensions}
+                            characterState={this.state.characterState}
+                            world={this.state.settings.world}
+                        />
+                        <div className='App__scene-controls'>
+                            <div className='App__scene-controls-group'>
+                                <PenDownToggleSwitch
+                                    className='App__penDown-toggle-switch'
+                                    value={this.state.drawingEnabled}
+                                    onChange={this.handleTogglePenDown}/>
+                                <div className='App__refreshButton-container'>
+                                    <RefreshButton
+                                        disabled={this.editingIsDisabled()}
+                                        onClick={this.handleRefresh}
+                                    />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="App__world-container">
+                        <h2 className='sr-only' >
+                            <FormattedMessage id='WorldSelector.heading' />
+                        </h2>
+                        <WorldSelector
+                            disabled={this.editingIsDisabled()}
+                            world={this.state.settings.world}
+                            onSelect={this.handleChangeWorld}
+                        />
+                        <CharacterPositionController
+                            characterState={this.state.characterState}
+                            editingDisabled={this.editingIsDisabled()}
+                            world={this.state.settings.world}
+                            onChangeCharacterPosition={this.handleChangeCharacterPosition}
+                            onChangeCharacterXPosition={this.handleChangeCharacterXPosition}
+                            onChangeCharacterYPosition={this.handleChangeCharacterYPosition} />
+                    </div>
                     <div className='App__command-palette'>
                         <ActionsMenu
                             allowedActions={this.state.allowedActions}
                             changeHandler={this.handleToggleAllowedCommand}
-                            editingDisabled={this.state.runningState === 'running'}
+                            editingDisabled={this.editingIsDisabled()}
                             intl={this.props.intl}
                             usedActions={this.state.usedActions}
                         />
@@ -781,53 +1126,12 @@ export class App extends React.Component<AppProps, AppState> {
                             </div>
                         </div>
                     </div>
-                    <div className='App__scene-container'>
-                        <h2 className='sr-only' >
-                            <FormattedMessage id='Scene.heading' />
-                        </h2>
-                        <Scene
-                            dimensions={this.state.sceneDimensions}
-                            characterState={this.state.characterState}
-                            world={this.state.settings.world}
-                        />
-                        <div className='App__scene-controls'>
-                            <div className='App__scene-controls-group'>
-                                <PenDownToggleSwitch
-                                    className='App__penDown-toggle-switch'
-                                    value={this.state.drawingEnabled}
-                                    onChange={this.handleTogglePenDown}/>
-                                <div className='App__refreshButton-container'>
-                                    <RefreshButton
-                                        disabled={
-                                            !(this.state.runningState === 'stopped'
-                                            || this.state.runningState === 'paused')
-                                        }
-                                        onClick={this.handleRefresh}
-                                    />
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="App__world-selector-container">
-                        <h2 className='sr-only' >
-                            <FormattedMessage id='WorldSelector.heading' />
-                        </h2>
-                        <WorldSelector
-                            disabled={
-                                !(this.state.runningState === 'stopped'
-                                || this.state.runningState === 'paused')
-                            }
-                            world={this.state.settings.world}
-                            onSelect={this.handleChangeWorld}
-                        />
-                    </div>
                     <div className='App__program-block-editor'>
                         <ProgramBlockEditor
+                            ref={this.programBlockEditorRef}
                             actionPanelStepIndex={this.state.actionPanelStepIndex}
                             characterState={this.state.characterState}
-                            editingDisabled={
-                                !(this.state.runningState === 'stopped'
-                                || this.state.runningState === 'paused')}
+                            editingDisabled={this.editingIsDisabled()}
                             programSequence={this.state.programSequence}
                             runningState={this.state.runningState}
                             selectedAction={this.state.selectedAction}
@@ -836,9 +1140,6 @@ export class App extends React.Component<AppProps, AppState> {
                             focusTrapManager={this.focusTrapManager}
                             addNodeExpandedMode={this.state.settings.addNodeExpandedMode}
                             world={this.state.settings.world}
-                            onChangeCharacterPosition={this.handleChangeCharacterPosition}
-                            onChangeCharacterXPosition={this.handleChangeCharacterXPosition}
-                            onChangeCharacterYPosition={this.handleChangeCharacterYPosition}
                             onChangeProgramSequence={this.handleProgramSequenceChange}
                             onChangeActionPanelStepIndex={this.handleChangeActionPanelStepIndex}
                             onChangeAddNodeExpandedMode={this.handleChangeAddNodeExpandedMode}
@@ -864,6 +1165,7 @@ export class App extends React.Component<AppProps, AppState> {
                                         || this.state.runningState === 'stopRequested'}
                                     onClick={this.handleClickStop}/>
                                 <ProgramSpeedController
+                                    rangeControlRef={this.speedControlRef}
                                     values={this.speedLookUp}
                                     onChange={this.handleChangeProgramSpeed}
                                 />
@@ -883,6 +1185,14 @@ export class App extends React.Component<AppProps, AppState> {
                     show={this.state.showDashConnectionError}
                     onCancel={this.handleCancelDashConnection}
                     onRetry={this.handleClickConnectDash}/>
+                <KeyboardInputModal
+                    show={this.state.showKeyboardModal}
+                    keyBindingsEnabled={this.state.keyBindingsEnabled}
+                    keyboardInputSchemeName={this.state.keyboardInputSchemeName}
+                    onChangeKeyboardInputScheme={this.handleChangeKeyboardInputScheme}
+                    onChangeKeyBindingsEnabled={this.handleChangeKeyBindingsEnabled}
+                    onHide={this.handleKeyboardModalClose}
+                />
             </React.Fragment>
         );
     }
@@ -1002,6 +1312,8 @@ export class App extends React.Component<AppProps, AppState> {
                 world: Utils.getWorldFromString(localWorld, 'default')
             });
         }
+
+        document.addEventListener('keydown', this.handleDocumentKeyDown);
     }
 
     componentDidUpdate(prevProps: {}, prevState: AppState) {
@@ -1103,6 +1415,10 @@ export class App extends React.Component<AppProps, AppState> {
             }
         }
         */
+    }
+
+    componentWillUnmount() {
+        document.removeEventListener('keydown', this.handleDocumentKeyDown);
     }
 }
 
