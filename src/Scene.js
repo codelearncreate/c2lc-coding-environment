@@ -53,7 +53,7 @@ class Scene extends React.Component<SceneProps, {}> {
                     dominantBaseline='middle'
                     x={-0.5}
                     // Center each gridcell with height of 8.25
-                    y={8.25*i - 4.125}>
+                    y={16.5*i - 8.25}>
                     {i}
                 </text>
             )
@@ -76,7 +76,7 @@ class Scene extends React.Component<SceneProps, {}> {
                     aria-hidden='true'
                     key={`grid-cell-label-${String.fromCharCode(64+i)}`}
                     textAnchor='middle'
-                    x={8.25*i - 4.125}
+                    x={16.5*i - 8.25}
                     y={0.5}>
                     {String.fromCharCode(64+i)}
                 </text>

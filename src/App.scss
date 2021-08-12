@@ -12,7 +12,7 @@ body {
     background-color: #FFF;
     box-sizing: border-box;
     display: grid;
-    grid-template-columns: 1fr min-content minmax(auto, 78rem) min-content 1fr;
+    grid-template-columns: 1fr min-content minmax(auto, 1640px) min-content 1fr;
     grid-template-rows: auto auto 1fr 4.5rem;
     row-gap: 0.25rem;
     height: 100vh;
@@ -36,8 +36,8 @@ body {
     flex-direction: column;
 }
 
-.App__header-keyboardMenuIcon {    
-    align-content: center;    
+.App__header-keyboardMenuIcon {
+    align-content: center;
     align-self: center;
     border-radius: 50%;
     background-color: #4C9990;
@@ -58,7 +58,7 @@ body {
     }
 }
 
-.App__header-keyboardMenuIcon--disabled {    
+.App__header-keyboardMenuIcon--disabled {
     background-color: #B9BEC6;
 }
 
@@ -103,8 +103,9 @@ body {
     grid-row-start: 1;
     grid-row-end: 3;
     min-height: 12rem;
+    max-height: 835px;
     min-width: 19.5rem;
-    max-width: 78rem;
+    max-width: 1640px;
 }
 
 .App__scene-controls {
