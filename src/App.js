@@ -507,6 +507,7 @@ export class App extends React.Component<AppProps, AppState> {
     }
 
     handleClickPlay = () => {
+        this.audioManager.startTone();
         switch (this.state.runningState) {
             case 'running':
                 this.setState({ runningState: 'pauseRequested' });

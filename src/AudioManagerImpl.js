@@ -1,6 +1,6 @@
 // @flow
 
-import {Filter, FMSynth, Gain, Instrument, MembraneSynth, MetalSynth, Noise, NoiseSynth, Panner, Reverb, Sequence, Signal, Synth, Transport} from 'tone';
+import {Filter, FMSynth, Gain, Instrument, MembraneSynth, MetalSynth, Noise, NoiseSynth, Panner, Reverb, Sequence, Signal, Synth, start as ToneStart, Transport} from 'tone';
 import CharacterState from './CharacterState';
 import type {IntlShape} from 'react-intl';
 import {AudioManager} from './types';
@@ -294,5 +294,9 @@ export default class AudioManagerImpl implements AudioManager {
 
     setAudioEnabled(value: boolean) {
         this.audioEnabled = value;
+    }
+
+    startTone() {
+        ToneStart();
     }
 };

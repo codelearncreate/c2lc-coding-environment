@@ -169,6 +169,9 @@ declare module "tone" {
         start(): void
     }
 
+    // https://tonejs.github.io/docs/14.7.39/fn/start
+    declare export function start(): Promise<void>;
+
     declare export class Synth extends Instrument {
         constructor(SynthOptions): Synth;
     }
