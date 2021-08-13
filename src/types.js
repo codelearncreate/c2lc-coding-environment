@@ -57,7 +57,6 @@ export interface AudioManager {
     playSoundForCharacterState(samplerKey: string, releaseTimeInMs: number, characterState: CharacterState, sceneDimension: SceneDimensions) : void;
     setAnnouncementsEnabled(value: boolean) : void;
     setAudioEnabled(value: boolean) : void;
-    setFeedbackIsPlaying(value: boolean) : void;
 }
 
 // https://developer.mozilla.org/en-US/docs/Web/API/SpeechGrammar

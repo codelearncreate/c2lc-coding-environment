@@ -312,8 +312,4 @@ export default class AudioManagerImpl implements AudioManager {
     setAudioEnabled(value: boolean) {
         this.audioEnabled = value;
     }
-
-    setFeedbackIsPlaying(value: boolean) {
-        this.feedbackIsPlaying = value;
-    }
 };
