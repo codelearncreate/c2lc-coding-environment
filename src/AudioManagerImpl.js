@@ -188,6 +188,7 @@ export default class AudioManagerImpl implements AudioManager {
     audioEnabled: boolean;
     announcementsEnabled: boolean;
     feedbackIsPlaying: boolean;
+    queuedPreviewAnnouncement: ?string;
     panner: Panner;
     samplers: {
         backward1: Sampler,
@@ -208,6 +209,7 @@ export default class AudioManagerImpl implements AudioManager {
         this.audioEnabled = audioEnabled;
         this.announcementsEnabled = announcementsEnabled;
         this.feedbackIsPlaying = false;
+        this.queuedPreviewAnnouncement = null;
 
         this.panner = new Panner();
         this.panner.toDestination();
@@ -231,23 +233,36 @@ export default class AudioManagerImpl implements AudioManager {
             if (window.speechSynthesis.speaking || window.speechSynthesis.pending) {
                 window.speechSynthesis.cancel();
             }
-            this.playStringMessage(message);
             this.feedbackIsPlaying = true;
+            const utterance = new SpeechSynthesisUtterance(message);
+            utterance.addEventListener('end', () => {
+                this.feedbackIsPlaying = false;
+                if (this.queuedPreviewAnnouncement) {
+                    const utterance = new SpeechSynthesisUtterance(this.queuedPreviewAnnouncement);
+                    window.speechSynthesis.speak(utterance);
+                }
+                this.queuedPreviewAnnouncement = null;
+            });
+            // In Safari, utterance onend is often not get fired, and throws an error
+            utterance.addEventListener('error', () => {
+                this.feedbackIsPlaying = false;
+            })
+            window.speechSynthesis.speak(utterance);
         }
     }
 
     playPreviewAnnouncement(message: string) {
-        if (this.announcementsEnabled) {
-            if (window.speechSynthesis.speaking || window.speechSynthesis.pending) {
-                window.speechSynthesis.cancel();
+        if (!this.feedbackIsPlaying) {
+            if (this.announcementsEnabled) {
+                if (window.speechSynthesis.speaking || window.speechSynthesis.pending) {
+                    window.speechSynthesis.cancel();
+                }
+                const utterance = new SpeechSynthesisUtterance(message);
+                window.speechSynthesis.speak(utterance);
             }
-            this.playStringMessage(message);
+        } else {
+            this.queuedPreviewAnnouncement = message;
         }
-    }
-
-    playStringMessage(message: string) {
-        const utterance = new SpeechSynthesisUtterance(message);
-        window.speechSynthesis.speak(utterance);
     }
 
     // TODO: Add a better type for pitch.

@@ -854,18 +854,14 @@ export class App extends React.Component<AppProps, AppState> {
     handleRootFocus = (e: SyntheticKeyboardEvent<HTMLElement>) => {
         // $FlowFixMe getAttribute is missing in event target
         const ariaLabel = e.target.getAttribute('aria-label');
-        if (!this.audioManager.getFeedbackIsPlaying()) {
-            if (ariaLabel) {
-                this.audioManager.playPreviewAnnouncement(ariaLabel);
-            } else {
-                // $FlowFixMe innerText is missing in event target
-                const innerText = e.target.innerText;
-                if (innerText) {
-                    this.audioManager.playPreviewAnnouncement(innerText);
-                }
-            }
+        if (ariaLabel) {
+            this.audioManager.playPreviewAnnouncement(ariaLabel);
         } else {
-            this.audioManager.setFeedbackIsPlaying(false);
+            // $FlowFixMe innerText is missing in event target
+            const innerText = e.target.innerText;
+            if (innerText) {
+                this.audioManager.playPreviewAnnouncement(innerText);
+            }
         }
     }
 
