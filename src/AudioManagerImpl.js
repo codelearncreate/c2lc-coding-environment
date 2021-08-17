@@ -209,6 +209,7 @@ export default class AudioManagerImpl implements AudioManager {
         this.audioEnabled = audioEnabled;
         this.announcementsEnabled = announcementsEnabled;
         this.feedbackIsPlaying = false;
+        this.previousFeedbackUtterance = null;
         this.queuedPreviewAnnouncement = null;
 
         this.panner = new Panner();
@@ -224,29 +225,36 @@ export default class AudioManagerImpl implements AudioManager {
         });
     }
 
-    getFeedbackIsPlaying() {
-        return this.feedbackIsPlaying;
-    }
-
     playFeedbackAnnouncement(message: string) {
         if (this.announcementsEnabled) {
-            if (window.speechSynthesis.speaking || window.speechSynthesis.pending) {
-                window.speechSynthesis.cancel();
+            if (this.previousFeedbackUtterance) {
+                this.previousFeedbackUtterance.onerror = null;
+                this.previousFeedbackUtterance.onend = null;
             }
-            this.feedbackIsPlaying = true;
+            window.speechSynthesis.cancel();
             const utterance = new SpeechSynthesisUtterance(message);
-            utterance.addEventListener('end', () => {
+            utterance.onend = () => {
                 this.feedbackIsPlaying = false;
                 if (this.queuedPreviewAnnouncement) {
                     const utterance = new SpeechSynthesisUtterance(this.queuedPreviewAnnouncement);
                     window.speechSynthesis.speak(utterance);
                 }
                 this.queuedPreviewAnnouncement = null;
-            });
+            }
+
             // In Safari, utterance onend is often not get fired, and throws an error
-            utterance.addEventListener('error', () => {
-                this.feedbackIsPlaying = false;
-            })
+            utterance.onerror = () => {
+                setTimeout(() => {
+                    this.feedbackIsPlaying = false;
+                    if (this.queuedPreviewAnnouncement) {
+                        const utterance = new SpeechSynthesisUtterance(this.queuedPreviewAnnouncement);
+                        window.speechSynthesis.speak(utterance);
+                    }
+                    this.queuedPreviewAnnouncement = null;
+                }, 1000);
+            };
+            this.previousFeedbackUtterance = utterance;
+            this.feedbackIsPlaying = true;
             window.speechSynthesis.speak(utterance);
         }
     }
@@ -254,9 +262,7 @@ export default class AudioManagerImpl implements AudioManager {
     playPreviewAnnouncement(message: string) {
         if (!this.feedbackIsPlaying) {
             if (this.announcementsEnabled) {
-                if (window.speechSynthesis.speaking || window.speechSynthesis.pending) {
-                    window.speechSynthesis.cancel();
-                }
+                window.speechSynthesis.cancel();
                 const utterance = new SpeechSynthesisUtterance(message);
                 window.speechSynthesis.speak(utterance);
             }
