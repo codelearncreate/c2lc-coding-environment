@@ -229,6 +229,7 @@ export default class AudioManagerImpl implements AudioManager {
     playFeedbackAnnouncement(message: string) {
         if (this.announcementsEnabled) {
             if (this.previousFeedbackUtterance) {
+                // Remove the event handlers for the previous utterance so that they are not fired when we cancel the existing speech
                 this.previousFeedbackUtterance.onerror = null;
                 this.previousFeedbackUtterance.onend = null;
             }
@@ -245,6 +246,10 @@ export default class AudioManagerImpl implements AudioManager {
 
             // In Safari, utterance onend is often not get fired, and throws an error
             utterance.onerror = () => {
+                // When error occurs, onend event is not going to be fired, and currently we are
+                // unsure of why the error occurs in Safari. So let the feedback announcement play
+                // for a second without interruption on error to somewhat match the onend event handler
+                // to provide expected announcement behaviour.
                 setTimeout(() => {
                     this.feedbackIsPlaying = false;
                     if (this.queuedPreviewAnnouncement) {
