@@ -51,7 +51,6 @@ export type ArrayLike<T> = {
 export type AudioContext = any;
 
 export interface AudioManager {
-    getFeedbackIsPlaying() : boolean;
     playFeedbackAnnouncement(message: string) : void;
     playPreviewAnnouncement(message: string): void;
     playSoundForCharacterState(samplerKey: string, releaseTimeInMs: number, characterState: CharacterState, sceneDimension: SceneDimensions) : void;
