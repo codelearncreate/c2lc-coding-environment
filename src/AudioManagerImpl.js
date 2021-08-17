@@ -188,6 +188,7 @@ export default class AudioManagerImpl implements AudioManager {
     audioEnabled: boolean;
     announcementsEnabled: boolean;
     feedbackIsPlaying: boolean;
+    previousFeedbackUtterance: ?SpeechSynthesisUtterance;
     queuedPreviewAnnouncement: ?string;
     panner: Panner;
     samplers: {
