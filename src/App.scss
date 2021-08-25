@@ -36,8 +36,8 @@ body {
     flex-direction: column;
 }
 
-.App__header-keyboardMenuIcon {    
-    align-content: center;    
+.App__header-keyboardMenuIcon {
+    align-content: center;
     align-self: center;
     border-radius: 50%;
     background-color: #4C9990;
@@ -56,9 +56,14 @@ body {
         box-shadow: 0 0 0 $c2lc-focus-indicator-width black;
         outline: none;
     }
+
+    svg {
+        width: 1.6rem;
+        height: 1.6rem;
+    }
 }
 
-.App__header-keyboardMenuIcon--disabled {    
+.App__header-keyboardMenuIcon--disabled {
     background-color: #B9BEC6;
 }
 
