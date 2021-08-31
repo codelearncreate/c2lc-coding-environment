@@ -11,6 +11,7 @@ import {Frequency, Midi} from 'tone';
 
 // Julien's Pentatonic Tuning, C D F G A. The "center" note is the highest
 // point in the row, all other notes descend from there.
+// TODO: Adjust this table or convert to an algorithm when the scene changes.
 const mirroredPentatonicTuning = [
     // <-- <-- <-- <-- <-- <-- <-- <-- <-- <-- <-- <-- <-- <-- <-- <---XX---> --> --> --> --> --> --> --> --> --> --> --> --> --> -->
     ["C4","D4","F4","G4","A4","C5","D5","F5","G5","A5","C6","D6","F6","G6","F6","D6","C6","A5","G5","F5","D5","C5","A4","G4","F4","D4"],
