@@ -875,6 +875,15 @@ export class App extends React.Component<AppProps, AppState> {
                                 this.handleChangeCharacterPosition('turnRight');
                             }
                             break;
+                        case("selectRobotCharacter"):
+                            this.setStateSettings({world: "default"});
+                            break;
+                        case("selectRabbitCharacter"):
+                            this.setStateSettings({world: "forest"});
+                            break;
+                        case("selectRocketCharacter"):
+                            this.setStateSettings({world: "space"});
+                            break;
                         default:
                             break;
                     }

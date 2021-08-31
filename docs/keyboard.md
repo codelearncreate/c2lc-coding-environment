@@ -66,6 +66,9 @@ follows.
 | Ctrl + Alt + x, f, x | focusCharacterColumnInput |
 | Ctrl + Alt + x, f, y | focusCharacterRowInput |
 | Ctrl + Alt + x, f, w | focusWorldSelector |
+| Ctrl + Alt + x, w, 1 | selectRobotCharacter |
+| Ctrl + Alt + x, w, 2 | selectRabbitCharacter |
+| Ctrl + Alt + x, w, 3 | selectRocketCharacter |
 | Ctrl + Alt + x, x | toggleFeedbackAnnouncements |
 
 ## VoiceOver Key Bindings
@@ -116,4 +119,7 @@ with the starting key of a sequence.  Those key bindings are as follows:
 | Alt + x, f, x | focusCharacterColumnInput |
 | Alt + x, f, y | focusCharacterRowInput |
 | Alt + x, f, w | focusWorldSelector |
+| Alt + x, w, 1 | selectRobotCharacter |
+| Alt + x, w, 2 | selectRabbitCharacter |
+| Alt + x, w, 3 | selectRocketCharacter |
 | Alt + x, x | toggleFeedbackAnnouncements |
