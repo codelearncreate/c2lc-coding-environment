@@ -1,155 +1,65 @@
 // @flow
 
-import {Filter, FMSynth, Gain, Instrument, MembraneSynth, MetalSynth, Noise, NoiseSynth, Panner, Reverb, Sequence, Signal, Synth, start as ToneStart, Transport} from 'tone';
+import {Panner, Sampler, Sequence, start as ToneStart, Transport} from 'tone';
 import CharacterState from './CharacterState';
 import type {IntlShape} from 'react-intl';
 import {AudioManager} from './types';
+import type {CommandName, WorldName} from './types';
 import SceneDimensions from './SceneDimensions';
-
-import tuning from './tuning.json';
-
-// We use pentatonic tuning, C D F G A. The "center" note is the highest
-// point in the row, all other notes descend from there. Every other row
-// is unplayed, so we have tunings for a total of 8 rows.
-export function getNoteForState (characterState: CharacterState) : string {
-    const noteName = (tuning[characterState.yPos - 1] && tuning[characterState.yPos - 1][characterState.xPos - 1]) || "C-1";
-    return noteName;
-}
-
-// TODO: Convert to Array<StepDef> once we have that.
-const sequences = {
-    forward1:  [{ instrumentKey: "drum", note: "C1"}],
-    forward2:  [{ instrumentKey: "drum", note: "C1"}, {}, { instrumentKey: "cymbal", note: "C3"}],
-    forward3:  [{ instrumentKey: "drum", note: "C1"}, {}, { instrumentKey: "cymbal", note: "C3"}, {}, { instrumentKey: "cymbal", note: "C3"}],
-    backward1: [{ instrumentKey: "cymbal", note: "C3"}],
-    backward2: [{ instrumentKey: "cymbal", note: "C3"}, {}, { instrumentKey: "drum", note: "C1"}],
-    backward3: [{ instrumentKey: "cymbal", note: "C3"}, {}, { instrumentKey: "drum", note: "C1"}, {},{ instrumentKey: "drum", note: "C1"}],
-    // TODO: Reconcile this so that we can have complex single notes like the turns
-    // and also simple patterns of individual notes.
-    // left45: [{ instrumentKey: "sweeper", note: "C2", endNote: "C3"}],
-    // left90: [{ instrumentKey: "sweeper", note: "C2", endNote: "C3"}],
-    // left180: [{ instrumentKey: "sweeper", note: "C2", endNote: "C3"}],
-    // right45:  [{ instrumentKey: "sweeper", note: "C2", endNote: "C3"}],
-    // right90:  [{ instrumentKey: "sweeper", note: "C2", endNote: "C3"}],
-    // right180: [{ instrumentKey: "sweeper", note: "C2", endNote: "C3"}]
-};
+import {soundscapes, instrumentDefs} from './Soundscapes';
 
 export default class AudioManagerImpl implements AudioManager {
-    audioEnabled: boolean;
     announcementsEnabled: boolean;
+    audioEnabled: boolean;
 
-    // $FlowFixMe: Add a type for gain.
-    fullGain: Gain;
-
-    // $FlowFixMe: Add a type for gain.
-    threeQuarterGain: Gain;
-
-    // $FlowFixMe: Add a type for gain.
-    halfGain: Gain;
+    // TODO: Look up flow typing for object properties and make these use an instrument type.
+    instruments: {}
 
     panner: Panner;
     // $FlowFixMe: Add a type for sequence.
-    sequence: boolean | Sequence;
+    playingSequence: boolean | Sequence;
 
-    orchestra: {
-        // $FlowFixMe: we need to add type definitions for yet another thing.
-        bell: Instrument,
-        // $FlowFixMe: we need to add type definitions for yet another thing.
-        cymbal: Instrument,
-        // $FlowFixMe: we need to add type definitions for yet another thing.
-        drum: Instrument,
-        // $FlowFixMe: we need to add type definitions for yet another thing.
-        marimba: Instrument,
-        // $FlowFixMe: we need to add type definitions for yet another thing.
-        sweepNoise: Noise,
-        // $FlowFixMe: we need to add type definitions for yet another thing.
-        sweepSignal: Signal
-    };
+    worldName: WorldName;
 
-    constructor(audioEnabled: boolean, announcementsEnabled: boolean) {
+    constructor(audioEnabled: boolean, announcementsEnabled: boolean, worldName: WorldName) {
         this.audioEnabled = audioEnabled;
         this.announcementsEnabled = announcementsEnabled;
 
         this.panner = new Panner();
         this.panner.toDestination();
 
-        this.fullGain = new Gain().connect(this.panner);
-        this.threeQuarterGain = new Gain(0.75).connect(this.panner);
-        this.halfGain = new Gain(0.5).connect(this.panner);
+        this.worldName = worldName;
 
-        const marimba = new FMSynth({
-            harmonicity: 8,
-            envelope :  { attack:0, decay:0, sustain:1, release:1 }
-        }).connect(this.fullGain);
+        this.instruments = {};
 
-        const highPass = new Filter({
-            frequency: 9000, type:"highpass"
-        }).connect(this.threeQuarterGain);
-
-        const lowPass = new Filter({
-            frequency: 2000, type:"lowpass"
-        }).connect(this.threeQuarterGain);
-
-        const sweepBandPass = new Filter({
-            type: "bandpass",
-            frequency: 440
-        }).connect(this.halfGain);
-
-        /* eslint-disable no-unused-vars */
-        const sweepSignal = new Signal({
-            value: 4000,
-            units: "frequency"
-        // $FlowFixMe: Can't get flow to admit that frequency exists.
-        }).connect(sweepBandPass.frequency);
-
-        // $FlowFixMe: Can't get flow to admit that bellVerb is a ToneAudioNode.
-        const sweepNoise = new Noise({ type: "white" }).connect(sweepBandPass);
-
-        const bellVerb = new Reverb({
-            preDelay:0 , decay:2, wet:0.25
-        // $FlowFixMe: Can't get flow to admit that lowPass is a ToneAudioNode.
-        }).connect(lowPass);
-
-        const bell = new Synth({
-            oscillator: {
-                type: 'fmsine',
-                modulationType: 'sine',
-                harmonicity: 2,
-                modulationIndex: 8,
-            }
-        // $FlowFixMe: Can't get flow to admit that bellVerb is a ToneAudioNode.
-        }).connect(bellVerb);
-
-        const drum = new MembraneSynth({
-            octaves: 1, pitchDecay:0.2
-        }).connect(this.threeQuarterGain);
-
-        // $FlowFixMe: Can't get flow to admit that lowPass is a ToneAudioNode.
-        const cymbal = new MetalSynth().connect(lowPass);
-
-        // const feedbackDelay = new FeedbackDelay({
-        //     delayTime:0.1, feedback:0.25
-        // }).connect(highPass);
-
-        // $FlowFixMe: Can't get flow to admit that highPass is a ToneAudioNode.
-        const shaker = new NoiseSynth().connect(highPass);
-
-        this.orchestra = {
-            // $FlowFixMe: Can't get flow to accept the way in which we assign orchestra members.
-            bell: bell,
-            // $FlowFixMe: Can't get flow to accept the way in which we assign orchestra members.
-            cymbal: cymbal,
-            // $FlowFixMe: Can't get flow to accept the way in which we assign orchestra members.
-            drum: drum,
-            // $FlowFixMe: Can't get flow to accept the way in which we assign orchestra members.
-            marimba: marimba,
-            shaker: shaker,
-            // $FlowFixMe: Can't get flow to accept the way in which we assign orchestra members.
-            sweepNoise: sweepNoise,
-            // $FlowFixMe: Can't get flow to accept the way in which we assign orchestra members.
-            sweepSignal: sweepSignal
-        };
+        this.constructSoundscape(worldName);
     }
+
+    constructSoundscape = (worldName: WorldName) => {
+        const soundscape = soundscapes[worldName];
+        if (soundscape) {
+            // Scan the defined sequences and make a note of all instruments used.
+            const usedInstrumentMap = {};
+            for (const sequence of Object.values(soundscape.sequences)) {
+                // $FlowFixMe: Need to add types for all new structures.
+                for (const sequenceStep of Object.values(sequence)) {
+                    // $FlowFixMe: Need to add types for all new structures.
+                    if (sequenceStep.instrumentKey) {
+                        usedInstrumentMap[sequenceStep.instrumentKey] = true;
+                    }
+                }
+
+            }
+            for (const instrumentKey of Object.keys(usedInstrumentMap)) {
+                // If another world has loaded this instrument, we don't need to.
+                if (!this.instruments[instrumentKey]) {
+                    // TODO: Evolve this to use a custom class that plays sounds in phases.
+                    this.instruments[instrumentKey] = new Sampler(instrumentDefs[instrumentKey]);
+                    this.instruments[instrumentKey].connect(this.panner);
+                }
+            }
+        }
+    };
 
     playAnnouncement(messageIdSuffix: string, intl: IntlShape, messagePayload: any) {
         if (this.announcementsEnabled) {
@@ -163,54 +73,32 @@ export default class AudioManagerImpl implements AudioManager {
         }
     }
 
-    // TODO: Add a better type for pitch.
-    // $FlowFixMe: Add a type for instrument.
-    playPitchedNote(instrument: Instrument, pitch: string, releaseTime: number) {
-        if (this.audioEnabled) {
-            instrument.triggerAttackRelease(pitch, releaseTime);
-        }
-    }
-
-    playSoundForCharacterState(actionKey: string, stepTimeInMs: number, characterState: CharacterState, sceneDimensions: SceneDimensions) {
+    playSoundForCharacterState(commandName: CommandName, stepTimeInMs: number, characterState: CharacterState, sceneDimensions: SceneDimensions) {
         const stepTimeInSeconds = stepTimeInMs / 1000;
 
-        // We only play "positional" sounds when the location (and not
-        // orientation) changes.
-        const isTurn = ["left45","left90","left180", "right45","right90","right180"].indexOf(actionKey) !== -1;
-
-        // There are no "movement" sounds for even rows.
         if (this.audioEnabled) {
-            if (isTurn) {
-                this.playSweep(actionKey, stepTimeInSeconds);
-            }
-            else {
-                const sequence = sequences[actionKey].slice();
+            const soundscape = soundscapes[this.worldName];
+            const sequence = soundscape.sequences[commandName];
 
-                if ((characterState.yPos % 2)) {
-                    const noteName = getNoteForState(characterState);
-                    sequence[0] = { instrumentKey: "marimba", note: noteName};
-                }
+            // Pan left/right to suggest the relative horizontal position.
+            // We can discuss adjusting this once we have multiple
+            // sound-producing elements in the environment.
 
-                // Pan left/right to suggest the relative horizontal position.
-                // We can discuss adjusting this once we have multiple
-                // sound-producing elements in the environment.
+            // Limit the deviation from the centre so that there is always some sound in each speaker.
+            const midPoint = (sceneDimensions.getMinX() + sceneDimensions.getMaxX()) / 2;
+            const panningLevel = 0.75 * ((characterState.xPos - midPoint) / midPoint);
 
-                // Limit the deviation from the centre so that there is always some sound in each speaker.
-                const midPoint = (sceneDimensions.getMinX() + sceneDimensions.getMaxX()) / 2;
-                const panningLevel = 0.75 * ((characterState.xPos - midPoint) / midPoint);
-
-                // TODO: Consider making the timing configurable or tying it to the movement timing.
-                this.panner.pan.rampTo(panningLevel, 0);
-                this.playSequence(sequence, stepTimeInSeconds);
-            }
+            // TODO: Consider making the timing configurable or tying it to the movement timing.
+            this.panner.pan.rampTo(panningLevel, 0);
+            this.playSequence(sequence, characterState, stepTimeInSeconds);
         }
     }
 
     // $FlowFixMe: Add a type for arrays of stepdefs.
-    playSequence = (sequenceDef, stepTimeInSeconds: number) => {
-        if (this.sequence) {
+    playSequence = (sequenceDef, characterState: CharacterState, stepTimeInSeconds: number) => {
+        if (this.playingSequence) {
             // $FlowFixMe: Add a type for sequence.
-            this.sequence.stop(0);
+            this.playingSequence.stop(0);
             Transport.stop();
         }
 
@@ -220,66 +108,24 @@ export default class AudioManagerImpl implements AudioManager {
         // $FlowFixMe: Define a type for step definitions.
         const stepCallbackFn = (time: number, stepDef) => {
             if (stepDef.instrumentKey) {
-                const instrument = this.orchestra[stepDef.instrumentKey];
-                // Some Tone synths don't allow a note, so we construct an
-                // array of the common arguments supported by all
-                // synths, i.e. note duration, and start time, and then
-                // choose to add the note if the instrument supports it.
-                const attackReleaseArgs = [noteTime, time];
-                if (stepDef.note) {
-                    attackReleaseArgs.unshift(stepDef.note);
+                const soundscape = soundscapes[this.worldName];
+                const instrument = this.instruments[stepDef.instrumentKey];
+                const note = soundscape.getNoteForState(characterState, stepDef.offset);
+                if (instrument && instrument.loaded) {
+                    instrument.triggerAttackRelease(note, noteTime, time);
                 }
-
-                instrument.triggerAttackRelease.apply(instrument, attackReleaseArgs);
             }
         };
 
-        this.sequence = new Sequence({
+        this.playingSequence = new Sequence({
             callback: stepCallbackFn,
             events: sequenceDef,
             subdivision: betweenNoteTime,
             loop: false
         });
 
-        this.sequence.start(0);
+        this.playingSequence.start(0);
         Transport.start();
-    }
-
-    playSweep = (actionKey: string, stepTimeInSeconds: number) => {
-        const rampDefs = {
-            right45: {
-                start: 125,
-                stop: 500
-            },
-            right90: {
-                start: 125,
-                stop: 2000
-            },
-            right180: {
-                start: 125,
-                stop: 8000
-            },
-            left45: {
-                start: 8000,
-                stop: 2000
-            },
-            left90: {
-                start: 8000,
-                stop: 500
-            },
-            left180: {
-                start: 8000,
-                stop: 125
-            }
-        }
-        const rampDef = rampDefs[actionKey];
-        if (rampDef) {
-            // TODO: Make our own class for this that makes it easier to start/stop, control the freq.
-            this.orchestra.sweepSignal.rampTo(rampDef.start, 0);
-            this.orchestra.sweepNoise.start();
-            this.orchestra.sweepSignal.rampTo(rampDef.stop, stepTimeInSeconds / 2);
-            this.orchestra.sweepNoise.stop("+" + (stepTimeInSeconds/2));
-        }
     }
 
     setAnnouncementsEnabled(announcementsEnabled: boolean) {
@@ -294,6 +140,13 @@ export default class AudioManagerImpl implements AudioManager {
 
     setAudioEnabled(value: boolean) {
         this.audioEnabled = value;
+    }
+
+    setWorld = (worldName: WorldName) => {
+        if (this.worldName !== worldName) {
+            this.worldName = worldName;
+            this.constructSoundscape(worldName);
+        }
     }
 
     startTone() {

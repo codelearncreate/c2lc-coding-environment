@@ -1,9 +1,11 @@
 // @flow
 
-import {getNoteForState} from './AudioManagerImpl';
 import CharacterState from './CharacterState';
 import SceneDimensions from './SceneDimensions';
+import { soundscapes } from './Soundscapes';
 import {Frequency} from 'tone';
+
+const logTunings = false;
 
 function arrayToPaddedRowString (array: Array<any>) : string {
     const paddedArray = [];
@@ -13,8 +15,11 @@ function arrayToPaddedRowString (array: Array<any>) : string {
     return "| " + paddedArray.join(" | ") + " |";
 }
 
-function logTuning (noteTable: Array<Array<string>>) {
+function logTuning (worldName, noteTable: Array<Array<string>>) {
     const tableStringSegments = [];
+
+    // Header for world name
+    tableStringSegments.push("## Tuning for World '{worldName}'")
     // Column Headings
     const colHeadings = ["", "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"];
     tableStringSegments.push(arrayToPaddedRowString(colHeadings));
@@ -37,7 +42,7 @@ function logTuning (noteTable: Array<Array<string>>) {
     console.log(tableStringSegments.join("\n"));
 }
 
-test("Returns a sensible note range for every supported character position.", () => {
+test("Returns a sensible note range for every supported character position in all themes.", () => {
     // We now have 16 rows and no "out of bounds".
     const minRow = 1;
     const maxRow = 16;
@@ -51,25 +56,33 @@ test("Returns a sensible note range for every supported character position.", ()
 
     const sceneDimensions = new SceneDimensions(1, 26, 1, 16);
 
-    for (let row = minRow; row <= maxRow; row++) {
-        const rowEntries = [];
-        noteTable.push(rowEntries);
+    for (const worldName of ['default', 'forest','space']) {
+        const soundscape = soundscapes[worldName];
 
-        let maxPitch = 0;
-        let minPitch = 127;
+        for (let row = minRow; row <= maxRow; row++) {
+            const rowEntries = [];
+            noteTable.push(rowEntries);
 
-        for (let col = minCol; col <= maxCol; col++) {
-            const noteForState = getNoteForState(new CharacterState(col, row, 0, [], sceneDimensions));
-            rowEntries.push(noteForState);
+            let maxPitch = 0;
+            let minPitch = 127;
 
-            const midiNote: number = Frequency(noteForState).toMidi();
-            maxPitch = Math.max(maxPitch, midiNote);
-            minPitch = Math.min(minPitch, midiNote);
+            for (let col = minCol; col <= maxCol; col++) {
+                const noteForState = soundscape.getNoteForState(new CharacterState(col, row, 0, [], sceneDimensions));
+                rowEntries.push(noteForState);
 
-            expect(midiNote).toBeGreaterThanOrEqual(0);
-            expect(midiNote).toBeLessThanOrEqual(127);
+                const midiNote: number = Frequency(noteForState).toMidi();
+                maxPitch = Math.max(maxPitch, midiNote);
+                minPitch = Math.min(minPitch, midiNote);
+
+                expect(midiNote).toBeGreaterThanOrEqual(0);
+                expect(midiNote).toBeLessThanOrEqual(127);
+            }
+        }
+
+        if (logTunings) {
+            logTuning(worldName, noteTable);
         }
     }
 
-    logTuning(noteTable);
+
 });

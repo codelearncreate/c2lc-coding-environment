@@ -1,45 +1,4 @@
-import { Filter } from "tone";
-import { Effect } from "tone/build/esm/effect/Effect";
-
 declare module "tone" {
-    // https://github.com/Tonejs/Tone.js/blob/053b5d4397b595ea804b5d6baf6108158c8e0696/Tone/component/filter/BiquadFilter.ts#L117
-    declare type BiquadFilterType =
-        "lowpass" | "highpass" | "bandpass" | "lowshelf" | "highshelf" | "notch"
-        | "allpass" | "peaking";
-
-    // https://tonejs.github.io/docs/14.7.77/interface/EnvelopeOptions
-    declare type EnvelopeOptions = {
-        attack : Time,
-        decay : Time,
-        release : Time,
-        sustain : NormalRange
-    }
-
-    // https://tonejs.github.io/docs/14.7.77/FMSynth
-    declare export function FMSynth (FMSynthOptions) : ToneAudioNode;
-
-    // https://tonejs.github.io/docs/14.7.77/interface/FMSynthOptions
-    declare type FMSynthOptions = {
-        harmonicity: number,
-        envelope: EnvelopeOptions
-    }
-
-    // https://tonejs.github.io/docs/14.7.77/Filter
-    declare export class Filter extends ToneAudioNode {
-        frequency: FrequencyType;
-        constructor(FilterOptions): Filter;
-    }
-
-    // https://tonejs.github.io/docs/14.7.77/type/FilterOptions
-    declare type FilterOptions = {
-        frequency?: FrequencyType,
-        type?: BiquadFilterType,
-        rolloff?: FilterRollOff
-    }
-
-    // https://tonejs.github.io/docs/14.7.77/type/FilterRollOff
-    declare type FilterRollOff = -12 | -24 | -48 | -96;
-
     // There are two things called "Frequency" in Tone.js
     //
     //       https://tonejs.github.io/docs/14.7.58/type/Frequency
@@ -50,31 +9,17 @@ declare module "tone" {
 
     // https://tonejs.github.io/docs/14.7.58/FrequencyClass
     declare export class FrequencyClass {
-        toMidi: any
+        toMidi: any,
+        toNote: any
     }
 
-    declare export function Frequency(value: TimeValue | FrequencyType ): FrequencyClass;
+    declare export function Frequency(value: TimeValue | FrequencyType, units?: string ): FrequencyClass;
 
     // https://tonejs.github.io/docs/14.7.77/Gain
     declare export function Gain(gain?: number) : ToneAudioNode;
 
     // https://tonejs.github.io/docs/14.7.58/type/InputNode
     declare type InputNode = ToneAudioNode;
-
-    // https://tonejs.github.io/docs/14.7.77/Noise
-    declare export class Noise extends ToneAudioNode {
-        constructor(NoiseOptions): Noise;
-        start(time?: number|string): void;
-        stop(time:? number|string): void;
-    }
-
-    // https://tonejs.github.io/docs/14.7.77/interface/NoiseOptions
-    declare type NoiseOptions = {
-        type: NoiseType
-    }
-
-    // https://tonejs.github.io/docs/14.7.77/type/NoiseType
-    declare type NoiseType = "white" | "brown" | "pink";
 
     // https://tonejs.github.io/docs/14.7.58/type/Note
     declare type Note = string;
@@ -86,27 +31,17 @@ declare module "tone" {
 
     // https://tonejs.github.io/docs/14.7.58/Instrument
     declare export class Instrument extends ToneAudioNode {
-        triggerAttackRelease (note: Note, time?: number): void;
+        triggerAttackRelease (note: Note, time: number): void;
     }
-
-    declare export class MembraneSynth extends Instrument {
-        constructor(MembraneSynthOptions) : MembraneSynth
-    }
-
-    declare type MembraneSynthOptions =  {
-        octaves: number,
-        pitchDecay: number
-    }
-
-    declare export class MetalSynth extends Instrument {}
 
     // https://tonejs.github.io/docs/14.7.58/MidiClass
     declare class MidiClass {
+        toMidi(): number,
         toNote(): Note
     }
 
     // https://tonejs.github.io/docs/14.7.58/fn/Midi
-    declare export function Midi(value: TimeValue): MidiClass;
+    declare export function Midi(value: Note|number): MidiClass;
 
     declare export class NoiseSynth extends Instrument {}
 
@@ -121,16 +56,21 @@ declare module "tone" {
         loaded: boolean
     }
 
-    // https://tonejs.github.io/docs/14.7.77/Reverb
-    declare export class Reverb extends ToneAudioNode {
-        constructor(ReverbOptions): Reverb;
+    // https://tonejs.github.io/docs/14.7.58/interface/SamplerOptions
+    declare type SamplerOptions = {
+        baseUrl: string,
+        urls: SamplesMap
     }
 
-    // https://tonejs.github.io/docs/14.7.77/interface/ReverbOptions
-    declare type ReverbOptions = {
-        decay : Seconds,
-        preDelay : Seconds,
-        wet : NormalRange
+    declare type SamplesMap = {
+        [note: string]: string;
+    }
+
+    // https://tonejs.github.io/docs/14.7.58/Sampler
+    declare export class Sampler extends Instrument {
+        constructor(samples: SamplerOptions): Sampler,
+        loaded: boolean,
+        triggerAttackRelease(notes: FrequencyType | Array<FrequencyType>, duration: Time): void
     }
 
     // https://tonejs.github.io/docs/14.7.58/type/Seconds
@@ -150,23 +90,6 @@ declare module "tone" {
     declare export type SequenceType = {
         start(time?: number): void,
         stop(time:? number): void
-    }
-
-    // https://tonejs.github.io/docs/14.7.77/Signal
-    declare export class Signal extends ToneAudioNode {
-        constructor(options: SignalOptions): Signal;
-        rampTo(value: any, rampTime: Time): void;
-    }
-
-    // https://tonejs.github.io/docs/14.7.77/interface/SignalOptions
-    declare type SignalOptions = {
-        units: FrequencyType,
-        value: number
-    }
-
-    // https://tonejs.github.io/docs/14.7.58/Source
-    declare class Source extends ToneAudioNode {
-        start(): void
     }
 
     // https://tonejs.github.io/docs/14.7.39/fn/start
