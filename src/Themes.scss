@@ -1394,6 +1394,7 @@ body.contrast-theme {
 
         &:hover {
             background-color: black;
+            box-shadow: 0 0 0 2px white;
 
             svg path {
                 fill: white;
