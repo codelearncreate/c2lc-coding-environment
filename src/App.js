@@ -414,7 +414,7 @@ export class App extends React.Component<AppProps, AppState> {
             usedActions: {},
             keyBindingsEnabled: true,
             showKeyboardModal: false,
-            keyboardInputSchemeName: "nvda"
+            keyboardInputSchemeName: "ctrlshift"
         };
 
         // For FakeRobotDriver, replace with:

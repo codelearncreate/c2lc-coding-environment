@@ -1,13 +1,14 @@
 //@flow
 import {extend} from './Utils';
 
-export type KeyboardInputSchemeName = "nvda" | "voiceover";
+export type KeyboardInputSchemeName = "ctrlshift"| "nvda" | "voiceover";
 
 export type KeyDef = {
     code?: string,
     key?: string,
     altKey?: boolean,
     ctrlKey?: boolean,
+    shiftKey?: boolean,
     hidden?: boolean
 };
 
@@ -86,6 +87,7 @@ export type KeyboardInputScheme = {
 };
 
 export type KeyboardInputSchemesType = {
+    "ctrlshift": KeyboardInputScheme,
     "nvda": KeyboardInputScheme,
     "voiceover":  KeyboardInputScheme
 };
@@ -376,7 +378,7 @@ const NvdaInputScheme = Object.assign({
         actionName: "refreshScene"
     },
     showHide: {
-        keyDef: { key: "?", shiftKey: true },
+        keyDef: { key: "?" },
         actionName: "showHide"
     },
     stopProgram: {
@@ -385,9 +387,75 @@ const NvdaInputScheme = Object.assign({
     },
 }, NvdaExtendedKeyboardSequences);
 
+const CtrlShiftExtendedKeyboardSequences = extend(ExtendedKeyboardSequences, {
+    extraSettings: {
+        keyDef: { ctrlKey: true, shiftKey: true, altKey: false }
+    },
+
+    focusChange: {
+        keyDef: {ctrlKey: true, shiftKey: true, altKey: false }
+    },
+
+    selectedActionChange: {
+        keyDef: { ctrlKey: true, shiftKey: true, altKey: false }
+    },
+
+    characterPosition: {
+        keyDef: { ctrlKey: true, shiftKey: true, altKey: false }
+    }
+});
+
+const CtrlShiftInputScheme = Object.assign({
+    addCommand: {
+        keyDef: { code: "KeyA", key: "a", ctrlKey: true, shiftKey: true},
+        actionName: "addCommand"
+    },
+    addCommandToBeginning: {
+        keyDef: { code: "KeyB", key: "b", ctrlKey: true, shiftKey: true},
+        actionName: "addCommandToBeginning"
+    },
+    addCommandToEnd: {
+        keyDef: { code: "KeyE", key: "e", ctrlKey: true, shiftKey: true},
+        actionName: "addCommandToEnd"
+    },
+    deleteCurrentStep: {
+        keyDef: { code: "KeyD", key: "d", ctrlKey: true, shiftKey: true},
+        actionName: "deleteCurrentStep"
+    },
+    announceScene: {
+        keyDef: {code: "KeyI", key: "i", ctrlKey: true, shiftKey: true},
+        actionName: "announceScene"
+    },
+    decreaseProgramSpeed: {
+        keyDef: { key: "<", shiftKey: true, hidden: true},
+        actionName: "decreaseProgramSpeed"
+    },
+    increaseProgramSpeed: {
+        keyDef: { key: ">", shiftKey: true, hidden: true},
+        actionName: "increaseProgramSpeed"
+    },
+    playPauseProgram: {
+        keyDef: { code: "KeyP", key: "p", ctrlKey: true, shiftKey: true},
+        actionName: "playPauseProgram"
+    },
+    refreshScene: {
+        keyDef: { code: "KeyR", key: "r", ctrlKey: true, shiftKey: true},
+        actionName: "refreshScene"
+    },
+    showHide: {
+        keyDef: { key: "?" },
+        actionName: "showHide"
+    },
+    stopProgram: {
+        keyDef: {code: "KeyS", key: "s", ctrlKey: true, shiftKey: true},
+        actionName: "stopProgram"
+    },
+}, CtrlShiftExtendedKeyboardSequences);
+
 export const KeyboardInputSchemes:KeyboardInputSchemesType = {
     "nvda": NvdaInputScheme,
-    "voiceover": VoiceOverInputScheme
+    "voiceover": VoiceOverInputScheme,
+    "ctrlshift": CtrlShiftInputScheme
 };
 
 const labelMessageKeysByCode = {
@@ -455,6 +523,11 @@ export function keyboardEventMatchesKeyDef (e: KeyboardEvent, keyDef: KeyDef) {
         }
         if (!!(keyDef.ctrlKey) !== !!(e.ctrlKey)) {
             return false;
+        }
+        // We are more flexible about shift, which is only required if it's
+        // specified in the keydef.
+        if (keyDef.shiftKey && !e.shiftKey) {
+            return false
         }
         return true;
     }

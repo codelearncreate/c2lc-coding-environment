@@ -21,7 +21,7 @@ function createShallowKeyboardInputModal(props) {
 
     const defaultWrapperProps = {
         keyBindingsEnabled: true,
-        keyboardInputSchemeName: "nvda",
+        keyboardInputSchemeName: "ctrlshift",
         onChangeKeyBindingsEnabled: onChangeKeyBindingsEnabled,
         onChangeKeyboardInputScheme: onChangeKeyboardInputScheme,
         onHide: onHide,
@@ -100,7 +100,7 @@ it('should be able to cancel changes.', () => {
     expect(wrappedModal.state.keyBindingsEnabled).toBe(false);
 
     wrappedModal.cancelChanges();
-    expect(wrappedModal.state.keyboardInputSchemeName).toBe("nvda");
+    expect(wrappedModal.state.keyboardInputSchemeName).toBe("ctrlshift");
     expect(wrappedModal.state.keyBindingsEnabled).toBe(true);
 
     expect(onChangeKeyBindingsEnabled.mock.calls.length).toBe(0);
