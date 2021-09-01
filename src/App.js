@@ -741,6 +741,11 @@ export class App extends React.Component<AppProps, AppState> {
                                 }
                             }
                             break;
+                        case("deleteLastStep"):
+                            if (!this.editingIsDisabled()) {
+                                this.programChangeController.deleteLastStep(this.programBlockEditorRef.current);
+                            }
+                            break;
                         case("deleteAll"): {
                             if (!this.editingIsDisabled()) {
                                 const newProgramSequence = this.state.programSequence.updateProgram([]);

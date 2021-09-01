@@ -17,6 +17,7 @@ export type ActionName =
     | "addCommandToBeginning"
     | "addCommandToEnd"
     | "deleteCurrentStep"
+    | "deleteLastStep"
     | "announceScene"
     | "decreaseProgramSpeed"
     | "increaseProgramSpeed"
@@ -290,6 +291,10 @@ const VoiceOverInputScheme: KeyboardInputScheme = Object.assign({
         keyDef: { code: "KeyD", key: "d", altKey: true},
         actionName: "deleteCurrentStep"
     },
+    deleteLastStep: {
+        keyDef: { code: "KeyL", key: "l", altKey: true},
+        actionName: "deleteLastStep"
+    },
     announceScene: {
         keyDef: { code: "KeyI", key: "i", altKey: true},
         actionName: "announceScene"
@@ -354,6 +359,10 @@ const NvdaInputScheme = Object.assign({
     deleteCurrentStep: {
         keyDef: { code: "KeyD", key: "d", altKey: true, ctrlKey: true},
         actionName: "deleteCurrentStep"
+    },
+    deleteLastStep: {
+        keyDef: { code: "KeyL", key: "l", altKey: true, ctrlKey: true},
+        actionName: "deleteLastStep"
     },
     announceScene: {
         keyDef: {code: "KeyI", key: "i", altKey: true, ctrlKey: true},

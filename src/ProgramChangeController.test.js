@@ -295,3 +295,43 @@ describe('Test deleteProgramStep()', () => {
     });
 
 });
+
+describe('Test deleteLastStep()', () => {
+    test('When deleting the last step, then focus is set to the add-node after the program', (done) => {
+        expect.assertions(7);
+
+        const { controller, appMock, audioManagerMock } = createProgramChangeController();
+
+        appMock.setState.mockImplementation((callback) => {
+            const newState = callback({
+                programSequence: new ProgramSequence(['forward1', 'forward2'], 0)
+            });
+
+            // The program should be updated
+            expect(newState.programSequence.getProgram()).toStrictEqual(
+                ['forward1']);
+
+            // The announcement should be made
+            expect(audioManagerMock.playAnnouncement.mock.calls.length).toBe(1);
+            expect(audioManagerMock.playAnnouncement.mock.calls[0][0]).toBe('delete');
+            expect(audioManagerMock.playAnnouncement.mock.calls[0][2]).toStrictEqual({
+                command: 'forward 2 squares'
+            });
+
+            // The add-node after the program should be focused
+            // $FlowFixMe: Jest mock API
+            const programBlockEditorMock = ProgramBlockEditor.mock.instances[0];
+            expect(programBlockEditorMock.focusCommandBlockAfterUpdate.mock.calls.length).toBe(0);
+            expect(programBlockEditorMock.focusAddNodeAfterUpdate.mock.calls.length).toBe(1);
+            expect(programBlockEditorMock.focusAddNodeAfterUpdate.mock.calls[0][0]).toBe(1);
+
+            done();
+        });
+
+        // $FlowFixMe: Jest mock API
+        ProgramBlockEditor.mockClear();
+        // $FlowFixMe: Jest mock API
+        controller.deleteLastStep(new ProgramBlockEditor());
+    });
+});
+
