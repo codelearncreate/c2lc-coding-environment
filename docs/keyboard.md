@@ -30,6 +30,7 @@ follows.
 | Ctrl + Alt + b | addCommandToBeginning |
 | Ctrl + Alt + e | addCommandToEnd |
 | Ctrl + Alt + d | deleteCurrentStep |
+| Ctrl + Alt + l | deleteLastStep |
 | Ctrl + Alt + i | announceScene |
 | Ctrl + Alt + p | playPauseProgram |
 | Ctrl + Alt + r | refreshScene |
@@ -85,6 +86,7 @@ with the starting key of a sequence.  Those key bindings are as follows:
 | Alt + b | addCommandToBeginning |
 | Alt + e | addCommandToEnd |
 | Alt + d | deleteCurrentStep |
+| Alt + l | deleteLastStep |
 | Alt + i | announceScene |
 | Alt + p | playPauseProgram |
 | Alt + r | refreshScene |
