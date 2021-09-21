@@ -27,6 +27,7 @@ $theme-colors: (
 
 html {
     font-size: 18px;
+    -webkit-backface-visibility: hidden;
 }
 
 body {
