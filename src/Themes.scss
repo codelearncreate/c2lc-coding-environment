@@ -119,29 +119,29 @@ body.light-theme {
         }
     }
 
-    button.ProgramBlockEditor__program-block--updated.btn-command-block--forward1,
-    button.ProgramBlockEditor__program-block--updated.btn-command-block--forward2,
-    button.ProgramBlockEditor__program-block--updated.btn-command-block--forward3 {
-        @include updatedProgramAnimation(#16796D, 'forward', 'light');
-    }
+    // button.ProgramBlockEditor__program-block--updated.btn-command-block--forward1,
+    // button.ProgramBlockEditor__program-block--updated.btn-command-block--forward2,
+    // button.ProgramBlockEditor__program-block--updated.btn-command-block--forward3 {
+    //     @include updatedProgramAnimation(#16796D, 'forward', 'light');
+    // }
 
-    button.ProgramBlockEditor__program-block--updated.btn-command-block--backward1,
-    button.ProgramBlockEditor__program-block--updated.btn-command-block--backward2,
-    button.ProgramBlockEditor__program-block--updated.btn-command-block--backward3 {
-        @include updatedProgramAnimation(#07586A, 'backward', 'light');
-    }
+    // button.ProgramBlockEditor__program-block--updated.btn-command-block--backward1,
+    // button.ProgramBlockEditor__program-block--updated.btn-command-block--backward2,
+    // button.ProgramBlockEditor__program-block--updated.btn-command-block--backward3 {
+    //     @include updatedProgramAnimation(#07586A, 'backward', 'light');
+    // }
 
-    button.ProgramBlockEditor__program-block--updated.btn-command-block--left45,
-    button.ProgramBlockEditor__program-block--updated.btn-command-block--left90,
-    button.ProgramBlockEditor__program-block--updated.btn-command-block--left180 {
-        @include updatedProgramAnimation(#AE6100, 'left', 'light');
-    }
+    // button.ProgramBlockEditor__program-block--updated.btn-command-block--left45,
+    // button.ProgramBlockEditor__program-block--updated.btn-command-block--left90,
+    // button.ProgramBlockEditor__program-block--updated.btn-command-block--left180 {
+    //     @include updatedProgramAnimation(#AE6100, 'left', 'light');
+    // }
 
-    button.ProgramBlockEditor__program-block--updated.btn-command-block--right45,
-    button.ProgramBlockEditor__program-block--updated.btn-command-block--right90,
-    button.ProgramBlockEditor__program-block--updated.btn-command-block--right180 {
-        @include updatedProgramAnimation(#952A1B, 'right', 'light');
-    }
+    // button.ProgramBlockEditor__program-block--updated.btn-command-block--right45,
+    // button.ProgramBlockEditor__program-block--updated.btn-command-block--right90,
+    // button.ProgramBlockEditor__program-block--updated.btn-command-block--right180 {
+    //     @include updatedProgramAnimation(#952A1B, 'right', 'light');
+    // }
 
     .Scene {
         background-color: white;
@@ -774,29 +774,29 @@ body.gray-theme {
         }
     }
 
-    button.ProgramBlockEditor__program-block--updated.btn-command-block--forward1,
-    button.ProgramBlockEditor__program-block--updated.btn-command-block--forward2,
-    button.ProgramBlockEditor__program-block--updated.btn-command-block--forward3 {
-        @include updatedProgramAnimation(#818A98, 'forward', 'grayscale');
-    }
+    // button.ProgramBlockEditor__program-block--updated.btn-command-block--forward1,
+    // button.ProgramBlockEditor__program-block--updated.btn-command-block--forward2,
+    // button.ProgramBlockEditor__program-block--updated.btn-command-block--forward3 {
+    //     @include updatedProgramAnimation(#818A98, 'forward', 'grayscale');
+    // }
 
-    button.ProgramBlockEditor__program-block--updated.btn-command-block--backward1,
-    button.ProgramBlockEditor__program-block--updated.btn-command-block--backward2,
-    button.ProgramBlockEditor__program-block--updated.btn-command-block--backward3 {
-        @include updatedProgramAnimation(#818A98, 'backward', 'grayscale');
-    }
+    // button.ProgramBlockEditor__program-block--updated.btn-command-block--backward1,
+    // button.ProgramBlockEditor__program-block--updated.btn-command-block--backward2,
+    // button.ProgramBlockEditor__program-block--updated.btn-command-block--backward3 {
+    //     @include updatedProgramAnimation(#818A98, 'backward', 'grayscale');
+    // }
 
-    button.ProgramBlockEditor__program-block--updated.btn-command-block--left45,
-    button.ProgramBlockEditor__program-block--updated.btn-command-block--left90,
-    button.ProgramBlockEditor__program-block--updated.btn-command-block--left180 {
-        @include updatedProgramAnimation(#818A98, 'left', 'grayscale');
-    }
+    // button.ProgramBlockEditor__program-block--updated.btn-command-block--left45,
+    // button.ProgramBlockEditor__program-block--updated.btn-command-block--left90,
+    // button.ProgramBlockEditor__program-block--updated.btn-command-block--left180 {
+    //     @include updatedProgramAnimation(#818A98, 'left', 'grayscale');
+    // }
 
-    button.ProgramBlockEditor__program-block--updated.btn-command-block--right45,
-    button.ProgramBlockEditor__program-block--updated.btn-command-block--right90,
-    button.ProgramBlockEditor__program-block--updated.btn-command-block--right180 {
-        @include updatedProgramAnimation(#818A98, 'right', 'grayscale');
-    }
+    // button.ProgramBlockEditor__program-block--updated.btn-command-block--right45,
+    // button.ProgramBlockEditor__program-block--updated.btn-command-block--right90,
+    // button.ProgramBlockEditor__program-block--updated.btn-command-block--right180 {
+    //     @include updatedProgramAnimation(#818A98, 'right', 'grayscale');
+    // }
 
     .command-block--hidden > svg {
         fill: #818A98;
@@ -1583,29 +1583,29 @@ body.contrast-theme {
         }
     }
 
-    button.ProgramBlockEditor__program-block--updated.btn-command-block--forward1,
-    button.ProgramBlockEditor__program-block--updated.btn-command-block--forward2,
-    button.ProgramBlockEditor__program-block--updated.btn-command-block--forward3 {
-        @include updatedProgramAnimation(white, 'forward', 'highcontrast');
-    }
+    // button.ProgramBlockEditor__program-block--updated.btn-command-block--forward1,
+    // button.ProgramBlockEditor__program-block--updated.btn-command-block--forward2,
+    // button.ProgramBlockEditor__program-block--updated.btn-command-block--forward3 {
+    //     @include updatedProgramAnimation(white, 'forward', 'highcontrast');
+    // }
 
-    button.ProgramBlockEditor__program-block--updated.btn-command-block--backward1,
-    button.ProgramBlockEditor__program-block--updated.btn-command-block--backward2,
-    button.ProgramBlockEditor__program-block--updated.btn-command-block--backward3 {
-        @include updatedProgramAnimation(white, 'backward', 'highcontrast');
-    }
+    // button.ProgramBlockEditor__program-block--updated.btn-command-block--backward1,
+    // button.ProgramBlockEditor__program-block--updated.btn-command-block--backward2,
+    // button.ProgramBlockEditor__program-block--updated.btn-command-block--backward3 {
+    //     @include updatedProgramAnimation(white, 'backward', 'highcontrast');
+    // }
 
-    button.ProgramBlockEditor__program-block--updated.btn-command-block--left45,
-    button.ProgramBlockEditor__program-block--updated.btn-command-block--left90,
-    button.ProgramBlockEditor__program-block--updated.btn-command-block--left180 {
-        @include updatedProgramAnimation(white, 'left', 'highcontrast');
-    }
+    // button.ProgramBlockEditor__program-block--updated.btn-command-block--left45,
+    // button.ProgramBlockEditor__program-block--updated.btn-command-block--left90,
+    // button.ProgramBlockEditor__program-block--updated.btn-command-block--left180 {
+    //     @include updatedProgramAnimation(white, 'left', 'highcontrast');
+    // }
 
-    button.ProgramBlockEditor__program-block--updated.btn-command-block--right45,
-    button.ProgramBlockEditor__program-block--updated.btn-command-block--right90,
-    button.ProgramBlockEditor__program-block--updated.btn-command-block--right180 {
-        @include updatedProgramAnimation(white, 'right', 'highcontrast');
-    }
+    // button.ProgramBlockEditor__program-block--updated.btn-command-block--right45,
+    // button.ProgramBlockEditor__program-block--updated.btn-command-block--right90,
+    // button.ProgramBlockEditor__program-block--updated.btn-command-block--right180 {
+    //     @include updatedProgramAnimation(white, 'right', 'highcontrast');
+    // }
 
     .command-block--hidden > svg {
         fill: white;
