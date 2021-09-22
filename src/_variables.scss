@@ -50,14 +50,3 @@ $c2lc-app-scene-container-margin-right: 0.25rem;
 /* Add Node */
 
 $c2lc-add-node-expanded-border-width: 2px;
-
-/* mixins */
-
-@mixin updatedProgramAnimation($color, $commandName, $theme) {
-    @keyframes updatedAnimation-#{$commandName}-#{$theme} {
-        0% {box-shadow: 0 0 0 1rem $color;}
-        100% {box-shadow: 0 0 0 0 $color;}
-    }
-    animation: updatedAnimation-#{$commandName}-#{$theme} 1.5s;
-    animation-timing-function: ease;
-};

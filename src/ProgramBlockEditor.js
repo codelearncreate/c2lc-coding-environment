@@ -109,14 +109,6 @@ export class ProgramBlockEditor extends React.Component<ProgramBlockEditorProps,
 
     setUpdatedCommandBlock(index: number) {
         this.updatedCommandBlockIndex = index;
-        // Remove the animation class, if it exists, from the current
-        // block at the index, to ensure that the animation (re)starts from
-        // the beginning.
-        // Uncomment down below when we figure out animation flickering issue in some iOS devices
-        // const element = this.commandBlockRefs.get(index);
-        // if (element) {
-        //     element.classList.remove('ProgramBlockEditor__program-block--updated');
-        // }
     }
 
     focusCommandBlockAfterUpdate(index: number) {
@@ -292,11 +284,6 @@ export class ProgramBlockEditor extends React.Component<ProgramBlockEditorProps,
         }
     };
 
-    // Uncomment down below when we figure out animation flickering issue in some iOS devices
-    // handleProgramCommandBlockAnimationEnd = (e: SyntheticEvent<HTMLButtonElement>) => {
-    //     e.currentTarget.classList.remove('ProgramBlockEditor__program-block--updated');
-    // };
-
     handleClickAddNode = (stepNumber: number) => {
         this.props.onInsertSelectedActionIntoProgram(stepNumber,
             this.props.selectedAction);
@@ -433,8 +420,6 @@ export class ProgramBlockEditor extends React.Component<ProgramBlockEditorProps,
                 aria-expanded={hasActionPanelControl}
                 disabled={this.props.editingDisabled}
                 onClick={this.handleClickStep}
-                // Uncomment down below when we figure out animation flickering issue in some iOS devices
-                // onAnimationEnd={this.handleProgramCommandBlockAnimationEnd}
             />
         );
     }
@@ -627,11 +612,6 @@ export class ProgramBlockEditor extends React.Component<ProgramBlockEditorProps,
             this.focusAddNodeIndex = null;
         }
         if (this.updatedCommandBlockIndex != null) {
-            // Uncomment down below when we figure out animation flickering issue in some iOS devices
-            // const element = this.commandBlockRefs.get(this.updatedCommandBlockIndex);
-            // if (element) {
-            //     element.classList.add('ProgramBlockEditor__program-block--updated');
-            // }
             this.updatedCommandBlockIndex = null;
         }
         if (this.props.runningState === 'running') {

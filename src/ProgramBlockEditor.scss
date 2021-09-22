@@ -1,11 +1,5 @@
 @import 'variables';
 
-@keyframes pausedAnimation {
-    0% {box-shadow: 0 0 0 $c2lc-paused-button-outer-width white;}
-    50% {box-shadow: 0 0 0 $c2lc-active-button-width white;}
-    100% {box-shadow: 0 0 0 $c2lc-paused-button-outer-width white;}
-}
-
 .ProgramBlockEditor__container {
     background-color: #CCE6E2;
     border: 2px solid #CCE6E2;
@@ -203,34 +197,8 @@ button.ProgramBlockEditor__program-block--active {
     box-shadow: 0 0 0 6px white;
 }
 
-// Uncomment down below when we figure out animation flickering issue in some iOS devices
-// button.ProgramBlockEditor__program-block--paused {
-//     animation-timing-function: ease;
-//     animation: pausedAnimation 2s infinite;
-// }
-
-button.ProgramBlockEditor__program-block--updated.btn-command-block--forward1,
-button.ProgramBlockEditor__program-block--updated.btn-command-block--forward2,
-button.ProgramBlockEditor__program-block--updated.btn-command-block--forward3 {
-    @include updatedProgramAnimation($c2lc-forward-command-color, 'forward', 'default');
-}
-
-button.ProgramBlockEditor__program-block--updated.btn-command-block--backward1,
-button.ProgramBlockEditor__program-block--updated.btn-command-block--backward2,
-button.ProgramBlockEditor__program-block--updated.btn-command-block--backward3 {
-    @include updatedProgramAnimation($c2lc-backward-command-color, 'backward', 'default');
-}
-
-button.ProgramBlockEditor__program-block--updated.btn-command-block--left45,
-button.ProgramBlockEditor__program-block--updated.btn-command-block--left90,
-button.ProgramBlockEditor__program-block--updated.btn-command-block--left180 {
-    @include updatedProgramAnimation($c2lc-left-command-color, 'left', 'default');
-}
-
-button.ProgramBlockEditor__program-block--updated.btn-command-block--right45,
-button.ProgramBlockEditor__program-block--updated.btn-command-block--right90,
-button.ProgramBlockEditor__program-block--updated.btn-command-block--right180 {
-    @include updatedProgramAnimation($c2lc-right-command-color, 'right', 'default');
+button.ProgramBlockEditor__program-block--paused {
+    box-shadow: 0 0 0 $c2lc-paused-button-outer-width white;
 }
 
 .ProgramBlockEditor__action-panel-container-outer {

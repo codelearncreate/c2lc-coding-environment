@@ -119,30 +119,6 @@ body.light-theme {
         }
     }
 
-    button.ProgramBlockEditor__program-block--updated.btn-command-block--forward1,
-    button.ProgramBlockEditor__program-block--updated.btn-command-block--forward2,
-    button.ProgramBlockEditor__program-block--updated.btn-command-block--forward3 {
-        @include updatedProgramAnimation(#16796D, 'forward', 'light');
-    }
-
-    button.ProgramBlockEditor__program-block--updated.btn-command-block--backward1,
-    button.ProgramBlockEditor__program-block--updated.btn-command-block--backward2,
-    button.ProgramBlockEditor__program-block--updated.btn-command-block--backward3 {
-        @include updatedProgramAnimation(#07586A, 'backward', 'light');
-    }
-
-    button.ProgramBlockEditor__program-block--updated.btn-command-block--left45,
-    button.ProgramBlockEditor__program-block--updated.btn-command-block--left90,
-    button.ProgramBlockEditor__program-block--updated.btn-command-block--left180 {
-        @include updatedProgramAnimation(#AE6100, 'left', 'light');
-    }
-
-    button.ProgramBlockEditor__program-block--updated.btn-command-block--right45,
-    button.ProgramBlockEditor__program-block--updated.btn-command-block--right90,
-    button.ProgramBlockEditor__program-block--updated.btn-command-block--right180 {
-        @include updatedProgramAnimation(#952A1B, 'right', 'light');
-    }
-
     .Scene {
         background-color: white;
     }
@@ -191,20 +167,13 @@ body.light-theme {
 
     }
 
-    @keyframes pausedLightAnimation {
-        0% {box-shadow: 0 0 0 $c2lc-paused-button-outer-width #30444E;}
-        50% {box-shadow: 0 0 0 $c2lc-active-button-width #30444E;}
-        100% {box-shadow: 0 0 0 $c2lc-paused-button-outer-width #30444E;}
-    }
-
     button.ProgramBlockEditor__program-block--active {
         box-shadow: 0 0 0 6px #30444E;
     }
 
-    // Uncomment down below when we figure out animation flickering issue in some iOS devices
-    // button.ProgramBlockEditor__program-block--paused {
-    //     animation: pausedLightAnimation 2s infinite;
-    // }
+    button.ProgramBlockEditor__program-block--paused {
+        box-shadow: 0 0 0 $c2lc-paused-button-outer-width #30444E;
+    }
 
     .ActionPanel__background {
         svg {
@@ -505,16 +474,9 @@ body.dark-theme {
         background-color: #22343C;
     }
 
-    @keyframes pausedDarkAnimation {
-        0% {box-shadow: 0 0 0 $c2lc-paused-button-outer-width white;}
-        50% {box-shadow: 0 0 0 $c2lc-active-button-width white;}
-        100% {box-shadow: 0 0 0 $c2lc-paused-button-outer-width white;}
+    button.ProgramBlockEditor__program-block--paused {
+        box-shadow: 0 0 0 $c2lc-paused-button-outer-width white;
     }
-
-    // Uncomment down below when we figure out animation flickering issue in some iOS devices
-    // button.ProgramBlockEditor__program-block--paused {
-    //     animation: pausedDarkAnimation 2s infinite;
-    // }
 
     button.ProgramBlockEditor__program-block--active {
         box-shadow: 0 0 0 $c2lc-active-button-width white;
@@ -774,30 +736,6 @@ body.gray-theme {
         &.command-block--pressed {
             border: 3px solid #505862;
         }
-    }
-
-    button.ProgramBlockEditor__program-block--updated.btn-command-block--forward1,
-    button.ProgramBlockEditor__program-block--updated.btn-command-block--forward2,
-    button.ProgramBlockEditor__program-block--updated.btn-command-block--forward3 {
-        @include updatedProgramAnimation(#818A98, 'forward', 'grayscale');
-    }
-
-    button.ProgramBlockEditor__program-block--updated.btn-command-block--backward1,
-    button.ProgramBlockEditor__program-block--updated.btn-command-block--backward2,
-    button.ProgramBlockEditor__program-block--updated.btn-command-block--backward3 {
-        @include updatedProgramAnimation(#818A98, 'backward', 'grayscale');
-    }
-
-    button.ProgramBlockEditor__program-block--updated.btn-command-block--left45,
-    button.ProgramBlockEditor__program-block--updated.btn-command-block--left90,
-    button.ProgramBlockEditor__program-block--updated.btn-command-block--left180 {
-        @include updatedProgramAnimation(#818A98, 'left', 'grayscale');
-    }
-
-    button.ProgramBlockEditor__program-block--updated.btn-command-block--right45,
-    button.ProgramBlockEditor__program-block--updated.btn-command-block--right90,
-    button.ProgramBlockEditor__program-block--updated.btn-command-block--right180 {
-        @include updatedProgramAnimation(#818A98, 'right', 'grayscale');
     }
 
     .command-block--hidden > svg {
@@ -1148,18 +1086,10 @@ body.gray-theme {
         }
     }
 
-    @keyframes pausedGreyscaleAnimation {
-        0% {box-shadow: 0 0 0 $c2lc-paused-button-outer-width #505862;}
-        50% {box-shadow: 0 0 0 $c2lc-active-button-width #505862;}
-        100% {box-shadow: 0 0 0 $c2lc-paused-button-outer-width #505862;}
+    button.ProgramBlockEditor__program-block--paused {
+        box-shadow: 0 0 0 $c2lc-paused-button-outer-width #505862;
+        border: 1px solid white;
     }
-
-    // Uncomment down below when we figure out animation flickering issue in some iOS devices
-    // button.ProgramBlockEditor__program-block--paused {
-    //     animation-timing-function: ease;
-    //     animation: pausedGreyscaleAnimation 2s infinite;
-    //     border: 1px solid white;
-    // }
 
     .App__playAndShare-background {
         background-color: #D5D8DD;
@@ -1586,30 +1516,6 @@ body.contrast-theme {
         }
     }
 
-    button.ProgramBlockEditor__program-block--updated.btn-command-block--forward1,
-    button.ProgramBlockEditor__program-block--updated.btn-command-block--forward2,
-    button.ProgramBlockEditor__program-block--updated.btn-command-block--forward3 {
-        @include updatedProgramAnimation(white, 'forward', 'highcontrast');
-    }
-
-    button.ProgramBlockEditor__program-block--updated.btn-command-block--backward1,
-    button.ProgramBlockEditor__program-block--updated.btn-command-block--backward2,
-    button.ProgramBlockEditor__program-block--updated.btn-command-block--backward3 {
-        @include updatedProgramAnimation(white, 'backward', 'highcontrast');
-    }
-
-    button.ProgramBlockEditor__program-block--updated.btn-command-block--left45,
-    button.ProgramBlockEditor__program-block--updated.btn-command-block--left90,
-    button.ProgramBlockEditor__program-block--updated.btn-command-block--left180 {
-        @include updatedProgramAnimation(white, 'left', 'highcontrast');
-    }
-
-    button.ProgramBlockEditor__program-block--updated.btn-command-block--right45,
-    button.ProgramBlockEditor__program-block--updated.btn-command-block--right90,
-    button.ProgramBlockEditor__program-block--updated.btn-command-block--right180 {
-        @include updatedProgramAnimation(white, 'right', 'highcontrast');
-    }
-
     .command-block--hidden > svg {
         fill: white;
     }
@@ -2022,18 +1928,10 @@ body.contrast-theme {
         }
     }
 
-    @keyframes pausedContrastAnimation {
-        0% {box-shadow: 0 0 0 $c2lc-paused-button-outer-width white;}
-        50% {box-shadow: 0 0 0 $c2lc-active-button-width white;}
-        100% {box-shadow: 0 0 0 $c2lc-paused-button-outer-width white;}
+    button.ProgramBlockEditor__program-block--paused {
+        border: 1px solid black;
+        box-shadow: 0 0 0 $c2lc-paused-button-outer-width white;
     }
-
-    // Uncomment down below when we figure out animation flickering issue in some iOS devices
-    // button.ProgramBlockEditor__program-block--paused {
-    //     border: 1px solid black;
-    //     animation-timing-function: ease;
-    //     animation: pausedContrastAnimation 2s infinite;
-    // }
 
     .App__playAndShare-background {
         background-color: white;
