@@ -201,9 +201,10 @@ body.light-theme {
         box-shadow: 0 0 0 6px #30444E;
     }
 
-    button.ProgramBlockEditor__program-block--paused {
-        animation: pausedLightAnimation 2s infinite;
-    }
+    // Uncomment down below when we figure out animation flickering issue in some iOS devices
+    // button.ProgramBlockEditor__program-block--paused {
+    //     animation: pausedLightAnimation 2s infinite;
+    // }
 
     .ActionPanel__background {
         svg {
@@ -510,9 +511,10 @@ body.dark-theme {
         100% {box-shadow: 0 0 0 $c2lc-paused-button-outer-width white;}
     }
 
-    button.ProgramBlockEditor__program-block--paused {
-        animation: pausedDarkAnimation 2s infinite;
-    }
+    // Uncomment down below when we figure out animation flickering issue in some iOS devices
+    // button.ProgramBlockEditor__program-block--paused {
+    //     animation: pausedDarkAnimation 2s infinite;
+    // }
 
     button.ProgramBlockEditor__program-block--active {
         box-shadow: 0 0 0 $c2lc-active-button-width white;
@@ -1152,11 +1154,12 @@ body.gray-theme {
         100% {box-shadow: 0 0 0 $c2lc-paused-button-outer-width #505862;}
     }
 
-    button.ProgramBlockEditor__program-block--paused {
-        animation-timing-function: ease;
-        animation: pausedGreyscaleAnimation 2s infinite;
-        border: 1px solid white;
-    }
+    // Uncomment down below when we figure out animation flickering issue in some iOS devices
+    // button.ProgramBlockEditor__program-block--paused {
+    //     animation-timing-function: ease;
+    //     animation: pausedGreyscaleAnimation 2s infinite;
+    //     border: 1px solid white;
+    // }
 
     .App__playAndShare-background {
         background-color: #D5D8DD;
@@ -2025,11 +2028,12 @@ body.contrast-theme {
         100% {box-shadow: 0 0 0 $c2lc-paused-button-outer-width white;}
     }
 
-    button.ProgramBlockEditor__program-block--paused {
-        border: 1px solid black;
-        animation-timing-function: ease;
-        animation: pausedContrastAnimation 2s infinite;
-    }
+    // Uncomment down below when we figure out animation flickering issue in some iOS devices
+    // button.ProgramBlockEditor__program-block--paused {
+    //     border: 1px solid black;
+    //     animation-timing-function: ease;
+    //     animation: pausedContrastAnimation 2s infinite;
+    // }
 
     .App__playAndShare-background {
         background-color: white;

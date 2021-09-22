@@ -203,10 +203,11 @@ button.ProgramBlockEditor__program-block--active {
     box-shadow: 0 0 0 6px white;
 }
 
-button.ProgramBlockEditor__program-block--paused {
-    animation-timing-function: ease;
-    animation: pausedAnimation 2s infinite;
-}
+// Uncomment down below when we figure out animation flickering issue in some iOS devices
+// button.ProgramBlockEditor__program-block--paused {
+//     animation-timing-function: ease;
+//     animation: pausedAnimation 2s infinite;
+// }
 
 button.ProgramBlockEditor__program-block--updated.btn-command-block--forward1,
 button.ProgramBlockEditor__program-block--updated.btn-command-block--forward2,
