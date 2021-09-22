@@ -56,7 +56,12 @@ export type WorldProperties = {|
     startingDirection: number
 |};
 
-const worlds = {
+const worlds: {|
+    'DeepOcean': WorldProperties,
+    'Jungle': WorldProperties,
+    'Sketchpad': WorldProperties,
+    'Space': WorldProperties
+|} = {
     'DeepOcean': {
         background: DeepOcean,
         backgroundGray: DeepOceanGray,
