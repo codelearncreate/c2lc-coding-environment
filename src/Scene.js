@@ -364,7 +364,7 @@ class Scene extends React.Component<SceneProps, {}> {
                                     world={this.props.world}
                                     theme={this.props.theme}
                                     transform={characterTransform}
-                                    width={0.9}
+                                    width={0.8}
                                 />
                             </g>
                         </svg>
