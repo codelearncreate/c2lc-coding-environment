@@ -21,7 +21,7 @@ class ModalFooter extends React.Component<ModalFooterProps, {}> {
                     </Button>
                 }
                 <Button className="ModalFooter__doneButton" onClick={this.props.onClickDone}>
-                    <FormattedMessage id="ModalFooter.Done"/>
+                    <FormattedMessage id="ModalFooter.Save"/>
                 </Button>
             </div>
         );
