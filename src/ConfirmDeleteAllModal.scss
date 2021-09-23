@@ -63,6 +63,11 @@ button.btn.ConfirmDeleteAllModal__option-button {
             background-color: #ED972C;
         }
     }
+
+    &.ConfirmDeleteAllModal__option-button-cancel {
+        background-color: #CCE6E2;
+        color: black;
+    }
 }
 
 @media only screen and (max-width: 991px) {
