@@ -8,7 +8,7 @@ import {ProgramBlockEditor} from './ProgramBlockEditor';
 // The ProgramChangeController is responsible for making changes to the
 // App 'state.programSequence' and coordinating any user interface
 // activities associated with the change, such as making announcements,
-// setting focus, or setting up animations.
+// setting focus, or scrolling.
 
 export default class ProgramChangeController {
     app: App;
@@ -108,11 +108,10 @@ export default class ProgramChangeController {
     }
 
     doActivitiesForAdd(programBlockEditor: ?ProgramBlockEditor, index: number) {
-        // Set up focus, scrolling, and animation
+        // Set up focus and scrolling
         if (programBlockEditor) {
             programBlockEditor.focusCommandBlockAfterUpdate(index);
             programBlockEditor.scrollToAddNodeAfterUpdate(index + 1);
-            programBlockEditor.setUpdatedCommandBlock(index);
         }
     }
 

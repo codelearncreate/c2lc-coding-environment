@@ -59,7 +59,6 @@ export class ProgramBlockEditor extends React.Component<ProgramBlockEditorProps,
     focusCommandBlockIndex: ?number;
     focusAddNodeIndex: ?number;
     scrollToAddNodeIndex: ?number;
-    updatedCommandBlockIndex: ?number;
     programSequenceContainerRef: { current: null | HTMLDivElement };
     lastCalculatedClosestAddNode: number;
 
@@ -70,7 +69,6 @@ export class ProgramBlockEditor extends React.Component<ProgramBlockEditorProps,
         this.focusCommandBlockIndex = null;
         this.focusAddNodeIndex = null;
         this.scrollToAddNodeIndex = null;
-        this.updatedCommandBlockIndex = null;
         this.programSequenceContainerRef = React.createRef();
         this.lastCalculatedClosestAddNode = Date.now();
         this.state = {
@@ -105,10 +103,6 @@ export class ProgramBlockEditor extends React.Component<ProgramBlockEditorProps,
 
     commandIsSelected() {
         return this.props.selectedAction != null;
-    }
-
-    setUpdatedCommandBlock(index: number) {
-        this.updatedCommandBlockIndex = index;
     }
 
     focusCommandBlockAfterUpdate(index: number) {
@@ -229,7 +223,6 @@ export class ProgramBlockEditor extends React.Component<ProgramBlockEditorProps,
                 });
                 this.focusCommandBlockIndex = index;
                 this.scrollToAddNodeIndex = index + 1;
-                this.setUpdatedCommandBlock(index);
             } else {
                 this.setState({
                     replaceIsActive: true
@@ -610,9 +603,6 @@ export class ProgramBlockEditor extends React.Component<ProgramBlockEditorProps,
                 addNode.focus();
             }
             this.focusAddNodeIndex = null;
-        }
-        if (this.updatedCommandBlockIndex != null) {
-            this.updatedCommandBlockIndex = null;
         }
         if (this.props.runningState === 'running') {
             const activeProgramStepNum = this.props.programSequence.getProgramCounter();

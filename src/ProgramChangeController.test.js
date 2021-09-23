@@ -41,7 +41,7 @@ function createProgramChangeController() {
 
 describe('Test insertSelectedActionIntoProgram()', () => {
     test('When there is a selectedAction, then the program should be updated and all expected activities invoked', (done) => {
-        expect.assertions(10);
+        expect.assertions(8);
 
         const { controller, appMock, audioManagerMock } = createProgramChangeController();
 
@@ -61,15 +61,13 @@ describe('Test insertSelectedActionIntoProgram()', () => {
                 command: 'forward 3 squares'
             });
 
-            // The focus, scrolling, and animation should be set up
+            // The focus and scrolling should be set up
             // $FlowFixMe: Jest mock API
             const programBlockEditorMock = ProgramBlockEditor.mock.instances[0];
             expect(programBlockEditorMock.focusCommandBlockAfterUpdate.mock.calls.length).toBe(1);
             expect(programBlockEditorMock.focusCommandBlockAfterUpdate.mock.calls[0][0]).toBe(1);
             expect(programBlockEditorMock.scrollToAddNodeAfterUpdate.mock.calls.length).toBe(1);
             expect(programBlockEditorMock.scrollToAddNodeAfterUpdate.mock.calls[0][0]).toBe(2);
-            expect(programBlockEditorMock.setUpdatedCommandBlock.mock.calls.length).toBe(1);
-            expect(programBlockEditorMock.setUpdatedCommandBlock.mock.calls[0][0]).toBe(1);
 
             done();
         });
@@ -82,7 +80,7 @@ describe('Test insertSelectedActionIntoProgram()', () => {
     });
 
     test('When there is no selectedAction, then no changes should be made', (done) => {
-        expect.assertions(5);
+        expect.assertions(4);
 
         const { controller, appMock, audioManagerMock } = createProgramChangeController();
 
@@ -102,7 +100,6 @@ describe('Test insertSelectedActionIntoProgram()', () => {
             const programBlockEditorMock = ProgramBlockEditor.mock.instances[0];
             expect(programBlockEditorMock.focusCommandBlockAfterUpdate.mock.calls.length).toBe(0);
             expect(programBlockEditorMock.scrollToAddNodeAfterUpdate.mock.calls.length).toBe(0);
-            expect(programBlockEditorMock.setUpdatedCommandBlock.mock.calls.length).toBe(0);
 
             done();
         });
@@ -116,7 +113,7 @@ describe('Test insertSelectedActionIntoProgram()', () => {
 
 describe('Test addSelectedActionToProgramEnd()', () => {
     test('When there is a selectedAction, then the program should be updated and all expected activities invoked', (done) => {
-        expect.assertions(10);
+        expect.assertions(8);
 
         const { controller, appMock, audioManagerMock } = createProgramChangeController();
 
@@ -136,15 +133,13 @@ describe('Test addSelectedActionToProgramEnd()', () => {
                 command: 'forward 3 squares'
             });
 
-            // The focus, scrolling, and animation should be set up
+            // The focus and scrolling should be set up
             // $FlowFixMe: Jest mock API
             const programBlockEditorMock = ProgramBlockEditor.mock.instances[0];
             expect(programBlockEditorMock.focusCommandBlockAfterUpdate.mock.calls.length).toBe(1);
             expect(programBlockEditorMock.focusCommandBlockAfterUpdate.mock.calls[0][0]).toBe(2);
             expect(programBlockEditorMock.scrollToAddNodeAfterUpdate.mock.calls.length).toBe(1);
             expect(programBlockEditorMock.scrollToAddNodeAfterUpdate.mock.calls[0][0]).toBe(3);
-            expect(programBlockEditorMock.setUpdatedCommandBlock.mock.calls.length).toBe(1);
-            expect(programBlockEditorMock.setUpdatedCommandBlock.mock.calls[0][0]).toBe(2);
 
             done();
         });
@@ -156,7 +151,7 @@ describe('Test addSelectedActionToProgramEnd()', () => {
     });
 
     test('When there is no selectedAction, then no changes should be made', (done) => {
-        expect.assertions(5);
+        expect.assertions(4);
 
         const { controller, appMock, audioManagerMock } = createProgramChangeController();
 
@@ -176,7 +171,6 @@ describe('Test addSelectedActionToProgramEnd()', () => {
             const programBlockEditorMock = ProgramBlockEditor.mock.instances[0];
             expect(programBlockEditorMock.focusCommandBlockAfterUpdate.mock.calls.length).toBe(0);
             expect(programBlockEditorMock.scrollToAddNodeAfterUpdate.mock.calls.length).toBe(0);
-            expect(programBlockEditorMock.setUpdatedCommandBlock.mock.calls.length).toBe(0);
 
             done();
         });
