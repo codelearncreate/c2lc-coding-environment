@@ -109,7 +109,7 @@ const worlds: {|
         character: Submarine,
         characterGray: SubmarineGray,
         characterContrast: SubmarineContrast,
-        startingX: 1,
+        startingX: 2,
         startingY: 2,
         startingDirection: 2 // East
     },
@@ -161,7 +161,7 @@ const worlds: {|
         character: SafariJeep,
         characterGray: SafariJeepGray,
         characterContrast: SafariJeepContrast,
-        startingX: 1,
+        startingX: 2,
         startingY: 2,
         startingDirection: 2 // East
     },
@@ -176,8 +176,8 @@ const worlds: {|
         character: Robot,
         characterGray: Robot,
         characterContrast: Robot,
-        startingX: 1,
-        startingY: 1,
+        startingX: 2,
+        startingY: 2,
         startingDirection: 2 // East
     },
     'Space': {
@@ -216,7 +216,7 @@ const worlds: {|
         character: SpaceShip,
         characterGray: SpaceShipGray,
         characterContrast: SpaceShipContrast,
-        startingX: 1,
+        startingX: 2,
         startingY: 2,
         startingDirection: 2 // East
     }
