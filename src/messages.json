@@ -7,6 +7,8 @@
         "ActionPanel.selectedCommandName": "with selected action {selectedCommandName}",
         "ActionsMenu.item.action.hide": "Hide",
         "ActionsMenu.item.action.show": "Show",
+        "ActionsMenu.item.selectedActionToggleAriaLabel": "{commandName} is currently selected and cannot be disabled",
+        "ActionsMenu.item.selectedActionToggleLabel": "(Selected)",
         "ActionsMenu.item.unusedItemToggleAriaLabel": "{action} {commandName}",
         "ActionsMenu.item.unusedItemToggleLabel": "{action}",
         "ActionsMenu.item.usedItemToggleAriaLabel": "{commandName} is used in the program and cannot be disabled",

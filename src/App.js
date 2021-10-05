@@ -928,7 +928,7 @@ export class App extends React.Component<AppProps, AppState> {
         // TODO: Use the function form of setState() as the new state
         //       depends on the current state
         const currentIsAllowed = this.state.allowedActions[commandName];
-        if (this.state.programSequence.usesAction(commandName) && currentIsAllowed) {
+        if (commandName === this.state.selectedAction || (this.state.programSequence.usesAction(commandName) && currentIsAllowed)) {
             event.preventDefault();
         }
         else {
@@ -1223,6 +1223,7 @@ export class App extends React.Component<AppProps, AppState> {
                             changeHandler={this.handleToggleAllowedCommand}
                             editingDisabled={this.editingIsDisabled()}
                             programSequence={this.state.programSequence}
+                            selectedAction={this.state.selectedAction}
                             intl={this.props.intl}
                         />
                         <div className='App__command-palette-command-container'>

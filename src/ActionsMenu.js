@@ -19,6 +19,7 @@ type ActionsMenuProps = {
     // TODO: Flesh this definition out.
     menuItems: {},
     programSequence: ProgramSequence,
+    selectedAction?: ?string;
     allowedActions: ActionToggleRegister
 };
 
@@ -144,6 +145,7 @@ class ActionsMenu extends React.Component<ActionsMenuProps, ActionsMenuState> {
                     intl={this.props.intl}
                     isAllowed={isAllowed}
                     isUsed={isUsed}
+                    isSelected={this.props.selectedAction === itemKey}
                     itemKey={itemKey}
                     key={itemKey}
                     onChange={itemChangeHandler}

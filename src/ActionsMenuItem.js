@@ -9,6 +9,7 @@ import './ActionsMenuItem.scss';
 type ActionsMenuItemProps = {
     intl: IntlShape,
     isAllowed?: boolean,
+    isSelected?: boolean,
     isUsed?: boolean,
     itemKey: string,
     onChange: (event: Event) => void
@@ -20,22 +21,31 @@ export class ActionsMenuItem extends React.Component< ActionsMenuItemProps, {} >
         const commandName = this.props.intl.formatMessage({ id: `Command.${this.props.itemKey}` });
         const commandNameShort = this.props.intl.formatMessage({ id: `Command.short.${this.props.itemKey}` });
 
-        const actionNameKey = this.props.isAllowed ? "ActionsMenu.item.action.show" : "ActionsMenu.item.action.hide";
+        const actionNameKey = this.props.isAllowed ? "ActionsMenu.item.action.show" :"ActionsMenu.item.action.hide";
         const actionName = this.props.intl.formatMessage({ id: actionNameKey });
 
-        // If we're used, show one message. If we're not, show another that differs based on `isAllowed`.
-        const showHideLabelKey = this.props.isUsed ? "ActionsMenu.item.usedItemToggleLabel" : "ActionsMenu.item.unusedItemToggleLabel";
+        let showHideLabelKey = "ActionsMenu.item.usedItemToggleLabel";
+        if (this.props.isSelected) {
+            showHideLabelKey = "ActionsMenu.item.selectedActionToggleLabel";
+        }
+        else if (!this.props.isUsed) { showHideLabelKey = "ActionsMenu.item.unusedItemToggleLabel"; }
         const showHideLabel = this.props.intl.formatMessage(
             { id: showHideLabelKey },
             { action: actionName, commandName: commandName }
         );
 
-        const showHideAriaLabelKey = this.props.isUsed ? "ActionsMenu.item.usedItemToggleAriaLabel" : "ActionsMenu.item.unusedItemToggleAriaLabel";
+        let showHideAriaLabelKey = "ActionsMenu.item.unusedItemToggleAriaLabel";
+        if (this.props.isSelected) {
+            showHideAriaLabelKey ="ActionsMenu.item.selectedActionToggleAriaLabel";
+        }
+        else if (this.props.isUsed) {
+            showHideAriaLabelKey = "ActionsMenu.item.usedItemToggleAriaLabel";
+        }
+
         const showHideAriaLabel = this.props.intl.formatMessage(
             { id: showHideAriaLabelKey },
             { action: actionName, commandName: commandName }
         );
-
         return (
             <div className="ActionsMenuItem">
                 <div className={'ActionsMenuItem__text' + (this.props.isAllowed ? '' : ' ActionsMenuItem__text--disabled')}>
