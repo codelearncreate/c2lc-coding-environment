@@ -471,6 +471,12 @@ export class App extends React.Component<AppProps, AppState> {
         });
     }
 
+    setSelectedActionIfAllowed(commandName:CommandName): void {
+        if (this.state.allowedActions[commandName]) {
+            this.setState({"selectedAction": commandName });
+        }
+    }
+
     // API for Interpreter
 
     getProgramSequence(): ProgramSequence {
@@ -770,40 +776,40 @@ export class App extends React.Component<AppProps, AppState> {
                             this.changeProgramSpeedIndex(this.speedLookUp.indexOf(this.interpreter.stepTimeMs) + 1);
                             break;
                         case("selectForward1"):
-                            this.setState({ "selectedAction": "forward1" });
+                            this.setSelectedActionIfAllowed("forward1");
                             break;
                         case("selectForward2"):
-                            this.setState({ "selectedAction": "forward2" });
+                            this.setSelectedActionIfAllowed("forward2");
                             break;
                         case("selectForward3"):
-                            this.setState({ "selectedAction": "forward3" });
+                            this.setSelectedActionIfAllowed("forward3");
                             break;
                         case("selectBackward1"):
-                            this.setState({ "selectedAction": "backward1" });
+                            this.setSelectedActionIfAllowed("backward1");
                             break;
                         case("selectBackward2"):
-                            this.setState({ "selectedAction": "backward2" });
+                            this.setSelectedActionIfAllowed("backward2");
                             break;
                         case("selectBackward3"):
-                            this.setState({ "selectedAction": "backward3" });
+                            this.setSelectedActionIfAllowed("backward3");
                             break;
                         case("selectLeft45"):
-                            this.setState({ "selectedAction": "left45" });
+                            this.setSelectedActionIfAllowed("left45");
                             break;
                         case("selectLeft90"):
-                            this.setState({ "selectedAction": "left90" });
+                            this.setSelectedActionIfAllowed("left90");
                             break;
                         case("selectLeft180"):
-                            this.setState({ "selectedAction": "left180" });
+                            this.setSelectedActionIfAllowed("left180");
                             break;
                         case("selectRight45"):
-                            this.setState({ "selectedAction": "right45" });
+                            this.setSelectedActionIfAllowed("right45");
                             break;
                         case("selectRight90"):
-                            this.setState({ "selectedAction": "right90" });
+                            this.setSelectedActionIfAllowed("right90");
                             break;
                         case("selectRight180"):
-                            this.setState({ "selectedAction": "right180" });
+                            this.setSelectedActionIfAllowed("right180");
                             break;
                         case("focusActions"):
                             focusOnFirstElementWithClass("command-block");
