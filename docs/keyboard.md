@@ -1,15 +1,15 @@
 # Key Bindings
 
-Weavly supports two sets of keyboard shortcuts.  A keyboard shortcut provides
-fast access to a range of Weavly's features using one or more key presses.
-Keyboard shortcuts can be configured (or turned off) using the keyboard input
-menu, which is displayed by default when the question mark key is pressed, or
-when the keyboard icon is clicked.
+A keyboard shortcut provides fast access to a range of Weavly's features using
+one or more key presses.  Keyboard shortcuts are disabled by default, and can be
+turned on using the keyboard input menu, which is displayed when the keyboard
+icon is clicked.  Once key bindings are enabled, the keyboard input menu can
+also be opened using the question mark key.
 
-The most basic shortcuts are activated by holding a key like alt, or holding
-control and alt at the same time, and then pressing a particular letter.  Longer
-shortcuts involve hitting a combination of keys to start a sequence, and then
-entering additional letters.
+Weavly supports two sets of keyboard shortcuts.  The most basic shortcuts are
+activated by holding a key like alt, or holding control and alt at the same
+time, and then pressing a particular letter.  Longer shortcuts involve hitting a
+combination of keys to start a sequence, and then entering additional letters.
 
 In the instructions below, keys that need to be held at the same time are
 indicated using plus signs, and keys that need to be entered separately are
@@ -17,7 +17,7 @@ divided using commas. For example, the shortcut `Ctrl + Alt + x, x` is
 activated by holding control, alt, and x at the same time, releasing all keys,
 and then hitting the x key again by itself.
 
-## NVDA Key Bindings
+## Control+Alt (Apple: Control+Option) Key Bindings
 
 NVDA has many commands that make use of the alt key, to avoid conflicting with
 these, the default keyboard input scheme uses the control and alt keys in
@@ -26,6 +26,7 @@ follows.
 
 | Keys | Command |
 | ---- | ------- |
+| Ctrl + Alt + a | addCommand |
 | Ctrl + Alt + b | addCommandToBeginning |
 | Ctrl + Alt + e | addCommandToEnd |
 | Ctrl + Alt + d | deleteCurrentStep |
@@ -65,9 +66,14 @@ follows.
 | Ctrl + Alt + x, f, x | focusCharacterColumnInput |
 | Ctrl + Alt + x, f, y | focusCharacterRowInput |
 | Ctrl + Alt + x, f, w | focusWorldSelector |
+| Ctrl + Alt + x, t, 1 | changeToDefaultTheme |
+| Ctrl + Alt + x, t, 2 | changeToLightTheme |
+| Ctrl + Alt + x, t, 3 | changeToDarkTheme |
+| Ctrl + Alt + x, t, 4 | changeToGrayscaleTheme |
+| Ctrl + Alt + x, t, 5 | changeToHighContrastTheme |
 | Ctrl + Alt + x, x | toggleFeedbackAnnouncements |
 
-## VoiceOver Key Bindings
+## Alt (Apple: Option) Key Bindings
 
 VoiceOver uses ctrl+alt for many of its commands, to avoid conflicting with
 those, there is a keyboard input scheme whichg uses the alt key in combination
@@ -75,6 +81,7 @@ with the starting key of a sequence.  Those key bindings are as follows:
 
 | Keys | Command |
 | ---- | ------- |
+| Alt + a | addCommand |
 | Alt + b | addCommandToBeginning |
 | Alt + e | addCommandToEnd |
 | Alt + d | deleteCurrentStep |
@@ -114,4 +121,9 @@ with the starting key of a sequence.  Those key bindings are as follows:
 | Alt + x, f, x | focusCharacterColumnInput |
 | Alt + x, f, y | focusCharacterRowInput |
 | Alt + x, f, w | focusWorldSelector |
+| Alt + x, t, 1 | changeToDefaultTheme |
+| Alt + x, t, 2 | changeToLightTheme |
+| Alt + x, t, 3 | changeToDarkTheme |
+| Alt + x, t, 4 | changeToGrayscaleTheme |
+| Alt + x, t, 5 | changeToHighContrastTheme |
 | Alt + x, x | toggleFeedbackAnnouncements |

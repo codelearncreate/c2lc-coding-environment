@@ -15,7 +15,8 @@ configure({ adapter: new Adapter() });
 const defaultSceneProps = {
     dimensions: new SceneDimensions(1, 1, 1, 1),
     characterState: new CharacterState(0, 0, 2, [], new SceneDimensions(1, 1, 1, 1)),
-    theme: 'default'
+    theme: 'mixed',
+    world: 'Sketchpad'
 };
 
 function createMountScene(props) {
@@ -73,6 +74,10 @@ function findColumnHeader(sceneWrapper) {
     return sceneWrapper.find('.Scene__column-header');
 }
 
+function findSceneBackground(sceneWrapper) {
+    return sceneWrapper.find('.Scene__background');
+}
+
 // TODO: This function is reproducing logic from Scene (the 0.8) and
 //       Character (everything else) and it will be easily
 //       broken. Is there a better approach here that tests that the
@@ -106,11 +111,11 @@ describe('When the Scene renders', () => {
         // Row labels
 
         expect(findGridLabels(sceneWrapper).get(0).props.x).toBe(-0.5);
-        expect(findGridLabels(sceneWrapper).get(0).props.y).toBe(4.125);
+        expect(findGridLabels(sceneWrapper).get(0).props.y).toBe(5);
 
         // Column labels
 
-        expect(findGridLabels(sceneWrapper).get(1).props.x).toBe(4.125);
+        expect(findGridLabels(sceneWrapper).get(1).props.x).toBe(5);
         expect(findGridLabels(sceneWrapper).get(1).props.y).toBe(0.5);
 
         // Grid lines
@@ -137,17 +142,17 @@ describe('When the Scene renders', () => {
         // Row labels
 
         expect(findGridLabels(sceneWrapper).get(0).props.x).toBe(-0.5);
-        expect(findGridLabels(sceneWrapper).get(0).props.y).toBe(4.125);
+        expect(findGridLabels(sceneWrapper).get(0).props.y).toBe(5);
         expect(findGridLabels(sceneWrapper).get(1).props.x).toBe(-0.5);
-        expect(findGridLabels(sceneWrapper).get(1).props.y).toBe(12.375);
+        expect(findGridLabels(sceneWrapper).get(1).props.y).toBe(15);
 
         // Column labels
 
-        expect(findGridLabels(sceneWrapper).get(2).props.x).toBe(4.125);
+        expect(findGridLabels(sceneWrapper).get(2).props.x).toBe(5);
         expect(findGridLabels(sceneWrapper).get(2).props.y).toBe(0.5);
-        expect(findGridLabels(sceneWrapper).get(3).props.x).toBe(12.375);
+        expect(findGridLabels(sceneWrapper).get(3).props.x).toBe(15);
         expect(findGridLabels(sceneWrapper).get(3).props.y).toBe(0.5);
-        expect(findGridLabels(sceneWrapper).get(4).props.x).toBe(20.625);
+        expect(findGridLabels(sceneWrapper).get(4).props.x).toBe(25);
         expect(findGridLabels(sceneWrapper).get(4).props.y).toBe(0.5);
 
         // Grid lines
@@ -176,14 +181,14 @@ describe('When the Scene renders', () => {
 
 describe('The ARIA label should tell there is a character with its position', () => {
     test.each([
-        [1, 2, 0, 'Scene, 17 by 9 grid with a character at column A, row 2 facing up'],
-        [2, 3, 1, 'Scene, 17 by 9 grid with a character at column B, row 3 facing upper right'],
-        [1, 2, 2, 'Scene, 17 by 9 grid with a character at column A, row 2 facing right'],
-        [1, 2, 3, 'Scene, 17 by 9 grid with a character at column A, row 2 facing lower right'],
-        [1, 2, 4, 'Scene, 17 by 9 grid with a character at column A, row 2 facing down'],
-        [1, 2, 5, 'Scene, 17 by 9 grid with a character at column A, row 2 facing lower left'],
-        [1, 2, 6, 'Scene, 17 by 9 grid with a character at column A, row 2 facing left'],
-        [1, 2, 7, 'Scene, 17 by 9 grid with a character at column A, row 2 facing upper left']
+        [1, 2, 0, 'Scene, in Sketchpad, 17 by 9 grid with the robot at column A, row 2 facing up'],
+        [2, 3, 1, 'Scene, in Sketchpad, 17 by 9 grid with the robot at column B, row 3 facing upper right'],
+        [1, 2, 2, 'Scene, in Sketchpad, 17 by 9 grid with the robot at column A, row 2 facing right'],
+        [1, 2, 3, 'Scene, in Sketchpad, 17 by 9 grid with the robot at column A, row 2 facing lower right'],
+        [1, 2, 4, 'Scene, in Sketchpad, 17 by 9 grid with the robot at column A, row 2 facing down'],
+        [1, 2, 5, 'Scene, in Sketchpad, 17 by 9 grid with the robot at column A, row 2 facing lower left'],
+        [1, 2, 6, 'Scene, in Sketchpad, 17 by 9 grid with the robot at column A, row 2 facing left'],
+        [1, 2, 7, 'Scene, in Sketchpad, 17 by 9 grid with the robot at column A, row 2 facing upper left']
     ])('x=%f, y=%f, direction=%i', (x, y, direction, expectedLabel) => {
         const sceneDimensions = new SceneDimensions(1, 17, 1, 9);
         const sceneWrapper = createMountScene({
@@ -348,5 +353,55 @@ describe('When Scene gets scrolled', () => {
         scene.simulate('scroll');
         expect(rowHeader.ref.currentTarget.scrollTop).toBe(200);
         expect(columnHeader.ref.currentTarget.scrollLeft).toBe(200);
+    });
+});
+
+describe('Scene background changes when world and theme change', () => {
+    test('world property changes to Sketchpad(default)', () => {
+        expect.assertions(3);
+        const sceneWrapper = createMountScene();
+        const sceneBackground = findSceneBackground(sceneWrapper);
+        // Renders no background
+        expect(sceneBackground.get(0)).toBe(undefined);
+        sceneWrapper.setProps({theme: 'gray'});
+        expect(sceneBackground.get(0)).toBe(undefined);
+        sceneWrapper.setProps({theme: 'contrast'});
+        expect(sceneBackground.get(0)).toBe(undefined);
+    });
+    test('world property changes to Space', () => {
+        expect.assertions(3);
+        const sceneWrapper = createMountScene({world: 'Space'});
+        let sceneBackground = findSceneBackground(sceneWrapper);
+        expect(sceneBackground.get(0).type.render().props.children).toBe('Space.svg');
+        sceneWrapper.setProps({theme: 'gray'});
+        sceneBackground = findSceneBackground(sceneWrapper);
+        expect(sceneBackground.get(0).type.render().props.children).toBe('Space-gray.svg');
+        sceneWrapper.setProps({theme: 'contrast'});
+        sceneBackground = findSceneBackground(sceneWrapper);
+        expect(sceneBackground.get(0).type.render().props.children).toBe('Space-contrast.svg');
+    });
+    test('world property changes to Jungle', () => {
+        expect.assertions(3);
+        const sceneWrapper = createMountScene({world: 'Jungle'});
+        let sceneBackground = findSceneBackground(sceneWrapper);
+        expect(sceneBackground.get(0).type.render().props.children).toBe('Jungle.svg');
+        sceneWrapper.setProps({theme: 'gray'});
+        sceneBackground = findSceneBackground(sceneWrapper);
+        expect(sceneBackground.get(0).type.render().props.children).toBe('Jungle-gray.svg');
+        sceneWrapper.setProps({theme: 'contrast'});
+        sceneBackground = findSceneBackground(sceneWrapper);
+        expect(sceneBackground.get(0).type.render().props.children).toBe('Jungle-contrast.svg');
+    });
+    test('world property changes to DeepOcean', () => {
+        expect.assertions(3);
+        const sceneWrapper = createMountScene({world: 'DeepOcean'});
+        let sceneBackground = findSceneBackground(sceneWrapper);
+        expect(sceneBackground.get(0).type.render().props.children).toBe('DeepOcean.svg');
+        sceneWrapper.setProps({theme: 'gray'});
+        sceneBackground = findSceneBackground(sceneWrapper);
+        expect(sceneBackground.get(0).type.render().props.children).toBe('DeepOcean-gray.svg');
+        sceneWrapper.setProps({theme: 'contrast'});
+        sceneBackground = findSceneBackground(sceneWrapper);
+        expect(sceneBackground.get(0).type.render().props.children).toBe('DeepOcean-contrast.svg');
     });
 });

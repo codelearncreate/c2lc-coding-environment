@@ -1,6 +1,6 @@
 {
     "name": "c2lc-coding-environment",
-    "version": "0.9.0",
+    "version": "0.9.1",
     "private": true,
     "dependencies": {
         "bootstrap": "4.6.0",
@@ -24,7 +24,9 @@
         "start": "react-scripts start",
         "build": "react-scripts build",
         "test": "react-scripts test",
-        "eject": "react-scripts eject"
+        "eject": "react-scripts eject",
+        "prenetlify-build": "npm rebuild",
+        "netlify-build": "react-scripts build"
     },
     "eslintConfig": {
         "extends": "react-app",
@@ -77,7 +79,7 @@
         ],
         "coverageThreshold": {
             "global": {
-                "branches": 89,
+                "branches": 88,
                 "functions": 95,
                 "lines": 95,
                 "statements": 95

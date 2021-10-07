@@ -18,11 +18,18 @@ test('Test getThemeFromString', () => {
 });
 
 test('Test getWorldFromString', () => {
-    expect(getWorldFromString('', 'default')).toBe('default');
-    expect(getWorldFromString(null, 'default')).toBe('default');
-    expect(getWorldFromString('default', 'default')).toBe('default');
-    expect(getWorldFromString('space', 'default')).toBe('space');
-    expect(getWorldFromString('forest', 'default')).toBe('forest');
+    // World names before 0.9 release
+    expect(getWorldFromString('default', 'Sketchpad')).toBe('Sketchpad');
+    expect(getWorldFromString('forest', 'Sketchpad')).toBe('Jungle');
+    expect(getWorldFromString('space', 'Sketchpad')).toBe('Space');
+
+    expect(getWorldFromString('', 'Sketchpad')).toBe('Sketchpad');
+    expect(getWorldFromString(null, 'Sketchpad')).toBe('Sketchpad');
+
+    expect(getWorldFromString('DeepOcean', 'Sketchpad')).toBe('DeepOcean');
+    expect(getWorldFromString('Jungle', 'Sketchpad')).toBe('Jungle');
+    expect(getWorldFromString('Sketchpad', 'Sketchpad')).toBe('Sketchpad');
+    expect(getWorldFromString('Space', 'Sketchpad')).toBe('Space');
 });
 
 test('Test extend', () => {

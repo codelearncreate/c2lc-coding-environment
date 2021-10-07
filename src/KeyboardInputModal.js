@@ -1,6 +1,8 @@
 // @flow
 import React from 'react';
-import { Button, Modal } from 'react-bootstrap';
+import ModalFooter from './ModalFooter';
+import ModalHeader from './ModalHeader';
+import { Modal } from 'react-bootstrap';
 import { injectIntl, FormattedMessage } from 'react-intl';
 import type {IntlShape} from 'react-intl';
 
@@ -182,20 +184,19 @@ class KeyboardInputModal extends React.Component<KeyboardInputModalProps, Keyboa
     render () {
         return(
             <Modal
+                aria-labelledby='KeyboardInputModal'
                 onHide={this.cancelChanges}
                 show={this.props.show}
-                aria-modal={true}
-                role="dialog"
                 dialogClassName='KeyboardInputModal'
             >
+                <ModalHeader
+                    id='KeyboardInputModal'
+                    title={this.props.intl.formatMessage({
+                        id: 'KeyboardInputModal.Title'
+                    })}>
+                    <KeyboardIcon aria-hidden='true'/>
+                </ModalHeader>
                 <Modal.Body className='KeyboardInputModal__content'>
-                    <h2 className="KeyboardInputModal__content__title">
-                        <KeyboardIcon/>
-                        <div>
-                            <FormattedMessage id='KeyboardInputModal.Title'/>
-                        </div>
-                    </h2>
-
                     <div className="KeyboardInputModal__content__toggleBar">
                         <div className="KeyboardInputModal__content__toggleBar__label">
                             <FormattedMessage id='KeyboardInputModal.Toggle.Label'/>
@@ -205,6 +206,7 @@ class KeyboardInputModal extends React.Component<KeyboardInputModalProps, Keyboa
                                 <FormattedMessage id='KeyboardInputModal.Toggle.Off'/>
                             </div>
                             <ToggleSwitch
+                                id='keyboardInputModal__toggle'
                                 ariaLabel={this.props.intl.formatMessage({id: "KeyboardInputModal.Toggle.AriaLabel"})}
                                 className="KeyboardInputModal__content__toggle"
                                 contentsTrue=""
@@ -223,18 +225,30 @@ class KeyboardInputModal extends React.Component<KeyboardInputModalProps, Keyboa
                     <ul className={"KeyboardInputModal__content__list" + (this.state.keyBindingsEnabled ? "": " KeyboardInputModal__content__list--disabled")}>
                         {this.renderKeyBindings()}
                     </ul>
-
-                    <div className="KeyboardInputModal__content__footer">
-                        <Button className="KeyboardInputModal__content__cancelButton" onClick={this.cancelChanges}>
-                            <FormattedMessage id="KeyboardInputModal.Cancel"/>
-                        </Button>
-
-                        <Button className="KeyboardInputModal__content__doneButton" onClick={this.saveChanges}>
-                            <FormattedMessage id="KeyboardInputModal.Done"/>
-                        </Button>
-                    </div>
+                    <ModalFooter
+                        hasCancel={true}
+                        onClickCancel={this.cancelChanges}
+                        onClickDone={this.saveChanges}
+                    />
                 </Modal.Body>
             </Modal>);
+    }
+
+    // Required to avoid a phantom state where we persist the defaults even after they are updated from local storage.
+    componentDidUpdate (prevProps: KeyboardInputModalProps) {
+        if (prevProps.keyBindingsEnabled !== this.props.keyBindingsEnabled || prevProps.keyboardInputSchemeName !== this.props.keyboardInputSchemeName) {
+            this.setState({
+                keyBindingsEnabled: this.props.keyBindingsEnabled,
+                keyboardInputSchemeName: this.props.keyboardInputSchemeName
+            });
+        }
+        if (prevProps.show !== this.props.show && this.props.show) {
+            // TODO: Implement a common function to set focus on an element with an id in Untils.js
+            const keyboardShortcutsToggle = document.getElementById('keyboardInputModal__toggle');
+            if (keyboardShortcutsToggle) {
+                keyboardShortcutsToggle.focus();
+            }
+        }
     }
 }
 
