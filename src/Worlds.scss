@@ -18,6 +18,14 @@
     stroke: #A4D0DA;
 }
 
+.WorldSelector__option-image--DeepOcean:hover {
+    svg {
+        .thumbnail-background {
+            fill: #33717F;
+        }
+    }
+}
+
 body.gray-theme {
     .Character-background--DeepOcean {
         fill: #67717E;
@@ -34,6 +42,14 @@ body.gray-theme {
 
     .Scene__path-line--DeepOcean {
         stroke: #505862;
+    }
+
+    .WorldSelector__option-image--DeepOcean:hover {
+        svg {
+            .thumbnail-background {
+                fill: #3A3F46;
+            }
+        }
     }
 }
 
@@ -53,6 +69,27 @@ body.contrast-theme {
 
     .Scene__path-line--DeepOcean {
         stroke: #FF0000;
+    }
+
+    .WorldSelector__option-image--DeepOcean:hover {
+        svg {
+            .thumbnail-background {
+                fill: #1E1E1E;
+            }
+
+            .thumbnail-character-outline {
+                fill: #1E1E1E;
+                stroke: #FFFFFF;
+            }
+
+            .thumbnail-character-innerline-white {
+                fill: #1E1E1E;
+            }
+
+            .thumbnail-character-innerline-black {
+                fill: #FFFFFF;
+            }
+        }
     }
 }
 
@@ -76,6 +113,14 @@ body.contrast-theme {
     stroke: #784234;
 }
 
+.WorldSelector__option-image--Jungle:hover {
+    svg {
+        .thumbnail-background {
+            fill: #D37D12;
+        }
+    }
+}
+
 body.gray-theme {
     .Character-background--Jungle {
         fill: #505862;
@@ -92,6 +137,14 @@ body.gray-theme {
 
     .Scene__path-line--Jungle {
         stroke: #505862;
+    }
+
+    .WorldSelector__option-image--Jungle:hover {
+        svg {
+            .thumbnail-background {
+                fill: #3A3F46;
+            }
+        }
     }
 }
 
@@ -111,6 +164,37 @@ body.contrast-theme {
 
     .Scene__path-line--Jungle {
         stroke: #FF0000;
+    }
+
+    .WorldSelector__option-image--Jungle:hover {
+        svg {
+            .thumbnail-background {
+                fill: #1E1E1E;
+            }
+
+            .thumbnail-character-outline-white {
+                fill: #1E1E1E;
+            }
+
+            .thumbnail-character-outline-black {
+                fill: #FFFFFF;
+            }
+
+            .thumbnail-character-innerline-white {
+                fill: #1E1E1E;
+                stroke: #FFFFFF;
+            }
+
+            .thumbnail-character-innerline-black {
+                fill: #FFFFFF;
+                stroke: #1E1E1E;
+            }
+
+            .thumbnail-character-part {
+                fill: #000000;
+                stroke: #FFFFFF;
+            }
+        }
     }
 }
 
@@ -132,6 +216,14 @@ body.contrast-theme {
 
 .Scene__path-line--Sketchpad {
     stroke: #505862;
+}
+
+.WorldSelector__option-image--Sketchpad:hover {
+    svg {
+        .thumbnail-background {
+            fill: #F1AE5B;
+        }
+    }
 }
 
 body.dark-theme {
@@ -161,6 +253,14 @@ body.gray-theme {
     .Scene__path-line--Sketchpad {
         stroke: #505862;
     }
+
+    .WorldSelector__option-image--Sketchpad:hover {
+        svg {
+            .thumbnail-background {
+                fill: #505862;
+            }
+        }
+    }
 }
 
 body.contrast-theme {
@@ -179,6 +279,28 @@ body.contrast-theme {
 
     .Scene__path-line--Sketchpad {
         stroke: #FF0000;
+    }
+
+    .WorldSelector__option-image--Sketchpad:hover {
+        svg {
+            .thumbnail-background {
+                fill: #FFFFFF;
+            }
+
+            .thumbnail-character-container {
+                fill: #1E1E1E;
+            }
+
+            .thumbnail-character-outline {
+                fill: #FFFFFF;
+                stroke: #FFFFFF;
+            }
+
+            .thumbnail-character-innerline {
+                fill: #1E1E1E;
+                stroke: #FFFFFF;
+            }
+        }
     }
 }
 
@@ -202,6 +324,14 @@ body.contrast-theme {
     stroke: #F1AE5B;
 }
 
+.WorldSelector__option-image--Space:hover {
+    svg {
+        .thumbnail-background {
+            fill: #33717F;
+        }
+    }
+}
+
 body.gray-theme {
     .Character-background--Space {
         fill: #505862;
@@ -218,6 +348,14 @@ body.gray-theme {
 
     .Scene__path-line--Space {
         stroke: #3A3F46;
+    }
+
+    .WorldSelector__option-image--Space:hover {
+        svg {
+            .thumbnail-background {
+                fill: #3A3F46;
+            }
+        }
     }
 }
 
@@ -237,5 +375,26 @@ body.contrast-theme {
 
     .Scene__path-line--Space {
         stroke: #FF0000;
+    }
+
+    .WorldSelector__option-image--Space:hover {
+        svg {
+            .thumbnail-background {
+                fill: #1E1E1E;
+            }
+
+            .thumbnail-background-item {
+                fill: #FFFFFF;
+                stroke: #FFFFFF;
+            }
+
+            .thumbnail-character-outline {
+                fill: #FFFFFF;
+            }
+
+            .thumbnail-character-innerline {
+                fill: #1E1E1E;
+            }
+        }
     }
 }

@@ -181,14 +181,14 @@ describe('When the Scene renders', () => {
 
 describe('The ARIA label should tell there is a character with its position', () => {
     test.each([
-        [1, 2, 0, 'Scene, 17 by 9 grid with a character at column A, row 2 facing up'],
-        [2, 3, 1, 'Scene, 17 by 9 grid with a character at column B, row 3 facing upper right'],
-        [1, 2, 2, 'Scene, 17 by 9 grid with a character at column A, row 2 facing right'],
-        [1, 2, 3, 'Scene, 17 by 9 grid with a character at column A, row 2 facing lower right'],
-        [1, 2, 4, 'Scene, 17 by 9 grid with a character at column A, row 2 facing down'],
-        [1, 2, 5, 'Scene, 17 by 9 grid with a character at column A, row 2 facing lower left'],
-        [1, 2, 6, 'Scene, 17 by 9 grid with a character at column A, row 2 facing left'],
-        [1, 2, 7, 'Scene, 17 by 9 grid with a character at column A, row 2 facing upper left']
+        [1, 2, 0, 'Scene, in Sketchpad, 17 by 9 grid with the robot at column A, row 2 facing up'],
+        [2, 3, 1, 'Scene, in Sketchpad, 17 by 9 grid with the robot at column B, row 3 facing upper right'],
+        [1, 2, 2, 'Scene, in Sketchpad, 17 by 9 grid with the robot at column A, row 2 facing right'],
+        [1, 2, 3, 'Scene, in Sketchpad, 17 by 9 grid with the robot at column A, row 2 facing lower right'],
+        [1, 2, 4, 'Scene, in Sketchpad, 17 by 9 grid with the robot at column A, row 2 facing down'],
+        [1, 2, 5, 'Scene, in Sketchpad, 17 by 9 grid with the robot at column A, row 2 facing lower left'],
+        [1, 2, 6, 'Scene, in Sketchpad, 17 by 9 grid with the robot at column A, row 2 facing left'],
+        [1, 2, 7, 'Scene, in Sketchpad, 17 by 9 grid with the robot at column A, row 2 facing upper left']
     ])('x=%f, y=%f, direction=%i', (x, y, direction, expectedLabel) => {
         const sceneDimensions = new SceneDimensions(1, 17, 1, 9);
         const sceneWrapper = createMountScene({
