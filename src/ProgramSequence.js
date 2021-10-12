@@ -1,6 +1,6 @@
 // @flow
 
-import type { Program } from './types';
+import type { CommandName, Program } from './types';
 
 export default class ProgramSequence {
     program: Program;
@@ -81,5 +81,13 @@ export default class ProgramSequence {
             program[indexTo] = currentStep;
         }
         return this.updateProgram(program);
+    }
+
+    usesAction(action: CommandName): boolean {
+        for (let index = 0; index < this.program.length; index++) {
+            if (this.program[index] === action) { return true; }
+        }
+
+        return false;
     }
 }

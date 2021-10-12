@@ -5,6 +5,7 @@ import classNames from 'classnames';
 import './ToggleSwitch.scss';
 
 type ToggleSwitchProps = {
+    id?: string,
     ariaLabel: string,
     value: boolean,
     className?: string,
@@ -37,7 +38,8 @@ export default class ToggleSwitch extends React.Component<ToggleSwitchProps, {}>
         );
         return (
             <div
-                className= {classes}
+                id={this.props.id}
+                className={classes}
                 role='switch'
                 aria-label={this.props.ariaLabel}
                 aria-checked={this.props.value}

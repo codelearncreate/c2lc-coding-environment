@@ -37,11 +37,15 @@ $c2lc-hover-indicator-width: 0.1rem;
 $c2lc-action-panel-width: 16rem;
 $c2lc-action-panel-height: 3rem;
 
-/* Scene Border Style */
+/* Scene */
 
-$c2lc-scene-border-width: 0.1rem;
-$c2lc-scene-border-color: #CCE6E2;
-$c2lc-scene-border-style: solid;
+$c2lc-scene-height: 600px;
+$c2lc-scene-width: 900px;
+$c2lc-scene-col-header-height: 30px;
+$c2lc-scene-row-header-width: 30px;
+$c2lc-scene-space-for-scrollbar: 20px;
+$c2lc-scene-border-width: 2px;
+$c2lc-app-scene-container-margin-right: 0.25rem;
 
 /* Add Node */
 
