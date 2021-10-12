@@ -28,7 +28,23 @@ class ShareCompleteModal extends React.Component<ShareCompleteModalProps, {}> {
                 <Modal.Body className='ShareCompleteModal__content'>
                     <FormattedMessage id='ShareCompleteModal.shareComplete' />
                 </Modal.Body>
+
+                <div className="ShareCompleteModal__footer">
+                    <button id="ShareCompleteModal__confirmButton" onClick={this.props.onHide}>
+                        <FormattedMessage id='ShareCompleteModal.confirmButton' />
+                    </button>
+                </div>
             </Modal>);
+    }
+
+    componentDidUpdate(prevProps: ShareCompleteModalProps) {
+        /* istanbul ignore next */
+        if (prevProps.show !== this.props.show && this.props.show) {
+            const confirmButtonRef = document.getElementById("ShareCompleteModal__confirmButton");
+            if(confirmButtonRef) {
+                confirmButtonRef.focus();
+            }
+        }
     }
 }
 

@@ -4,12 +4,11 @@
 .Scene__container {
     position: relative;
     height: 100%;
-    width: 100%;
     display: grid;
-    grid-template-columns: 30px auto;
-    grid-template-rows: 30px auto;
+    grid-template-columns: $c2lc-scene-row-header-width auto;
+    grid-template-rows: $c2lc-scene-col-header-height auto;
     background-color: #CCE6E2;
-    border: 2px solid #CCE6E2;
+    border: $c2lc-scene-border-width solid #CCE6E2;
     border-radius: 3px;
 }
 
@@ -21,11 +20,12 @@
     overflow: scroll;
     background-color: #FFF;
     display: inline-block;
-    box-sizing: border-box;
+    box-sizing: content-box;
+    max-width: max-content;
 }
 
 .Scene > svg {
-    width: 1430px;
+    width: $c2lc-scene-width;
 }
 
 .Scene__row-header {
@@ -41,8 +41,8 @@
 }
 
 .Scene__row-header > svg {
-    width: 30px;
-    height: 900px;
+    width: $c2lc-scene-row-header-width;
+    height: $c2lc-scene-height
 }
 
 .Scene__row-header::-webkit-scrollbar {
@@ -67,22 +67,21 @@
 }
 
 .Scene__column-header > svg {
-    width: 1450px;
-    height: 30px;
+    height: $c2lc-scene-col-header-height;
+    width: $c2lc-scene-width;
 }
 
 .Scene__grid-line {
-    stroke: #F1F2F4;
     stroke-width: 0.02;
 }
 
 .Scene__grid-label {
     fill: #555;
-    font: 600 2.5px sans-serif;
+    font-weight: 600;
+    font-size: 2.2px;
 }
 
 .Scene__path-line {
     stroke-width: 0.05;
     stroke-linecap: round;
-    stroke: #505862;
 }

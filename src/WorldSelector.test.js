@@ -3,131 +3,188 @@
 import React from 'react';
 import Adapter from 'enzyme-adapter-react-16';
 import { configure, mount } from 'enzyme';
-// $FlowFixMe: Flow doesn't know that the RawIntlProvider exists.
-import { createIntl, RawIntlProvider } from 'react-intl';
+import { IntlProvider } from 'react-intl';
 import messages from './messages.json';
 import WorldSelector from './WorldSelector';
-import type {WorldName} from './types';
 
 configure({ adapter: new Adapter() });
 
-const intl = createIntl({
-    locale: 'en',
-    defaultLocale: 'en',
-    messages: messages.en
+const defaultWorldSelectorProps = {
+    currentWorld: 'Sketchpad',
+    theme: 'mixed',
+    show: true
+};
+
+function createMountWorldSelector(props) {
+    const mockOnSelect = jest.fn();
+    const mockOnChange = jest.fn();
+    const wrapper = mount(
+        React.createElement(
+            WorldSelector,
+            Object.assign(
+                {},
+                defaultWorldSelectorProps,
+                {
+                    onSelect: mockOnSelect,
+                    onChange: mockOnChange
+                },
+                props
+            )
+        ),
+        {
+            wrappingComponent: IntlProvider,
+            wrappingComponentProps: {
+                locale: 'en',
+                defaultLocale: 'en',
+                messages: messages.en
+            }
+        }
+    );
+
+    return {
+        wrapper,
+        mockOnSelect,
+        mockOnChange
+    };
+}
+
+function getWorldSelectorRadioButton(wrapper) {
+    return wrapper.find('.WorldSelector__option-radio');
+}
+
+function getWorldSelectorThumbnailIcon(wrapper) {
+    return wrapper.find('.WorldSelector__option-image');
+}
+
+function getCancelButton(wrapper) {
+    return wrapper.find('.ModalFooter__cancelButton');
+}
+
+function getDoneButton(wrapper) {
+    return wrapper.find('.ModalFooter__doneButton');
+}
+
+describe('When rendering selector options', () => {
+    test('All worlds should be displayed as options and only one is checked', () => {
+        expect.assertions(8);
+        const { wrapper } = createMountWorldSelector();
+        const selectorOptions = getWorldSelectorRadioButton(wrapper);
+
+        // Sketchpad world
+        expect(selectorOptions.get(0).props.value).toBe('Sketchpad');
+        expect(selectorOptions.get(0).props.checked).toBe(true);
+
+        // Space world
+        expect(selectorOptions.get(1).props.value).toBe('Space');
+        expect(selectorOptions.get(1).props.checked).toBe(false);
+
+        // Jungle world
+        expect(selectorOptions.get(2).props.value).toBe('Jungle');
+        expect(selectorOptions.get(2).props.checked).toBe(false);
+
+        // Deep Ocean world
+        expect(selectorOptions.get(3).props.value).toBe('DeepOcean');
+        expect(selectorOptions.get(3).props.checked).toBe(false);
+    });
+    test('Thumbnail icons get rendered with the selector options', () => {
+        const { wrapper } = createMountWorldSelector();
+        let selectorThumbnails = getWorldSelectorThumbnailIcon(wrapper);
+
+        expect(selectorThumbnails.get(0).props.children.type.render().props.children).toBe('SketchpadThumbnail.svg');
+        expect(selectorThumbnails.get(1).props.children.type.render().props.children).toBe('SpaceThumbnail.svg');
+        expect(selectorThumbnails.get(2).props.children.type.render().props.children).toBe('JungleThumbnail.svg');
+        expect(selectorThumbnails.get(3).props.children.type.render().props.children).toBe('DeepOceanThumbnail.svg');
+
+        // Grayscale theme
+        wrapper.setProps({theme: 'gray'});
+        selectorThumbnails = getWorldSelectorThumbnailIcon(wrapper);
+
+        expect(selectorThumbnails.get(1).props.children.type.render().props.children).toBe('SpaceThumbnail-gray.svg');
+        expect(selectorThumbnails.get(2).props.children.type.render().props.children).toBe('JungleThumbnail-gray.svg');
+        expect(selectorThumbnails.get(3).props.children.type.render().props.children).toBe('DeepOceanThumbnail-gray.svg');
+
+        // High contrast theme
+        wrapper.setProps({theme: 'contrast'});
+        selectorThumbnails = getWorldSelectorThumbnailIcon(wrapper);
+
+        expect(selectorThumbnails.get(1).props.children.type.render().props.children).toBe('SpaceThumbnail-contrast.svg');
+        expect(selectorThumbnails.get(2).props.children.type.render().props.children).toBe('JungleThumbnail-contrast.svg');
+        expect(selectorThumbnails.get(3).props.children.type.render().props.children).toBe('DeepOceanThumbnail-contrast.svg');
+    });
 });
 
-type WorldSelectorTestWrapperProps = {
-    onSelect: (value: WorldName) => void
-}
+describe('When selecting a world', () => {
+    test('should call onSelect prop', () => {
+        expect.assertions(8);
+        const { wrapper, mockOnSelect } = createMountWorldSelector();
+        const selectorOptions = getWorldSelectorRadioButton(wrapper);
 
-type WorldSelectorTestWrapperState = {
-    world: WorldName
-}
+        const sketchpadWorldSelector = selectorOptions.at(0);
+        const spaceWorldSelector = selectorOptions.at(1);
+        const jungleWorldSelector = selectorOptions.at(2);
+        const deepOceanWorldSelector = selectorOptions.at(3);
 
-class WorldSelectorTestWrapper extends React.Component<WorldSelectorTestWrapperProps, WorldSelectorTestWrapperState> {
-    constructor (props) {
-        super(props);
-        this.state = {
-            world: 'default'
-        }
-    }
+        // Space World
+        spaceWorldSelector.simulate('change');
+        expect(mockOnSelect.mock.calls.length).toBe(1);
+        expect(mockOnSelect.mock.calls[0][0]).toBe('Space');
 
-    onSelect = (worldName: WorldName) => {
-        this.setState({ world: worldName});
-        this.props.onSelect(worldName);
-    };
+        // Jungle World
+        jungleWorldSelector.simulate('change');
+        expect(mockOnSelect.mock.calls.length).toBe(2);
+        expect(mockOnSelect.mock.calls[1][0]).toBe('Jungle');
 
-    render () {
-        return (<RawIntlProvider value={intl}>
-            <WorldSelector
-                world={this.state.world}
-                onSelect={this.onSelect}
-            />
-        </RawIntlProvider>);
-    }
-}
+        // Deep Ocean World
+        deepOceanWorldSelector.simulate('change');
+        expect(mockOnSelect.mock.calls.length).toBe(3);
+        expect(mockOnSelect.mock.calls[2][0]).toBe('DeepOcean');
 
-function createMountWorldSelector() {
-    const mockOnSelectHandler = jest.fn();
-    const worldSelectorTestWrapper = mount(<WorldSelectorTestWrapper onSelect={mockOnSelectHandler}/>);
-    const worldSelector = worldSelectorTestWrapper.find(WorldSelector).childAt(0);
+        // Sketchpad World
+        sketchpadWorldSelector.simulate('change');
+        expect(mockOnSelect.mock.calls.length).toBe(4);
+        expect(mockOnSelect.mock.calls[3][0]).toBe('Sketchpad');
+    })
+});
 
-    return { worldSelector, worldSelectorTestWrapper, mockOnSelectHandler };
-}
+describe('When the cancel button is clicked', () => {
+    test('The world stays the same as when the modal is opened', () => {
+        expect.assertions(2);
+        const { wrapper, mockOnChange } = createMountWorldSelector({currentWorld: 'Space'});
+        const cancelButton = getCancelButton(wrapper).at(0);
+        wrapper.setProps({currentWorld: 'Jungle'});
+        cancelButton.simulate('click');
+        expect(mockOnChange.mock.calls.length).toBe(1);
+        expect(mockOnChange.mock.calls[0][0]).toBe('Space');
+    })
+});
 
-describe('When rendering the WorldSelector', () => {
-    test('it should be possible to select a world using mouse input.', () => {
-        const {worldSelector, worldSelectorTestWrapper, mockOnSelectHandler} = createMountWorldSelector();
+describe('When the done button is clicked', () => {
+    test('The world changed to the selected world', () => {
+        expect.assertions(2);
+        const { wrapper, mockOnChange } = createMountWorldSelector({currentWorld: 'Sketchpad'});
+        const doneButton = getDoneButton(wrapper).at(0);
+        wrapper.setProps({currentWorld: 'Space'});
+        doneButton.simulate('click');
+        expect(mockOnChange.mock.calls.length).toBe(1);
+        expect(mockOnChange.mock.calls[0][0]).toBe('Space');
+    })
+});
 
-        // TODO: Adjust these once the header icon is the first child again.
-        const robotIcon = worldSelector.childAt(0).childAt(0);
-        const rabbitIcon = worldSelector.childAt(0).childAt(1);
-        const spaceShipIcon = worldSelector.childAt(0).childAt(2);
+test('When one of the thumbnail images is clicked, onSelect prop gets called', () => {
+    expect.assertions(4);
+    const { wrapper, mockOnSelect } = createMountWorldSelector();
+    const selectorThumbnails = getWorldSelectorThumbnailIcon(wrapper);
+    const sketchPadThumbnailImage = selectorThumbnails.at(0);
+    const spaceThumbnailImage = selectorThumbnails.at(1);
+    const jungleThumbnailImage = selectorThumbnails.at(2);
+    const deepOceanThumbnailImage = selectorThumbnails.at(3);
 
-        rabbitIcon.simulate('click');
-
-        expect(mockOnSelectHandler.mock.calls.length).toBe(1);
-        expect(mockOnSelectHandler.mock.calls[0][0]).toBe('forest');
-        expect(worldSelectorTestWrapper.state('world')).toBe('forest');
-
-
-        spaceShipIcon.simulate('click');
-
-        expect(mockOnSelectHandler.mock.calls.length).toBe(2);
-        expect(mockOnSelectHandler.mock.calls[1][0]).toBe('space');
-        expect(worldSelectorTestWrapper.state('world')).toBe('space');
-
-        robotIcon.simulate('click');
-
-        expect(mockOnSelectHandler.mock.calls.length).toBe(3);
-        expect(mockOnSelectHandler.mock.calls[2][0]).toBe('default');
-        expect(worldSelectorTestWrapper.state('world')).toBe('default');
-    });
-
-    test('it should be possible to select a world using keyboard input.', () => {
-        const {worldSelector, worldSelectorTestWrapper, mockOnSelectHandler} = createMountWorldSelector();
-
-        // TODO: Adjust these once the header icon is the first child again.
-        const robotIcon = worldSelector.childAt(0).childAt(0);
-        const rabbitIcon = worldSelector.childAt(0).childAt(1);
-        const spaceShipIcon = worldSelector.childAt(0).childAt(2);
-
-        rabbitIcon.simulate('keyDown', {key: ' '});
-
-        expect(mockOnSelectHandler.mock.calls.length).toBe(1);
-        expect(mockOnSelectHandler.mock.calls[0][0]).toBe('forest');
-        expect(worldSelectorTestWrapper.state('world')).toBe('forest');
-
-
-        spaceShipIcon.simulate('keyDown', {key: 'Enter'});
-
-        expect(mockOnSelectHandler.mock.calls.length).toBe(2);
-        expect(mockOnSelectHandler.mock.calls[1][0]).toBe('space');
-        expect(worldSelectorTestWrapper.state('world')).toBe('space');
-
-        robotIcon.simulate('keyDown', {key: ' '});
-
-        expect(mockOnSelectHandler.mock.calls.length).toBe(3);
-        expect(mockOnSelectHandler.mock.calls[2][0]).toBe('default');
-        expect(worldSelectorTestWrapper.state('world')).toBe('default');
-    });
-
-    test('all icons should have ARIA labels.', () => {
-        const {worldSelector} = createMountWorldSelector();
-
-        // TODO: Reenable this once the header icon is uncommented.
-        // const worldIcon = worldSelector.childAt(0).childAt(0)
-        // expect(worldIcon.prop('aria-label')).toBe("World");
-
-        // TODO: Adjust the index numbers once the header icon is the first child again.
-        const robotIcon = worldSelector.childAt(0).childAt(0);
-        expect(robotIcon.prop('aria-label')).toBe(intl.messages['WorldSelector.world.default']);
-
-        const rabbitIcon = worldSelector.childAt(0).childAt(1);
-        expect(rabbitIcon.prop('aria-label')).toBe(intl.messages['WorldSelector.world.forest']);
-
-        const spaceShipIcon = worldSelector.childAt(0).childAt(2);
-        expect(spaceShipIcon.prop('aria-label')).toBe(intl.messages['WorldSelector.world.space']);
-    });
+    sketchPadThumbnailImage.simulate('click');
+    expect(mockOnSelect.mock.calls[0][0]).toBe('Sketchpad');
+    spaceThumbnailImage.simulate('click');
+    expect(mockOnSelect.mock.calls[1][0]).toBe('Space');
+    jungleThumbnailImage.simulate('click');
+    expect(mockOnSelect.mock.calls[2][0]).toBe('Jungle');
+    deepOceanThumbnailImage.simulate('click');
+    expect(mockOnSelect.mock.calls[3][0]).toBe('DeepOcean');
 });

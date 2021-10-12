@@ -1,4 +1,15 @@
-import {keyboardEventMatchesKeyDef, findKeyboardEventSequenceMatches} from './KeyboardInputSchemes';
+// @flow
+
+import {keyboardEventMatchesKeyDef, findKeyboardEventSequenceMatches, isKeyboardInputSchemeName} from './KeyboardInputSchemes';
+
+it('isKeyboardInputSchemeName', () => {
+    expect.assertions(5);
+    expect(isKeyboardInputSchemeName('controlalt')).toBe(true);
+    expect(isKeyboardInputSchemeName('alt')).toBe(true);
+    expect(isKeyboardInputSchemeName('')).toBe(false);
+    expect(isKeyboardInputSchemeName(null)).toBe(false);
+    expect(isKeyboardInputSchemeName('UNKNOWN')).toBe(false);
+});
 
 it('Should be able to handle unmodified keys', ()  => {
     const keyDef = { key: "?" };
@@ -47,16 +58,16 @@ it('Should be able to handle a complete valid sequence', () => {
         new KeyboardEvent('keydown', { code: "KeyX"})
     ];
 
-    const result = findKeyboardEventSequenceMatches(completeValidSequence, "voiceover");
+    const result = findKeyboardEventSequenceMatches(completeValidSequence, "alt");
     expect(result).toBe("toggleFeedbackAnnouncements");
 });
 
 it('Should be able to handle a complete invalid sequence', () => {
     const completeInvalidSequence = [
-        new KeyboardEvent('keydown', { code: "KeyA", altKey: true}),
+        new KeyboardEvent('keydown', { code: "KeyZ", altKey: true}),
         new KeyboardEvent('keydown', { code: "KeyX"})
     ];
-    const result = findKeyboardEventSequenceMatches(completeInvalidSequence, "voiceover");
+    const result = findKeyboardEventSequenceMatches(completeInvalidSequence, "alt");
     expect(result).toBe(false);
 });
 
@@ -66,7 +77,7 @@ it('Should be able to handle a partial sequence', () => {
         new KeyboardEvent('keydown', { code: "KeyA"})
     ];
 
-    const result = findKeyboardEventSequenceMatches(partialSequence, "voiceover");
+    const result = findKeyboardEventSequenceMatches(partialSequence, "alt");
     expect(result).toBe("partial");
 });
 
