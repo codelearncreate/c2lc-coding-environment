@@ -164,7 +164,7 @@
         "KeyboardInputModal.KeyIcons.P": "P",
         "KeyboardInputModal.KeyIcons.S": "S",
         "KeyboardInputModal.KeyIcons.R": "R",
-        "KeyboardInputModal.Scheme.Descriptions.ctrlshift": "Control + Shift key bindings",
+        "KeyboardInputModal.Scheme.Descriptions.controlshift": "Control + Shift key bindings",
         "KeyboardInputModal.Scheme.Descriptions.controlalt": "Control+Alt (Apple: Control+Option)",
         "KeyboardInputModal.Scheme.Descriptions.alt": "Alt (Apple: Option)",
         "KeyboardInputModal.ShowHide.AriaLabel": "Display keyboard shortcuts menu",

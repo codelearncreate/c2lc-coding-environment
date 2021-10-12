@@ -1,7 +1,7 @@
 //@flow
 import {extend} from './Utils';
 
-export type KeyboardInputSchemeName = "ctrlshift" | "controlalt" | "alt";
+export type KeyboardInputSchemeName = "controlshift" | "controlalt" | "alt";
 
 export function isKeyboardInputSchemeName(str: ?string): boolean {
     return str === 'controlalt' || str === 'alt';
@@ -91,7 +91,7 @@ export type KeyboardInputScheme = {
 };
 
 export type KeyboardInputSchemesType = {
-    "ctrlshift": KeyboardInputScheme,
+    "controlshift": KeyboardInputScheme,
     "controlalt": KeyboardInputScheme,
     "alt":  KeyboardInputScheme
 };
@@ -457,7 +457,7 @@ const CtrlShiftInputScheme = Object.assign({
 }, CtrlShiftExtendedKeyboardSequences);
 
 export const KeyboardInputSchemes:KeyboardInputSchemesType = {
-    "ctrlshift": CtrlShiftInputScheme,
+    "controlshift": CtrlShiftInputScheme,
     "controlalt": ControlAltInputScheme,
     "alt": AltInputScheme
 };
