@@ -9,6 +9,7 @@ import ActionsMenuItem from './ActionsMenuItem';
 import ActionsMenuToggle from './ActionsMenuToggle';
 
 import messages from './messages.json';
+import ProgramSequence from './ProgramSequence';
 
 configure({ adapter: new Adapter()});
 
@@ -37,6 +38,7 @@ function createActionsMenu(props) {
                 {
                     editingDisabled: false,
                     allowedActions: mockAllowedActions,
+                    programSequence: new ProgramSequence([], 0),
                     changeHandler: mockChangeHandler
                 },
                 props

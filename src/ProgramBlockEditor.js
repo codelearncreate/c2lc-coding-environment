@@ -568,7 +568,8 @@ export class ProgramBlockEditor extends React.Component<ProgramBlockEditorProps,
                 <div className='ProgramBlockEditor__character-column'>
                     <div
                         aria-hidden='true'
-                        className='ProgramBlockEditor__character-column-character-container'
+                        className={`ProgramBlockEditor__character-column-character-container
+                            ProgramBlockEditor__character-column-character-container--${this.props.world}`}
                         role='img'>
                         {React.createElement(
                             character,

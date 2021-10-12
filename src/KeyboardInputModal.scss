@@ -1,14 +1,5 @@
 @import '_variables';
 
-.modal {
-    border-radius: 0.25rem;
-}
-
-.modal-body {
-    border-radius: 0.25rem;
-    padding: 0;
-}
-
 .KeyboardInputModal {
     max-width: 75%;
 }
@@ -18,6 +9,7 @@
     flex-direction: column;
     justify-content: center;
     margin-top: 1rem;
+    padding: 0;
 }
 
 .KeyboardInputModal__content__toggleBar {

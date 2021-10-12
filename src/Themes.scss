@@ -163,12 +163,7 @@ body.light-theme {
     }
 
     .ProgramBlockEditor__character-column-character-container {
-        box-sizing: border-box;
-        height: 45px;
-        width: 45px;
-        background-color: #EBFAF8;
         border: 2px solid #818A98;
-        border-radius: 4px;
     }
 
     .ProgramBlockEditor__program-sequence-scroll-container {
@@ -1054,14 +1049,6 @@ body.gray-theme {
         background-color: #F1F2F4;
     }
 
-    .ProgramBlockEditor__character-column-character-container {
-        box-sizing: border-box;
-        height: 45px;
-        width: 45px;
-        background-color: #F1F2F4;
-        border-radius: 4px;
-    }
-
     .ProgramBlockEditor__program-sequence-scroll-container {
         background-color: white;
         margin-left: 0.1rem;
@@ -1908,10 +1895,6 @@ body.contrast-theme {
     .ProgramBlockEditor__character-column {
         background-color: black;
         border-right: 2px solid #9DA4AF;
-    }
-
-    .ProgramBlockEditor__character-column-character-container {
-        background-color: white;
     }
 
     .ProgramBlockEditor__program-sequence-scroll-container {
