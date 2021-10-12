@@ -1,6 +1,6 @@
 {
     "name": "c2lc-coding-environment",
-    "version": "0.9.0",
+    "version": "1.0.0",
     "private": true,
     "dependencies": {
         "bootstrap": "4.6.0",
@@ -79,7 +79,7 @@
         ],
         "coverageThreshold": {
             "global": {
-                "branches": 89,
+                "branches": 88,
                 "functions": 95,
                 "lines": 95,
                 "statements": 95

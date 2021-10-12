@@ -130,15 +130,19 @@ export const instrumentDefs = {
 }
 
 export const soundscapes = {
-    default: {
+    Sketchpad: {
         sequences: complexSequences,
         getNoteForState: getMirroredPentatonicNoteForState
     },
-    forest: {
+    Space: {
+        sequences: complexSequences,
+        getNoteForState: getMirroredPentatonicNoteForState
+    },
+    Jungle: {
         sequences: singleNoteSequences,
         getNoteForState: getHarmonicNoteForState
     },
-    space: {
+    DeepOcean: {
         sequences: complexSequences,
         getNoteForState: getMirroredPentatonicNoteForState
     }

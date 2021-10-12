@@ -2,7 +2,7 @@
 
 import React from 'react';
 import Adapter from 'enzyme-adapter-react-16';
-import { configure, mount, shallow } from 'enzyme';
+import { configure, mount, shallow, ReactWrapper } from 'enzyme';
 import { createIntl, IntlProvider } from 'react-intl';
 import CharacterState from './CharacterState';
 import SceneDimensions from './SceneDimensions';
@@ -16,7 +16,8 @@ const defaultCharacterPositionControllerProps = {
     interpreterIsRunning: false,
     characterState: new CharacterState(1, 1, 2, [], new SceneDimensions(1, 100, 1, 100)),
     editingDisabled: false,
-    world: 'default'
+    theme: 'light',
+    world: 'Sketchpad'
 };
 
 function createShallowCharacterPositionController(props) {
@@ -92,15 +93,15 @@ function createMountCharacterPositionController(props) {
     };
 }
 
-function getCharacterPositionButton(characterPositionControllerWrapper, directionName) {
+function getCharacterPositionButton(characterPositionControllerWrapper: ReactWrapper<HTMLElement>, directionName: string): ReactWrapper<HTMLElement> {
     return characterPositionControllerWrapper.find('.CharacterPositionController__character-position-button').filter({value: directionName}).at(0);
 }
 
-function getCharacterPositionCoordinateBoxes(characterPositionControllerWrapper) {
+function getCharacterPositionCoordinateBoxes(characterPositionControllerWrapper: ReactWrapper<HTMLElement>): ReactWrapper<HTMLElement> {
     return characterPositionControllerWrapper.find('.ProgramBlock__character-position-coordinate-box');
 }
 
-function getCharacterIcon(characterPositionControllerWrapper) {
+function getCharacterIcon(characterPositionControllerWrapper: ReactWrapper<HTMLElement>): ReactWrapper<HTMLElement> {
     return characterPositionControllerWrapper.find('.CharacterPositionController__character-column-character');
 }
 
@@ -199,12 +200,29 @@ describe('Using change character position by column/row labels', () => {
         expect(mockChangeCharacterYPosition.mock.calls[1][0]).toBe(secondSampleYPosition);
     });
     test('Changing world changes the character icon', () => {
-        expect.assertions(2);
+        expect.assertions(9);
         const { wrapper } = createShallowCharacterPositionController();
-        wrapper.setProps({world: 'space'});
+        // Space World
+        wrapper.setProps({world: 'Space'});
         expect(getCharacterIcon(wrapper).get(0).type.render().props.children).toBe('SpaceShip.svg');
-        wrapper.setProps({world: 'forest'});
-        expect(getCharacterIcon(wrapper).get(0).type.render().props.children).toBe('Rabbit.svg');
+        wrapper.setProps({theme: 'gray'});
+        expect(getCharacterIcon(wrapper).get(0).type.render().props.children).toBe('SpaceShip-gray.svg');
+        wrapper.setProps({theme: 'contrast'});
+        expect(getCharacterIcon(wrapper).get(0).type.render().props.children).toBe('SpaceShip-contrast.svg');
+        // Jungle World
+        wrapper.setProps({world: 'Jungle', theme: 'light'});
+        expect(getCharacterIcon(wrapper).get(0).type.render().props.children).toBe('SafariJeep.svg');
+        wrapper.setProps({theme: 'gray'});
+        expect(getCharacterIcon(wrapper).get(0).type.render().props.children).toBe('SafariJeep-gray.svg');
+        wrapper.setProps({theme: 'contrast'});
+        expect(getCharacterIcon(wrapper).get(0).type.render().props.children).toBe('SafariJeep-contrast.svg');
+        // DeepOcean World
+        wrapper.setProps({world: 'DeepOcean', theme: 'light'});
+        expect(getCharacterIcon(wrapper).get(0).type.render().props.children).toBe('Submarine.svg');
+        wrapper.setProps({theme: 'gray'});
+        expect(getCharacterIcon(wrapper).get(0).type.render().props.children).toBe('Submarine-gray.svg');
+        wrapper.setProps({theme: 'contrast'});
+        expect(getCharacterIcon(wrapper).get(0).type.render().props.children).toBe('Submarine-contrast.svg');
     });
     test('Character icon gets transform value to match the character in the scene', () => {
         expect.assertions(3);

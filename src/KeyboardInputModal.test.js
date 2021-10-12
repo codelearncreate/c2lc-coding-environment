@@ -21,7 +21,7 @@ function createShallowKeyboardInputModal(props) {
 
     const defaultWrapperProps = {
         keyBindingsEnabled: true,
-        keyboardInputSchemeName: "nvda",
+        keyboardInputSchemeName: "controlalt",
         onChangeKeyBindingsEnabled: onChangeKeyBindingsEnabled,
         onChangeKeyboardInputScheme: onChangeKeyboardInputScheme,
         onHide: onHide,
@@ -62,15 +62,15 @@ it('should be able to save keyboardInputSchemeName changes', () => {
     const {wrappedModal, onChangeKeyboardInputScheme, onHide} = createShallowKeyboardInputModal();
     wrappedModal.handleChangeKeyboardInputSchemeName({
         target: {
-            value: "nvda"
+            value: "controlalt"
         }
     });
-    expect(wrappedModal.state.keyboardInputSchemeName).toBe("nvda");
+    expect(wrappedModal.state.keyboardInputSchemeName).toBe("controlalt");
 
     wrappedModal.saveChanges();
 
     expect(onChangeKeyboardInputScheme.mock.calls.length).toBe(1);
-    expect(onChangeKeyboardInputScheme.mock.calls[0][0]).toBe('nvda');
+    expect(onChangeKeyboardInputScheme.mock.calls[0][0]).toBe('controlalt');
     expect(onHide.mock.calls.length).toBe(1);
 });
 
@@ -91,16 +91,16 @@ it('should be able to cancel changes.', () => {
 
     wrappedModal.handleChangeKeyboardInputSchemeName({
         target: {
-            value: "voiceover"
+            value: "alt"
         }
     });
-    expect(wrappedModal.state.keyboardInputSchemeName).toBe("voiceover");
+    expect(wrappedModal.state.keyboardInputSchemeName).toBe("alt");
 
     wrappedModal.handleChangeKeyBindingsEnabled(false);
     expect(wrappedModal.state.keyBindingsEnabled).toBe(false);
 
     wrappedModal.cancelChanges();
-    expect(wrappedModal.state.keyboardInputSchemeName).toBe("nvda");
+    expect(wrappedModal.state.keyboardInputSchemeName).toBe("controlalt");
     expect(wrappedModal.state.keyBindingsEnabled).toBe(true);
 
     expect(onChangeKeyBindingsEnabled.mock.calls.length).toBe(0);

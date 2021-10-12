@@ -2,6 +2,7 @@
 import CharacterState from './CharacterState';
 import type {IntlShape} from 'react-intl';
 import SceneDimensions from './SceneDimensions';
+import type {WorldName} from './Worlds';
 
 export type CommandName =
     'forward1' | 'forward2' | 'forward3' |
@@ -25,8 +26,6 @@ export type EditorMode = 'text' | 'block';
 
 */
 export type ThemeName = 'mixed' | 'light' | 'dark' | 'gray' | 'contrast';
-
-export type WorldName = 'default' | 'forest' | 'space';
 
 export type Program = Array<string>;
 

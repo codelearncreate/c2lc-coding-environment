@@ -1,0 +1,25 @@
+@import 'variables';
+
+.IconButton {
+    align-self: center;
+    border-radius: 50%;
+    background-color: #4C9990;
+    font-size: 1.6rem;
+    text-align: center;
+    margin-bottom: 0.5rem;
+    height: 2.6rem;
+    width: 2.6rem;
+
+    &:hover {
+        background-color: #F1AE5B;
+    }
+
+    &:focus {
+        box-shadow: 0 0 0 $c2lc-focus-indicator-width black;
+        outline: none;
+    }
+}
+
+.IconButton--disabled {    
+    background-color: #B9BEC6;
+}

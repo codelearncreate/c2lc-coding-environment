@@ -56,7 +56,7 @@ test("Returns a sensible note range for every supported character position in al
 
     const sceneDimensions = new SceneDimensions(1, 26, 1, 16);
 
-    for (const worldName of ['default', 'forest','space']) {
+    for (const worldName of ['Sketchpad', 'Space','Jungle', 'DeepOcean']) {
         const soundscape = soundscapes[worldName];
 
         for (let row = minRow; row <= maxRow; row++) {

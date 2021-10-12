@@ -4,7 +4,8 @@ import {Panner, Sampler, Sequence, start as ToneStart, Transport} from 'tone';
 import CharacterState from './CharacterState';
 import type {IntlShape} from 'react-intl';
 import {AudioManager} from './types';
-import type {CommandName, WorldName} from './types';
+import type {CommandName} from './types';
+import type {WorldName} from './Worlds';
 import SceneDimensions from './SceneDimensions';
 import {soundscapes, instrumentDefs} from './Soundscapes';
 
