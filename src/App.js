@@ -428,7 +428,7 @@ export class App extends React.Component<AppProps, AppState> {
             this.audioManager = props.audioManager
         }
         else if (FeatureDetection.webAudioApiIsAvailable()) {
-            this.audioManager = new AudioManagerImpl(this.state.audioEnabled, this.state.announcementsEnabled);
+            this.audioManager = new AudioManagerImpl(this.state.audioEnabled, this.state.announcementsEnabled, this.state.settings.world);
         }
         else {
             this.audioManager = new FakeAudioManager();
@@ -500,6 +500,10 @@ export class App extends React.Component<AppProps, AppState> {
         this.setState({
             programSequence: programSequence
         });
+    }
+
+    handleClickPlay = () => {
+        this.audioManager.startTone();
     }
 
     handleProgramBlockEditorInsertSelectedAction = (index: number, selectedAction: ?string) => {
@@ -1502,6 +1506,9 @@ export class App extends React.Component<AppProps, AppState> {
         }
         if (this.state.audioEnabled !== prevState.audioEnabled) {
             this.audioManager.setAudioEnabled(this.state.audioEnabled);
+        }
+        if(this.state.settings.world !== prevState.settings.world) {
+            this.audioManager.setWorld(this.state.settings.world);
         }
         if (this.state.runningState !== prevState.runningState
                 && this.state.runningState === 'running') {
