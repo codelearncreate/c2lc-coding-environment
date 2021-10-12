@@ -76,12 +76,12 @@ export type ActionName =
     | "deleteAll"
     ;
 
-type ActionKeyStep = {
+export type ActionKeyStep = {
     actionName: ActionName,
     keyDef: KeyDef
 };
 
-type KeySequenceStep = {
+export type KeySequenceStep = {
     keyDef: KeyDef,
     [string]: KeySequenceStep | ActionKeyStep
 };

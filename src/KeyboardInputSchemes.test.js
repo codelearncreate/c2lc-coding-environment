@@ -1,4 +1,6 @@
+// @flow
 import {keyboardEventMatchesKeyDef, findKeyboardEventSequenceMatches, isKeyboardInputSchemeName, KeyboardInputSchemes} from './KeyboardInputSchemes';
+import type {KeyDef} from './KeyboardInputSchemes';
 
 it('isKeyboardInputSchemeName', () => {
     expect.assertions(5);
@@ -10,42 +12,42 @@ it('isKeyboardInputSchemeName', () => {
 });
 
 it('Should be able to handle unmodified keys', ()  => {
-    const keyDef = { key: "?" };
+    const keyDef: KeyDef = { key: "?" };
 
-    const unmodifiedKeyboardEvent = new KeyboardEvent('keydown', { key: "?"});
+    const unmodifiedKeyboardEvent: KeyboardEvent = new KeyboardEvent('keydown', { key: "?"});
     expect(keyboardEventMatchesKeyDef(unmodifiedKeyboardEvent, keyDef)).toBe(true);
 
-    const controlModifiedKeyboardEvent = new KeyboardEvent('keydown', { key: "?", ctrlKey: true});
+    const controlModifiedKeyboardEvent: KeyboardEvent = new KeyboardEvent('keydown', { key: "?", ctrlKey: true});
     expect(keyboardEventMatchesKeyDef(controlModifiedKeyboardEvent, keyDef)).toBe(false);
 
-    const altModifiedKeyboardEvent = new KeyboardEvent('keydown', { key: "?", altKey: true});
+    const altModifiedKeyboardEvent: KeyboardEvent = new KeyboardEvent('keydown', { key: "?", altKey: true});
     expect(keyboardEventMatchesKeyDef(altModifiedKeyboardEvent, keyDef)).toBe(false);
 });
 
 it('Should be able to handle control keys', ()  => {
-    const keyDef = { key: "A", ctrlKey: true };
+    const keyDef: KeyDef = { key: "A", ctrlKey: true };
 
-    const controlModifiedKeyboardEvent = new KeyboardEvent('keydown', { key: "A", ctrlKey: true});
+    const controlModifiedKeyboardEvent: KeyboardEvent = new KeyboardEvent('keydown', { key: "A", ctrlKey: true});
     expect(keyboardEventMatchesKeyDef(controlModifiedKeyboardEvent, keyDef)).toBe(true);
 
-    const unmodifiedKeyboardEvent = new KeyboardEvent('keydown', { key: "A"});
+    const unmodifiedKeyboardEvent: KeyboardEvent = new KeyboardEvent('keydown', { key: "A"});
     expect(keyboardEventMatchesKeyDef(unmodifiedKeyboardEvent, keyDef)).toBe(false);
 
 
-    const controlAltModifiedKeyboardEvent = new KeyboardEvent('keydown', { key: "A", altKey: true, ctrlKey: true});
+    const controlAltModifiedKeyboardEvent: KeyboardEvent = new KeyboardEvent('keydown', { key: "A", altKey: true, ctrlKey: true});
     expect(keyboardEventMatchesKeyDef(controlAltModifiedKeyboardEvent, keyDef)).toBe(false);
 });
 
 it('Should be able to handle alt keys', ()  => {
-    const keyDef = { key: "B", altKey: true };
+    const keyDef: KeyDef = { key: "B", altKey: true };
 
-    const altModifiedKeyboardEvent = new KeyboardEvent('keydown', { key: "B", altKey: true});
+    const altModifiedKeyboardEvent: KeyboardEvent = new KeyboardEvent('keydown', { key: "B", altKey: true});
     expect(keyboardEventMatchesKeyDef(altModifiedKeyboardEvent, keyDef)).toBe(true);
 
-    const unmodifiedKeyboardEvent = new KeyboardEvent('keydown', { key: "B"});
+    const unmodifiedKeyboardEvent: KeyboardEvent = new KeyboardEvent('keydown', { key: "B"});
     expect(keyboardEventMatchesKeyDef(unmodifiedKeyboardEvent, keyDef)).toBe(false);
 
-    const controlAltModifiedKeyboardEvent = new KeyboardEvent('keydown', { key: "B", altKey: true, ctrlKey: true});
+    const controlAltModifiedKeyboardEvent: KeyboardEvent = new KeyboardEvent('keydown', { key: "B", altKey: true, ctrlKey: true});
     expect(keyboardEventMatchesKeyDef(controlAltModifiedKeyboardEvent, keyDef)).toBe(false);
 });
 
@@ -81,12 +83,15 @@ it('Should be able to handle a partial sequence', () => {
 
 function processSingleLevel (singleLevel, accumulatedSequence) {
     let levelSequences = [];
+    // $FlowFixMe: This function generates docs, we don't particularly care about flow coverage here.
     const levelAccumulatedSequence = accumulatedSequence.concat([singleLevel.keyDef]);
+    // $FlowFixMe: This function generates docs, we don't particularly care about flow coverage here.
     if (singleLevel.actionName) {
         levelAccumulatedSequence.push(singleLevel.actionName);
         levelSequences.push(levelAccumulatedSequence);
     }
     else {
+        // $FlowFixMe: This function generates docs, we don't particularly care about flow coverage here.
         for (const [subEntryKey, subEntryValue] of Object.entries(singleLevel)) {
             if (subEntryKey !== "keyDef" && subEntryKey !== "commandName") {
                 const subSequences = processSingleLevel(subEntryValue, levelAccumulatedSequence);
@@ -103,6 +108,7 @@ function  displayKeyBindings () {
         markdown += '## ' + schemeName + ' Key Bindings\n\n';
         markdown += '| Keys | Command |\n'
         markdown += '| ---- | ------- |\n'
+        // $FlowFixMe: This function generates docs, we don't particularly care about flow coverage here.
         for (const topLevelBinding of Object.values(keyboardInputScheme)) {
             const allSequences = processSingleLevel(topLevelBinding, []);
             const bindingEntries = [];
@@ -125,6 +131,7 @@ function  displayKeyBindings () {
                     }
                     bindingText += keyDef.key || (keyDef.code && keyDef.code.replace("Key", ""));
                 }
+                // $FlowFixMe: This function generates docs, we don't particularly care about flow coverage here.
                 bindingEntries.push('| ' + bindingText + ' | ' + commandName + ' |');
             }
             markdown += bindingEntries.sort().join('\n') + '\n';
