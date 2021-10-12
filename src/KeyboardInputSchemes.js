@@ -1,7 +1,11 @@
 //@flow
 import {extend} from './Utils';
 
-export type KeyboardInputSchemeName = "ctrlshift"| "nvda" | "voiceover";
+export type KeyboardInputSchemeName = "ctrlshift" | "controlalt" | "alt";
+
+export function isKeyboardInputSchemeName(str: ?string): boolean {
+    return str === 'controlalt' || str === 'alt';
+}
 
 export type KeyDef = {
     code?: string,
@@ -88,8 +92,8 @@ export type KeyboardInputScheme = {
 
 export type KeyboardInputSchemesType = {
     "ctrlshift": KeyboardInputScheme,
-    "nvda": KeyboardInputScheme,
-    "voiceover":  KeyboardInputScheme
+    "controlalt": KeyboardInputScheme,
+    "alt":  KeyboardInputScheme
 };
 
 const ExtendedKeyboardSequences: KeyboardInputScheme = {
@@ -275,7 +279,7 @@ const ExtendedKeyboardSequences: KeyboardInputScheme = {
     }
 }
 
-const VoiceOverInputScheme: KeyboardInputScheme = Object.assign({
+const AltInputScheme: KeyboardInputScheme = Object.assign({
     addCommand: {
         keyDef: { code: "KeyA", key: "a", altKey: true},
         actionName: "addCommand"
@@ -322,7 +326,7 @@ const VoiceOverInputScheme: KeyboardInputScheme = Object.assign({
     }
 }, ExtendedKeyboardSequences);
 
-const NvdaExtendedKeyboardSequences = extend(ExtendedKeyboardSequences, {
+const ControlAltExtendedKeyboardSequences = extend(ExtendedKeyboardSequences, {
     extraSettings: {
         keyDef: { ctrlKey: true }
     },
@@ -340,7 +344,7 @@ const NvdaExtendedKeyboardSequences = extend(ExtendedKeyboardSequences, {
     }
 });
 
-const NvdaInputScheme = Object.assign({
+const ControlAltInputScheme = Object.assign({
     addCommand: {
         keyDef: { code: "KeyA", key: "a", altKey: true, ctrlKey: true},
         actionName: "addCommand"
@@ -385,7 +389,7 @@ const NvdaInputScheme = Object.assign({
         keyDef: {code: "KeyS", key: "s", altKey: true, ctrlKey: true},
         actionName: "stopProgram"
     },
-}, NvdaExtendedKeyboardSequences);
+}, ControlAltExtendedKeyboardSequences);
 
 const CtrlShiftExtendedKeyboardSequences = extend(ExtendedKeyboardSequences, {
     extraSettings: {
@@ -453,9 +457,9 @@ const CtrlShiftInputScheme = Object.assign({
 }, CtrlShiftExtendedKeyboardSequences);
 
 export const KeyboardInputSchemes:KeyboardInputSchemesType = {
-    "nvda": NvdaInputScheme,
-    "voiceover": VoiceOverInputScheme,
-    "ctrlshift": CtrlShiftInputScheme
+    "ctrlshift": CtrlShiftInputScheme,
+    "controlalt": ControlAltInputScheme,
+    "alt": AltInputScheme
 };
 
 const labelMessageKeysByCode = {

@@ -49,7 +49,7 @@ const defaultProgramBlockEditorProps = {
     addNodeExpandedMode: false,
     theme: 'default',
     allowedActions: mockAllowedActions,
-    world: 'default'
+    world: 'Sketchpad'
 };
 
 function createMountProgramBlockEditor(props) {
@@ -81,8 +81,7 @@ function createMountProgramBlockEditor(props) {
                     onInsertSelectedActionIntoProgram: mockInsertSelectedActionIntoProgramHandler,
                     onDeleteProgramStep: mockDeleteProgramStepHandler,
                     onChangeActionPanelStepIndex: mockChangeActionPanelStepIndex,
-                    onChangeAddNodeExpandedMode: mockChangeAddNodeExpandedModeHandler,
-                    world: 'default'
+                    onChangeAddNodeExpandedMode: mockChangeAddNodeExpandedModeHandler
                 },
                 props
             )

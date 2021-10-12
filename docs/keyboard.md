@@ -1,15 +1,15 @@
 # Key Bindings
 
-Weavly supports two sets of keyboard shortcuts.  A keyboard shortcut provides
-fast access to a range of Weavly's features using one or more key presses.
-Keyboard shortcuts can be configured (or turned off) using the keyboard input
-menu, which is displayed by default when the question mark key is pressed, or
-when the keyboard icon is clicked.
+A keyboard shortcut provides fast access to a range of Weavly's features using
+one or more key presses.  Keyboard shortcuts are disabled by default, and can be
+turned on using the keyboard input menu, which is displayed when the keyboard
+icon is clicked.  Once key bindings are enabled, the keyboard input menu can
+also be opened using the question mark key.
 
-The most basic shortcuts are activated by holding a key like alt, or holding
-control and alt at the same time, and then pressing a particular letter.  Longer
-shortcuts involve hitting a combination of keys to start a sequence, and then
-entering additional letters.
+Weavly supports two sets of keyboard shortcuts.  The most basic shortcuts are
+activated by holding a key like alt, or holding control and alt at the same
+time, and then pressing a particular letter.  Longer shortcuts involve hitting a
+combination of keys to start a sequence, and then entering additional letters.
 
 In the instructions below, keys that need to be held at the same time are
 indicated using plus signs, and keys that need to be entered separately are
@@ -73,6 +73,7 @@ conflicting with entering international characters in some keyboard layouts.
 
 
 ## NVDA Key Bindings
+## Control+Alt (Apple: Control+Option) Key Bindings
 
 NVDA has many commands that make use of the alt key, to avoid conflicting with
 these, the default keyboard input scheme uses the control and alt keys in
@@ -128,7 +129,7 @@ follows.
 | Ctrl + Alt + x, t, 5 | changeToHighContrastTheme |
 | Ctrl + Alt + x, x | toggleFeedbackAnnouncements |
 
-## VoiceOver Key Bindings
+## Alt (Apple: Option) Key Bindings
 
 VoiceOver uses ctrl+alt for many of its commands, to avoid conflicting with
 those, there is a keyboard input scheme whichg uses the alt key in combination

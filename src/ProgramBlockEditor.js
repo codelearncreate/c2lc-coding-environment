@@ -2,7 +2,8 @@
 
 import { injectIntl, FormattedMessage } from 'react-intl';
 import type {IntlShape} from 'react-intl';
-import type {AudioManager, RunningState} from './types';
+import type {AudioManager, RunningState, ThemeName} from './types';
+import type { WorldName } from './Worlds';
 import React from 'react';
 import CharacterState from './CharacterState';
 import ConfirmDeleteAllModal from './ConfirmDeleteAllModal';
@@ -16,9 +17,7 @@ import ProgramSequence from './ProgramSequence';
 import ToggleSwitch from './ToggleSwitch';
 import { ReactComponent as AddIcon } from './svg/Add.svg';
 import { ReactComponent as DeleteAllIcon } from './svg/DeleteAll.svg';
-import { ReactComponent as RobotIcon } from './svg/Robot.svg';
-import { ReactComponent as SpaceShipIcon } from './svg/SpaceShip.svg';
-import { ReactComponent as RabbitIcon } from './svg/Rabbit.svg';
+import { getWorldCharacter } from './Worlds';
 import './ProgramBlockEditor.scss';
 
 // TODO: Send focus to Delete toggle button on close of Delete All confirmation
@@ -36,9 +35,8 @@ type ProgramBlockEditorProps = {
     audioManager: AudioManager,
     focusTrapManager: FocusTrapManager,
     addNodeExpandedMode: boolean,
-    // Bring back in C2LC-289
-    // theme: string,
-    world: string,
+    theme: ThemeName,
+    world: WorldName,
     // TODO: Remove onChangeProgramSequence once we have callbacks
     //       for each specific change
     onChangeProgramSequence: (programSequence: ProgramSequence) => void,
@@ -529,22 +527,14 @@ export class ProgramBlockEditor extends React.Component<ProgramBlockEditorProps,
         )
     }
 
-    getWorldCharacter() {
-        if (this.props.world === 'space') {
-            return <SpaceShipIcon className='ProgramBlockEditor__character-column-character' />
-        } else if (this.props.world === 'forest') {
-            return <RabbitIcon className='ProgramBlockEditor__character-column-character' />
-        } else {
-            return <RobotIcon className='ProgramBlockEditor__character-column-character' />
-        }
-    }
-
     render() {
         const contents = this.props.programSequence.getProgram().map((command, stepNumber) => {
             return this.makeProgramBlockSection(stepNumber, command);
         });
 
         contents.push(this.makeEndOfProgramAddNodeSection(this.props.programSequence.getProgramLength()));
+
+        const character = getWorldCharacter(this.props.theme, this.props.world);
 
         return (
             <div className='ProgramBlockEditor__container'>
@@ -578,9 +568,13 @@ export class ProgramBlockEditor extends React.Component<ProgramBlockEditorProps,
                 <div className='ProgramBlockEditor__character-column'>
                     <div
                         aria-hidden='true'
-                        className='ProgramBlockEditor__character-column-character-container'
+                        className={`ProgramBlockEditor__character-column-character-container
+                            ProgramBlockEditor__character-column-character-container--${this.props.world}`}
                         role='img'>
-                        {this.getWorldCharacter()}
+                        {React.createElement(
+                            character,
+                            { className: 'ProgramBlockEditor__character-column-character' }
+                        )}
                     </div>
                 </div>
                 <div
