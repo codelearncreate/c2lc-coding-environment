@@ -33,7 +33,7 @@ import ShareButton from './ShareButton';
 import ActionsMenu from './ActionsMenu';
 import type { ActionToggleRegister, AudioManager, CommandName, DeviceConnectionStatus, RobotDriver, RunningState, ThemeName } from './types';
 import type { WorldName } from './Worlds';
-import { getWorldProperties, getWorldThumbnail } from './Worlds';
+import { getWorldProperties } from './Worlds';
 import WorldSelector from './WorldSelector';
 import * as Utils from './Utils';
 import './App.scss';
@@ -125,7 +125,7 @@ export class App extends React.Component<AppProps, AppState> {
     constructor(props: any) {
         super(props);
 
-        this.version = '0.9.1';
+        this.version = '1.0';
 
         this.appContext = {
             bluetoothApiIsAvailable: FeatureDetection.bluetoothApiIsAvailable()
@@ -1127,7 +1127,6 @@ export class App extends React.Component<AppProps, AppState> {
                                 </a>
                             </h1>
                             <IconButton
-                                disabled={!this.state.keyBindingsEnabled}
                                 ariaLabel={this.props.intl.formatMessage({ id: 'KeyboardInputModal.ShowHide.AriaLabel' })}
                                 onClick={this.handleKeyboardModalToggle}
                                 onKeyDown={this.handleKeyboardMenuIconKeydown}
@@ -1201,12 +1200,6 @@ export class App extends React.Component<AppProps, AppState> {
                             >
                                 <WorldIcon />
                             </IconButton>
-                            <div className='App__world-preview'>
-                                {React.createElement(
-                                    getWorldThumbnail(this.state.settings.theme, this.state.settings.world),
-                                    {'aria-hidden': 'true'}
-                                )}
-                            </div>
                         </div>
                         <CharacterPositionController
                             characterState={this.state.characterState}

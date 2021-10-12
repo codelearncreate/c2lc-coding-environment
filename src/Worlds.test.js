@@ -10,6 +10,8 @@ import { ReactComponent as SpaceThumbnail } from './svg/SpaceThumbnail.svg';
 import { ReactComponent as SpaceThumbnailGray } from './svg/SpaceThumbnail-gray.svg';
 import { ReactComponent as SpaceThumbnailContrast } from './svg/SpaceThumbnail-contrast.svg';
 
+import { ReactComponent as SketchpadThumbnailDark } from './svg/SketchpadThumbnail-dark.svg';
+
 test('isWorldName', () => {
     expect.assertions(7);
     expect(isWorldName('DeepOcean')).toBe(true);
@@ -37,10 +39,12 @@ test('getWorldCharacter', () => {
 });
 
 test('getWorldThumbnail', () => {
-    expect.assertions(3);
+    expect.assertions(5);
     expect(getWorldThumbnail('light', 'Space')).toBe(SpaceThumbnail);
     expect(getWorldThumbnail('gray', 'Space')).toBe(SpaceThumbnailGray);
     expect(getWorldThumbnail('contrast', 'Space')).toBe(SpaceThumbnailContrast);
+    expect(getWorldThumbnail('dark', 'Space')).toBe(SpaceThumbnail);
+    expect(getWorldThumbnail('dark', 'Sketchpad')).toBe(SketchpadThumbnailDark);
 })
 test('getBackgroundInfo', () => {
     expect.assertions(5);

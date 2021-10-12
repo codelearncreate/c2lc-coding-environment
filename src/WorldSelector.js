@@ -84,6 +84,7 @@ class WorldSelector extends React.Component<WorldSelectorProps, WorldSelectorSta
         for (const world of this.availableWorldOptions) {
             const classes = classNames(
                 'WorldSelector__option-image',
+                `WorldSelector__option-image--${world}`,
                 this.state.focusedWorld === world && 'WorldSelector__option--selected'
             );
             worldOptions.push(
@@ -105,7 +106,7 @@ class WorldSelector extends React.Component<WorldSelectorProps, WorldSelectorSta
                             onFocus={this.onFocusWorld}
                             onBlur={this.onBlurWorld}/>
                         <label htmlFor={`WorldSelector__input-world-${world}`}>
-                            <FormattedMessage id={`WorldSelector.option.${world}`} />
+                            <FormattedMessage id={`${world}.name`} />
                         </label>
                     </div>
                 </div>
@@ -150,7 +151,7 @@ class WorldSelector extends React.Component<WorldSelectorProps, WorldSelectorSta
                     })}>
                     <WorldIcon aria-hidden='true' />
                 </ModalHeader>
-                <Modal.Body>
+                <Modal.Body className='WorldSelector__content'>
                     <div className='WorldSelector__prompt'>
                         <FormattedMessage id={'WorldSelector.Prompt'} />
                     </div>
