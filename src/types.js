@@ -26,8 +26,6 @@ export type EditorMode = 'text' | 'block';
 */
 export type ThemeName = 'mixed' | 'light' | 'dark' | 'gray' | 'contrast';
 
-export type WorldName = 'default' | 'forest' | 'space';
-
 export type Program = Array<string>;
 
 // use running, paused, stopped

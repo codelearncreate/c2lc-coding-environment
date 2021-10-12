@@ -1,0 +1,113 @@
+@import 'variables';
+
+.CharacterPositionController__character-column {
+    align-items: center;
+    background-color: #CCE6E2;
+    border: 0px;
+    border-top: 1px solid #88C3BC;
+    border-radius: 0 0 3px 3px;
+    display: flex;
+    flex-direction: column;
+    grid-column-start: 1;
+    grid-column-end: 2;
+    justify-content: flex-end;
+    pointer-events: none;
+    padding: 0 0.5rem;
+    grid-row-start: 2;
+    grid-row-end: 3;
+}
+
+.CharacterPositionController__character-column-character-container {
+    position: relative;
+    border-radius: 50%;
+}
+
+.CharacterPositionController__character-column-character {
+    width: 2.5rem;
+    height: 2.5rem;
+    padding: 0.4rem;
+}
+
+.CharacterPositionController__character-turn-positions {
+    display: flex;
+    width: 100%;
+    justify-content: space-around;
+    position: relative;
+    height: 2rem;
+}
+
+.CharacterPositionController__character-turn-positions > svg {
+    fill: black;
+}
+
+.CharacterPositionController__character-move-position-sides {
+    display: flex;
+    align-items: center;
+    height: 2rem;
+}
+
+.CharacterPositionController__character-position-button {
+    position: relative;
+    z-index: 1;
+    pointer-events: all;
+    stroke: #4C9990;
+    width: 2.2rem;
+    height: 2rem;
+
+    &:focus {
+        outline: $c2lc-focus-indicator-width solid $c2lc-focus-indicator-color;
+    }
+
+    &:not(.CharacterPositionController__character-position-button--disabled):hover {
+        path.filled {
+            fill: #F1AE5B;
+        }
+        path:not(.filled) {
+            stroke: #F1AE5B;
+        }
+    }
+}
+
+.CharacterPositionController__character-move-position-sides > svg {
+    width: 2rem;
+    height: 2.2rem;
+}
+
+.CharacterPositionController__character-turn-positions {
+    svg path.filled {
+        fill: #4C9990;
+        stroke: none;
+    }
+
+    .CharacterPositionController__character-position-button--disabled {
+        path.filled {
+            fill: #B9BEC6;
+        }
+    }
+}
+
+.CharacterPositionController__character-position-button--disabled {
+    cursor: default;
+    stroke: #B9BEC6;
+}
+
+.CharacterPositionController__character-move-position-coordinate {
+    display: flex;
+    width: 100%;
+    justify-content: space-around;
+}
+
+.ProgramBlock__character-position-coordinate-box {
+    text-align: center;
+    pointer-events: all;
+    margin-bottom: 0.5rem;
+}
+
+.ProgramBlock__character-position-coordinate-box:focus {
+    outline: $c2lc-focus-indicator-width solid $c2lc-focus-indicator-color;
+}
+
+.ProgramBlock__character-position-coordinate-box--disabled {
+    color: $c2lc-disabled-background-color;
+    pointer-events: none;
+}

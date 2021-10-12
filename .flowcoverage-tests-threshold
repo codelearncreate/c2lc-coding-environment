@@ -1,5 +1,8 @@
 {
   "concurrentFiles": 1,
+  "globExcludePatterns": [
+    "src/ProgramChangeController.test.js"
+  ],
   "globIncludePatterns": [
     "src/**/*.test.js"
   ],

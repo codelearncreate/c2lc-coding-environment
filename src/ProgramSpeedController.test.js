@@ -9,11 +9,19 @@ import messages from './messages.json';
 
 configure({ adapter: new Adapter()});
 
+const defaultSpeedControllerProps = {
+    rangeControlRef: React.createRef()
+};
+
 function createMountProgramSpeedController(props) {
     const wrapper = mount(
         React.createElement(
             ProgramSpeedController,
-            props
+            Object.assign(
+                {},
+                defaultSpeedControllerProps,
+                props
+            )
         ),
         {
             wrappingComponent: IntlProvider,

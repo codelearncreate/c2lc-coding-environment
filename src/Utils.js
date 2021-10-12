@@ -1,6 +1,8 @@
 // @flow
 
-import type { ThemeName, WorldName } from './types';
+import { isWorldName } from './Worlds';
+import type { ThemeName } from './types';
+import type { WorldName } from './Worlds';
 
 let idCounter: number = 0;
 
@@ -45,10 +47,44 @@ function getThemeFromString(themeQuery: ?string, defaultThemeName: ThemeName): T
 
 function getWorldFromString(worldQuery: ?string, defaultWorldName: WorldName): WorldName {
     switch (worldQuery) {
-        case('space'): return 'space';
-        case('forest'): return 'forest';
-        default: return defaultWorldName;
+        // Convert old world names to the new world names
+        case('space'):
+            return 'Space';
+        case('forest'):
+            return 'Jungle';
+        // If 'worldQuery' is a known world name, use it,
+        // otherwise return 'defaultWorldName'
+        default:
+            if (isWorldName(worldQuery)) {
+                return ((worldQuery: any): WorldName);
+            } else {
+                return defaultWorldName;
+            }
     }
 }
 
-export { generateId, makeDelayedPromise, generateEncodedProgramURL, getThemeFromString, getWorldFromString };
+/**
+ * A simplified pure JS equivalent of jQuery.extend that always performs a
+ * "deep" merge.
+ *
+ * @param  {...Object} toMerge - One or more objects to be merged together from left to right.
+ * @returns {Object} - The merged object.
+ *
+ */
+function extend(...toMerge:Object) {
+    const merged = {};
+    for (const singleEntryToMerge of toMerge) {
+        for (const [key, value] of Object.entries(singleEntryToMerge)) {
+            if (typeof value === "object" && !Array.isArray(value) && (typeof merged[key] === "object" && !Array.isArray(merged[key]) && merged[key] !== null)) {
+                merged[key] = extend(merged[key], value);
+            }
+            else {
+                merged[key] = value;
+            }
+        }
+    }
+    return merged;
+}
+
+
+export { extend, generateId, makeDelayedPromise, generateEncodedProgramURL, getThemeFromString, getWorldFromString };

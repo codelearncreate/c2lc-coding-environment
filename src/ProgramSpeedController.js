@@ -11,6 +11,7 @@ import './ProgramSpeedController.scss';
 type ProgramSpeedControllerProps = {
     intl: IntlShape,
     values: Array<number>,
+    rangeControlRef: { current: null | HTMLElement };
     onChange: (value: number) => void
 };
 
@@ -32,6 +33,7 @@ class ProgramSpeedController extends React.Component<ProgramSpeedControllerProps
                         type='range'
                         min='1'
                         max={this.props.values.length}
+                        ref={this.props.rangeControlRef}
                         onChange={this.onChangeInput} />
                 }
                 <FastIcon />
