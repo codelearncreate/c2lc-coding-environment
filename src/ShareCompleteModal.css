@@ -1,8 +1,30 @@
 .ShareCompleteModal {
     border-radius: 0.25rem;
+    background-color: yellow;
 }
 
-.ShareCompleteModal__content {
-    border-radius: 0.25rem;
+.ShareCompleteModal.modal-dialog {
+    max-width: 550px;
+}
+
+.ShareCompleteModal__content,.ShareCompleteModal .modal-content {
     background-color: yellow;
+    margin: 0 auto;
+}
+
+.ShareCompleteModal__content.modal-body {
+    padding: 1rem;
+}
+
+.ShareCompleteModal__footer {
+    padding: 0.5rem 1rem 1rem 1rem;
+    display: flex;
+    justify-content: flex-end;
+    background-color: yellow;
+}
+
+.ShareCompleteModal__footer button {
+    margin-left: auto;
+    background-color: black;
+    color: white;
 }

@@ -1,69 +1,51 @@
 @import 'variables';
 
-.WorldSelector {
-    background-color: #CCE6E2;
-    padding: 1rem;
-    min-height: 100%;
-}
-
-.WorldSelector .HeaderIcon, .WorldSelector .WorldIcon {
-    display: block;
-    height: 4rem;
-    width: 4rem;
-    padding: 0.2rem;
-}
-
-.WorldSelector .HeaderIcon {
-    background: none;
-}
-
-.WorldSelector .WorldIcon {
-    box-shadow: inset 0 .1rem .2rem rgba(0, 0, 0, 0.25);
-    background-color: white;
-    border: none;
-    padding: 0.4rem;
-    border-radius: 5px;
-
-    // TODO: Move this out of the conditional block once the header icon is reenabled.
-    &:not(:first-of-type) {
-        margin-top: 0.8rem;
-    }
-}
-
-.WorldSelector .WorldIcon svg {
-    width: 2.5rem;
-    height: 2.5rem;
-}
-
-.WorldSelector button.btn.WorldIcon--disabled,
-.WorldSelector button.btn.WorldIcon--disabled:active {
-    background-color: #B9BEC6;
-    cursor: default;
-    box-shadow: unset;
-}
-
-.WorldSelector .WorldIcon--disabled svg {
-    opacity: 0.5;
-}
-
-.WorldSelector button.btn.WorldIcon--disabled:hover {
+.WorldSelector__content {
     padding: 0;
 }
 
-.WorldSelector .WorldIcon--selected {
-    background-color: #4C9990;
+.WorldSelector__prompt {
+    padding: 1.5rem 0 1.5rem 3rem;
 }
 
-.WorldSelector button.btn.WorldIcon:focus {
-    box-shadow: 0 0 0 $c2lc-focus-indicator-width black;
+.WorldSelector__options {
+    background-color: #F1F2F4;
+    column-gap: 1.5rem;
+    display: grid;
+    justify-content: center;
+    grid-template-columns: max-content max-content;
+    padding: 1rem 0;
 }
 
-.WorldSelector button.btn:not(.WorldIcon--disabled):hover {
-    background-color: #F1AE5B;
-    padding-top: 0.25rem;
-    padding-left: 0.2rem;
+.WorldSelector__option-container {
+    display: flex;
+    flex-direction: column;
+    row-gap: 0.5rem;
 }
 
-.WorldSelector .btn-primary:not(.WorldIcon--disabled):not(.WorldIcon--disabled):active {
-    background-color: #F1AE5B;
+.WorldSelector__option-image {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 10px;
+    width: 5.6rem;
+    height: 5.6rem;
+    svg {
+        width: 5rem;
+        height: 5rem;
+    }
+}
+
+.WorldSelector__option--selected {
+    box-shadow: 0 0 0 $c2lc-focus-indicator-width #000;
+}
+
+.WorldSelector__option-row {
+    display: flex;
+    column-gap: 0.5rem;
+    margin-bottom: 0.5rem;
+    align-items: center;
+    label {
+        margin-bottom: 0;
+    }
 }
