@@ -12,6 +12,7 @@ import './IconButton.scss';
 //       enabled or disabled).
 
 type IconButtonProps = {
+    className?: string,
     children: any,
     disabled?: boolean,
     ariaLabel: string,
@@ -23,7 +24,8 @@ class IconButton extends React.Component<IconButtonProps, {}> {
     render() {
         const classes = classNames(
             "IconButton",
-            this.props.disabled && "IconButton--disabled"
+            this.props.disabled && "IconButton--disabled",
+            this.props.className
         );
         return (
             <div

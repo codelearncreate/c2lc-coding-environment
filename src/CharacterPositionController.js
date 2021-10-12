@@ -172,7 +172,8 @@ class CharacterPositionController extends React.Component<CharacterPositionContr
                         onClick={!this.props.editingDisabled ? this.handleClickCharacterPositionButton : undefined} />
                     <div
                         aria-hidden='true'
-                        className='CharacterPositionController__character-column-character-container'
+                        className={`CharacterPositionController__character-column-character-container
+                            CharacterPositionController__character-column-character-container--${this.props.world}`}
                         role='img'>
                         {this.getWorldCharacter()}
                     </div>

@@ -17,7 +17,7 @@ divided using commas. For example, the shortcut `Ctrl + Alt + x, x` is
 activated by holding control, alt, and x at the same time, releasing all keys,
 and then hitting the x key again by itself.
 
-## NVDA Key Bindings
+## Control+Alt (Apple: Control+Option) Key Bindings
 
 NVDA has many commands that make use of the alt key, to avoid conflicting with
 these, the default keyboard input scheme uses the control and alt keys in
@@ -73,7 +73,7 @@ follows.
 | Ctrl + Alt + x, t, 5 | changeToHighContrastTheme |
 | Ctrl + Alt + x, x | toggleFeedbackAnnouncements |
 
-## VoiceOver Key Bindings
+## Alt (Apple: Option) Key Bindings
 
 VoiceOver uses ctrl+alt for many of its commands, to avoid conflicting with
 those, there is a keyboard input scheme whichg uses the alt key in combination
