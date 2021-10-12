@@ -6,19 +6,20 @@ import type {IntlShape} from 'react-intl';
 import ActionsMenuToggle from './ActionsMenuToggle';
 import ActionsMenuItem from './ActionsMenuItem';
 import FocusTrapManager from './FocusTrapManager';
+import ProgramSequence from './ProgramSequence';
 
 import './ActionsMenu.scss';
 
-import type {ActionToggleRegister} from './types';
+import type {ActionToggleRegister, CommandName} from './types';
 
 type ActionsMenuProps = {
     intl: IntlShape,
-    changeHandler?: (event: Event, commandName: string) => void,
+    changeHandler?: (event: Event, commandName: CommandName) => void,
     editingDisabled?: boolean,
     // TODO: Flesh this definition out.
     menuItems: {},
-    allowedActions: ActionToggleRegister,
-    usedActions: ActionToggleRegister
+    programSequence: ProgramSequence,
+    allowedActions: ActionToggleRegister
 };
 
 type ActionsMenuState = {
@@ -31,7 +32,6 @@ class ActionsMenu extends React.Component<ActionsMenuProps, ActionsMenuState> {
     static defaultProps = {
         changeHandler: () => {},
         editingDisabled: false,
-        usedActions: {},
         menuItems: {
             forward1: {
                 isAllowed: true,
@@ -129,9 +129,9 @@ class ActionsMenu extends React.Component<ActionsMenuProps, ActionsMenuState> {
     generateMenu = () => {
         const actionsMenuItems = [];
         // TODO: Discuss how to evolve this into a deeper structure when we add groups and things other than actions.
-        Object.keys(this.props.menuItems).forEach((itemKey: string) => {
+        Object.keys(this.props.menuItems).forEach((itemKey: CommandName) => {
             const isAllowed: boolean = !!this.props.allowedActions[itemKey];
-            const isUsed: boolean = !!this.props.usedActions[itemKey];
+            const isUsed: boolean = this.props.programSequence.usesAction(itemKey);
             // TODO: Add a mechanism for values to come back to us.
             const itemChangeHandler = (event: Event) => {
                 /* istanbul ignore next */

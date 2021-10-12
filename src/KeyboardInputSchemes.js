@@ -1,7 +1,11 @@
 //@flow
 import {extend} from './Utils';
 
-export type KeyboardInputSchemeName = "nvda" | "voiceover";
+export type KeyboardInputSchemeName = "controlalt" | "alt";
+
+export function isKeyboardInputSchemeName(str: ?string): boolean {
+    return str === 'controlalt' || str === 'alt';
+}
 
 export type KeyDef = {
     code?: string,
@@ -13,6 +17,7 @@ export type KeyDef = {
 
 export type ActionName =
     // Single Key Commands
+    | "addCommand"
     | "addCommandToBeginning"
     | "addCommandToEnd"
     | "deleteCurrentStep"
@@ -60,6 +65,13 @@ export type ActionName =
     | "turnCharacterLeft"
     | "turnCharacterRight"
 
+    // Change Theme
+    | "changeToDefaultTheme"
+    | "changeToLightTheme"
+    | "changeToDarkTheme"
+    | "changeToGrayscaleTheme"
+    | "changeToHighContrastTheme"
+
     // Update Program
     | "deleteAll"
     ;
@@ -79,8 +91,8 @@ export type KeyboardInputScheme = {
 };
 
 export type KeyboardInputSchemesType = {
-    "nvda": KeyboardInputScheme,
-    "voiceover":  KeyboardInputScheme
+    "controlalt": KeyboardInputScheme,
+    "alt":  KeyboardInputScheme
 };
 
 const ExtendedKeyboardSequences: KeyboardInputScheme = {
@@ -235,6 +247,30 @@ const ExtendedKeyboardSequences: KeyboardInputScheme = {
             }
         },
 
+        changeTheme: {
+            keyDef: { code: "KeyT", key: "t" },
+            default: {
+                keyDef: { key: "1"},
+                actionName: "changeToDefaultTheme"
+            },
+            light: {
+                keyDef: { key: "2"},
+                actionName: "changeToLightTheme"
+            },
+            dark: {
+                keyDef: { key: "3"},
+                actionName: "changeToDarkTheme"
+            },
+            grayscale: {
+                keyDef: { key: "4"},
+                actionName: "changeToGrayscaleTheme"
+            },
+            highContrast: {
+                keyDef: { key: "5"},
+                actionName: "changeToHighContrastTheme"
+            }
+        },
+
         deleteAll: {
             keyDef: { code: "KeyD", key: "d" },
             actionName: "deleteAll"
@@ -242,7 +278,11 @@ const ExtendedKeyboardSequences: KeyboardInputScheme = {
     }
 }
 
-const VoiceOverInputScheme: KeyboardInputScheme = Object.assign({
+const AltInputScheme: KeyboardInputScheme = Object.assign({
+    addCommand: {
+        keyDef: { code: "KeyA", key: "a", altKey: true},
+        actionName: "addCommand"
+    },
     addCommandToBeginning: {
         keyDef: { code: "KeyB", key: "b", altKey: true},
         actionName: "addCommandToBeginning"
@@ -289,7 +329,7 @@ const VoiceOverInputScheme: KeyboardInputScheme = Object.assign({
     }
 }, ExtendedKeyboardSequences);
 
-const NvdaExtendedKeyboardSequences = extend(ExtendedKeyboardSequences, {
+const ControlAltExtendedKeyboardSequences = extend(ExtendedKeyboardSequences, {
     extraSettings: {
         keyDef: { ctrlKey: true }
     },
@@ -307,7 +347,11 @@ const NvdaExtendedKeyboardSequences = extend(ExtendedKeyboardSequences, {
     }
 });
 
-const NvdaInputScheme = Object.assign({
+const ControlAltInputScheme = Object.assign({
+    addCommand: {
+        keyDef: { code: "KeyA", key: "a", altKey: true, ctrlKey: true},
+        actionName: "addCommand"
+    },
     addCommandToBeginning: {
         keyDef: { code: "KeyB", key: "b", altKey: true, ctrlKey: true},
         actionName: "addCommandToBeginning"
@@ -352,11 +396,11 @@ const NvdaInputScheme = Object.assign({
         keyDef: { key: "+", shiftKey: true},
         actionName: "expandAddNode"
     }
-}, NvdaExtendedKeyboardSequences);
+}, ControlAltExtendedKeyboardSequences);
 
 export const KeyboardInputSchemes:KeyboardInputSchemesType = {
-    "nvda": NvdaInputScheme,
-    "voiceover": VoiceOverInputScheme
+    "controlalt": ControlAltInputScheme,
+    "alt": AltInputScheme
 };
 
 const labelMessageKeysByCode = {
@@ -435,12 +479,14 @@ export function findKeyboardEventSequenceMatches (events: Array<KeyboardEvent>, 
     const keyboardInputScheme = KeyboardInputSchemes[keyboardInputSchemeName];
     let match = false;
 
-    for (const singleKeySequence of Object.values(keyboardInputScheme)) {
-        if (match === false || match === "partial") {
-            // $FlowFixMe: Flow doesn't believe this matches our "or"ed set of allowed inputs.
-            const keySequenceMatch = matchSingleInputSchemeLevel(events, singleKeySequence, 0);
-            if (keySequenceMatch !== false) {
-                match = keySequenceMatch;
+    if (events.length) {
+        for (const singleKeySequence of Object.values(keyboardInputScheme)) {
+            if (match === false || match === "partial") {
+                // $FlowFixMe: Flow doesn't believe this matches our "or"ed set of allowed inputs.
+                const keySequenceMatch = matchSingleInputSchemeLevel(events, singleKeySequence, 0);
+                if (keySequenceMatch !== false) {
+                    match = keySequenceMatch;
+                }
             }
         }
     }

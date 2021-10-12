@@ -2,7 +2,8 @@
 
 import { injectIntl, FormattedMessage } from 'react-intl';
 import type {IntlShape} from 'react-intl';
-import type {AudioManager, RunningState} from './types';
+import type {AudioManager, RunningState, ThemeName} from './types';
+import type { WorldName } from './Worlds';
 import React from 'react';
 import CharacterState from './CharacterState';
 import ConfirmDeleteAllModal from './ConfirmDeleteAllModal';
@@ -16,9 +17,7 @@ import ProgramSequence from './ProgramSequence';
 import ToggleSwitch from './ToggleSwitch';
 import { ReactComponent as AddIcon } from './svg/Add.svg';
 import { ReactComponent as DeleteAllIcon } from './svg/DeleteAll.svg';
-import { ReactComponent as RobotIcon } from './svg/Robot.svg';
-import { ReactComponent as SpaceShipIcon } from './svg/SpaceShip.svg';
-import { ReactComponent as RabbitIcon } from './svg/Rabbit.svg';
+import { getWorldCharacter } from './Worlds';
 import './ProgramBlockEditor.scss';
 
 // TODO: Send focus to Delete toggle button on close of Delete All confirmation
@@ -36,10 +35,13 @@ type ProgramBlockEditorProps = {
     audioManager: AudioManager,
     focusTrapManager: FocusTrapManager,
     addNodeExpandedMode: boolean,
-    // Bring back in C2LC-289
-    // theme: string,
-    world: string,
+    theme: ThemeName,
+    world: WorldName,
+    // TODO: Remove onChangeProgramSequence once we have callbacks
+    //       for each specific change
     onChangeProgramSequence: (programSequence: ProgramSequence) => void,
+    onInsertSelectedActionIntoProgram: (index: number, selectedAction: ?string) => void,
+    onDeleteProgramStep: (index: number, command: string) => void,
     onChangeActionPanelStepIndex: (index: ?number) => void,
     onChangeAddNodeExpandedMode: (boolean) => void
 };
@@ -51,7 +53,7 @@ type ProgramBlockEditorState = {
     closestAddNodeIndex: number
 };
 
-class ProgramBlockEditor extends React.Component<ProgramBlockEditorProps, ProgramBlockEditorState> {
+export class ProgramBlockEditor extends React.Component<ProgramBlockEditorProps, ProgramBlockEditorState> {
     commandBlockRefs: Map<number, HTMLElement>;
     addNodeRefs: Map<number, HTMLElement>;
     focusCommandBlockIndex: ?number;
@@ -116,59 +118,17 @@ class ProgramBlockEditor extends React.Component<ProgramBlockEditorProps, Progra
         }
     }
 
-    // *************************************
-    // BEGIN Methods to make program changes
-    //
-    // These methods are used by both the ProgramBlockEditor and the keyboard
-    // shortcut handlers in App to:
-    //
-    // * Make the announcement for the program change
-    //
-    // * Set up focus, scrolling, and animations following the change
-    //
-    // * Make the change to the program
-
-    // TODO: Is ProgramBlockEditor the best place for these methods?
-
-    deleteProgramStep(index: number) {
-        // Play the announcement
-        const commandString = this.props.intl.formatMessage({ id: "Announcement." + this.props.programSequence.getProgramStepAt(index)});
-        this.props.audioManager.playAnnouncement('delete', this.props.intl, { command: commandString});
-
-        // If there are steps following the one being deleted, focus the
-        // next step. Otherwise, focus the final add node.
-        if (index < this.props.programSequence.getProgramLength() - 1) {
-            this.focusCommandBlockIndex = index;
-        } else {
-            this.focusAddNodeIndex = index;
-        }
-
-        // Make the change
-        this.props.onChangeProgramSequence(
-            this.props.programSequence.deleteStep(index)
-        );
+    focusCommandBlockAfterUpdate(index: number) {
+        this.focusCommandBlockIndex = index;
     }
 
-    insertSelectedCommandIntoProgram(index: number) {
-        // Play the announcement
-        const selectedAction = this.props.selectedAction;
-        const commandString = this.props.intl.formatMessage({ id: "Announcement." + (selectedAction || "") });
-        this.props.audioManager.playAnnouncement('add', this.props.intl, { command: commandString});
-
-        if (selectedAction) {
-            // Set up focus, scrolling, and animation
-            this.focusCommandBlockIndex = index;
-            this.scrollToAddNodeIndex = index + 1;
-            this.setUpdatedCommandBlock(index);
-            // Make the change
-            this.props.onChangeProgramSequence(
-                this.props.programSequence.insertStep(index, selectedAction)
-            );
-        }
+    focusAddNodeAfterUpdate(index: number) {
+        this.focusAddNodeIndex = index;
     }
 
-    // END Methods to make program changes
-    // ***********************************
+    scrollToAddNodeAfterUpdate(index: number) {
+        this.scrollToAddNodeIndex = index;
+    }
 
     programStepIsActive(programStepNumber: number) {
         if (this.props.runningState === 'running'
@@ -253,7 +213,8 @@ class ProgramBlockEditor extends React.Component<ProgramBlockEditorProps, Progra
     };
 
     handleActionPanelDeleteStep = (index: number) => {
-        this.deleteProgramStep(index);
+        this.props.onDeleteProgramStep(index,
+            this.props.programSequence.getProgramStepAt(index));
         this.closeActionPanel();
     };
 
@@ -335,7 +296,8 @@ class ProgramBlockEditor extends React.Component<ProgramBlockEditorProps, Progra
     };
 
     handleClickAddNode = (stepNumber: number) => {
-        this.insertSelectedCommandIntoProgram(stepNumber);
+        this.props.onInsertSelectedActionIntoProgram(stepNumber,
+            this.props.selectedAction);
     };
 
     // TODO: Discuss removing this once we have a good way to test drag and drop.
@@ -402,7 +364,8 @@ class ProgramBlockEditor extends React.Component<ProgramBlockEditorProps, Progra
             });
 
             const closestAddNodeIndex = this.findAddNodeClosestToEvent(event);
-            this.insertSelectedCommandIntoProgram(closestAddNodeIndex);
+            this.props.onInsertSelectedActionIntoProgram(closestAddNodeIndex,
+                this.props.selectedAction);
         }
     }
 
@@ -564,22 +527,14 @@ class ProgramBlockEditor extends React.Component<ProgramBlockEditorProps, Progra
         )
     }
 
-    getWorldCharacter() {
-        if (this.props.world === 'space') {
-            return <SpaceShipIcon className='ProgramBlockEditor__character-column-character' />
-        } else if (this.props.world === 'forest') {
-            return <RabbitIcon className='ProgramBlockEditor__character-column-character' />
-        } else {
-            return <RobotIcon className='ProgramBlockEditor__character-column-character' />
-        }
-    }
-
     render() {
         const contents = this.props.programSequence.getProgram().map((command, stepNumber) => {
             return this.makeProgramBlockSection(stepNumber, command);
         });
 
         contents.push(this.makeEndOfProgramAddNodeSection(this.props.programSequence.getProgramLength()));
+
+        const character = getWorldCharacter(this.props.theme, this.props.world);
 
         return (
             <div className='ProgramBlockEditor__container'>
@@ -613,9 +568,13 @@ class ProgramBlockEditor extends React.Component<ProgramBlockEditorProps, Progra
                 <div className='ProgramBlockEditor__character-column'>
                     <div
                         aria-hidden='true'
-                        className='ProgramBlockEditor__character-column-character-container'
+                        className={`ProgramBlockEditor__character-column-character-container
+                            ProgramBlockEditor__character-column-character-container--${this.props.world}`}
                         role='img'>
-                        {this.getWorldCharacter()}
+                        {React.createElement(
+                            character,
+                            { className: 'ProgramBlockEditor__character-column-character' }
+                        )}
                     </div>
                 </div>
                 <div

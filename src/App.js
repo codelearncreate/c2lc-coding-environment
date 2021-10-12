@@ -16,6 +16,7 @@ import DashDriver from './DashDriver';
 import * as FeatureDetection from './FeatureDetection';
 import FakeAudioManager from './FakeAudioManager';
 import FocusTrapManager from './FocusTrapManager';
+import IconButton from './IconButton';
 import Interpreter from './Interpreter';
 import PlayButton from './PlayButton';
 import ProgramBlockEditor from './ProgramBlockEditor';
@@ -30,7 +31,9 @@ import ProgramSpeedController from './ProgramSpeedController';
 import ProgramSerializer from './ProgramSerializer';
 import ShareButton from './ShareButton';
 import ActionsMenu from './ActionsMenu';
-import type { ActionToggleRegister, AudioManager, CommandName, DeviceConnectionStatus, RobotDriver, RunningState, ThemeName, WorldName } from './types';
+import type { ActionToggleRegister, AudioManager, CommandName, DeviceConnectionStatus, RobotDriver, RunningState, ThemeName } from './types';
+import type { WorldName } from './Worlds';
+import { getWorldProperties } from './Worlds';
 import WorldSelector from './WorldSelector';
 import * as Utils from './Utils';
 import './App.scss';
@@ -41,8 +44,10 @@ import { ReactComponent as HiddenBlock } from './svg/Hidden.svg';
 import KeyboardInputModal from './KeyboardInputModal';
 
 import type {ActionName, KeyboardInputSchemeName} from './KeyboardInputSchemes';
-import {findKeyboardEventSequenceMatches, isRepeatedEvent} from './KeyboardInputSchemes';
-import { ReactComponent as KeyboardModalToggleIcon} from './svg/Keyboard.svg'
+import {findKeyboardEventSequenceMatches, isRepeatedEvent, isKeyboardInputSchemeName} from './KeyboardInputSchemes';
+import { ReactComponent as KeyboardModalToggleIcon} from './svg/Keyboard.svg';
+import { ReactComponent as WorldIcon } from './svg/World.svg';
+import ProgramChangeController from './ProgramChangeController';
 
 // Convenience function to focus on the first element with a given class, used
 // for keyboard shortcuts.
@@ -92,10 +97,10 @@ type AppState = {
     drawingEnabled: boolean,
     runningState: RunningState,
     allowedActions: ActionToggleRegister,
-    usedActions: ActionToggleRegister,
     keyBindingsEnabled: boolean,
     keyboardInputSchemeName: KeyboardInputSchemeName;
-    showKeyboardModal: boolean
+    showKeyboardModal: boolean,
+    showWorldSelector: boolean
 };
 
 export class App extends React.Component<AppProps, AppState> {
@@ -106,7 +111,6 @@ export class App extends React.Component<AppProps, AppState> {
     interpreter: Interpreter;
     audioManager: AudioManager;
     focusTrapManager: FocusTrapManager;
-    startingCharacterState: CharacterState;
     programSerializer: ProgramSerializer;
     characterStateSerializer: CharacterStateSerializer;
     allowedActionsSerializer: AllowedActionsSerializer;
@@ -115,20 +119,19 @@ export class App extends React.Component<AppProps, AppState> {
     speedControlRef: { current: null | HTMLElement };
     programBlockEditorRef: { current: any };
     sequenceInProgress: Array<KeyboardEvent>;
+    programChangeController: ProgramChangeController;
+    defaultWorld: WorldName;
 
     constructor(props: any) {
         super(props);
 
-        this.version = '0.9';
+        this.version = '1.0';
 
         this.appContext = {
             bluetoothApiIsAvailable: FeatureDetection.bluetoothApiIsAvailable()
         };
 
-        this.sceneDimensions = new SceneDimensions(1, 26, 1, 16);
-
-        // Begin facing East
-        this.startingCharacterState = new CharacterState(1, 1, 2, [], this.sceneDimensions);
+        this.sceneDimensions = new SceneDimensions(1, 12, 1, 8);
 
         this.interpreter = new Interpreter(1000, this);
 
@@ -143,6 +146,8 @@ export class App extends React.Component<AppProps, AppState> {
         this.pushStateTimeoutID = null;
 
         this.sequenceInProgress = [];
+
+        this.defaultWorld = 'Sketchpad';
 
         this.interpreter.addCommandHandler(
             'forward1',
@@ -391,12 +396,12 @@ export class App extends React.Component<AppProps, AppState> {
 
         this.state = {
             programSequence: new ProgramSequence([], 0),
-            characterState: this.startingCharacterState,
+            characterState: this.makeStartingCharacterState(this.defaultWorld),
             settings: {
                 language: 'en',
                 addNodeExpandedMode: true,
                 theme: 'mixed',
-                world: 'default'
+                world: this.defaultWorld
             },
             dashConnectionStatus: 'notConnected',
             showDashConnectionError: false,
@@ -409,10 +414,10 @@ export class App extends React.Component<AppProps, AppState> {
             drawingEnabled: true,
             runningState: 'stopped',
             allowedActions: allowedActions,
-            usedActions: {},
-            keyBindingsEnabled: true,
+            keyBindingsEnabled: false,
             showKeyboardModal: false,
-            keyboardInputSchemeName: "nvda"
+            showWorldSelector: false,
+            keyboardInputSchemeName: "controlalt"
         };
 
         // For FakeRobotDriver, replace with:
@@ -430,6 +435,9 @@ export class App extends React.Component<AppProps, AppState> {
         }
 
         this.focusTrapManager = new FocusTrapManager();
+
+        this.programChangeController = new ProgramChangeController(this,
+            this.props.intl, this.audioManager);
 
         this.speedControlRef = React.createRef();
         this.programBlockEditorRef = React.createRef();
@@ -486,41 +494,52 @@ export class App extends React.Component<AppProps, AppState> {
         }, callback);
     }
 
-
-    calculateUsedActions = (programSequence: ProgramSequence): ActionToggleRegister => {
-        // Calculate  "used actions".
-        const usedActions = {};
-        programSequence.program.forEach((commandName) => {
-            usedActions[commandName] = true;
-        });
-        return usedActions;
-    }
-
     // Handlers
 
     handleProgramSequenceChange = (programSequence: ProgramSequence) => {
-        const usedActions: ActionToggleRegister = this.calculateUsedActions(programSequence);
         this.setState({
-            programSequence: programSequence,
-            usedActions: usedActions
+            programSequence: programSequence
         });
     }
 
-    handleClickPlay = () => {
+    handleProgramBlockEditorInsertSelectedAction = (index: number, selectedAction: ?string) => {
+        this.programChangeController.insertSelectedActionIntoProgram(
+            this.programBlockEditorRef.current,
+            index,
+            selectedAction
+        );
+    }
+
+    handleProgramBlockEditorDeleteStep = (index: number, command: string) => {
+        this.programChangeController.deleteProgramStep(
+            this.programBlockEditorRef.current,
+            index,
+            command
+        );
+    }
+
+    handlePlay = () => {
         switch (this.state.runningState) {
             case 'running':
-                this.setState({ runningState: 'pauseRequested' });
+                this.setState({
+                    runningState: 'pauseRequested',
+                    actionPanelStepIndex: null
+                });
                 break;
             case 'pauseRequested': // Fall through
             case 'paused':
-                this.setState({ runningState: 'running' });
+                this.setState({
+                    runningState: 'running',
+                    actionPanelStepIndex: null
+                });
                 break;
             case 'stopRequested': // Fall through
             case 'stopped':
                 this.setState((state) => {
                     return {
                         programSequence: state.programSequence.updateProgramCounter(0),
-                        runningState: 'running'
+                        runningState: 'running',
+                        actionPanelStepIndex: null
                     };
                 });
                 break;
@@ -529,7 +548,7 @@ export class App extends React.Component<AppProps, AppState> {
         }
     };
 
-    handleClickStop = () => {
+    handleStop = () => {
         this.setRunningState('stopRequested');
     }
 
@@ -624,6 +643,11 @@ export class App extends React.Component<AppProps, AppState> {
     // TODO: Convert to use keyboardEventMatchesKeyDef for each command in turn.
     handleDocumentKeyDown = (e: KeyboardEvent) => {
         if (this.state.keyBindingsEnabled) {
+            if (e.key === 'Escape') {
+                this.sequenceInProgress = [];
+                return;
+            }
+
             const isOnlyModifier = ["Shift", "Control", "Alt"].indexOf(e.key) !== -1;
             let isRepeat = false;
             if (this.sequenceInProgress.length) {
@@ -652,34 +676,56 @@ export class App extends React.Component<AppProps, AppState> {
                                 return { announcementsEnabled: !(currentState.announcementsEnabled) };
                             });
                             break;
-                        case("addCommandToBeginning"):
+                        case("addCommand"): {
                             if (!this.editingIsDisabled()) {
-                                if (this.state.selectedAction) {
-                                    if (this.programBlockEditorRef.current) {
-                                        this.programBlockEditorRef.current.insertSelectedCommandIntoProgram(0);
+                                const currentElement = document.activeElement;
+                                if (currentElement) {
+                                    if (currentElement.dataset.controltype === 'programStep' ||
+                                        currentElement.dataset.controltype === 'addNode') {
+                                        const index = currentElement.dataset.controltype === 'programStep' ?
+                                            parseInt(currentElement.dataset.stepnumber, 10) + 1:
+                                            parseInt(currentElement.dataset.stepnumber, 10);
+                                        if (index != null) {
+                                            this.programChangeController.insertSelectedActionIntoProgram(
+                                                this.programBlockEditorRef.current,
+                                                index,
+                                                this.state.selectedAction
+                                            );
+                                        }
                                     }
                                 }
                             }
                             break;
+                        }
+                        case("addCommandToBeginning"):
+                            if (!this.editingIsDisabled()) {
+                                this.programChangeController.insertSelectedActionIntoProgram(
+                                    this.programBlockEditorRef.current,
+                                    0,
+                                    this.state.selectedAction
+                                );
+                            }
+                            break;
                         case("addCommandToEnd"):
                             if (!this.editingIsDisabled()) {
-                                if (this.state.selectedAction) {
-                                    const index = this.state.programSequence.getProgramLength();
-                                    if (this.programBlockEditorRef.current) {
-                                        this.programBlockEditorRef.current.insertSelectedCommandIntoProgram(index);
-                                    }
-                                }
+                                this.programChangeController.addSelectedActionToProgramEnd(
+                                    this.programBlockEditorRef.current,
+                                    this.state.selectedAction
+                                );
                             }
                             break;
                         case("deleteCurrentStep"):
                             if (!this.editingIsDisabled()) {
                                 const currentElement = document.activeElement;
-                                // $FlowFixMe: Not all elements have dataset property
-                                if (currentElement.dataset.controltype === 'programStep') {
-                                    const index = parseInt(currentElement.dataset.stepnumber, 10);
-                                    if (index != null) {
-                                        if (this.programBlockEditorRef.current) {
-                                            this.programBlockEditorRef.current.deleteProgramStep(index);
+                                if (currentElement) {
+                                    if (currentElement.dataset.controltype === 'programStep') {
+                                        const index = parseInt(currentElement.dataset.stepnumber, 10);
+                                        if (index != null) {
+                                            this.programChangeController.deleteProgramStep(
+                                                this.programBlockEditorRef.current,
+                                                index,
+                                                currentElement.dataset.command
+                                            );
                                         }
                                     }
                                 }
@@ -704,7 +750,7 @@ export class App extends React.Component<AppProps, AppState> {
                             break;
                         case("playPauseProgram"):
                             if (this.state.programSequence.getProgramLength() > 0) {
-                                this.handleClickPlay();
+                                this.handlePlay();
                             }
                             break;
                         case("refreshScene"):
@@ -714,7 +760,7 @@ export class App extends React.Component<AppProps, AppState> {
                             break;
                         case("stopProgram"):
                             if (this.state.runningState !== 'stopped' && this.state.runningState !== 'stopRequested') {
-                                this.handleClickStop();
+                                this.handleStop();
                             }
                             break;
                         case("decreaseProgramSpeed"):
@@ -763,7 +809,7 @@ export class App extends React.Component<AppProps, AppState> {
                             focusOnFirstElementWithClass("command-block");
                             break;
                         case("focusAppHeader"):
-                            focusOnFirstElementWithClass("App__header-keyboardMenuIcon");
+                            focusOnFirstElementWithClass("keyboard-shortcut-focus__app-header");
                             break;
                         case("focusAddNodeToggle"):
                             focusOnFirstElementWithClass("ProgramBlockEditor__add-node-toggle-switch");
@@ -787,7 +833,7 @@ export class App extends React.Component<AppProps, AppState> {
                             focusOnFirstElementWithClass("PenDownToggleSwitch");
                             break;
                         case("focusWorldSelector"):
-                            focusOnFirstElementWithClass("WorldIcon");
+                            focusOnFirstElementWithClass("keyboard-shortcut-focus__world-selector");
                             break;
                         case("moveCharacterLeft"):
                             if (!this.editingIsDisabled()) {
@@ -822,6 +868,21 @@ export class App extends React.Component<AppProps, AppState> {
                         case("expandAddNode"):
                             const currentAddNodeState = this.state.settings.addNodeExpandedMode;
                             this.handleChangeAddNodeExpandedMode(!currentAddNodeState);
+                            break;
+                        case("changeToDefaultTheme"):
+                            this.setStateSettings({theme: "mixed"});
+                            break;
+                        case("changeToLightTheme"):
+                            this.setStateSettings({theme: "light"});
+                            break;
+                        case("changeToDarkTheme"):
+                            this.setStateSettings({theme: "dark"});
+                            break;
+                        case("changeToGrayscaleTheme"):
+                            this.setStateSettings({theme: "gray"});
+                            break;
+                        case("changeToHighContrastTheme"):
+                            this.setStateSettings({theme: "contrast"});
                             break;
                         default:
                             break;
@@ -867,13 +928,15 @@ export class App extends React.Component<AppProps, AppState> {
         });
     }
 
-    handleToggleAllowedCommand = (event: Event, commandName: string) => {
-        if (this.state.usedActions[commandName]) {
+    handleToggleAllowedCommand = (event: Event, commandName: CommandName) => {
+        // TODO: Use the function form of setState() as the new state
+        //       depends on the current state
+        const currentIsAllowed = this.state.allowedActions[commandName];
+        if (this.state.programSequence.usesAction(commandName) && currentIsAllowed) {
             event.preventDefault();
         }
         else {
             const newAllowedActions= Object.assign({}, this.state.allowedActions);
-            const currentIsAllowed = this.state.allowedActions[commandName];
             newAllowedActions[commandName] = !currentIsAllowed;
             this.setState({ allowedActions: newAllowedActions})
         }
@@ -925,18 +988,26 @@ export class App extends React.Component<AppProps, AppState> {
         return commandBlocks;
     }
 
+    makeStartingCharacterState(world: WorldName): CharacterState {
+        const worldProperties = getWorldProperties(world);
+        return new CharacterState(
+            worldProperties.startingX,
+            worldProperties.startingY,
+            worldProperties.startingDirection,
+            [],
+            this.sceneDimensions
+        );
+    }
+
     handleRefresh = () => {
+        const currentWorld = this.state.settings.world;
         this.setState({
-            characterState: this.startingCharacterState
+            characterState: this.makeStartingCharacterState(currentWorld)
         });
     }
 
     handleChangeTheme = (theme: ThemeName) => {
         this.setStateSettings({ theme });
-    }
-
-    handleChangeWorld = (world: WorldName) => {
-        this.setStateSettings({ world });
     }
 
     handleChangeCharacterPosition = (positionName: ?string) => {
@@ -1010,6 +1081,35 @@ export class App extends React.Component<AppProps, AppState> {
         this.setState({keyBindingsEnabled: keyBindingsEnabled});
     }
 
+    //World handlers
+
+    handleClickWorldIcon = () => {
+        this.setState({
+            showWorldSelector: true
+        });
+    }
+
+    handleKeyDownWorldIcon = (event: KeyboardEvent) => {
+        if (event.key === "Enter" || event.key === " ") {
+            this.setState({
+                showWorldSelector: true
+            });
+        }
+    }
+
+    handleSelectWorld = (world: WorldName) => {
+        this.setStateSettings({world});
+    }
+
+    handleChangeWorld = (world: WorldName) => {
+        this.setState((state) => {
+            return {
+                showWorldSelector: false,
+                settings: Object.assign({}, state.settings, {world})
+            };
+        });
+    }
+
     render() {
         return (
             <React.Fragment>
@@ -1021,22 +1121,22 @@ export class App extends React.Component<AppProps, AppState> {
                     <header className='App__header'>
                         <div className='App__header-row'>
                             <h1 className='App__app-heading'>
-                                <a href='https://weavly.org'
+                                <a
+                                    className='keyboard-shortcut-focus__app-header'
+                                    href='https://weavly.org'
                                     aria-label={this.props.intl.formatMessage({id: 'App.appHeading.link'})}
                                     target='_blank'
                                     rel='noopener noreferrer'>
                                     <FormattedMessage id='App.appHeading'/>
                                 </a>
                             </h1>
-                            <div
-                                className={"App__header-keyboardMenuIcon" + (this.state.keyBindingsEnabled ? "" : " App__header-keyboardMenuIcon--disabled")}
-                                tabIndex={0}
-                                aria-label={this.props.intl.formatMessage({ id: 'KeyboardInputModal.ShowHide.AriaLabel' })}
+                            <IconButton
+                                ariaLabel={this.props.intl.formatMessage({ id: 'KeyboardInputModal.ShowHide.AriaLabel' })}
                                 onClick={this.handleKeyboardModalToggle}
                                 onKeyDown={this.handleKeyboardMenuIconKeydown}
                             >
                                 <KeyboardModalToggleIcon/>
-                            </div>
+                            </IconButton>
                             <div className='App__header-audio-toggle'>
                                 <div className='App__audio-toggle-switch'>
                                     <AudioFeedbackToggleSwitch
@@ -1073,6 +1173,7 @@ export class App extends React.Component<AppProps, AppState> {
                         <Scene
                             dimensions={this.state.sceneDimensions}
                             characterState={this.state.characterState}
+                            theme={this.state.settings.theme}
                             world={this.state.settings.world}
                         />
                         <div className='App__scene-controls'>
@@ -1094,14 +1195,20 @@ export class App extends React.Component<AppProps, AppState> {
                         <h2 className='sr-only' >
                             <FormattedMessage id='WorldSelector.heading' />
                         </h2>
-                        <WorldSelector
-                            disabled={this.editingIsDisabled()}
-                            world={this.state.settings.world}
-                            onSelect={this.handleChangeWorld}
-                        />
+                        <div className="App__world-selector">
+                            <IconButton
+                                className='keyboard-shortcut-focus__world-selector'
+                                ariaLabel={this.props.intl.formatMessage({ id: 'WorldSelector' })}
+                                onClick={this.handleClickWorldIcon}
+                                onKeyDown={this.handleKeyDownWorldIcon}
+                            >
+                                <WorldIcon />
+                            </IconButton>
+                        </div>
                         <CharacterPositionController
                             characterState={this.state.characterState}
                             editingDisabled={this.editingIsDisabled()}
+                            theme={this.state.settings.theme}
                             world={this.state.settings.world}
                             onChangeCharacterPosition={this.handleChangeCharacterPosition}
                             onChangeCharacterXPosition={this.handleChangeCharacterXPosition}
@@ -1112,8 +1219,8 @@ export class App extends React.Component<AppProps, AppState> {
                             allowedActions={this.state.allowedActions}
                             changeHandler={this.handleToggleAllowedCommand}
                             editingDisabled={this.editingIsDisabled()}
+                            programSequence={this.state.programSequence}
                             intl={this.props.intl}
-                            usedActions={this.state.usedActions}
                         />
                         <div className='App__command-palette-command-container'>
                             <div className='App__command-palette-commands'>
@@ -1143,8 +1250,11 @@ export class App extends React.Component<AppProps, AppState> {
                             audioManager={this.audioManager}
                             focusTrapManager={this.focusTrapManager}
                             addNodeExpandedMode={this.state.settings.addNodeExpandedMode}
+                            theme={this.state.settings.theme}
                             world={this.state.settings.world}
                             onChangeProgramSequence={this.handleProgramSequenceChange}
+                            onInsertSelectedActionIntoProgram={this.handleProgramBlockEditorInsertSelectedAction}
+                            onDeleteProgramStep={this.handleProgramBlockEditorDeleteStep}
                             onChangeActionPanelStepIndex={this.handleChangeActionPanelStepIndex}
                             onChangeAddNodeExpandedMode={this.handleChangeAddNodeExpandedMode}
                         />
@@ -1160,14 +1270,14 @@ export class App extends React.Component<AppProps, AppState> {
                                     className='App__playControlButton'
                                     interpreterIsRunning={this.state.runningState === 'running'}
                                     disabled={this.state.programSequence.getProgramLength() === 0}
-                                    onClick={this.handleClickPlay}
+                                    onClick={this.handlePlay}
                                 />
                                 <StopButton
                                     className='App__playControlButton'
                                     disabled={
                                         this.state.runningState === 'stopped'
                                         || this.state.runningState === 'stopRequested'}
-                                    onClick={this.handleClickStop}/>
+                                    onClick={this.handleStop}/>
                                 <ProgramSpeedController
                                     rangeControlRef={this.speedControlRef}
                                     values={this.speedLookUp}
@@ -1197,6 +1307,12 @@ export class App extends React.Component<AppProps, AppState> {
                     onChangeKeyBindingsEnabled={this.handleChangeKeyBindingsEnabled}
                     onHide={this.handleKeyboardModalClose}
                 />
+                <WorldSelector
+                    show={this.state.showWorldSelector}
+                    currentWorld={this.state.settings.world}
+                    theme={this.state.settings.theme}
+                    onChange={this.handleChangeWorld}
+                    onSelect={this.handleSelectWorld}/>
             </React.Fragment>
         );
     }
@@ -1218,11 +1334,8 @@ export class App extends React.Component<AppProps, AppState> {
             if (programQuery != null) {
                 try {
                     const programSequence: ProgramSequence = new ProgramSequence(this.programSerializer.deserialize(programQuery), 0);
-                    const usedActions: ActionToggleRegister = this.calculateUsedActions(programSequence);
-
                     this.setState({
-                        programSequence: programSequence,
-                        usedActions: usedActions
+                        programSequence: programSequence
                     });
                 } catch(err) {
                     /* eslint-disable no-console */
@@ -1260,7 +1373,7 @@ export class App extends React.Component<AppProps, AppState> {
 
             this.setStateSettings({
                 theme: Utils.getThemeFromString(themeQuery, 'mixed'),
-                world: Utils.getWorldFromString(worldQuery, 'default')
+                world: Utils.getWorldFromString(worldQuery, this.defaultWorld)
             });
         } else {
             const localProgram = window.localStorage.getItem('c2lc-program');
@@ -1268,13 +1381,12 @@ export class App extends React.Component<AppProps, AppState> {
             const localTheme = window.localStorage.getItem('c2lc-theme');
             const localAllowedActions = window.localStorage.getItem('c2lc-allowedActions');
             const localWorld = window.localStorage.getItem('c2lc-world');
+
             if (localProgram != null) {
                 try {
                     const programSequence: ProgramSequence = new ProgramSequence(this.programSerializer.deserialize(localProgram), 0);
-                    const usedActions: ActionToggleRegister = this.calculateUsedActions(programSequence);
                     this.setState({
-                        programSequence: programSequence,
-                        usedActions: usedActions
+                        programSequence: programSequence
                     });
                 } catch(err) {
                     /* eslint-disable no-console */
@@ -1313,7 +1425,31 @@ export class App extends React.Component<AppProps, AppState> {
 
             this.setStateSettings({
                 theme: Utils.getThemeFromString(localTheme, 'mixed'),
-                world: Utils.getWorldFromString(localWorld, 'default')
+                world: Utils.getWorldFromString(localWorld, this.defaultWorld)
+            });
+        }
+
+        // Keyboard settings are read from local storage whether or not we have URL content.
+        const localKeyBindingsEnabled = window.localStorage.getItem('c2lc-keyBindingsEnabled');
+        const localKeyboardInputSchemeName = window.localStorage.getItem('c2lc-keyboardInputSchemeName');
+
+        if (localKeyBindingsEnabled != null) {
+            try {
+                this.setState({
+                    keyBindingsEnabled: !!(JSON.parse(localKeyBindingsEnabled))
+                });
+            }
+            catch(err) {
+                /* eslint-disable no-console */
+                console.log(`Error parsing key bindings toggle: ${localKeyBindingsEnabled}`);
+                console.log(err.toString());
+                /* eslint-enable no-console */
+            }
+        }
+
+        if (isKeyboardInputSchemeName(localKeyboardInputSchemeName)) {
+            this.setState({
+                keyboardInputSchemeName: localKeyboardInputSchemeName
             });
         }
 
@@ -1357,6 +1493,12 @@ export class App extends React.Component<AppProps, AppState> {
             window.localStorage.setItem('c2lc-theme', this.state.settings.theme);
             window.localStorage.setItem('c2lc-allowedActions', serializedAllowedActions);
             window.localStorage.setItem('c2lc-world', this.state.settings.world)
+        }
+
+        if (this.state.keyBindingsEnabled !== prevState.keyBindingsEnabled
+            || this.state.keyboardInputSchemeName !== prevState.keyboardInputSchemeName) {
+            window.localStorage.setItem('c2lc-keyBindingsEnabled', this.state.keyBindingsEnabled);
+            window.localStorage.setItem('c2lc-keyboardInputSchemeName', this.state.keyboardInputSchemeName);
         }
 
         if (this.state.announcementsEnabled !== prevState.announcementsEnabled) {

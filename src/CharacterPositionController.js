@@ -5,22 +5,23 @@ import type {IntlShape} from 'react-intl';
 import React from 'react';
 import CharacterState from './CharacterState';
 import classNames from 'classnames';
-import { ReactComponent as RobotIcon } from './svg/Robot.svg';
-import { ReactComponent as SpaceShipIcon } from './svg/SpaceShip.svg';
-import { ReactComponent as RabbitIcon } from './svg/Rabbit.svg';
+import { getWorldCharacter } from './Worlds';
 import { ReactComponent as MovePositionUp } from './svg/MovePositionUp.svg';
 import { ReactComponent as MovePositionRight } from './svg/MovePositionRight.svg';
 import { ReactComponent as MovePositionDown } from './svg/MovePositionDown.svg';
 import { ReactComponent as MovePositionLeft } from './svg/MovePositionLeft.svg';
 import { ReactComponent as TurnPositionRight } from './svg/TurnPositionRight.svg';
 import { ReactComponent as TurnPositionLeft } from './svg/TurnPositionLeft.svg';
+import type { ThemeName } from './types';
+import type { WorldName } from './Worlds';
 import './CharacterPositionController.scss';
 
 type CharacterPositionControllerProps = {
     intl: IntlShape,
     characterState: CharacterState,
     editingDisabled: boolean,
-    world: string,
+    theme: ThemeName,
+    world: WorldName,
     onChangeCharacterPosition: (direction: ?string) => void,
     onChangeCharacterXPosition: (columnLabel: string) => void,
     onChangeCharacterYPosition: (rowLabel: string) => void
@@ -100,19 +101,11 @@ class CharacterPositionController extends React.Component<CharacterPositionContr
 
     getWorldCharacter() {
         const transform = `rotate(${this.props.characterState.getDirectionDegrees() - 90} 0 0)`;
-        if (this.props.world === 'space') {
-            return <SpaceShipIcon
-                transform={transform}
-                className='CharacterPositionController__character-column-character' />
-        } else if (this.props.world === 'forest') {
-            return <RabbitIcon
-                transform={transform}
-                className='CharacterPositionController__character-column-character' />
-        } else {
-            return <RobotIcon
-                transform={transform}
-                className='CharacterPositionController__character-column-character' />
-        }
+        const character = getWorldCharacter(this.props.theme, this.props.world);
+        return React.createElement(character, {
+            className: 'CharacterPositionController__character-column-character',
+            transform: transform
+        });
     }
 
     render() {
@@ -179,7 +172,8 @@ class CharacterPositionController extends React.Component<CharacterPositionContr
                         onClick={!this.props.editingDisabled ? this.handleClickCharacterPositionButton : undefined} />
                     <div
                         aria-hidden='true'
-                        className='CharacterPositionController__character-column-character-container'
+                        className={`CharacterPositionController__character-column-character-container
+                            CharacterPositionController__character-column-character-container--${this.props.world}`}
                         role='img'>
                         {this.getWorldCharacter()}
                     </div>
