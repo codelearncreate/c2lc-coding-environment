@@ -93,4 +93,15 @@ function focusByQuerySelector (selectors: string) {
     }
 }
 
-export { extend, focusByQuerySelector, generateId, makeDelayedPromise, generateEncodedProgramURL, getThemeFromString, getWorldFromString };
+const ApplePlatforms = [
+    "iPad",
+    "iPhone",
+    "iPod",
+    "MacIntel"
+]
+
+function isAppleDevice () :boolean {
+    return ApplePlatforms.indexOf(window.navigator.platform) !== -1;
+}
+
+export { extend, focusByQuerySelector, generateId, makeDelayedPromise, generateEncodedProgramURL, getThemeFromString, getWorldFromString, isAppleDevice };

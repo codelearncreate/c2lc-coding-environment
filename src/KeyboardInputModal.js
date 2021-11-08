@@ -10,7 +10,7 @@ import type {KeyDef, KeyboardInputScheme, KeyboardInputSchemeName} from './Keybo
 import {KeyboardInputSchemes, getLabelMessageKeyFromKeyDef, getIconMessageKeyFromKeyDef} from './KeyboardInputSchemes';
 
 import ToggleSwitch from './ToggleSwitch';
-import { focusByQuerySelector } from './Utils';
+import { focusByQuerySelector, isAppleDevice } from './Utils';
 
 import { ReactComponent as KeyboardIcon} from './svg/Keyboard.svg'
 
@@ -95,6 +95,8 @@ class KeyboardInputModal extends React.Component<KeyboardInputModalProps, Keyboa
         const keyboardInputScheme: KeyboardInputScheme = KeyboardInputSchemes[this.state.keyboardInputSchemeName];
 
         const keyBindingElements = [];
+        const altSuffix = isAppleDevice() ? "Option" : "Alt";
+
         keyBindings.forEach((key, index) => {
             const itemKey = "binding-" + index;
             const keyDef: KeyDef = keyboardInputScheme[key].keyDef;
@@ -116,12 +118,12 @@ class KeyboardInputModal extends React.Component<KeyboardInputModalProps, Keyboa
 
                 if (keyDef.altKey) {
                     const altKeyLabel = this.props.intl.formatMessage(
-                        { id: "KeyboardInputModal.KeyLabels.Alt" }
+                        { id: "KeyboardInputModal.KeyLabels." + altSuffix }
                     );
                     labelKeySegments.unshift(altKeyLabel);
 
                     const altKeyIcon = this.props.intl.formatMessage(
-                        { id: "KeyboardInputModal.KeyIcons.Alt" }
+                        { id: "KeyboardInputModal.KeyIcons." + altSuffix }
                     );
                     icons.unshift(<div key="alt-modifier" className="KeyboardInputModal__binding__icon">
                         {altKeyIcon}
@@ -164,10 +166,15 @@ class KeyboardInputModal extends React.Component<KeyboardInputModalProps, Keyboa
     }
 
     renderKeyboardSchemeMenu () {
+        const altSuffix = isAppleDevice() ? "Option" : "Alt";
+        const altKeyLabel = this.props.intl.formatMessage(
+            { id: "KeyboardInputModal.KeyLabels." + altSuffix }
+        );
+
         const selectOptionElements = [];
         Object.keys(KeyboardInputSchemes).forEach((schemeName) => {
             const messageId = "KeyboardInputModal.Scheme.Descriptions." + schemeName;
-            const optionText = this.props.intl.formatMessage({ id: messageId });
+            const optionText = this.props.intl.formatMessage({ id: messageId }, { alt: altKeyLabel });
             selectOptionElements.push(<option key={schemeName} value={schemeName}>
                 {optionText}
             </option>);
