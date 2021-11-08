@@ -144,7 +144,15 @@ class KeyboardInputModal extends React.Component<KeyboardInputModalProps, Keyboa
                     </div>);
                 }
 
-                const labelKeyString = labelKeySegments.join(" + ")
+                let labelKeyString = labelKeySegments[0];
+                if (labelKeySegments.length > 1) {
+                    if (labelKeySegments.length > 2) {
+                        labelKeyString += ", " + labelKeySegments.slice(1, labelKeySegments.length - 1).join(", ") + ",";
+                    }
+
+                    labelKeyString += " and " + labelKeySegments[labelKeySegments.length - 1];
+                }
+
                 const descriptionMessageKey = "KeyboardInputModal.Description." + key;
                 const descriptionMessageId = "key-binding-description-" + index;
                 keyBindingElements.push(<li className="KeyboardInputModal__binding" key={itemKey}>
