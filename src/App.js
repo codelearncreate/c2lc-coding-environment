@@ -49,15 +49,6 @@ import { ReactComponent as KeyboardModalToggleIcon} from './svg/Keyboard.svg';
 import { ReactComponent as WorldIcon } from './svg/World.svg';
 import ProgramChangeController from './ProgramChangeController';
 
-// Convenience function to focus on the first element with a given class, used
-// for keyboard shortcuts.
-function focusOnFirstElementWithClass (className) {
-    const elements = document.getElementsByClassName(className);
-    if (elements.length) {
-        elements[0].focus();
-    }
-}
-
 /* Dash connection removed for version 0.5
 import BluetoothApiWarning from './BluetoothApiWarning';
 import DeviceConnectControl from './DeviceConnectControl';
@@ -806,34 +797,34 @@ export class App extends React.Component<AppProps, AppState> {
                             this.setState({ "selectedAction": "right180" });
                             break;
                         case("focusActions"):
-                            focusOnFirstElementWithClass("command-block");
+                            Utils.focusByQuerySelector(".command-block");
                             break;
                         case("focusAppHeader"):
-                            focusOnFirstElementWithClass("keyboard-shortcut-focus__app-header");
+                            Utils.focusByQuerySelector(".keyboard-shortcut-focus__app-header");
                             break;
                         case("focusAddNodeToggle"):
-                            focusOnFirstElementWithClass("ProgramBlockEditor__add-node-toggle-switch");
+                            Utils.focusByQuerySelector(".ProgramBlockEditor__add-node-toggle-switch");
                             break;
                         case("focusCharacterPositionControls"):
-                            focusOnFirstElementWithClass("CharacterPositionController__character-position-button");
+                            Utils.focusByQuerySelector(".CharacterPositionController__character-position-button");
                             break;
                         case("focusCharacterColumnInput"):
-                            focusOnFirstElementWithClass("ProgramBlock__character-position-coordinate-box-column");
+                            Utils.focusByQuerySelector(".ProgramBlock__character-position-coordinate-box-column");
                             break;
                         case("focusCharacterRowInput"):
-                            focusOnFirstElementWithClass("ProgramBlock__character-position-coordinate-box-row");
+                            Utils.focusByQuerySelector(".ProgramBlock__character-position-coordinate-box-row");
                             break;
                         case("focusPlayShare"):
-                            focusOnFirstElementWithClass("PlayButton--play");
+                            Utils.focusByQuerySelector(".PlayButton--play");
                             break;
                         case("focusProgramSequence"):
-                            focusOnFirstElementWithClass("AddNode__expanded-button");
+                            Utils.focusByQuerySelector(".AddNode__expanded-button");
                             break;
                         case("focusScene"):
-                            focusOnFirstElementWithClass("PenDownToggleSwitch");
+                            Utils.focusByQuerySelector(".PenDownToggleSwitch");
                             break;
                         case("focusWorldSelector"):
-                            focusOnFirstElementWithClass("keyboard-shortcut-focus__world-selector");
+                            Utils.focusByQuerySelector(".keyboard-shortcut-focus__world-selector");
                             break;
                         case("moveCharacterLeft"):
                             if (!this.editingIsDisabled()) {
@@ -1131,7 +1122,7 @@ export class App extends React.Component<AppProps, AppState> {
                                 onClick={this.handleKeyboardModalToggle}
                                 onKeyDown={this.handleKeyboardMenuIconKeydown}
                             >
-                                <KeyboardModalToggleIcon/>
+                                <KeyboardModalToggleIcon className='App__header-keyboard-icon'/>
                             </IconButton>
                             <div className='App__header-audio-toggle'>
                                 <div className='App__audio-toggle-switch'>
@@ -1198,7 +1189,7 @@ export class App extends React.Component<AppProps, AppState> {
                                 onClick={this.handleClickWorldIcon}
                                 onKeyDown={this.handleKeyDownWorldIcon}
                             >
-                                <WorldIcon />
+                                <WorldIcon className='App__world-selector-icon'/>
                             </IconButton>
                         </div>
                         <CharacterPositionController

@@ -5,6 +5,7 @@ import { Button, Modal } from 'react-bootstrap';
 import { injectIntl, FormattedMessage } from 'react-intl';
 import type {IntlShape} from 'react-intl';
 import { ReactComponent as ErrorIcon } from './svg/Error.svg';
+import { focusByQuerySelector } from './Utils';
 import './ConfirmDeleteAllModal.scss';
 
 type ConfirmDeleteAllModalProps = {
@@ -51,11 +52,7 @@ class ConfirmDeleteAllModal extends React.Component<ConfirmDeleteAllModalProps, 
 
     componentDidUpdate (prevProps: ConfirmDeleteAllModalProps) {
         if (prevProps.show !== this.props.show && this.props.show) {
-            // TODO: Implement a common function to set focus on an element with an id in Untils.js
-            const deleteAllButton = document.getElementById('deleteAll-button');
-            if (deleteAllButton) {
-                deleteAllButton.focus();
-            }
+            focusByQuerySelector('#deleteAll-button');
         }
     }
 }
