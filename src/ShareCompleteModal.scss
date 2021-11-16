@@ -1,3 +1,5 @@
+@import '_variables';
+
 .ShareCompleteModal {
     border-radius: 0.25rem;
     background-color: yellow;
@@ -25,6 +27,6 @@
 
 .ShareCompleteModal__footer button {
     margin-left: auto;
-    background-color: black;
+    background-color: $c2lc-black;
     color: white;
 }

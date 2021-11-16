@@ -1,3 +1,5 @@
+@import '_variables';
+
 /* DeepOcean */
 
 .Character-background--DeepOcean {
@@ -74,16 +76,16 @@ body.contrast-theme {
     .WorldSelector__option-image--DeepOcean:hover {
         svg {
             .thumbnail-background {
-                fill: #1E1E1E;
+                fill:  $c2lc-black;
             }
 
             .thumbnail-character-outline {
-                fill: #1E1E1E;
+                fill:  $c2lc-black;
                 stroke: #FFFFFF;
             }
 
             .thumbnail-character-innerline-white {
-                fill: #1E1E1E;
+                fill:  $c2lc-black;
             }
 
             .thumbnail-character-innerline-black {
@@ -169,11 +171,11 @@ body.contrast-theme {
     .WorldSelector__option-image--Jungle:hover {
         svg {
             .thumbnail-background {
-                fill: #1E1E1E;
+                fill:  $c2lc-black;
             }
 
             .thumbnail-character-outline-white {
-                fill: #1E1E1E;
+                fill:  $c2lc-black;
             }
 
             .thumbnail-character-outline-black {
@@ -181,13 +183,13 @@ body.contrast-theme {
             }
 
             .thumbnail-character-innerline-white {
-                fill: #1E1E1E;
+                fill:  $c2lc-black;
                 stroke: #FFFFFF;
             }
 
             .thumbnail-character-innerline-black {
                 fill: #FFFFFF;
-                stroke: #1E1E1E;
+                stroke:  $c2lc-black;
             }
 
             .thumbnail-character-part {
@@ -288,7 +290,7 @@ body.contrast-theme {
             }
 
             .thumbnail-character-container {
-                fill: #1E1E1E;
+                fill:  $c2lc-black;
             }
 
             .thumbnail-character-outline {
@@ -297,7 +299,7 @@ body.contrast-theme {
             }
 
             .thumbnail-character-innerline {
-                fill: #1E1E1E;
+                fill:  $c2lc-black;
                 stroke: #FFFFFF;
             }
         }
@@ -380,7 +382,7 @@ body.contrast-theme {
     .WorldSelector__option-image--Space:hover {
         svg {
             .thumbnail-background {
-                fill: #1E1E1E;
+                fill:  $c2lc-black;
             }
 
             .thumbnail-background-item {
@@ -393,7 +395,7 @@ body.contrast-theme {
             }
 
             .thumbnail-character-innerline {
-                fill: #1E1E1E;
+                fill:  $c2lc-black;
             }
         }
     }

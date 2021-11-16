@@ -19,20 +19,20 @@ button.btn.ModalFooter__doneButton {
 
     &:hover {
         background-color: #F5C58A;
-        color: black;
+        color: $c2lc-black;
     }
 
     &:focus {
         box-shadow:
             0 0 0 0.1rem #D5D8DD,
-            0 0 0 $c2lc-focus-indicator-width black;
+            0 0 0 $c2lc-focus-indicator-width $c2lc-black;
     }
 }
 
 button.btn.ModalFooter__cancelButton {
     margin-left: auto;
     background-color: #CCE6E2;
-    color: #1E1E1E;
+    color:  $c2lc-black;
 }
 
 button.btn.ModalFooter__doneButton {

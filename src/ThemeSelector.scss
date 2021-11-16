@@ -11,13 +11,13 @@
         &:hover {
             background-color: #F5C58A;
             border-color: #F5C58A;
-            color: black;
+            color: $c2lc-black;
         }
 
         &:focus {
             box-shadow:
                 0 0 0 0.1rem white,
-                0 0 0 $c2lc-focus-indicator-width black;
+                0 0 0 $c2lc-focus-indicator-width $c2lc-black;
         }
     }
 

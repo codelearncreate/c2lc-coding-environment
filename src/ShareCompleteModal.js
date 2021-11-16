@@ -5,7 +5,7 @@ import { injectIntl, FormattedMessage } from 'react-intl';
 import type {IntlShape} from 'react-intl';
 import { focusByQuerySelector } from './Utils';
 
-import './ShareCompleteModal.css';
+import './ShareCompleteModal.scss';
 
 type ShareCompleteModalProps = {
     intl: IntlShape,

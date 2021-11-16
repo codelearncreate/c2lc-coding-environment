@@ -50,9 +50,9 @@
     
 
     &::-webkit-slider-runnable-track {
-        border: 2px solid black;
+        border: 2px solid $c2lc-black;
         -webkit-appearance: none;
-        background-color: black;
+        background-color: $c2lc-black;
         border-radius: 8px;
         height: 16px;
         overflow: hidden;
@@ -61,7 +61,7 @@
     &::-webkit-slider-thumb {
         -webkit-appearance: none;
         background-color: #F97953;
-        border: 2px solid black;
+        border: 2px solid $c2lc-black;
         border-radius: 0;
         box-shadow: -8rem 0 0 8rem #F97953;
         height: 12px;
@@ -70,7 +70,7 @@
 
     &::-moz-range-thumb {
         background-color: #F97953;
-        border: 2px solid black;
+        border: 2px solid $c2lc-black;
         border-radius: 0;
         box-shadow: -8rem 0 0 8rem #F97953;
         height: 16px;
@@ -86,7 +86,7 @@
     &::-moz-range-track {
         height:16px;
         overflow: hidden;
-        background-color: black;
+        background-color: $c2lc-black;
     }
 
     &::-ms-fill-lower {
@@ -94,6 +94,6 @@
     }
 
     &::-ms-fill-upper {  
-        background-color: black;    
+        background-color: $c2lc-black;    
     }
 }

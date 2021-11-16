@@ -16,7 +16,7 @@ button.btn.RefreshButton {
     padding: 0.5rem;
 
     svg path {
-        fill: black;
+        fill: $c2lc-black;
     }
 
     &:active {
@@ -24,7 +24,7 @@ button.btn.RefreshButton {
     }
 
     &:focus {
-        box-shadow: 0 0 0 $c2lc-focus-indicator-width black;
+        box-shadow: 0 0 0 $c2lc-focus-indicator-width $c2lc-black;
     }
 }
 

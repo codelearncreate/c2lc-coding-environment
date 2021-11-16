@@ -9,11 +9,11 @@ button.btn.PlayButton {
     padding: 0;
     padding-top: 0.05rem;
     svg circle {
-        fill: black;
+        fill: $c2lc-black;
     }
 
     svg path.triangle {
-        fill: black;
+        fill: $c2lc-black;
     }
 }
 

@@ -96,10 +96,10 @@ button.btn.command-block--dragged {
     height: 2rem;
 
     path, circle {
-        stroke: #1E1E1E;
+        stroke:  $c2lc-black;
     }
     circle, path.filled {
-        fill: #1E1E1E;
+        fill:  $c2lc-black;
     }
 }
 
