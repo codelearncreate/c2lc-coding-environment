@@ -88,7 +88,7 @@ button.btn.command-block.command-block--pressed:active {
 }
 
 button.btn.command-block--dragged {
-    border: $c2lc-button-border-width solid #000000;
+    border: $c2lc-button-border-width solid   $c2lc-black;
 }
 
 .command-block-svg {

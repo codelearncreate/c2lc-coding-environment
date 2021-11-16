@@ -87,7 +87,7 @@ button.btn.ProgramBlockEditor__program-deleteAll-button {
 }
 
 button.btn.ProgramBlockEditor__program-deleteAll-button--pressed {
-    background-color: #000;
+    background-color:  $c2lc-black;
 }
 
 button.btn.ProgramBlockEditor__program-deleteAll-button.ProgramBlockEditor__program-deleteAll-button--disabled,
@@ -103,7 +103,7 @@ button.btn.ProgramBlockEditor__program-deleteAll-button--pressed.ProgramBlockEdi
 }
 
 .ProgramBlockEditor__program-deleteAll-button svg {
-    stroke: #000;
+    stroke:  $c2lc-black;
 }
 
 button.btn.ProgramBlockEditor__program-deleteAll-button--disabled svg {
