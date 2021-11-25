@@ -1102,7 +1102,7 @@ export class App extends React.Component<AppProps, AppState> {
                                 </a>
                             </h1>
                             <IconButton
-                                className="App__header-keyboardMenuIcon"
+                                className="App__header-keyboardMenuIcon focus-keyboardMenuIcon"
                                 ariaLabel={this.props.intl.formatMessage({ id: 'KeyboardInputModal.ShowHide.AriaLabel' })}
                                 onClick={this.handleClickKeyboardIcon}
                             >
