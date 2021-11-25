@@ -103,27 +103,11 @@ body {
     grid-row-start: 1;
     grid-row-end: 3;
     min-height: 12rem;
-    min-width: 19.5rem;
+    min-width: 19.5rem; 
 }
 
-.App__scene-controls {
-    position: absolute;
-    z-index: 1;
-    bottom: 2rem;
-    right: 2rem;
-    display: grid;
-    grid-template-columns: 1fr;
-}
-
-.App__scene-controls-group {
-    display: flex;
-    align-items: center;
-    justify-self: end;
-    margin: auto 0;
-}
-
-.App__refreshButton-container {
-    margin-left: 1.5rem;
+.App__PenDownToggleSwitch-container {
+    margin: 1rem auto;
 }
 
 .App__world-container {
@@ -135,7 +119,7 @@ body {
     border-radius: 3px;
     margin-right: 0.5rem;
     margin-top: 0.25rem;
-    grid-template-rows: 1fr min-content;
+    grid-template-rows: 1fr min-content min-content;
     background-color: #CCE6E2;
 }
 
@@ -143,6 +127,7 @@ body {
     display: flex;
     flex-direction: column;
     margin-top: 1rem;
+    border-bottom: 1px solid #88C3BC;
 }
 
 .App__command-palette {
@@ -195,7 +180,7 @@ body {
 }
 
 .App__playAndShare-background {
-    background-color: #D5D8DD;
+    background-color: #67717E;
     grid-column-start: 1;
     grid-column-end: 6;
     grid-row-start: 4;
@@ -224,11 +209,16 @@ body {
 
 .App__playButton-container {
     display: flex;
+    gap: 0.5rem;
 }
 
 .App__playControlButton {
     margin-right: 1.5rem;
+    &.StopButton {
+        margin-right: 1.9rem;
+    }
 }
+
 
 .App__shareButton-container {
     align-items: flex-end;

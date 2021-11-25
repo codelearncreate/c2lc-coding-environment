@@ -4,8 +4,8 @@ import React from 'react';
 import Adapter from 'enzyme-adapter-react-16';
 import { configure, shallow } from 'enzyme';
 import { createIntl } from 'react-intl';
+import IconButton from './IconButton';
 import messages from './messages.json';
-import AriaDisablingButton from './AriaDisablingButton';
 import StopButton from './StopButton';
 
 configure({ adapter: new Adapter()});
@@ -40,7 +40,7 @@ function createShallowStopButton(props) {
 }
 
 function getStopButton(stopButtonWrapper) {
-    return stopButtonWrapper.find(AriaDisablingButton)
+    return stopButtonWrapper.find(IconButton)
         .filter('.StopButton');
 }
 

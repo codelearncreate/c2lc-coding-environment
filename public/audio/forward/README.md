@@ -1,10 +1,11 @@
 # About These Files
 
-These sounds were recorded for this project, see the LICENSE.txt file for terms of use.  The patch used is from the
-Arturia V Collection, and is a CS-80 patch called "Kitten Run".
+These sounds were recorded for this project, see the LICENSE.txt file for terms
+of use. The patch used is from the Arturia V Collection, and is a CS-80 patch
+called "Kitten Run".
 
-Each filename corresponds to the pitch of the note.  The individual sounds are meant to be sped up and slowed down to
-simulate a fuller range of pitches.
+Each filename corresponds to the pitch of the note. The individual sounds are
+meant to be sped up and slowed down to simulate a fuller range of pitches.
 
 ## Timing
 
@@ -20,7 +21,6 @@ breakdown of the duration of every file used for this "sampler":
 | C4.wav   | 2.567 sec  |
 | C5.wav   | 3.337 sec  |
 | C6.wav   | 4.396 sec  |
-
 
 If you need to regenerate this timing data, on OS X you can use a command like:
 

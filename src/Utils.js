@@ -86,5 +86,11 @@ function extend(...toMerge:Object) {
     return merged;
 }
 
+function focusByQuerySelector (selectors: string) {
+    const element = document.querySelector(selectors);
+    if (element && element.focus) {
+        element.focus();
+    }
+}
 
-export { extend, generateId, makeDelayedPromise, generateEncodedProgramURL, getThemeFromString, getWorldFromString };
+export { extend, focusByQuerySelector, generateId, makeDelayedPromise, generateEncodedProgramURL, getThemeFromString, getWorldFromString };
