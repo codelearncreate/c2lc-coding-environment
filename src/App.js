@@ -882,21 +882,13 @@ export class App extends React.Component<AppProps, AppState> {
         }
     };
 
-    handleKeyboardMenuIconKeydown = (event: KeyboardEvent) => {
-        if (event.key === "Enter" || event.key === " ") {
-            this.handleKeyboardModalToggle();
-        }
-    }
-
     handleKeyboardModalClose = () => {
         this.setState({showKeyboardModal: false});
     };
 
-    handleKeyboardModalToggle = () => {
-        this.setState((currentState: AppState) => {
-            return { showKeyboardModal: !currentState.showKeyboardModal};
-        });
-    }
+    handleClickKeyboardIcon = () => {
+        this.setState({ showKeyboardModal: true});
+    };
 
     // Focus trap escape key handling.
     handleRootKeyDown = (e: SyntheticKeyboardEvent<HTMLInputElement>) => {
@@ -1076,14 +1068,6 @@ export class App extends React.Component<AppProps, AppState> {
         });
     }
 
-    handleKeyDownWorldIcon = (event: KeyboardEvent) => {
-        if (event.key === "Enter" || event.key === " ") {
-            this.setState({
-                showWorldSelector: true
-            });
-        }
-    }
-
     handleSelectWorld = (world: WorldName) => {
         this.setStateSettings({world});
     }
@@ -1118,11 +1102,11 @@ export class App extends React.Component<AppProps, AppState> {
                                 </a>
                             </h1>
                             <IconButton
+                                className="App__header-keyboardMenuIcon focus-keyboardMenuIcon"
                                 ariaLabel={this.props.intl.formatMessage({ id: 'KeyboardInputModal.ShowHide.AriaLabel' })}
-                                onClick={this.handleKeyboardModalToggle}
-                                onKeyDown={this.handleKeyboardMenuIconKeydown}
+                                onClick={this.handleClickKeyboardIcon}
                             >
-                                <KeyboardModalToggleIcon/>
+                                <KeyboardModalToggleIcon className='App__header-keyboard-icon'/>
                             </IconButton>
                             <div className='App__header-audio-toggle'>
                                 <div className='App__audio-toggle-switch'>
@@ -1163,20 +1147,6 @@ export class App extends React.Component<AppProps, AppState> {
                             theme={this.state.settings.theme}
                             world={this.state.settings.world}
                         />
-                        <div className='App__scene-controls'>
-                            <div className='App__scene-controls-group'>
-                                <PenDownToggleSwitch
-                                    className='App__penDown-toggle-switch'
-                                    value={this.state.drawingEnabled}
-                                    onChange={this.handleTogglePenDown}/>
-                                <div className='App__refreshButton-container'>
-                                    <RefreshButton
-                                        disabled={this.editingIsDisabled()}
-                                        onClick={this.handleRefresh}
-                                    />
-                                </div>
-                            </div>
-                        </div>
                     </div>
                     <div className="App__world-container">
                         <h2 className='sr-only' >
@@ -1187,11 +1157,18 @@ export class App extends React.Component<AppProps, AppState> {
                                 className='keyboard-shortcut-focus__world-selector'
                                 ariaLabel={this.props.intl.formatMessage({ id: 'WorldSelector' })}
                                 onClick={this.handleClickWorldIcon}
-                                onKeyDown={this.handleKeyDownWorldIcon}
                             >
-                                <WorldIcon />
+                                <WorldIcon className='App__world-selector-icon'/>
                             </IconButton>
                         </div>
+
+                        <div className='App__PenDownToggleSwitch-container'>
+                            <PenDownToggleSwitch
+                                className='App__penDown-toggle-switch'
+                                value={this.state.drawingEnabled}
+                                onChange={this.handleTogglePenDown}/>
+                        </div>
+
                         <CharacterPositionController
                             characterState={this.state.characterState}
                             editingDisabled={this.editingIsDisabled()}
@@ -1253,6 +1230,11 @@ export class App extends React.Component<AppProps, AppState> {
                         </h2>
                         <div className='App__playControl-container'>
                             <div className='App__playButton-container'>
+                                <RefreshButton
+                                    className='App__playControlButton'
+                                    disabled={this.editingIsDisabled()}
+                                    onClick={this.handleRefresh}
+                                />
                                 <PlayButton
                                     className='App__playControlButton'
                                     interpreterIsRunning={this.state.runningState === 'running'}
@@ -1279,6 +1261,7 @@ export class App extends React.Component<AppProps, AppState> {
                 </div>
                 <CharacterAriaLive
                     ariaLiveRegionId='character-position'
+                    ariaHidden={this.state.showWorldSelector}
                     characterState={this.state.characterState}
                     runningState={this.state.runningState}
                     world={this.state.settings.world}/>

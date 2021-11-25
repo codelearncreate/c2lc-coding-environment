@@ -2,9 +2,9 @@
 
 import React from 'react';
 import classNames from 'classnames';
+import ModalBody from './ModalBody';
 import ModalHeader from './ModalHeader';
-import ModalFooter from './ModalFooter';
-import { Modal } from 'react-bootstrap';
+import ModalWithFooter from './ModalWithFooter';
 import { getWorldThumbnail } from './Worlds';
 import { injectIntl, FormattedMessage } from 'react-intl';
 import { ReactComponent as WorldIcon } from './svg/World.svg';
@@ -121,8 +121,6 @@ class WorldSelector extends React.Component<WorldSelectorProps, WorldSelectorSta
     componentDidUpdate(prevProps: WorldSelectorProps, prevState: WorldSelectorState) {
         // When the modal first open up, remember the world at that time
         if (prevProps.show !== this.props.show && this.props.show) {
-            focusByQuerySelector(`#WorldSelector__input-world-${this.props.currentWorld}`);
-
             this.setState({
                 selectedWorld: this.props.currentWorld
             });
@@ -137,10 +135,17 @@ class WorldSelector extends React.Component<WorldSelectorProps, WorldSelectorSta
 
     render() {
         return (
-            <Modal
-                aria-labelledby='WorldSelector'
+            <ModalWithFooter
                 show={this.props.show}
-                onHide={this.handleCancel}>
+                focusOnOpenSelector={`#WorldSelector__input-world-${this.props.currentWorld}`}
+                focusOnCloseSelector='.IconButton.keyboard-shortcut-focus__world-selector'
+                ariaLabelledById='WorldSelector'
+                ariaDescribedById='WorldSelectorDesc'
+                onClose={this.handleCancel}
+                buttonProperties={[
+                    {label: this.props.intl.formatMessage({id: 'WorldSelector.Cancel'}), onClick: this.handleCancel},
+                    {label: this.props.intl.formatMessage({id: 'WorldSelector.Save'}), onClick: this.handleDone, isPrimary: true}
+                ]}>
                 <ModalHeader
                     id='WorldSelector'
                     title={this.props.intl.formatMessage({
@@ -148,20 +153,17 @@ class WorldSelector extends React.Component<WorldSelectorProps, WorldSelectorSta
                     })}>
                     <WorldIcon aria-hidden='true' />
                 </ModalHeader>
-                <Modal.Body className='WorldSelector__content'>
-                    <div className='WorldSelector__prompt'>
-                        <FormattedMessage id={'WorldSelector.Prompt'} />
+                <ModalBody>
+                    <div className='WorldSelector__content'>
+                        <div id='WorldSelectorDesc'className='WorldSelector__prompt'>
+                            <FormattedMessage id={'WorldSelector.Prompt'} />
+                        </div>
+                        <div className='WorldSelector__options'>
+                            {this.renderWorldOptions()}
+                        </div>
                     </div>
-                    <div className='WorldSelector__options'>
-                        {this.renderWorldOptions()}
-                    </div>
-                </Modal.Body>
-                <ModalFooter
-                    hasCancel={true}
-                    onClickCancel={this.handleCancel}
-                    onClickDone={this.handleDone}
-                />
-            </Modal>
+                </ModalBody>
+            </ModalWithFooter>
         );
     }
 }

@@ -88,7 +88,7 @@ function extend(...toMerge:Object) {
 
 function focusByQuerySelector (selectors: string) {
     const element = document.querySelector(selectors);
-    if (element) {
+    if (element && element.focus) {
         element.focus();
     }
 }

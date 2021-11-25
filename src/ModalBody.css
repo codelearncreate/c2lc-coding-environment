@@ -1,0 +1,5 @@
+.ModalBody {
+    max-width: 90vw;
+    max-height: calc(100vh - 15rem);
+    overflow-y: auto;
+}

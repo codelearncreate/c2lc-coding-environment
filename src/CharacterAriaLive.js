@@ -11,6 +11,7 @@ import type { WorldName } from './Worlds';
 type CharacterAriaLiveProps = {
     intl: IntlShape,
     ariaLiveRegionId: string,
+    ariaHidden: boolean,
     characterState: CharacterState,
     runningState: RunningState,
     world: WorldName
@@ -70,7 +71,22 @@ class CharacterAriaLive extends React.Component<CharacterAriaLiveProps, {}> {
         );
     }
 
+    componentDidMount() {
+        // Set aria-hidden
+        const ariaLiveRegion = document.getElementById(this.props.ariaLiveRegionId);
+        if (ariaLiveRegion) {
+            ariaLiveRegion.setAttribute('aria-hidden', this.props.ariaHidden.toString());
+        }
+    }
+
     componentDidUpdate(prevProps: CharacterAriaLiveProps) {
+        // Set aria-hidden
+        if (prevProps.ariaHidden !== this.props.ariaHidden) {
+            const ariaLiveRegion = document.getElementById(this.props.ariaLiveRegionId);
+            if (ariaLiveRegion) {
+                ariaLiveRegion.setAttribute('aria-hidden', this.props.ariaHidden.toString());
+            }
+        }
         // Ensure updateCharacterPositionAriaLive gets called only once
         if (prevProps.characterState !== this.props.characterState) {
             if (this.props.runningState !== 'running') {

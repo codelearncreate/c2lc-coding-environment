@@ -4,8 +4,8 @@ import React from 'react';
 import Adapter from 'enzyme-adapter-react-16';
 import { configure, shallow } from 'enzyme';
 import { createIntl } from 'react-intl';
+import IconButton from './IconButton';
 import messages from './messages.json';
-import AriaDisablingButton from './AriaDisablingButton';
 import RefreshButton from './RefreshButton';
 
 configure({ adapter: new Adapter()});
@@ -39,7 +39,7 @@ function createShallowRefreshButton(props) {
 }
 
 function getRefreshButton(refreshButtonWrapper) {
-    return refreshButtonWrapper.find(AriaDisablingButton)
+    return refreshButtonWrapper.find(IconButton)
         .filter('.RefreshButton');
 }
 

@@ -237,17 +237,37 @@ describe('When the character renders, transform should apply', (sceneDimensions 
         });
         const character = findCharacter(sceneWrapper);
         expect(character.get(0).props.transform)
-            .toBe('translate(10 8) rotate(90 0 0)');
+            .toBe('translate(10 8) rotate(90 0 0) scale(1 -1)');
     });
-    test('When xPos = 1, yPos = 9, direction = 0', () => {
-        expect.assertions(1);
+    test('When the character is rotated, rotation and/or mirroring should be applied', () => {
+        expect.assertions(9);
+
         const sceneWrapper = createMountScene({
             dimensions: sceneDimensions,
-            characterState: new CharacterState(1, 9, 0, [], sceneDimensions)
+            characterState: new CharacterState(1, 1, 2, [], sceneDimensions)
         });
+
         const character = findCharacter(sceneWrapper);
-        expect(character.get(0).props.transform)
-            .toBe('translate(1 9) rotate(-90 0 0)');
+
+        expect(character.get(0).props.transform).toBe('translate(1 1) rotate(0 0 0)');
+
+        // Hard-coded to avoid having to test math with math.
+        const expectedValues = [
+            "translate(1 1) rotate(-90 0 0)",
+            "translate(1 1) rotate(-45 0 0)",
+            "translate(1 1) rotate(0 0 0)",
+            "translate(1 1) rotate(45 0 0)",
+            "translate(1 1) rotate(90 0 0) scale(1 -1)",
+            "translate(1 1) rotate(135 0 0) scale(1 -1)",
+            "translate(1 1) rotate(180 0 0) scale(1 -1)",
+            "translate(1 1) rotate(225 0 0) scale(1 -1)"
+        ];
+
+        for (let direction = 0; direction <= 7; direction++) {
+            sceneWrapper.setProps({characterState: new CharacterState(1, 1, direction, [], new SceneDimensions(1, 100, 1, 100))});
+            const rotatedCharacter = findCharacter(sceneWrapper);
+            expect(rotatedCharacter.get(0).props.transform).toBe(expectedValues[direction]);
+        }
     });
 });
 

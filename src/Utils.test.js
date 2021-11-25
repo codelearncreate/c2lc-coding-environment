@@ -4,6 +4,7 @@ import { extend, generateEncodedProgramURL, getThemeFromString, getWorldFromStri
 import React from 'react';
 import Adapter from 'enzyme-adapter-react-16';
 import { mount, configure } from 'enzyme';
+import { makeTestDiv } from './TestUtils';
 
 configure({ adapter: new Adapter()});
 
@@ -53,8 +54,7 @@ test('Test focusByQuerySelector', () => {
             <a className="second" href="http://create.weavly.org/">Second</a>
             <a className="third" href="http://create.weavly.org/">Third</a>
         </div>,
-        // $FlowFixMe:  Flow is worried that document.body might not exist.
-        {attachTo: document.body}
+        {attachTo: makeTestDiv()}
     );
 
     const secondElement = testFixture.find(".second");
@@ -68,6 +68,6 @@ test('Test focusByQuerySelector', () => {
     // $FlowFixMe: Flow is worried that document.activeElement might not exist.
     expect(secondElement.html()).toEqual(document.activeElement.outerHTML);
 
-    // make sure to detach after attach to body
+    // make sure to detach after attach
     testFixture.detach();
 });
