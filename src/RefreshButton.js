@@ -18,8 +18,8 @@ class RefreshButton extends React.Component<RefreshButtonProps, {}> {
         return (
             <IconButton
                 ariaLabel={this.props.intl.formatMessage({id:'RefreshButton'})}
-                className='RefreshButton'
-                disabledClassName='RefreshButton--disabled'
+                className='RefreshButton PlayControlButton'
+                disabledClassName='RefreshButton--disabled PlayControlButton--disabled'
                 disabled={this.props.disabled}
                 onClick={this.props.onClick}
             >
