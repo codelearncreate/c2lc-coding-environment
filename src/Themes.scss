@@ -291,11 +291,6 @@ body.light-theme {
             fill: #505862;
             stroke: #9DA4AF;        
         }
-    
-        circle {
-            stroke: none;
-            fill: #67717E;
-        }
 
         rect.refresh-icon {
             stroke: #505862;
@@ -1208,18 +1203,6 @@ body.gray-theme {
         background-color: #D5D8DD;
     }
 
-    .RefreshButton svg path:not(.refresh-icon) {
-        fill: white;
-    }
-
-    .RefreshButton--disabled,
-    .RefreshButton--disabled:hover,
-    .RefreshButton--disabled:focus {
-        svg path:not(.refresh-icon) {
-            fill: #D5D8DD;
-        }
-    }
-
     button.PlayControlButton:not(.PlayControlButton--disabled),
     button.PlayControlButton:not(.PlayControlButton--disabled):not(:disabled):not(.disabled):active,
     .IconButton.PlayControlButton:not(.PlayControlButton--disabled) {
@@ -2127,12 +2110,6 @@ body.contrast-theme {
 
 
     .RefreshButton {
-        svg {
-            path:not(.refresh-icon) {
-                fill: #FFFFFF;
-            }
-        }
-
         &:hover:not(.RefreshButton--disabled) {
             svg {
                 .refresh-icon {
