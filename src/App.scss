@@ -56,6 +56,11 @@ body {
         box-shadow: 0 0 0 $c2lc-focus-indicator-width black;
         outline: none;
     }
+
+    svg {
+        width: 1.6rem;
+        height: 1.6rem;
+    }
 }
 
 .App__header-keyboardMenuIcon--disabled {
