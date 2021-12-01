@@ -84,6 +84,7 @@ type AppState = {
     isDraggingCommand: boolean,
     audioEnabled: boolean,
     announcementsEnabled: boolean,
+    audioUtteranceRate: number,
     actionPanelStepIndex: ?number,
     sceneDimensions: SceneDimensions,
     drawingEnabled: boolean,
@@ -402,6 +403,8 @@ export class App extends React.Component<AppProps, AppState> {
             isDraggingCommand: false,
             audioEnabled: true,
             announcementsEnabled: true,
+            // Keep utteranceRate in the state, so that we can add controls to change it later
+            audioUtteranceRate: 0.8,
             actionPanelStepIndex: null,
             sceneDimensions: this.sceneDimensions,
             drawingEnabled: true,
@@ -422,7 +425,7 @@ export class App extends React.Component<AppProps, AppState> {
             this.audioManager = props.audioManager
         }
         else if (FeatureDetection.webAudioApiIsAvailable()) {
-            this.audioManager = new AudioManagerImpl(this.state.audioEnabled, this.state.announcementsEnabled);
+            this.audioManager = new AudioManagerImpl(this.state.audioEnabled, this.state.announcementsEnabled, this.state.audioUtteranceRate);
         }
         else {
             this.audioManager = new FakeAudioManager();
