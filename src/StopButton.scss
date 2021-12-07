@@ -1,52 +1,41 @@
 @import 'variables';
 
+.StopButton {
+    height: 2rem;
+    width: 2rem;
+    font-size: 1.2rem;
+
+    box-shadow: 0 0 0 0.2rem $c2lc-black;
+
+    &:focus {
+        box-shadow:
+            0 0 0 0.2rem $c2lc-black,
+            0 0 0 0.4rem #67717E,
+            0 0 0 0.6rem #FFFFFF;
+        outline: none;
+    }
+}
+
+.StopButton:not(:hover):not(.StopButton--disabled) {
+    background-color: #F97953;
+}
+
+.StopButton--disabled {
+    box-shadow: 0 0 0 0.2rem #9DA4AF;
+
+    &:focus {
+        box-shadow:
+            0 0 0 0.2rem #9DA4AF,
+            0 0 0 0.4rem #67717E,
+            0 0 0 0.6rem #FFFFFF;
+    }
+
+    svg rect {
+        fill: #67717E;
+    }
+}
+
 .StopButton-svg {
-    width: 1.7rem;
-    height: 1.7rem;
-}
-
-button.btn.StopButton {
-    background-color: transparent;
-    border: none;
-    border-radius: 50%;
-    padding: 0;
-    padding-top: 0.05rem;
-    width: 2.2rem;
-    height: 2.2rem;
-    margin: auto 0;
-    margin-right: 1.9rem;
-
-    svg circle {
-        fill: $c2lc-black
-    }
-}
-
-button.btn.StopButton:focus {
-    box-shadow: 0 0 0 $c2lc-focus-indicator-width $c2lc-focus-indicator-color;
-}
-
-button.btn.StopButton:hover {
-    svg path {
-        fill: #F1AE5B;
-    }
-}
-
-button.btn.StopButton.StopButton--disabled {
-    background-color: inherit;
-    cursor: default;
-
-    svg {
-        circle {
-            fill: #67717E;
-        }
-
-        path.inner-circle {
-            fill: #B9BEC6;
-        }
-    }
-}
-
-button.btn.StopButton.StopButton--disabled:active:focus {
-    background-color: $c2lc-primary-button-color;
-    box-shadow: 0 0 0 $c2lc-focus-indicator-width $c2lc-focus-indicator-color;
+    width: 1rem;
+    height: 1rem;
 }

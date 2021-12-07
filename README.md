@@ -72,3 +72,4 @@ use in Weavly:
 | [github.com/sass/node-sass](https://github.com/sass/node-sass) | MIT License |
 | [github.com/Tonejs/Tone.js](https://github.com/Tonejs/Tone.js) | [MIT License](https://github.com/Tonejs/Tone.js/blob/dev/LICENSE.md)|
 | [loading.io](https://loading.io/) | [Loading.io Free License](https://loading.io/license/#free-license) |
+| [WAI-ARIA Authoring Practices 1.1](https://www.w3.org/TR/wai-aria-practices-1.1/) | [W3C License](https://www.w3.org/Consortium/Legal/2015/copyright-software-and-document) |

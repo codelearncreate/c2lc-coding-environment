@@ -1,9 +1,9 @@
 @import '_variables';
 
 button.btn.ShareButton {
-    background-color: #33717F;
+    background-color: #CCE6E2;
     border: 0;
-    color: #FFFFFF;
+    color: $c2lc-black;
     padding: 0.2rem;
     width: 10rem;
 
@@ -13,8 +13,8 @@ button.btn.ShareButton {
 
     &:focus {
         box-shadow:
-            0 0 0 0.1rem #D5D8DD,
-            0 0 0 $c2lc-focus-indicator-width $c2lc-black;
+            0 0 0 0.1rem #30444E,
+            0 0 0 $c2lc-focus-indicator-width #FFFFFF;
     }
 
     &:hover {

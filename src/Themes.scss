@@ -1,7 +1,7 @@
 @import 'variables';
 
-/* "Mixed" Theme is the default, check _variables.scss for most colours. */
-body.mixed-theme {
+/* Check _variables.scss for most colours. */
+body.default-theme {
     // Change this in the theme to avoid side effects in other themes.
     .App__command-palette-command-container {
         &::-webkit-scrollbar {
@@ -75,6 +75,18 @@ body.light-theme {
         }
     }
 
+    .ActionsMenuItem__icon:not(.ActionsMenuItem__icon--hidden)
+    {
+        svg {
+            path, circle, rect {
+                stroke: white;
+            }
+            circle, path.filled {
+                fill: white;
+            }
+        }
+    }
+
     // Use both IDs and classnames here to overpower styles inherited from react-bootstrap's $theme-colors
     #command-block--backward1, .btn-command-block--backward1,
     #command-block--backward2, .btn-command-block--backward2,
@@ -83,6 +95,12 @@ body.light-theme {
 
         &:hover, &:focus {
             background-color: #07586A;
+        }
+    }
+
+    .ActionsMenuItem__icon--backward1, .ActionsMenuItem__icon--backward2, .ActionsMenuItem__icon--backward3 {
+        &:not(.ActionsMenuItem__icon--disabled) {
+            background-color: #33717F;
         }
     }
 
@@ -97,6 +115,12 @@ body.light-theme {
         }
     }
 
+    .ActionsMenuItem__icon--forward1, .ActionsMenuItem__icon--forward2 .ActionsMenuItem__icon--forward3 {
+        &:not(.ActionsMenuItem__icon--disabled) {
+            background-color: #4C9990;
+        }
+    }
+
     // Use both IDs and classnames here to overpower styles inherited from react-bootstrap's $theme-colors
     #command-block--left45, .btn-command-block--left45,
     #command-block--left90, .btn-command-block--left90,
@@ -108,6 +132,12 @@ body.light-theme {
         }
     }
 
+    .ActionsMenuItem__icon--left45, .ActionsMenuItem__icon--left90, .ActionsMenuItem__icon--left180 {
+        &:not(.ActionsMenuItem__icon--disabled) {
+            background-color: #D37D12;
+        }
+    }
+
     // Use both IDs and classnames here to overpower styles inherited from react-bootstrap's $theme-colors
     #command-block--right45, .btn-command-block--right45,
     #command-block--right90, .btn-command-block--right90,
@@ -116,6 +146,12 @@ body.light-theme {
 
         &:hover, &:focus {
             background-color: #952A1B;
+        }
+    }
+
+    .ActionsMenuItem__icon--right45, .ActionsMenuItem__icon--right90, .ActionsMenuItem__icon--right180 {
+        &:not(.ActionsMenuItem__icon--disabled) {
+            background-color: #C13925;
         }
     }
 
@@ -286,10 +322,40 @@ body.light-theme {
         background-color: #D5D8DD;
     }
 
-    button.btn.PlayButton, button.btn.StopButton {
+    .RefreshButton {
+        &:focus {
+            box-shadow: 0 0 0 $c2lc-focus-indicator-width $c2lc-black;
+        }
+    }
+
+    .RefreshButton--disabled svg {
+        .refresh-icon {
+            fill: #505862;
+            stroke: #9DA4AF;        
+        }
+    
+        circle {
+            stroke: none;
+            fill: #67717E;
+        }
+
+        rect.refresh-icon {
+            stroke: #505862;
+            fill: #B9BEC6;
+        }
+    }
+
+    button.btn.PlayButton:focus {
+        box-shadow: 0 0 0 $c2lc-focus-indicator-width $c2lc-focus-indicator-color;
+    }
+
+    button.btn.PlayButton--disabled {
         svg {
-            circle, path.triangle {
-                fill: #3A3F46;
+            circle {
+                fill: #67717E;
+            }
+            path.triangle {
+                fill: #505862;
             }
         }
     }
@@ -297,6 +363,86 @@ body.light-theme {
     .ShareButton {
         color: $c2lc-black;
         background-color: #F1F2F4;
+    }
+
+    .StopButton:focus {
+        box-shadow:
+            0 0 0 0.2rem $c2lc-black,
+            0 0 0 0.4rem #D5D8DD,
+            0 0 0 0.6rem $c2lc-black;
+    }
+
+    .StopButton--disabled {
+        box-shadow: 0 0 0 0.2rem #67717E;
+
+        svg rect {
+            fill: #505862;
+        }
+
+        &:focus {
+            box-shadow:
+                0 0 0 0.2rem #67717E,
+                0 0 0 0.4rem #D5D8DD,
+                0 0 0 0.6rem $c2lc-black;
+        }
+    }
+
+    .ProgramSpeedController__slider {
+        &:hover {
+            &::-webkit-slider-thumb {
+                background-color: #F1AE5B;
+                box-shadow: -8rem 0 0 8rem #F1AE5B;
+            }
+        
+            &::-moz-range-thumb {
+                background-color: #F1AE5B;
+                box-shadow: -8rem 0 0 8rem #F1AE5B;
+            }
+           
+            &::-moz-range-progress {
+                background-color: #F1AE5B; 
+            }
+            
+            &::-ms-fill-lower {
+                background-color: #F1AE5B; 
+            }
+        }
+
+        &:focus {
+            outline-color: $c2lc-focus-indicator-color;
+        }
+
+        &::-webkit-slider-thumb {
+            background-color: #33717F;
+            box-shadow: -8rem 0 0 8rem #33717F;
+        }
+
+        &::-moz-range-thumb {
+            background-color: #33717F;
+            box-shadow: -8rem 0 0 8rem #33717F;
+        }
+
+        &::-moz-range-progress {
+            background-color: #33717F;
+        }
+        
+        &::-ms-fill-lower {
+            background-color: #33717F; 
+        }
+    }
+    
+    button.btn.ShareButton {
+        background-color: #33717F;
+        color: #FFFFFF;
+        &:focus {
+            box-shadow:
+                0 0 0 0.1rem #D5D8DD,
+                0 0 0 $c2lc-focus-indicator-width $c2lc-black;
+        }
+        &:hover {
+            background-color: #F5C58A;
+            color: $c2lc-black;
+        }
     }
 }
 
@@ -348,12 +494,12 @@ body.dark-theme {
         color: #F1AE5B;
     }
 
-    .ActionsMenu__header {
+    .App__ActionsMenu__header {
         background-color: #30444E;
         color: white;
     }
 
-    .ActionsMenu__toggle-button {
+    .App__ActionsMenu__toggle-button {
         &:focus {
             box-shadow:
                 0 0 0 0.1rem white;
@@ -364,7 +510,7 @@ body.dark-theme {
         }
     }
 
-    .ActionsMenu__menu {
+    .App__ActionsMenu__menu {
         background-color: #22343C;
         border: 2px solid #33717F;
         box-shadow: 0px 4px 4px #22262A;
@@ -376,6 +522,10 @@ body.dark-theme {
         border: 2px solid #33717F;
     }
 
+
+    .App__world-selector {
+        border-color: #33717F;
+    }
 
     button.btn.command-block.command-block--pressed,
     button.btn.command-block.command-block--pressed:hover,
@@ -409,10 +559,6 @@ body.dark-theme {
     }
 
     .PenDownToggleSwitch:focus {
-        box-shadow: 0 0 0 $c2lc-focus-indicator-width white;
-    }
-
-    .RefreshButton:focus {
         box-shadow: 0 0 0 $c2lc-focus-indicator-width white;
     }
 
@@ -491,11 +637,6 @@ body.dark-theme {
         box-shadow: 0 0 0 $c2lc-focus-indicator-width white;
     }
 
-    button.btn.ProgramBlockEditor__program-deleteAll-button:focus {
-        box-shadow: 0 0 0 $c2lc-focus-indicator-width white;
-
-    }
-
     .ProgramBlockEditor__program-sequence-scroll-container {
         background-color: #22343C;
     }
@@ -540,29 +681,19 @@ body.dark-theme {
         }
     }
 
-    .App__playAndShare-background {
-        background-color: #30444e;
+    .StopButton:focus {
+        box-shadow:
+            0 0 0 0.2rem $c2lc-black,
+            0 0 0 0.4rem #67717E,
+            0 0 0 0.6rem #FFFFFF;
     }
 
-    button.btn.PlayButton:focus, button.btn.StopButton:focus {
-        border: none;
-        box-shadow: 0 0 0 $c2lc-focus-indicator-width white;
+    .StopButton.StopButton--disabled:focus {
+        box-shadow:
+            0 0 0 0.2rem #9DA4AF,
+            0 0 0 0.4rem #67717E,
+            0 0 0 0.6rem #FFFFFF;
     }
-
-    .ProgramSpeedController__slider {
-        &:focus {
-            outline-color: white;
-        }
-    }
-
-    button.btn.ShareButton {
-        &:focus {
-            box-shadow:
-                0 0 0 0.1rem #30444E,
-                0 0 0 $c2lc-focus-indicator-width white;
-        }
-    }
-
 }
 
 
@@ -578,29 +709,8 @@ body.gray-theme {
         background-color: #D5D8DD;
     }
 
-    .ThemeSelector {
-        button.btn {
-            background-color: #F1F2F4;
-            border-color: #F1F2F4;
-            color: $c2lc-black;
-
-            &:hover:not(:active) {
-                background: #505862;
-                color: White;
-            }
-
-            &:focus {
-                box-shadow:
-                    0 0 0 0.1rem white,
-                    0 0 0 $c2lc-focus-indicator-width #505862
-            }
-        }
-
-        button.btn-primary {
-            &:not(:disabled):not(.disabled):active {
-                background-color: #B9BEC6;
-            }
-        }
+    .App__world-selector {
+        border-color: #9DA4AF;
     }
 
     .App__command-palette {
@@ -628,7 +738,7 @@ body.gray-theme {
     .IconButton {
         background-color: #818A98;
 
-        &:hover {
+        &:hover:not(.IconButton--disabled) {
             background-color: #505862;
         }
 
@@ -637,6 +747,12 @@ body.gray-theme {
         }
 
         .App__header-keyboard-icon {
+            path {
+                fill: white;
+            }
+        }
+
+        .App__header-theme-icon {
             path {
                 fill: white;
             }
@@ -673,8 +789,8 @@ body.gray-theme {
         }
     }
 
-    button.btn.ModalFooter__cancelButton,
-    button.btn.ModalFooter__doneButton {
+    button.btn.ModalWithFooter__secondaryButton,
+    button.btn.ModalWithFooter__primaryButton {
         background-color: #aaa;
         color: $c2lc-black;
 
@@ -732,7 +848,7 @@ body.gray-theme {
         }
     }
 
-    .ActionsMenu__header {
+    .App__ActionsMenu__header {
         background-color: #D5D8DD;
     }
 
@@ -780,6 +896,30 @@ body.gray-theme {
 
         &.command-block--pressed {
             border: 3px solid #505862;
+        }
+    }
+
+    .ActionsMenuItem {
+        &:hover {
+            background-color:#D5D8DD;
+        }
+
+        &:focus {
+            box-shadow: 0 0 0 0.25rem #505862;
+        }
+    }
+
+    .ActionsMenuItem__icon:not(.ActionsMenuItem__icon--disabled) {
+        background-color: #818A98;
+        border-color: #818A98;
+
+        svg {
+            path, circle, rect {
+                stroke: white;
+            }
+            circle, path.filled {
+                fill: white;
+            }
         }
     }
 
@@ -897,30 +1037,6 @@ body.gray-theme {
         background-color: #818A98;
     }
 
-    button.btn.RefreshButton {
-        background-color: #818A98;
-        svg path {
-            fill: white;
-        }
-
-        &:hover {
-            background-color: #505862;
-        }
-
-        &:focus {
-            box-shadow: 0 0 0 $c2lc-focus-indicator-width #505862;
-        }
-    }
-
-    button.btn.RefreshButton--disabled,
-    button.btn.RefreshButton--disabled:hover,
-    button.btn.RefreshButton--disabled:focus {
-        background-color: #9DA4AF;
-        svg path {
-            fill: #D5D8DD;
-        }
-    }
-
     .WorldSelector {
         background-color: #D5D8DD;
     }
@@ -1007,24 +1123,13 @@ body.gray-theme {
         background-color: #818A98;
     }
 
-    button.btn.ProgramBlockEditor__program-deleteAll-button {
-        background-color: #818A98;
-        svg path {
-            stroke: white;
-        }
-
-        &:focus {
-            box-shadow: 0 0 0 $c2lc-focus-indicator-width #505862;
-        }
-
-        &:hover {
-            background-color: #505862;
-        }
+    .ProgramBlockEditor__program-deleteAll-button  svg path {
+        stroke: white;
+        fill: inherit;
     }
 
-    button.btn.ProgramBlockEditor__program-deleteAll-button--disabled,
-    button.btn.ProgramBlockEditor__program-deleteAll-button--disabled:hover {
-        background-color: #9DA4AF;
+    .ProgramBlockEditor__program-deleteAll-button--disabled,
+    .ProgramBlockEditor__program-deleteAll-button--disabled:hover {
         svg path {
             stroke: #D5D8DD;
         }
@@ -1158,18 +1263,30 @@ body.gray-theme {
         background-color: #D5D8DD;
     }
 
-    button.btn.PlayButton, button.btn.StopButton {
+    .RefreshButton svg path:not(.refresh-icon) {
+        fill: white;
+    }
+
+    .RefreshButton--disabled,
+    .RefreshButton--disabled:hover,
+    .RefreshButton--disabled:focus {
+        svg path:not(.refresh-icon) {
+            fill: #D5D8DD;
+        }
+    }
+
+    button.btn.PlayButton:not(.PlayButton--disabled), .StopButton, .RefreshButton:not(.RefreshButton--disabled) {
         box-shadow: none;
 
         svg {
             path.inner-circle {
-                fill: white;
+                fill: #FFFFFF;
             }
             circle {
                 fill: #67717E;
             }
             path.triangle {
-                fill: #30444E;
+                fill: $c2lc-black;
             }
         }
 
@@ -1187,22 +1304,67 @@ body.gray-theme {
                     fill: #67717E;
                 }
                 path.triangle {
-                    fill: #30444E;
+                    fill: $c2lc-black;
                 }
             }
         }
     }
 
-    button.btn.PlayButton--disabled, button.btn.StopButton--disabled {
+    button.btn.PlayButton--disabled, .StopButton--disabled, .RefreshButton--disabled {
         background-color: #D5D8DD;
 
         svg {
             path.inner-circle {
                 fill: #D5D8DD;
             }
-            circle, path.triangle {
+            circle {
                 fill: #9DA4AF;
             }
+            path.triangle, path.refresh-icon {
+                fill: #67717E;
+            }
+            rect.refresh-icon {
+                fill: #D5D8DD;
+            }
+        }
+
+        &:focus {
+            box-shadow: 0 0 0 $c2lc-focus-indicator-width #505862;
+        }
+    }
+
+    .StopButton:not(.StopButton--disabled) {
+        box-shadow: 0 0 0 0.2rem #67717E;
+
+        svg rect {
+            fill: $c2lc-black;
+        }
+
+        &:hover {
+            background-color: #9DA4AF;
+        }
+
+        &:focus {
+            box-shadow:
+                0 0 0 0.2rem #67717E,
+                0 0 0 0.4rem #D5D8DD,
+                0 0 0 0.6rem #67717E;
+        }        
+    }
+
+    .StopButton:not(:hover):not(.StopButton--disabled) {
+        background-color: #FFFFFF;
+    }
+
+    .StopButton--disabled {
+        background-color: #D5D8DD;
+        box-shadow: 0 0 0 0.2rem #9DA4AF;
+
+        &:focus {
+            box-shadow:
+                0 0 0 0.2rem #9DA4AF,
+                0 0 0 0.3rem #D5D8DD,
+                0 0 0 0.5rem #505862;
         }
     }
 
@@ -1218,26 +1380,26 @@ body.gray-theme {
 
         &::-webkit-slider-thumb {
             border: 2px solid #67717E;
-            background-color: white;
-            box-shadow: -8rem 0 0 8rem white;
+            background-color: #F1F2F4;
+            box-shadow: -8rem 0 0 8rem #F1F2F4;
         }
 
         &::-moz-range-thumb {
             border-radius: 0;
             border: 2px solid $c2lc-black;
-            background-color: white;
-            box-shadow: -8rem 0 0 8rem white;
+            background-color: #F1F2F4;
+            box-shadow: -8rem 0 0 8rem #F1F2F4;
         }
 
         &::-moz-range-progress {
-            background-color: white;
+            background-color: #F1F2F4;
         }
         &::-moz-range-track {
             background-color: #67717E;
         }
 
         &::-ms-fill-lower {
-            background-color: white;
+            background-color: #F1F2F4;
         }
 
         &::-ms-fill-upper {
@@ -1265,18 +1427,6 @@ body.gray-theme {
 
         &:focus {
             outline-color: #505862;
-        }
-    }
-
-
-    button.btn.PlayButton--play.PlayButton--disabled {
-        background-color: inherit;
-        cursor: default;
-
-        svg {
-            path.triangle {
-                fill: #30444E;
-            }
         }
     }
 
@@ -1313,42 +1463,23 @@ body.contrast-theme {
         color: white;
     }
 
-    .ThemeSelector {
-        button.btn {
-            background-color: white;
-            color: $c2lc-black;
-            border-color: white;
-
-            &:hover:not(:active) {
-                background-color: $c2lc-black;
-                border: 2px solid white;
-                color: white;
-            }
-
-            &:focus {
-                box-shadow: 0 0 0 $c2lc-focus-indicator-width white;
-            }
-
-            &:focus:not(:hover) {
-                border: 2px solid $c2lc-black;
-            }
-        }
-
-        button.btn-primary {
-            &:not(:disabled):not(.disabled):active {
-                background-color: white;
-                color: $c2lc-black;
-            }
-        }
-    }
-
     .IconButton {
         background-color: white;
 
-        &:hover {
+        svg path {
+            fill: $c2lc-black;
+        }
+
+        &:hover:not(.IconButton--disabled) {
             background-color: $c2lc-black;
 
             .App__header-keyboard-icon {
+                path {
+                    fill: white;
+                }
+            }
+
+            .App__header-theme-icon {
                 path {
                     fill: white;
                 }
@@ -1415,8 +1546,8 @@ body.contrast-theme {
         }
     }
 
-    button.btn.ModalFooter__cancelButton,
-    button.btn.ModalFooter__doneButton {
+    button.btn.ModalWithFooter__secondaryButton,
+    button.btn.ModalWithFooter__primaryButton {
         background-color: $c2lc-black;
         color: white;
 
@@ -1518,7 +1649,7 @@ body.contrast-theme {
         }
     }
 
-    .ActionsMenu__header {
+    .App__ActionsMenu__header {
         background-color: white;
     }
 
@@ -1542,6 +1673,10 @@ body.contrast-theme {
 
     .App__world-container {
         background-color: $c2lc-black;
+    }
+
+    .App__world-selector {
+        border-color: #FFFFFF;
     }
 
     // Use both IDs and classnames here to overpower styles inherited from react-bootstrap's $theme-colors
@@ -1603,6 +1738,37 @@ body.contrast-theme {
 
         &:not(:disabled):not(.disabled):active {
             background-color: $c2lc-black;
+        }
+    }
+
+    .ActionsMenuItem {
+        &:focus {
+            box-shadow: 0 0 0 0.2rem $c2lc-black;
+        }
+
+        &:hover {
+            background-color: $c2lc-black;
+            color: white;
+        }
+
+        &:hover:focus {
+            box-shadow:
+                0 0 0 0.1rem white,
+                0 0 0 0.2rem $c2lc-black;
+        }
+    }
+
+    .ActionsMenuItem__icon:not(.ActionsMenuItem__icon--disabled) {
+        background-color: white;
+        border: 1px solid $c2lc-black;
+
+        svg {
+            path, circle {
+                stroke: $c2lc-black;
+            }
+            circle, path.filled {
+                fill: $c2lc-black;
+            }
         }
     }
 
@@ -1759,39 +1925,6 @@ body.contrast-theme {
         }
     }
 
-    .RefreshButton {
-        background-color: white;
-        border: 2px solid $c2lc-black;
-        padding: 0.4rem;
-        svg path {
-            fill: $c2lc-black;
-            stroke: none;
-        }
-
-        &:focus {
-            box-shadow: 0 0 0 $c2lc-focus-indicator-width white;
-            border: 2px solid $c2lc-black;
-        }
-
-        &:hover:not(:active) {
-            background-color: $c2lc-black;
-            border: 2px solid white;
-            svg path {
-                fill: white;
-            }
-        }
-    }
-
-    button.btn.RefreshButton--disabled,
-    button.btn.RefreshButton--disabled:hover,
-    button.btn.RefreshButton--disabled:active {
-        background-color: white;
-        border: 2px solid $c2lc-black;
-        svg path {
-            fill: #818A98;
-        }
-    }
-
     .WorldSelector {
         background-color: $c2lc-black;
 
@@ -1868,18 +2001,19 @@ body.contrast-theme {
         }
     }
 
-    button.btn.ProgramBlockEditor__program-deleteAll-button {
+    .ProgramBlockEditor__program-deleteAll-button {
         background-color: $c2lc-black;
         border: 2px solid white;
         svg path {
             stroke: white;
         }
 
-        &:hover {
+        &:hover:not(.ProgramBlockEditor__program-deleteAll-button--disabled) {
             background-color: white;
             border: 2px solid $c2lc-black;
             svg path {
                 stroke: $c2lc-black;
+                fill: inherit;
             }
         }
 
@@ -1888,12 +2022,13 @@ body.contrast-theme {
         }
     }
 
-    button.btn.ProgramBlockEditor__program-deleteAll-button--disabled,
-    button.btn.ProgramBlockEditor__program-deleteAll-button--disabled:hover {
+    .ProgramBlockEditor__program-deleteAll-button--disabled,
+    .ProgramBlockEditor__program-deleteAll-button--disabled:hover {
         background-color: white;
         border: 2px solid $c2lc-black;
         svg path {
             stroke: #818A98;
+            fill:inherit;
         }
     }
 
@@ -2050,42 +2185,170 @@ body.contrast-theme {
     }
 
     .App__playAndShare-background {
-        background-color: white;
+        background-color: #FFFFFF;
     }
 
     .App__shareButton-container button {
         background-color: $c2lc-black;
-        color: white;
+        color: #FFFFFF;
     }
 
-    button.btn.PlayButton, button.btn.StopButton {
-        &:hover {
-            background-color: white;
+
+    .RefreshButton {
+        svg {
+            path:not(.refresh-icon) {
+                fill: white;
+            }
+            circle {
+                fill:black;
+            }
+        }
+
+        &:hover:not(.RefreshButton--disabled) {
+            &:not(:focus) {
+                box-shadow: 0 0 0 2px white;
+            }
+
             svg {
+                .refresh-icon {
+                    fill: white;
+                }
                 path.inner-circle {
-                    fill: #9DA4AF;
+                    fill: $c2lc-black;
+                }
+                circle {
+                    fill: $c2lc-black;
                 }
             }
+        }
+
+        &:focus {
+            box-shadow: 0 0 0 $c2lc-focus-indicator-width $c2lc-black;
+        }
+    }
+
+    button.btn.PlayButton:not(.PlayButton--disabled) {
+        &:hover {
+            svg {
+                path.inner-circle {
+                    fill: $c2lc-black;
+                }
+                path.triangle {
+                    fill: #FFFFFF;
+                }
+            }
+        }
+        &:focus {
+            box-shadow: 0 0 0 $c2lc-focus-indicator-width $c2lc-black;
         }
 
         svg {
             path.inner-circle {
                 fill: white;
-            }
+            }    
+        }
+    }
+
+    button.btn.PlayButton, .StopButton {
+        svg {
+            fill: #FFFFFF;
             circle, path.triangle {
                 fill: $c2lc-black;
             }
         }
     }
 
-    button.btn.PlayButton--play.PlayButton--disabled, button.btn.StopButton--disabled {
-        svg {
-            path {
-                fill: white;
+    button.btn.PlayButton--pause:not(.PlayButton--disabled) {
+        &:hover {
+            svg {
+                circle {
+                    fill: #FFFFFF;
+                }
+                path.inner-circle {
+                    fill: $c2lc-black;
+                }
             }
-            circle, path.triangle, rect {
+        }
+        &:focus {
+            box-shadow: 0 0 0 $c2lc-focus-indicator-width $c2lc-black;
+        }
+    }
+
+    button.btn.PlayButton--play.PlayButton--disabled, .StopButton--disabled, .RefreshButton--disabled {
+        svg {
+            path.inner-circle {
+                fill: #FFFFFF;
+            }
+            circle, path.triangle, rect, path.refresh-icon {
                 fill: #8E8E8E;
             }
+        }
+        &:focus {
+            box-shadow: 0 0 0 $c2lc-focus-indicator-width $c2lc-black;
+        }
+    }
+
+    .RefreshButton--disabled {
+        svg {
+            rect.refresh-icon {
+                stroke: #8E8E8E;
+                fill: #FFFFFF;
+            }
+            line.refresh-icon {
+                stroke: #8E8E8E;
+            }
+            .refresh-icon {
+                stroke: #FFFFFF;
+            }
+        }
+    }
+
+    .StopButton {
+        box-shadow: 0 0 0 0.2rem $c2lc-black;
+
+        svg rect {
+            fill: #FFFFFF;
+        }
+
+        &:hover:not(.StopButton--disabled) {
+            box-shadow:
+                0 0 0 0.2rem $c2lc-black,
+                0 0 0 0.4rem white;
+
+            svg rect {
+                fill: #ffffff
+            }
+            background-color: $c2lc-black;
+        }
+
+        &:focus {
+            box-shadow:
+                0 0 0 0.2rem $c2lc-black,
+                0 0 0 0.4rem #FFFFFF,
+                0 0 0 0.6rem $c2lc-black;
+        }        
+    }
+
+    .StopButton:not(:hover):not(.StopButton--disabled) {
+        background-color: #FFFFFF;
+        svg rect {
+            fill: $c2lc-black;
+        }
+    }
+
+    .StopButton--disabled {
+        background-color: #FFFFFF;
+        box-shadow: 0 0 0 0.2rem #8E8E8E;
+
+        &:focus {
+            box-shadow:
+                0 0 0 0.2rem #8E8E8E,
+                0 0 0 0.4rem #FFFFFF,
+                0 0 0 0.6rem $c2lc-black;
+        }
+
+        svg rect {
+            fill: #8E8E8E;
         }
     }
 
@@ -2097,19 +2360,19 @@ body.contrast-theme {
 
         &::-webkit-slider-thumb {
             border: 2px solid $c2lc-black;
-            background-color: white;
-            box-shadow: -8rem 0 0 8rem white;
+            background-color: #0078FF;
+            box-shadow: -8rem 0 0 8rem #0078FF;
         }
 
         &::-moz-range-thumb {
             border-radius: 0;
             border: 2px solid $c2lc-black;
-            background-color: white;
-            box-shadow: -8rem 0 0 8rem white;
+            background-color: #0078FF;
+            box-shadow: -8rem 0 0 8rem #0078FF;
         }
 
         &::-moz-range-progress {
-            background-color: white;
+            background-color: #0078FF;
         }
 
         &::-moz-range-track {
@@ -2117,7 +2380,7 @@ body.contrast-theme {
         }
 
         &::-ms-fill-lower {
-            background-color: white;
+            background-color: #0078FF;
         }
 
         &::-ms-fill-upper {
@@ -2126,21 +2389,25 @@ body.contrast-theme {
 
         &:hover {
             &::-webkit-slider-thumb {
-                background-color: #9DA4AF;
-                box-shadow: -8rem 0 0 8rem #9DA4AF;
+                background-color: #FF0000;
+                box-shadow: -8rem 0 0 8rem #FF0000;
             }
             &::-moz-range-thumb {
-                background-color: #9DA4AF;
-                box-shadow: -8rem 0 0 8rem #9DA4AF;
+                background-color: #FF0000;
+                box-shadow: -8rem 0 0 8rem #FF0000;
             }
 
             &::-moz-range-progress {
-                background-color: #9DA4AF;
+                background-color: #FF0000;
             }
 
             &::-ms-fill-lower {
-                background-color: #9DA4AF;
+                background-color: #FF0000;
             }
+        }
+
+        &:focus {
+            outline-color: $c2lc-black;
         }
     }
 

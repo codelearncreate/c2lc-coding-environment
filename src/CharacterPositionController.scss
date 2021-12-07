@@ -13,8 +13,48 @@
     justify-content: flex-end;
     pointer-events: none;
     padding: 0 0.5rem;
-    grid-row-start: 2;
-    grid-row-end: 3;
+    grid-row-start: 3;
+    grid-row-end: 4;
+}
+
+// N:  0
+.CharacterPositionController__character-column-character--angle0 {
+    transform: rotate(-90deg);
+}
+
+// NE: 1
+.CharacterPositionController__character-column-character--angle1 {
+    transform: rotate(-45deg);
+}
+
+// E:  2
+// .CharacterPositionController__character-column-character--angle2 {
+//     transform: rotate(0deg);
+// }
+
+// SE: 3
+.CharacterPositionController__character-column-character--angle3 {
+    transform: rotate(45deg);
+}
+
+// S:  4
+.CharacterPositionController__character-column-character--angle4 {
+    transform: rotate(90deg) scaleY(-1);
+}
+
+// SW: 5
+.CharacterPositionController__character-column-character--angle5 {
+    transform: rotate(135deg) scaleY(-1);
+}
+
+// W:  6
+.CharacterPositionController__character-column-character--angle6 {
+    transform: rotate(180deg) scaleY(-1);
+}
+
+// NW: 7
+.CharacterPositionController__character-column-character--angle7 {
+    transform: rotate(225deg) scaleY(-1);
 }
 
 .CharacterPositionController__character-column-character-container {

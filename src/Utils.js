@@ -28,7 +28,7 @@ function generateEncodedProgramURL(versionString: string, themeString: string, w
 
 
 /*
-    "mixed"    => A mixture of light and dark elements, with colour.
+    "default"    => A mixture of light and dark elements, with colour.
     "light"    => A light theme, with colour.
     "dark"     => A dark theme, with colour.
     "gray"     => A grayscale theme, without colour.
@@ -36,7 +36,7 @@ function generateEncodedProgramURL(versionString: string, themeString: string, w
 */
 function getThemeFromString(themeQuery: ?string, defaultThemeName: ThemeName): ThemeName {
     switch (themeQuery) {
-        case('mixed'): return 'mixed';
+        case('default'): return 'default';
         case('dark'): return 'dark';
         case('light'): return 'light';
         case('gray'): return 'gray';
@@ -88,7 +88,7 @@ function extend(...toMerge:Object) {
 
 function focusByQuerySelector (selectors: string) {
     const element = document.querySelector(selectors);
-    if (element) {
+    if (element && element.focus) {
         element.focus();
     }
 }

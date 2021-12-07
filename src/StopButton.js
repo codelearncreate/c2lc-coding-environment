@@ -1,10 +1,10 @@
 // @flow
 
 import React from 'react';
-import AriaDisablingButton from './AriaDisablingButton';
 import classNames from 'classnames';
 import { injectIntl } from 'react-intl';
 import type { IntlShape } from 'react-intl';
+import IconButton from './IconButton';
 import { ReactComponent as StopIcon } from './svg/Stop.svg';
 import './StopButton.scss';
 
@@ -22,15 +22,15 @@ class StopButton extends React.Component<StopButtonProps, {}> {
             'StopButton'
         );
         return (
-            <AriaDisablingButton
-                aria-label={`${this.props.intl.formatMessage({id:'StopButton'})}`}
+            <IconButton
+                ariaLabel={`${this.props.intl.formatMessage({id:'StopButton'})}`}
                 className={classes}
                 disabledClassName='StopButton--disabled'
                 disabled={this.props.disabled}
                 onClick={this.props.onClick}
             >
                 <StopIcon className='StopButton-svg' />
-            </AriaDisablingButton>
+            </IconButton>
         );
     }
 }

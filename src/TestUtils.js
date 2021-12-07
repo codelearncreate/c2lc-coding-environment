@@ -22,4 +22,11 @@ function makeKeyDownEvent(currentTarget: {}, key: string): {} {
     };
 }
 
-export { makeBlurEvent, makeChangeEvent, makeKeyDownEvent };
+function makeTestDiv() {
+    const div = document.createElement('div');
+    // $FlowFixMe: document.body may be null, no need to handle
+    document.body.appendChild(div);
+    return div;
+}
+
+export { makeBlurEvent, makeChangeEvent, makeKeyDownEvent, makeTestDiv };
