@@ -281,6 +281,11 @@ export class ProgramBlockEditor extends React.Component<ProgramBlockEditorProps,
 
     handleClickStep = (e: SyntheticEvent<HTMLButtonElement>) => {
         const index = parseInt(e.currentTarget.dataset.stepnumber, 10);
+
+        // Required to ensure that Safari focuses on the step.  See:
+        // https://bugs.webkit.org/show_bug.cgi?id=13724
+        this.focusCommandBlockIndex = index;
+
         // Open or close the ActionPanel
         if (this.props.actionPanelStepIndex === index) {
             // The ActionPanel is already open for this program step, close it
