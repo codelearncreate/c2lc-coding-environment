@@ -3,17 +3,6 @@
 import * as React from 'react';
 import type { ThemeName } from './types';
 
-// BlueBot
-import { ReactComponent as BlueBotRWorld } from './svg/BlueBotRWorld.svg';
-import { ReactComponent as BlueBotRWorldGray } from './svg/BlueBotRWorldGray.svg';
-import { ReactComponent as BlueBotRWorldContrast } from './svg/BlueBotRWorldContrast.svg';
-import { ReactComponent as BlueBotRThumbnail } from './svg/BlueBotRThumbnail.svg';
-import { ReactComponent as BlueBotRThumbnailGray } from './svg/BlueBotRThumbnailGray.svg';
-import { ReactComponent as BlueBotRThumbnailContrast } from './svg/BlueBotRThumbnailContrast.svg';
-import { ReactComponent as Bot } from './svg/Bot.svg';
-import { ReactComponent as BotGray } from './svg/BotGray.svg';
-import { ReactComponent as BotContrast } from './svg/BotContrast.svg';
-
 // DeepOcean
 import { ReactComponent as DeepOcean } from './svg/DeepOcean.svg';
 import { ReactComponent as DeepOceanGray } from './svg/DeepOcean-gray.svg';
@@ -35,6 +24,17 @@ import { ReactComponent as JungleThumbnailContrast } from './svg/JungleThumbnail
 import { ReactComponent as SafariJeep } from './svg/SafariJeep.svg';
 import { ReactComponent as SafariJeepGray } from './svg/SafariJeep-gray.svg';
 import { ReactComponent as SafariJeepContrast } from './svg/SafariJeep-contrast.svg';
+
+// Landmarks
+import { ReactComponent as LandmarksWorld } from './svg/LandmarksWorld.svg';
+import { ReactComponent as LandmarksWorldGray } from './svg/LandmarksWorldGray.svg';
+import { ReactComponent as LandmarksWorldContrast } from './svg/LandmarksWorldContrast.svg';
+import { ReactComponent as LandmarksThumbnail } from './svg/LandmarksThumbnail.svg';
+import { ReactComponent as LandmarksThumbnailGray } from './svg/LandmarksThumbnailGray.svg';
+import { ReactComponent as LandmarksThumbnailContrast } from './svg/LandmarksThumbnailContrast.svg';
+import { ReactComponent as Bot } from './svg/Bot.svg';
+import { ReactComponent as BotGray } from './svg/BotGray.svg';
+import { ReactComponent as BotContrast } from './svg/BotContrast.svg';
 
 // Sketchpad
 import { ReactComponent as SketchpadThumbnail } from './svg/SketchpadThumbnail.svg';
@@ -72,54 +72,12 @@ export type WorldProperties = {|
 |};
 
 const worlds: {|
-    'BlueBotR': WorldProperties,
     'DeepOcean': WorldProperties,
     'Jungle': WorldProperties,
+    'Landmarks': WorldProperties,
     'Sketchpad': WorldProperties,
     'Space': WorldProperties
 |} = {
-    'BlueBotR': {
-        background: BlueBotRWorld,
-        backgroundGray: BlueBotRWorldGray,
-        backgroundContrast: BlueBotRWorldContrast,
-        backgroundInfo : {
-            A1: 'plane',
-            A4: 'easterIsland',
-            A6: 'leaningTowerPisa',
-            B3: 'greatSphinx',
-            B8: 'stonehenge',
-            C2: 'greatPyramid',
-            C7: 'eiffelTower',
-            D5: 'fairyChimneys',
-            E2: 'colosseum',
-            E7: 'tajMahal',
-            F4: 'burAlArab',
-            F8: 'statueLiberty',
-            G1: 'floatingMarket',
-            G6: 'greatWall',
-            H3: 'windmill',
-            H5: 'cnTower',
-            I2: 'tableMountain',
-            I8: 'tokyoTower',
-            J4: 'niagaraFalls',
-            J6: 'grandCanyon',
-            K3: 'bigBen',
-            K7: 'operaHouse',
-            L1: 'machuPiccu',
-            L5: 'stBasils',
-            L8: 'train'
-        },
-        thumbnail: BlueBotRThumbnail,
-        thumbnailDark: BlueBotRThumbnail,
-        thumbnailGray: BlueBotRThumbnailGray,
-        thumbnailContrast: BlueBotRThumbnailContrast,
-        character: Bot,
-        characterGray: BotGray,
-        characterContrast: BotContrast,
-        startingX: 1,
-        startingY: 2,
-        startingDirection: 2 // East
-    },
     'DeepOcean': {
         background: DeepOcean,
         backgroundGray: DeepOceanGray,
@@ -216,6 +174,48 @@ const worlds: {|
         character: SafariJeep,
         characterGray: SafariJeepGray,
         characterContrast: SafariJeepContrast,
+        startingX: 1,
+        startingY: 2,
+        startingDirection: 2 // East
+    },
+    'Landmarks': {
+        background: LandmarksWorld,
+        backgroundGray: LandmarksWorldGray,
+        backgroundContrast: LandmarksWorldContrast,
+        backgroundInfo : {
+            A1: 'plane',
+            A4: 'easterIsland',
+            A6: 'leaningTowerPisa',
+            B3: 'greatSphinx',
+            B8: 'stonehenge',
+            C2: 'greatPyramid',
+            C7: 'eiffelTower',
+            D5: 'fairyChimneys',
+            E2: 'colosseum',
+            E7: 'tajMahal',
+            F4: 'burAlArab',
+            F8: 'statueLiberty',
+            G1: 'floatingMarket',
+            G6: 'greatWall',
+            H3: 'windmill',
+            H5: 'cnTower',
+            I2: 'tableMountain',
+            I8: 'tokyoTower',
+            J4: 'niagaraFalls',
+            J6: 'grandCanyon',
+            K3: 'bigBen',
+            K7: 'operaHouse',
+            L1: 'machuPiccu',
+            L5: 'stBasils',
+            L8: 'train'
+        },
+        thumbnail: LandmarksThumbnail,
+        thumbnailDark: LandmarksThumbnail,
+        thumbnailGray: LandmarksThumbnailGray,
+        thumbnailContrast: LandmarksThumbnailContrast,
+        character: Bot,
+        characterGray: BotGray,
+        characterContrast: BotContrast,
         startingX: 1,
         startingY: 2,
         startingDirection: 2 // East
