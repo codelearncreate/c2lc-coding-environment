@@ -205,7 +205,7 @@ const worlds: {|
             J6: 'grandCanyon',
             K3: 'bigBen',
             K7: 'operaHouse',
-            L1: 'machuPiccu',
+            L1: 'machuPicchu',
             L5: 'stBasils',
             L8: 'train'
         },
