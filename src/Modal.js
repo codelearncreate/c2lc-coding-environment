@@ -72,7 +72,7 @@ class Modal extends React.Component<ModalProps, {}> {
         if (element.type === 'radio' && !element.checked) {
             return false;
         }
-        if (element.focus) {
+        if ((element.focus && ((element.tabIndex == null) || (element.tabIndex >= 0)))) {
             element.focus();
         }
         this.ignoreFocusChanges = false;

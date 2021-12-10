@@ -168,4 +168,30 @@ describe('Focus logic', () => {
         // make sure to detach after attach
         wrapper.detach();
     });
+    test('Does not focus when element has explicit tabIndex less than 0', () => {
+        expect.assertions(3);
+        const wrapper = mount(
+            <Modal
+                show={false}
+                focusOnOpenSelector='.focusElement'
+                focusOnCloseSelector='.onCloseElement'
+                onClose={() => {}}>
+                <div>
+                    <button tabIndex='-1' className='button1'>button1</button>
+                    <button className='button2'>button2</button>
+                    <button className='button3'>button3</button>
+                </div>
+            </Modal>,
+            {attachTo: makeTestDiv()}
+        );
+        const modalContainer = findModalContainer(wrapper);
+        // Focus event is fired on the modal container
+        modalContainer.simulate('focus');
+        expect(wrapper.find('.button1').is(':focus')).toBe(false);
+        expect(wrapper.find('.button2').is(':focus')).toBe(true);
+        modalContainer.simulate('focus');
+        expect(wrapper.find('.button3').is(':focus')).toBe(true);
+        // make sure to detach after attach
+        wrapper.detach();
+    });
 });

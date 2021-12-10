@@ -15,7 +15,7 @@ configure({ adapter: new Adapter() });
 const defaultSceneProps = {
     dimensions: new SceneDimensions(1, 1, 1, 1),
     characterState: new CharacterState(0, 0, 2, [], new SceneDimensions(1, 1, 1, 1)),
-    theme: 'mixed',
+    theme: 'default',
     world: 'Sketchpad'
 };
 

@@ -17,6 +17,7 @@ test('Test URL encoding', () => {
 test('Test getThemeFromString', () => {
     expect(getThemeFromString('', 'light')).toBe('light');
     expect(getThemeFromString(null, 'light')).toBe('light');
+    expect(getThemeFromString('UNKNOWN', 'light')).toBe('light');
     expect(getThemeFromString('light', 'light')).toBe('light');
     expect(getThemeFromString('dark', 'light')).toBe('dark');
     expect(getThemeFromString('contrast', 'light')).toBe('contrast');

@@ -11,7 +11,7 @@ configure({ adapter: new Adapter() });
 
 const defaultWorldSelectorProps = {
     currentWorld: 'Sketchpad',
-    theme: 'mixed',
+    theme: 'default',
     show: true
 };
 
