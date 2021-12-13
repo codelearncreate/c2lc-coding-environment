@@ -1,8 +1,13 @@
 .ModalHeader {
     background-color: #F1F2F4;
-    border-radius: 0.3rem;
+    border-radius: 0.3rem 0.3rem 0 0;
     display: flex;
     column-gap: 0.5rem;
     align-items: center;
     padding: 1.2rem 0 1.2rem 1rem;
+}
+
+.ModalHeader > svg {
+    width: 2rem;
+    height: 2rem;
 }

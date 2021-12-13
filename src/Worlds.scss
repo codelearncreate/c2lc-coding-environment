@@ -1,3 +1,121 @@
+/* Landmarks */
+
+.Character-background--Landmarks {
+    fill: #FFE5B4;
+    stroke: none;
+}
+
+.CharacterPositionController__character-column-character-container--Landmarks,
+.ProgramBlockEditor__character-column-character-container--Landmarks {
+    background-color: #FFE5B4;
+}
+
+.Scene__grid-line--Landmarks {
+    stroke: #F9F2EC;
+}
+
+.Scene__path-line--Landmarks {
+    stroke: #784234;
+}
+
+.WorldSelector__option-image--Landmarks:hover {
+    svg {
+        .thumbnail-background {
+            fill: #BCA490;
+        }
+        .thumbnail-background-item-2 {
+            fill: #CEAF95
+        }
+        .thumbnail-background-item {
+            fill: #9C7D63;
+        }
+    }
+}
+
+body.gray-theme {
+    .Character-background--Landmarks {
+        fill: #505862;
+        stroke: none;
+    }
+    
+    .CharacterPositionController__character-column-character-container--Landmarks,
+    .ProgramBlockEditor__character-column-character-container--Landmarks {
+        background-color: #505862;
+    }
+    
+    .Scene__grid-line--Landmarks {
+        stroke: #FFFFFF;
+    }
+    
+    .Scene__path-line--Landmarks {
+        stroke: #505862;
+    }
+    
+    .WorldSelector__option-image--Landmarks:hover {
+        svg {
+            .thumbnail-background {
+                fill: #9DA0A6;
+            }
+            .thumbnail-background-item-2 {
+                fill: #828892
+            }
+            .thumbnail-background-item {
+                fill: #656B72;
+            }
+        }
+    }
+}
+
+body.contrast-theme {
+    .Character-background--Landmarks {
+        fill: #FFFFFF;
+        stroke: none;
+    }
+
+    .CharacterPositionController__character-column-character-container--Landmarks,
+    .ProgramBlockEditor__character-column-character-container--Landmarks {
+        background-color: #FFFFFF;
+    }
+
+    .Scene__grid-line--Landmarks {
+        stroke: #0078FF;
+    }
+
+    .Scene__path-line--Landmarks {
+        stroke: #FF0000;
+    }
+
+    .WorldSelector__option-image--Landmarks:hover {
+        svg {
+            .thumbnail-background {
+                fill: #1E1E1E;
+            }
+            .thumbnail-background-item {
+                fill: #FFFFFF;
+            }
+            .thumbnail-character-body {
+                fill: #FFFFFF;
+            }
+            .thumbnail-character-eye {
+                fill: #1E1E1E;
+                stroke: #FFFFFF;
+            }
+            .thumbnail-character-eye-pupil {
+                fill: #FFFFFF;
+            }
+            .thumbnail-character-outline {
+                fill: #1E1E1E;
+            }
+            .thumbnail-character-stripe {
+                fill: #1E1E1E;
+            }
+            .thumbnail-character-wing {
+                fill: #FFFFFF;
+            }
+        }
+    }
+}
+
 /* DeepOcean */
 
 .Character-background--DeepOcean {

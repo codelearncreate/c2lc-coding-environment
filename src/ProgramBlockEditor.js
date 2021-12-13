@@ -9,10 +9,10 @@ import CharacterState from './CharacterState';
 import ConfirmDeleteAllModal from './ConfirmDeleteAllModal';
 import AddNode from './AddNode';
 import ActionPanel from './ActionPanel';
-import AriaDisablingButton from './AriaDisablingButton';
 import FocusTrapManager from './FocusTrapManager';
 import CommandBlock from './CommandBlock';
 import classNames from 'classnames';
+import IconButton from './IconButton';
 import ProgramSequence from './ProgramSequence';
 import ToggleSwitch from './ToggleSwitch';
 import { ReactComponent as AddIcon } from './svg/Add.svg';
@@ -552,8 +552,8 @@ export class ProgramBlockEditor extends React.Component<ProgramBlockEditorProps,
                             className='ProgramBlockEditor__add-node-toggle-switch'
                         />
                         <span className='ProgramBlockEditor__program-deleteAll'>
-                            <AriaDisablingButton
-                                aria-label={this.props.intl.formatMessage({id:'ProgramBlockEditor.program.deleteAll'})}
+                            <IconButton
+                                ariaLabel={this.props.intl.formatMessage({id:'ProgramBlockEditor.program.deleteAll'})}
                                 className='ProgramBlockEditor__program-deleteAll-button'
                                 disabledClassName='ProgramBlockEditor__program-deleteAll-button--disabled'
                                 disabled={this.props.editingDisabled}
@@ -561,7 +561,7 @@ export class ProgramBlockEditor extends React.Component<ProgramBlockEditorProps,
                                 key='deleteButton'
                             >
                                 <DeleteAllIcon className='ProgramBlockEditor__program-deleteAll-button-svg'/>
-                            </AriaDisablingButton>
+                            </IconButton>
                         </span>
                     </div>
                 </div>

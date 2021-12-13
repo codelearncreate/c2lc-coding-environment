@@ -36,30 +36,16 @@ body {
     flex-direction: column;
 }
 
-.App__header-keyboardMenuIcon {
-    align-content: center;
-    align-self: center;
-    border-radius: 50%;
-    background-color: #4C9990;
-    font-size: 1.6rem;
-    text-align: center;
-    vertical-align: middle;
-    margin-bottom: 0.5rem;
-    height: 2.6rem;
-    width: 2.6rem;
-
-    &:hover {
-        background-color: #F1AE5B;
-    }
-
-    &:focus {
-        box-shadow: 0 0 0 $c2lc-focus-indicator-width black;
-        outline: none;
-    }
-}
-
-.App__header-keyboardMenuIcon--disabled {
-    background-color: #B9BEC6;
+.App__header-menu {
+    // Uncomment background-color and border radius later when we change all the setting
+    // menu items as buttons
+    // background-color: #CCE6E2;
+    // border-radius: 3px;
+    display: grid;
+    grid-template-columns: min-content min-content;
+    justify-content: center;
+    column-gap: 0.5rem;
+    padding: 0.5rem 0;
 }
 
 .App__header-audio-toggle {
@@ -103,27 +89,11 @@ body {
     grid-row-start: 1;
     grid-row-end: 3;
     min-height: 12rem;
-    min-width: 19.5rem;
+    min-width: 19.5rem; 
 }
 
-.App__scene-controls {
-    position: absolute;
-    z-index: 1;
-    bottom: 2rem;
-    right: 2rem;
-    display: grid;
-    grid-template-columns: 1fr;
-}
-
-.App__scene-controls-group {
-    display: flex;
-    align-items: center;
-    justify-self: end;
-    margin: auto 0;
-}
-
-.App__refreshButton-container {
-    margin-left: 1.5rem;
+.App__PenDownToggleSwitch-container {
+    margin: 1rem auto;
 }
 
 .App__world-container {
@@ -135,7 +105,7 @@ body {
     border-radius: 3px;
     margin-right: 0.5rem;
     margin-top: 0.25rem;
-    grid-template-rows: 1fr min-content;
+    grid-template-rows: 1fr min-content min-content;
     background-color: #CCE6E2;
 }
 
@@ -143,6 +113,45 @@ body {
     display: flex;
     flex-direction: column;
     margin-top: 1rem;
+    border-bottom: 1px solid #88C3BC;
+}
+
+.App__ActionsMenu__header {
+    background-color: #CCE6E2;
+    display: grid;
+    grid-template-columns: min-content 1fr;
+    padding: 0.4rem;
+    padding-left: 1.2rem;
+    padding-right: 1.2rem;
+    position:relative;
+}
+
+.App__ActionsMenu__header-heading {
+    font-size: inherit;
+    font-weight: bold;
+    grid-column-end: 2;
+    grid-column-start: 1;
+    margin: auto;
+}
+
+.App__ActionsMenu__toggle-button {
+    align-self: center;
+    grid-column-end: 4;
+    grid-column-start: 3;
+    justify-self: center;
+    width: 1.4em;
+    padding: 0.2rem;
+    border-radius: 5px;
+   
+    &:focus {
+        box-shadow:
+            0 0 0 0.1rem black;
+        outline: none;
+    }
+
+    svg {
+        height: 0.75rem;
+    }
 }
 
 .App__command-palette {
@@ -195,7 +204,7 @@ body {
 }
 
 .App__playAndShare-background {
-    background-color: #D5D8DD;
+    background-color: #67717E;
     grid-column-start: 1;
     grid-column-end: 6;
     grid-row-start: 4;
@@ -224,11 +233,16 @@ body {
 
 .App__playButton-container {
     display: flex;
+    gap: 0.5rem;
 }
 
 .App__playControlButton {
     margin-right: 1.5rem;
+    &.StopButton {
+        margin-right: 1.9rem;
+    }
 }
+
 
 .App__shareButton-container {
     align-items: flex-end;

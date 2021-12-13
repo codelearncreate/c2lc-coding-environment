@@ -1,8 +1,8 @@
 // @flow
 import React from 'react';
-import ModalFooter from './ModalFooter';
 import ModalHeader from './ModalHeader';
-import { Modal } from 'react-bootstrap';
+import ModalBody from './ModalBody';
+import ModalWithFooter from './ModalWithFooter';
 import { injectIntl, FormattedMessage } from 'react-intl';
 import type {IntlShape} from 'react-intl';
 
@@ -10,7 +10,6 @@ import type {KeyDef, KeyboardInputScheme, KeyboardInputSchemeName} from './Keybo
 import {KeyboardInputSchemes, getLabelMessageKeyFromKeyDef, getIconMessageKeyFromKeyDef} from './KeyboardInputSchemes';
 
 import ToggleSwitch from './ToggleSwitch';
-import { focusByQuerySelector } from './Utils';
 
 import { ReactComponent as KeyboardIcon} from './svg/Keyboard.svg'
 
@@ -175,64 +174,73 @@ class KeyboardInputModal extends React.Component<KeyboardInputModalProps, Keyboa
 
         return (<select
             className="KeyboardInputModal__content__schemeDropdown"
-            defaultValue={this.state.keyboardInputSchemeName}
-            disabled={!this.state.keyBindingsEnabled}
+            value={this.state.keyboardInputSchemeName}
             onChange={this.handleChangeKeyboardInputSchemeName}>
             {selectOptionElements}
         </select>);
     }
 
     render () {
+        const cancelButtonProperties = {
+            label: this.props.intl.formatMessage({id: 'KeyboardInputModal.Cancel'}),
+            onClick: this.cancelChanges
+        };
+
+        const doneButtonProperties = {
+            id: 'KeyboardInputModal-done',
+            label: this.props.intl.formatMessage({id: 'KeyboardInputModal.Save'}),
+            onClick: this.saveChanges,
+            isPrimary: true
+        };
+
         return(
-            <Modal
-                aria-labelledby='KeyboardInputModal'
-                onHide={this.cancelChanges}
+            <ModalWithFooter
+                ariaLabel={this.props.intl.formatMessage({ id: 'KeyboardInputModal.Title' })}
+                onClose={this.cancelChanges}
                 show={this.props.show}
-                dialogClassName='KeyboardInputModal'
+                focusOnOpenSelector={'#keyboardInputModal__toggle'}
+                focusOnCloseSelector={'.focus-keyboardMenuIcon'}
+                buttonProperties={[cancelButtonProperties, doneButtonProperties]}
             >
                 <ModalHeader
                     id='KeyboardInputModal'
-                    title={this.props.intl.formatMessage({
-                        id: 'KeyboardInputModal.Title'
-                    })}>
+                    title={this.props.intl.formatMessage({ id: 'KeyboardInputModal.Title' })}>
                     <KeyboardIcon aria-hidden='true'/>
                 </ModalHeader>
-                <Modal.Body className='KeyboardInputModal__content'>
-                    <div className="KeyboardInputModal__content__toggleBar">
-                        <div className="KeyboardInputModal__content__toggleBar__label">
-                            <FormattedMessage id='KeyboardInputModal.Toggle.Label'/>
-                        </div>
-                        <div className="KeyboardInputModal__content__toggleBar__toggle">
-                            <div>
-                                <FormattedMessage id='KeyboardInputModal.Toggle.Off'/>
+
+                <ModalBody>
+                    <div className='KeyboardInputModal__content'>
+                        <div className="KeyboardInputModal__content__toggleBar">
+                            <div className="KeyboardInputModal__content__toggleBar__label">
+                                <FormattedMessage id='KeyboardInputModal.Toggle.Label'/>
                             </div>
-                            <ToggleSwitch
-                                id='keyboardInputModal__toggle'
-                                ariaLabel={this.props.intl.formatMessage({id: "KeyboardInputModal.Toggle.AriaLabel"})}
-                                className="KeyboardInputModal__content__toggle"
-                                contentsTrue=""
-                                contentsFalse=""
-                                value={this.state.keyBindingsEnabled}
-                                onChange={this.handleChangeKeyBindingsEnabled}
-                            />
-                            <div>
-                                <FormattedMessage id='KeyboardInputModal.Toggle.On'/>
+                            <div className="KeyboardInputModal__content__toggleBar__toggle">
+                                <div>
+                                    <FormattedMessage id='KeyboardInputModal.Toggle.Off'/>
+                                </div>
+                                <ToggleSwitch
+                                    id='keyboardInputModal__toggle'
+                                    ariaLabel={this.props.intl.formatMessage({id: "KeyboardInputModal.Toggle.AriaLabel"})}
+                                    className="KeyboardInputModal__content__toggle"
+                                    contentsTrue=""
+                                    contentsFalse=""
+                                    value={this.state.keyBindingsEnabled}
+                                    onChange={this.handleChangeKeyBindingsEnabled}
+                                />
+                                <div>
+                                    <FormattedMessage id='KeyboardInputModal.Toggle.On'/>
+                                </div>
                             </div>
                         </div>
+
+                        {this.renderKeyboardSchemeMenu()}
+
+                        <ul className="KeyboardInputModal__content__list">
+                            {this.renderKeyBindings()}
+                        </ul>
                     </div>
-
-                    {this.renderKeyboardSchemeMenu()}
-
-                    <ul className={"KeyboardInputModal__content__list" + (this.state.keyBindingsEnabled ? "": " KeyboardInputModal__content__list--disabled")}>
-                        {this.renderKeyBindings()}
-                    </ul>
-                    <ModalFooter
-                        hasCancel={true}
-                        onClickCancel={this.cancelChanges}
-                        onClickDone={this.saveChanges}
-                    />
-                </Modal.Body>
-            </Modal>);
+                </ModalBody>
+            </ModalWithFooter>);
     }
 
     // Required to avoid a phantom state where we persist the defaults even after they are updated from local storage.
@@ -242,9 +250,6 @@ class KeyboardInputModal extends React.Component<KeyboardInputModalProps, Keyboa
                 keyBindingsEnabled: this.props.keyBindingsEnabled,
                 keyboardInputSchemeName: this.props.keyboardInputSchemeName
             });
-        }
-        if (prevProps.show !== this.props.show && this.props.show) {
-            focusByQuerySelector('#keyboardInputModal__toggle');
         }
     }
 }

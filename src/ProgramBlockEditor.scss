@@ -73,56 +73,26 @@
     }
 }
 
-button.btn.ProgramBlockEditor__program-deleteAll-button {
-    background-color: #4C9990;
-    border: none;
-    border-radius: 50%;
-    box-shadow: none;
+.ProgramBlockEditor__program-deleteAll-button {
     margin-left: 1.5rem;
-    padding: 0.5rem;
-
-    &:focus {
-        box-shadow: 0 0 0 $c2lc-focus-indicator-width black;
-    }
 }
 
-button.btn.ProgramBlockEditor__program-deleteAll-button--pressed {
-    background-color: #000;
-}
-
-button.btn.ProgramBlockEditor__program-deleteAll-button.ProgramBlockEditor__program-deleteAll-button--disabled,
-button.btn.ProgramBlockEditor__program-deleteAll-button.ProgramBlockEditor__program-deleteAll-button--disabled:hover,
-button.btn.ProgramBlockEditor__program-deleteAll-button.ProgramBlockEditor__program-deleteAll-button--disabled:active {
-    background-color: $c2lc-disabled-background-color;
-    cursor: default;
-}
-
-button.btn.ProgramBlockEditor__program-deleteAll-button--pressed.ProgramBlockEditor__program-deleteAll-button--disabled,
-button.btn.ProgramBlockEditor__program-deleteAll-button--pressed.ProgramBlockEditor__program-deleteAll-button--disabled:active:focus {
-    background-color: $c2lc-disabled-background-color;
-}
 
 .ProgramBlockEditor__program-deleteAll-button svg {
     stroke: #000;
 }
 
-button.btn.ProgramBlockEditor__program-deleteAll-button--disabled svg {
+.ProgramBlockEditor__program-deleteAll-button--disabled svg {
     stroke: $c2lc-disabled-foreground-color;
 }
 
-button.btn.ProgramBlockEditor__program-deleteAll-button:hover {
+.ProgramBlockEditor__program-deleteAll-button:hover:not(.ProgramBlockEditor__program-deleteAll-button--disabled) {
     background-color: #F1AE5B;
-}
-
-button.btn.ProgramBlockEditor__program-deleteAll-button--pressed svg,
-button.btn.ProgramBlockEditor__program-deleteAll-button--pressed.ProgramBlockEditor__program-deleteAll-button--disabled svg {
-    stroke: #FFF;
 }
 
 .ProgramBlockEditor__program-deleteAll-button-svg {
     width: 1.4rem;
     height: 1.4rem;
-    display: block;
 }
 
 .ProgramBlockEditor__character-column {
