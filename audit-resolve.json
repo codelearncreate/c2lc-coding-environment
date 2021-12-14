@@ -1,0 +1,98 @@
+{
+  "decisions": {
+    "1005040|node-sass>node-gyp>tar": {
+      "decision": "ignore",
+      "madeAt": 1639470104279
+    },
+    "1005043|node-sass>node-gyp>tar": {
+      "decision": "ignore",
+      "madeAt": 1639470104279
+    },
+    "1005046|node-sass>node-gyp>tar": {
+      "decision": "ignore",
+      "madeAt": 1639470104279
+    },
+    "1005078|node-sass>node-gyp>tar": {
+      "decision": "ignore",
+      "madeAt": 1639470104279
+    },
+    "1005082|node-sass>node-gyp>tar": {
+      "decision": "ignore",
+      "madeAt": 1639470104279
+    },
+    "1006754|node-sass>meow>trim-newlines": {
+      "decision": "ignore",
+      "madeAt": 1639470104279
+    },
+    "1004946|node-sass>sass-graph>yargs>cliui>strip-ansi>ansi-regex": {
+      "decision": "ignore",
+      "madeAt": 1639470113774
+    },
+    "1004946|node-sass>sass-graph>yargs>cliui>string-width>strip-ansi>ansi-regex": {
+      "decision": "ignore",
+      "madeAt": 1639470113774
+    },
+    "1004946|node-sass>sass-graph>yargs>cliui>wrap-ansi>strip-ansi>ansi-regex": {
+      "decision": "ignore",
+      "madeAt": 1639470113774
+    },
+    "1004946|node-sass>sass-graph>yargs>cliui>wrap-ansi>string-width>strip-ansi>ansi-regex": {
+      "decision": "ignore",
+      "madeAt": 1639470113774
+    },
+    "1004946|node-sass>sass-graph>yargs>string-width>strip-ansi>ansi-regex": {
+      "decision": "ignore",
+      "madeAt": 1639470113774
+    },
+    "1004946|flow-coverage-report>flow-annotation-check>eslint>strip-ansi>ansi-regex": {
+      "decision": "ignore",
+      "madeAt": 1639470113774
+    },
+    "1004946|flow-coverage-report>flow-annotation-check>eslint>table>string-width>strip-ansi>ansi-regex": {
+      "decision": "ignore",
+      "madeAt": 1639470113774
+    },
+    "1004946|npm-audit-resolver>yargs-unparser>yargs>string-width>strip-ansi>ansi-regex": {
+      "decision": "ignore",
+      "madeAt": 1639470113774
+    },
+    "1004967|flow-coverage-report>@rpl/badge-up>svgo>css-select>nth-check": {
+      "decision": "ignore",
+      "madeAt": 1639470122125
+    },
+    "1004967|react-scripts>@svgr/webpack>@svgr/plugin-svgo>svgo>css-select>nth-check": {
+      "decision": "ignore",
+      "madeAt": 1639470122125
+    },
+    "1004967|react-scripts>optimize-css-assets-webpack-plugin>cssnano>cssnano-preset-default>postcss-svgo>svgo>css-select>nth-check": {
+      "decision": "ignore",
+      "madeAt": 1639470122125
+    },
+    "1005024|react-scripts>react-dev-utils>immer": {
+      "decision": "ignore",
+      "madeAt": 1639470127890
+    },
+    "1005029|react-scripts>react-dev-utils>immer": {
+      "decision": "ignore",
+      "madeAt": 1639470127890
+    },
+    "1005059|react-scripts>@pmmmwh/react-refresh-webpack-plugin>ansi-html": {
+      "decision": "ignore",
+      "madeAt": 1639470132279
+    },
+    "1005154|react-scripts>webpack>watchpack>watchpack-chokidar2>chokidar>glob-parent": {
+      "decision": "ignore",
+      "madeAt": 1639470135138
+    },
+    "1005154|react-scripts>webpack-dev-server>chokidar>glob-parent": {
+      "decision": "ignore",
+      "madeAt": 1639470135138
+    },
+    "1005174|react-scripts>react-dev-utils>browserslist": {
+      "decision": "ignore",
+      "madeAt": 1639470140071
+    }
+  },
+  "rules": {},
+  "version": 1
+}

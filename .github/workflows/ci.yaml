@@ -26,11 +26,10 @@ jobs:
           node --version
           echo NPM:
           npm --version
-      - name: NPM audit
-        continue-on-error: true
-        run: npm audit
       - name: NPM install (ci)
         run: npm ci
+      - name: Security audit
+        run: $(npm bin) check-audit
       - name: Lint
         run: npx eslint .
       - name: Build
@@ -47,7 +46,7 @@ jobs:
           path: flow-coverage/
       - name: Test
         run: npm test -- --verbose --coverage
-      - name: Archive Test Code Coverage Report
+a      - name: Archive Test Code Coverage Report
         continue-on-error: true
         uses: actions/upload-artifact@v2
         with:
