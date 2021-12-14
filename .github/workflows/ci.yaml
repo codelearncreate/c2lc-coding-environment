@@ -29,7 +29,7 @@ jobs:
       - name: NPM install (ci)
         run: npm ci
       - name: Security audit
-        run: $(npm bin) check-audit
+        run: $(npm bin)/check-audit
       - name: Lint
         run: npx eslint .
       - name: Build
