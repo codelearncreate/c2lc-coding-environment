@@ -46,7 +46,7 @@ jobs:
           path: flow-coverage/
       - name: Test
         run: npm test -- --verbose --coverage
-a      - name: Archive Test Code Coverage Report
+      - name: Archive Test Code Coverage Report
         continue-on-error: true
         uses: actions/upload-artifact@v2
         with:
