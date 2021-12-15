@@ -1,8 +1,7 @@
 /* Landmarks */
 
 .Character-background--Landmarks {
-    fill: #FFE5B4;
-    stroke: none;
+    opacity: 0;
 }
 
 .CharacterPositionController__character-column-character-container--Landmarks,
@@ -34,8 +33,7 @@
 
 body.gray-theme {
     .Character-background--Landmarks {
-        fill: #505862;
-        stroke: none;
+        opacity: 0;
     }
     
     .CharacterPositionController__character-column-character-container--Landmarks,
@@ -68,8 +66,7 @@ body.gray-theme {
 
 body.contrast-theme {
     .Character-background--Landmarks {
-        fill: #FFFFFF;
-        stroke: none;
+        opacity: 0;
     }
 
     .CharacterPositionController__character-column-character-container--Landmarks,
