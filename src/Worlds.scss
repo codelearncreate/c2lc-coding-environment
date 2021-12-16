@@ -32,10 +32,6 @@
 }
 
 body.gray-theme {
-    .Character-background--Landmarks {
-        opacity: 0;
-    }
-    
     .CharacterPositionController__character-column-character-container--Landmarks,
     .ProgramBlockEditor__character-column-character-container--Landmarks {
         background-color: #505862;
@@ -65,10 +61,6 @@ body.gray-theme {
 }
 
 body.contrast-theme {
-    .Character-background--Landmarks {
-        opacity: 0;
-    }
-
     .CharacterPositionController__character-column-character-container--Landmarks,
     .ProgramBlockEditor__character-column-character-container--Landmarks {
         background-color: #FFFFFF;
