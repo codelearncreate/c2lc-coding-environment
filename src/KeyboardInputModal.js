@@ -199,7 +199,7 @@ class KeyboardInputModal extends React.Component<KeyboardInputModalProps, Keyboa
                 onClose={this.cancelChanges}
                 show={this.props.show}
                 focusOnOpenSelector={'#keyboardInputModal__toggle'}
-                focusOnCloseSelector={'.focus-keyboardMenuIcon'}
+                focusOnCloseSelector={'.App__header-keyboardMenuIcon'}
                 buttonProperties={[cancelButtonProperties, doneButtonProperties]}
             >
                 <ModalHeader
