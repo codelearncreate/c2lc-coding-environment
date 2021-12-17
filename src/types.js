@@ -17,14 +17,14 @@ export type EditorMode = 'text' | 'block';
 
     These theme names are shorthand for:
 
-    "mixed"    => A mixture of light and dark elements, with colour.
+    "default"  => A mixture of light and dark elements, with colour.
     "light"    => A light theme, with colour.
     "dark"     => A dark theme, with colour.
     "gray"     => A grayscale theme, without colour.
     "contrast" => A high-contrast black and white theme.
 
 */
-export type ThemeName = 'mixed' | 'light' | 'dark' | 'gray' | 'contrast';
+export type ThemeName = 'default' | 'light' | 'dark' | 'gray' | 'contrast';
 
 export type Program = Array<string>;
 
