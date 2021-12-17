@@ -100,11 +100,18 @@ class CharacterPositionController extends React.Component<CharacterPositionContr
     }
 
     getWorldCharacter() {
-        const transform = `rotate(${this.props.characterState.getDirectionDegrees() - 90} 0 0)`;
+        // We use a CSS approach because Safari doesn't support scale transforms whole svgs (and ignores the rotation
+        // if you include scaling in the transform).  See:
+        // https://stackoverflow.com/questions/48248512/svg-transform-rotate180-does-not-work-in-safari-11
+        const worldCharacterClassName = classNames(
+            'CharacterPositionController__character-column-character',
+            'CharacterPositionController__character-column-character--angle' + this.props.characterState.direction
+        );
+
         const character = getWorldCharacter(this.props.theme, this.props.world);
         return React.createElement(character, {
-            className: 'CharacterPositionController__character-column-character',
-            transform: transform
+            className: worldCharacterClassName,
+            transform: ""
         });
     }
 

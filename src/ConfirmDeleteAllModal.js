@@ -1,10 +1,12 @@
 // @flow
 
 import React from 'react';
-import { Button, Modal } from 'react-bootstrap';
+import ModalBody from './ModalBody';
+import ModalHeader from './ModalHeader';
+import ModalWithFooter from './ModalWithFooter';
 import { injectIntl, FormattedMessage } from 'react-intl';
 import type {IntlShape} from 'react-intl';
-import { ReactComponent as ErrorIcon } from './svg/Error.svg';
+import { ReactComponent as DeleteIcon } from './svg/Delete.svg';
 import './ConfirmDeleteAllModal.scss';
 
 type ConfirmDeleteAllModalProps = {
@@ -17,46 +19,32 @@ type ConfirmDeleteAllModalProps = {
 class ConfirmDeleteAllModal extends React.Component<ConfirmDeleteAllModalProps, {}> {
     render() {
         return (
-            <Modal
-                aria-labelledby='deleteAll-button'
+            <ModalWithFooter
                 show={this.props.show}
-                onHide={this.props.onCancel}
-                size='lg'
-                dialogClassName='ConfirmDeleteAllModal'
-                centered>
-                <Modal.Body className='ConfirmDeleteAllModal__content'>
-                    <div className='ConfirmDeleteAllModal__header'>
-                        <span role='img' aria-hidden='true' >
-                            <ErrorIcon className='ConfirmDeleteAllModal__warning-svg' />
-                        </span>
-                        <FormattedMessage id='ConfirmDeleteAllModal.title' />
+                focusOnOpenSelector={'#ConformDeleteAllModal-confirm'}
+                focusOnCloseSelector={'.ProgramBlockEditor__program-deleteAll-button'}
+                ariaLabel={this.props.intl.formatMessage({ id: 'ConfirmDeleteAllModal.title' })}
+                onClose={this.props.onCancel}
+                buttonProperties={
+                    [
+                        {label: this.props.intl.formatMessage({id: 'ConfirmDeleteAllModal.cancelButton'}), onClick: this.props.onCancel},
+                        {id: 'ConformDeleteAllModal-confirm', label: this.props.intl.formatMessage({id: 'ConfirmDeleteAllModal.confirmButton'}), onClick: this.props.onConfirm, isPrimary: true}
+                    ]
+                }>
+                <ModalHeader
+                    id='ConfirmDeleteAllModal'
+                    title={this.props.intl.formatMessage({
+                        id: 'ConfirmDeleteAllModal.title'
+                    })}>
+                    <DeleteIcon aria-hidden='true' />
+                </ModalHeader>
+                <ModalBody>
+                    <div className='ConfirmDeleteAllModal__content'>
+                        <FormattedMessage id='ConfirmDeleteAllModal.content' />
                     </div>
-                    <div className='ConfirmDeleteAllModal__footer'>
-                        <Button
-                            className='ConfirmDeleteAllModal__option-button cancel'
-                            onClick={this.props.onCancel}>
-                            <FormattedMessage id='ConfirmDeleteAllModal.cancelButton' />
-                        </Button>
-                        <Button
-                            id='deleteAll-button'
-                            className='ConfirmDeleteAllModal__option-button confirm'
-                            onClick={this.props.onConfirm}>
-                            <FormattedMessage id='ConfirmDeleteAllModal.confirmButton' />
-                        </Button>
-                    </div>
-                </Modal.Body>
-            </Modal>
+                </ModalBody>
+            </ModalWithFooter>
         );
-    }
-
-    componentDidUpdate (prevProps: ConfirmDeleteAllModalProps) {
-        if (prevProps.show !== this.props.show && this.props.show) {
-            // TODO: Implement a common function to set focus on an element with an id in Untils.js
-            const deleteAllButton = document.getElementById('deleteAll-button');
-            if (deleteAllButton) {
-                deleteAllButton.focus();
-            }
-        }
     }
 }
 

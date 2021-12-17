@@ -255,7 +255,7 @@ export default class AudioManagerImpl implements AudioManager {
 
             // Pan left/right to suggest the relative horizontal position.
             // As we use a single Sampler grade, our best option for panning is
-            // to pan all sounds.  We can discuss adjusting this once we have
+            // to pan all sounds. We can discuss adjusting this once we have
             // multiple sound-producing elements in the environment.
 
             // Limit the deviation from the centre so that there is always some sound in each speaker.

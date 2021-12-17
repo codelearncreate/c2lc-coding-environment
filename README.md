@@ -1,59 +1,64 @@
-# Coding to Learn and Create - Inclusive Coding Environment
+# Weavly
 
-The Inclusive Coding Environment is a new educational coding tool designed for learners with disabilities. The Environment can be used with a mouse, touchscreen, or keyboard, and supports assistive technologies such as screen readers. It is a web application that works in the Chrome browser.
+Weavly is a new educational coding tool designed for learners with
+disabilities. It can be used with a mouse, touchscreen, or keyboard,
+and supports assistive technologies such as screen readers. It is a web
+application that works in a browser.
 
-![inclusive coding environment UI](./inclusive-coding-env.png)
+![screenshot of Weavly](./inclusive-coding-env.png)
 
-To try the latest version of the Inclusive Coding Environment,
-visit our [coding environment online](https://build.codelearncreate.org/).
+To try the latest version, visit [Weavly online](https://create.weavly.org/).
 
 ## Installation for Developers
 
-Running this project requires [npm and Node.js](https://www.npmjs.com/get-npm); once you download or fork the source code, run npm install to get all required dependencies.
+Running this project requires [npm and Node.js](https://www.npmjs.com/get-npm).
+Many of the scripts used in Weavly require npx, which is included with
+npm 5.2.0 or higher. Once you download or fork the source code, you will need to
+install the required dependencies using the command:
 
-```
+```shell
 npm install
 ```
 
 ## Start the application
 
-```
+To start the app in development mode, use the command:
+
+```shell
 npm start
 ```
 
-Runs the app in the development mode. Open [http://localhost:3000](http://localhost:3000) to view it in the browser. The page will reload if you make edits. You will also see any lint errors in the console.
+A URL like [http://localhost:3000](http://localhost:3000) will be displayed in
+the console output, open that URL with a browser to see Weavly
+in action. The browser window will reload if you add or change files. You will
+also see any errors in the console (see [our Contributor's guide for details](./docs/contributing.md)).
 
 ## Testing
 
-```
+To run the tests for this project, use the command:
+
+```shell
 npm test
 ```
 
-Launches the test runner in the interactive watch mode. We are using the [Jest](https://jestjs.io/) and [Enzyme](https://airbnb.io/enzyme/) testing frameworks.
-
-## Static Type Check
-
-```
-npx flow
-```
-
-We are using flow as static type checker. Learn more about [flow](https://flow.org/).
+This launches the test runner in the interactive watch mode. We are using the
+[Jest](https://jestjs.io/) and [Enzyme](https://airbnb.io/enzyme/) testing
+frameworks. For more details, see [our Contributor's guide](./docs/contributing.md).
 
 ## Contributing
 
-Contributions are welcome! To get started, fork the main repository. In general, we try to always create an [issue](https://issues.fluidproject.org/projects/C2LC/issues) and a branch for each new change. Branches should be named after the issue number that they address (e.g. C2LC-#). Each commit message should begin with the issue number, and use singular present tense. For example, "C2LC-30: Update the README to include more information about how to contribute".
-
-Accessibility is an important part of our project. If you have any questions about accessibility, please feel free to ask questions. The [W3C's WCAG guidelines](https://www.w3.org/WAI/standards-guidelines/wcag/) are a good place to start learning about accessibility on the web.
-
-Before submitting pull requests, please make sure all static type checks and test cases are passing.
+Contributions are welcome! For more details about contributing, please see
+[our Contributor's guide](./docs/contributing.md).
 
 ## License
 
-The Inclusive Coding Environment is open source software, distributed under the [BSD-3](LICENSE.txt) license.
+Weavly is open source software, distributed under the [BSD-3](LICENSE.txt)
+license.
 
 ## Dependencies
 
-We would like to thank these amazing open source projects and libraries that we use in the Inclusive Coding Environment:
+We would like to thank these amazing open source projects and libraries that we
+use in Weavly:
 
 | Dependency | License |
 | :--------- | :------ |
@@ -65,4 +70,6 @@ We would like to thank these amazing open source projects and libraries that we 
 | [github.com/KyleAMathews/typefaces/tree/master/packages/roboto](https://github.com/KyleAMathews/typefaces/tree/master/packages/roboto) | MIT License |
 | [github.com/react-bootstrap/react-bootstrap](https://github.com/react-bootstrap/react-bootstrap) | MIT License |
 | [github.com/sass/node-sass](https://github.com/sass/node-sass) | MIT License |
-| [loading.io/](https://loading.io/) | [Loading.io Free License](https://loading.io/license/#free-license) |
+| [github.com/Tonejs/Tone.js](https://github.com/Tonejs/Tone.js) | [MIT License](https://github.com/Tonejs/Tone.js/blob/dev/LICENSE.md)|
+| [loading.io](https://loading.io/) | [Loading.io Free License](https://loading.io/license/#free-license) |
+| [WAI-ARIA Authoring Practices 1.1](https://www.w3.org/TR/wai-aria-practices-1.1/) | [W3C License](https://www.w3.org/Consortium/Legal/2015/copyright-software-and-document) |

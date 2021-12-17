@@ -10,6 +10,7 @@ import { ReactComponent as MovePreviousIcon } from './svg/MovePrevious.svg';
 import { ReactComponent as MoveNextIcon } from './svg/MoveNext.svg';
 import { ReactComponent as DeleteIcon } from './svg/Delete.svg';
 import { ReactComponent as ReplaceIcon } from './svg/replace.svg';
+import { focusByQuerySelector } from './Utils';
 import './ActionPanel.scss';
 
 type ActionPanelProps = {
@@ -155,10 +156,7 @@ class ActionPanel extends React.Component<ActionPanelProps, {}> {
         if (element && element.scrollIntoView) {
             element.scrollIntoView({ behavior: 'auto', block: 'nearest', inline: 'nearest' });
             if (this.props.focusedOptionName != null) {
-                const optionButtonRef = document.querySelector(`[name="${this.props.focusedOptionName}"]`);
-                if(optionButtonRef) {
-                    optionButtonRef.focus();
-                }
+                focusByQuerySelector(`[name="${this.props.focusedOptionName}"]`);
             }
         }
     }

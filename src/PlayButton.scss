@@ -3,22 +3,24 @@
 button.btn.PlayButton {
     margin-top: 0.5rem;
     margin-bottom: 0.5rem;
+    margin-right: 0.5rem;
     border: none;
     border-radius: 50%;
     background-color: transparent;
     padding: 0;
     padding-top: 0.05rem;
+
     svg circle {
-        fill: black;
+        fill: #1E1E1E;
     }
 
     svg path.triangle {
-        fill: black;
+        fill: #1E1E1E;
     }
 }
 
 button.btn.PlayButton:focus {
-    box-shadow: 0 0 0 $c2lc-focus-indicator-width $c2lc-focus-indicator-color;
+    box-shadow: 0 0 0 $c2lc-focus-indicator-width #FFFFFF;
 }
 
 button.btn.PlayButton:hover {
@@ -32,7 +34,7 @@ button.btn.PlayButton svg {
     width: 3.5rem;
 
     circle {
-        fill: #000;
+        fill: #1E1E1E;
     }
 }
 
@@ -42,11 +44,11 @@ button.btn.PlayButton--play.PlayButton--disabled {
 
     svg {
         path.triangle {
-            fill: #30444E;
+            fill: #67717E;
         }
 
         circle {
-            fill: #67717E;
+            fill: #9DA4AF;
         }
 
         path.inner-circle {
