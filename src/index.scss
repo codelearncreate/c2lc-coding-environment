@@ -142,3 +142,39 @@ button.btn.btn-command-block--right90:hover,
 button.btn.btn-command-block--right180:hover {
     background-color: $c2lc-right-command-hover-color;
 }
+
+
+// need to make play button rule complex to override React bootstrap button
+button.PlayControlButton:not(.PlayControlButton--disabled),
+button.PlayControlButton:not(.PlayControlButton--disabled):not(:disabled):not(.disabled):active,
+.IconButton.PlayControlButton:not(.PlayControlButton--disabled) {
+    background-color: #F97953;
+    box-shadow: inset 0 0 0 0.3rem #1E1E1E;
+    &:hover {
+        background-color: #F1AE5B;
+        box-shadow: inset 0 0 0 0.3rem #1E1E1E;
+    }
+    &:focus {
+        box-shadow: 
+            0 0 0 0.2rem #67717E,
+            0 0 0 0.4rem #FFFFFF,
+            inset 0 0 0 0.3rem #1E1E1E;
+    }
+}
+
+button.btn.PlayControlButton--disabled.PlayButton, 
+button.btn.PlayControlButton--disabled.PlayButton:not(:disabled):not(.disabled):active,
+.IconButton.PlayControlButton--disabled {
+    background-color: #B9BEC6;
+    box-shadow: inset 0 0 0 0.3rem #9DA4AF;
+    svg .playControls {
+        fill: #67717E;
+    }
+
+    &:focus {
+        box-shadow:
+            0 0 0 0.2rem #67717E,
+            0 0 0 0.4rem #FFFFFF,
+            inset 0 0 0 0.3rem #9DA4AF,
+    }
+}

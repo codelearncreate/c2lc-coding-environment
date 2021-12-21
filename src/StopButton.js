@@ -6,7 +6,6 @@ import { injectIntl } from 'react-intl';
 import type { IntlShape } from 'react-intl';
 import IconButton from './IconButton';
 import { ReactComponent as StopIcon } from './svg/Stop.svg';
-import './StopButton.scss';
 
 type StopButtonProps = {
     intl: IntlShape,
@@ -19,13 +18,14 @@ class StopButton extends React.Component<StopButtonProps, {}> {
     render() {
         const classes = classNames(
             this.props.className,
+            'PlayControlButton',
             'StopButton'
         );
         return (
             <IconButton
                 ariaLabel={`${this.props.intl.formatMessage({id:'StopButton'})}`}
                 className={classes}
-                disabledClassName='StopButton--disabled'
+                disabledClassName='StopButton--disabled PlayControlButton--disabled'
                 disabled={this.props.disabled}
                 onClick={this.props.onClick}
             >

@@ -322,21 +322,10 @@ body.light-theme {
         background-color: #D5D8DD;
     }
 
-    .RefreshButton {
-        &:focus {
-            box-shadow: 0 0 0 $c2lc-focus-indicator-width #1E1E1E;
-        }
-    }
-
     .RefreshButton--disabled svg {
         .refresh-icon {
             fill: #505862;
             stroke: #9DA4AF;        
-        }
-    
-        circle {
-            stroke: none;
-            fill: #67717E;
         }
 
         rect.refresh-icon {
@@ -345,40 +334,37 @@ body.light-theme {
         }
     }
 
-    button.btn.PlayButton:focus {
-        box-shadow: 0 0 0 $c2lc-focus-indicator-width $c2lc-focus-indicator-color;
-    }
-
-    button.btn.PlayButton--disabled {
-        svg {
-            circle {
-                fill: #67717E;
-            }
-            path.triangle {
-                fill: #505862;
-            }
+    button.PlayControlButton:not(.PlayControlButton--disabled),
+    button.PlayControlButton:not(.PlayControlButton--disabled):not(:disabled):not(.disabled):active,
+    .IconButton.PlayControlButton:not(.PlayControlButton--disabled) {
+        background-color: #F97953;
+        box-shadow: inset 0 0 0 0.3rem #1E1E1E;
+        &:hover {
+            background-color: #F1AE5B;
+            box-shadow: inset 0 0 0 0.3rem #1E1E1E;
+        }
+        &:focus {
+            box-shadow: 
+                0 0 0 0.2rem #D5D8DD,
+                0 0 0 0.4rem #1E1E1E,
+                inset 0 0 0 0.3rem #1E1E1E;
         }
     }
 
-    .StopButton:focus {
-        box-shadow:
-            0 0 0 0.2rem #1E1E1E,
-            0 0 0 0.4rem #D5D8DD,
-            0 0 0 0.6rem #1E1E1E;
-    }
-
-    .StopButton--disabled {
-        box-shadow: 0 0 0 0.2rem #67717E;
-
-        svg rect {
+    button.btn.PlayControlButton--disabled.PlayButton, 
+    button.btn.PlayControlButton--disabled.PlayButton:not(:disabled):not(.disabled):active,
+    .IconButton.PlayControlButton--disabled {
+        background-color: #B9BEC6;
+        box-shadow: inset 0 0 0 0.3rem #67717E;
+        svg .playControls {
             fill: #505862;
         }
 
         &:focus {
             box-shadow:
-                0 0 0 0.2rem #67717E,
-                0 0 0 0.4rem #D5D8DD,
-                0 0 0 0.6rem #1E1E1E;
+                0 0 0 0.2rem #D5D8DD,
+                0 0 0 0.4rem #1E1E1E,
+                inset 0 0 0 0.3rem #67717E,
         }
     }
 
@@ -1258,108 +1244,51 @@ body.gray-theme {
         background-color: #D5D8DD;
     }
 
-    .RefreshButton svg path:not(.refresh-icon) {
-        fill: white;
-    }
-
-    .RefreshButton--disabled,
-    .RefreshButton--disabled:hover,
-    .RefreshButton--disabled:focus {
-        svg path:not(.refresh-icon) {
-            fill: #D5D8DD;
+    button.PlayControlButton:not(.PlayControlButton--disabled),
+    button.PlayControlButton:not(.PlayControlButton--disabled):not(:disabled):not(.disabled):active,
+    .IconButton.PlayControlButton:not(.PlayControlButton--disabled) {
+        background-color: #FFFFFF;
+        box-shadow: inset 0 0 0 0.3rem #67717E;
+        svg .playControls {
+            fill: #1E1E1E;
+        }
+        &:hover {
+            background-color: #9DA4AF;
+            box-shadow: inset 0 0 0 0.3rem #67717E;
+        }
+        &:focus {
+            box-shadow: 
+                0 0 0 0.2rem #D5D8DD,
+                0 0 0 0.4rem #505862,
+                inset 0 0 0 0.3rem #67717E;
         }
     }
 
-    button.btn.PlayButton:not(.PlayButton--disabled), .StopButton, .RefreshButton:not(.RefreshButton--disabled) {
-        box-shadow: none;
-
-        svg {
-            path.inner-circle {
-                fill: #FFFFFF;
-            }
-            circle {
-                fill: #67717E;
-            }
-            path.triangle {
-                fill: #1E1E1E;
-            }
+    button.btn.PlayControlButton--disabled.PlayButton, 
+    button.btn.PlayControlButton--disabled.PlayButton:not(:disabled):not(.disabled):active,
+    .IconButton.PlayControlButton--disabled {
+        background-color: #D5D8DD;
+        box-shadow: inset 0 0 0 0.3rem #9DA4AF;
+        svg .playControls {
+            fill: #67717E;
         }
 
         &:focus {
-            box-shadow: 0 0 0 $c2lc-focus-indicator-width #505862;
-            border: none;
-        }
-
-        &:hover {
-            svg {
-                path.inner-circle {
-                    fill: #9DA4AF;
-                }
-                circle {
-                    fill: #67717E;
-                }
-                path.triangle {
-                    fill: #1E1E1E;
-                }
-            }
+            box-shadow:
+                0 0 0 0.2rem #D5D8DD,
+                0 0 0 0.4rem #505862,
+                inset 0 0 0 0.3rem #9DA4AF,
         }
     }
 
     button.btn.PlayButton--disabled, .StopButton--disabled, .RefreshButton--disabled {
-        background-color: #D5D8DD;
-
         svg {
-            path.inner-circle {
-                fill: #D5D8DD;
-            }
-            circle {
-                fill: #9DA4AF;
-            }
             path.triangle, path.refresh-icon {
                 fill: #67717E;
             }
             rect.refresh-icon {
                 fill: #D5D8DD;
             }
-        }
-
-        &:focus {
-            box-shadow: 0 0 0 $c2lc-focus-indicator-width #505862;
-        }
-    }
-
-    .StopButton:not(.StopButton--disabled) {
-        box-shadow: 0 0 0 0.2rem #67717E;
-
-        svg rect {
-            fill: #1E1E1E;
-        }
-
-        &:hover {
-            background-color: #9DA4AF;
-        }
-
-        &:focus {
-            box-shadow:
-                0 0 0 0.2rem #67717E,
-                0 0 0 0.4rem #D5D8DD,
-                0 0 0 0.6rem #67717E;
-        }        
-    }
-
-    .StopButton:not(:hover):not(.StopButton--disabled) {
-        background-color: #FFFFFF;
-    }
-
-    .StopButton--disabled {
-        background-color: #D5D8DD;
-        box-shadow: 0 0 0 0.2rem #9DA4AF;
-
-        &:focus {
-            box-shadow:
-                0 0 0 0.2rem #9DA4AF,
-                0 0 0 0.3rem #D5D8DD,
-                0 0 0 0.5rem #505862;
         }
     }
 
@@ -2188,103 +2117,62 @@ body.contrast-theme {
         color: #FFFFFF;
     }
 
-
-    .RefreshButton {
-        svg {
-            path:not(.refresh-icon) {
-                fill: white;
-            }
-            circle {
-                fill:black;
-            }
+    button.PlayControlButton:not(.PlayControlButton--disabled),
+    button.PlayControlButton:not(.PlayControlButton--disabled):not(:disabled):not(.disabled):active,
+    .IconButton.PlayControlButton:not(.PlayControlButton--disabled) {
+        background-color: #FFFFFF;
+        box-shadow: inset 0 0 0 0.3rem #1E1E1E;
+        svg .playControls {
+            fill: #1E1E1E;
         }
-
-        &:hover:not(.RefreshButton--disabled) {
-            &:not(:focus) {
-                box-shadow: 0 0 0 2px white;
-            }
-
-            svg {
-                .refresh-icon {
-                    fill: white;
-                }
-                path.inner-circle {
-                    fill: #1E1E1E;
-                }
-                circle {
-                    fill: black;
-                }
-            }
-        }
-
-        &:focus {
-            box-shadow: 0 0 0 $c2lc-focus-indicator-width #1E1E1E;
-        }
-    }
-
-    button.btn.PlayButton:not(.PlayButton--disabled) {
         &:hover {
-            svg {
-                path.inner-circle {
-                    fill: #1E1E1E;
-                }
-                path.triangle {
-                    fill: #FFFFFF;
-                }
-            }
-        }
-        &:focus {
-            box-shadow: 0 0 0 $c2lc-focus-indicator-width #1E1E1E;
-        }
-
-        svg {
-            path.inner-circle {
-                fill: white;
-            }    
-        }
-    }
-
-    button.btn.PlayButton, .StopButton {
-        svg {
-            fill: #FFFFFF;
-            circle, path.triangle {
-                fill: #1E1E1E;
-            }
-        }
-    }
-
-    button.btn.PlayButton--pause:not(.PlayButton--disabled) {
-        &:hover {
-            svg {
-                circle {
-                    fill: #FFFFFF;
-                }
-                path.inner-circle {
-                    fill: #1E1E1E;
-                }
-            }
-        }
-        &:focus {
-            box-shadow: 0 0 0 $c2lc-focus-indicator-width #1E1E1E;
-        }
-    }
-
-    button.btn.PlayButton--play.PlayButton--disabled, .StopButton--disabled, .RefreshButton--disabled {
-        svg {
-            path.inner-circle {
+            background-color: #1E1E1E;
+            box-shadow: inset 0 0 0 0.3rem #1E1E1E;
+            svg .playControls {
                 fill: #FFFFFF;
             }
-            circle, path.triangle, rect, path.refresh-icon {
-                fill: #8E8E8E;
-            }
         }
         &:focus {
-            box-shadow: 0 0 0 $c2lc-focus-indicator-width #1E1E1E;
+            box-shadow: 
+                0 0 0 0.2rem #FFFFFF,
+                0 0 0 0.4rem #1E1E1E,
+                inset 0 0 0 0.3rem #1E1E1E;
         }
     }
 
-    .RefreshButton--disabled {
+    button.btn.PlayControlButton--disabled.PlayButton, 
+    button.btn.PlayControlButton--disabled.PlayButton:not(:disabled):not(.disabled):active,
+    .IconButton.PlayControlButton--disabled {
+        background-color: #FFFFFF;
+        box-shadow: inset 0 0 0 0.3rem #8E8E8E;
+        svg .playControls {
+            fill: #8E8E8E;
+        }
+
+        &:focus {
+            box-shadow:
+                0 0 0 0.2rem #FFFFFF,
+                0 0 0 0.4rem #1E1E1E,
+                inset 0 0 0 0.3rem #8E8E8E,
+        }
+    }
+
+
+    .RefreshButton {
+        &:hover:not(.RefreshButton--disabled) {
+            svg {
+                .refresh-icon {
+                    fill: #FFFFFF;
+                }
+            }
+        }
+    }
+
+    .IconButton.RefreshButton--disabled {
         svg {
+            path.refresh-icon {
+                fill: #8E8E8E;
+            }
             rect.refresh-icon {
                 stroke: #8E8E8E;
                 fill: #FFFFFF;
@@ -2295,55 +2183,6 @@ body.contrast-theme {
             .refresh-icon {
                 stroke: #FFFFFF;
             }
-        }
-    }
-
-    .StopButton {
-        box-shadow: 0 0 0 0.2rem #1E1E1E;
-
-        svg rect {
-            fill: #FFFFFF;
-        }
-
-        &:hover:not(.StopButton--disabled) {
-            box-shadow:
-                0 0 0 0.2rem #1E1E1E,
-                0 0 0 0.4rem white;
-
-            svg rect {
-                fill: #ffffff
-            }
-            background-color: #1E1E1E;
-        }
-
-        &:focus {
-            box-shadow:
-                0 0 0 0.2rem #1E1E1E,
-                0 0 0 0.4rem #FFFFFF,
-                0 0 0 0.6rem #1E1E1E;
-        }        
-    }
-
-    .StopButton:not(:hover):not(.StopButton--disabled) {
-        background-color: #FFFFFF;
-        svg rect {
-            fill: #1E1E1E;
-        }
-    }
-
-    .StopButton--disabled {
-        background-color: #FFFFFF;
-        box-shadow: 0 0 0 0.2rem #8E8E8E;
-
-        &:focus {
-            box-shadow:
-                0 0 0 0.2rem #8E8E8E,
-                0 0 0 0.4rem #FFFFFF,
-                0 0 0 0.6rem #1E1E1E;
-        }
-
-        svg rect {
-            fill: #8E8E8E;
         }
     }
 

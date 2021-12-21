@@ -1,67 +1,21 @@
 @import 'variables';
 
 button.btn.PlayButton {
+    width: 3.5rem;
+    height: 3.5rem;
     margin-top: 0.5rem;
     margin-bottom: 0.5rem;
-    margin-right: 0.5rem;
-    border: none;
+    margin-right: 0;
     border-radius: 50%;
-    background-color: transparent;
+    border: 0;
     padding: 0;
-    padding-top: 0.05rem;
 
-    svg circle {
+    svg .playControls {
         fill: #1E1E1E;
-    }
-
-    svg path.triangle {
-        fill: #1E1E1E;
-    }
-}
-
-button.btn.PlayButton:focus {
-    box-shadow: 0 0 0 $c2lc-focus-indicator-width #FFFFFF;
-}
-
-button.btn.PlayButton:hover {
-    svg path.inner-circle {
-        fill: #F1AE5B;
     }
 }
 
 button.btn.PlayButton svg {
-    height: 3.5rem;
-    width: 3.5rem;
-
-    circle {
-        fill: #1E1E1E;
-    }
-}
-
-button.btn.PlayButton--play.PlayButton--disabled {
-    background-color: inherit;
-    cursor: default;
-
-    svg {
-        path.triangle {
-            fill: #67717E;
-        }
-
-        circle {
-            fill: #9DA4AF;
-        }
-
-        path.inner-circle {
-            fill: #B9BEC6;
-        }
-    }
-}
-
-button.btn.PlayButton--play.PlayButton--disabled svg {
-    fill: $c2lc-disabled-foreground-color;
-}
-
-button.btn.PlayButton--play.PlayButton--disabled:active:focus {
-    background-color: $c2lc-primary-button-color;
-    box-shadow: 0 0 0 $c2lc-focus-indicator-width $c2lc-focus-indicator-color;
+    height: 1.4rem;
+    width: 1.4rem;
 }

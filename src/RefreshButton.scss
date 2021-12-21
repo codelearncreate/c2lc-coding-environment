@@ -5,32 +5,7 @@
 }
 
 .RefreshButton {
-    background-color: inherit;
     margin: auto 0;
-
-    svg {
-        path {
-            fill: #1E1E1E;
-        }
-        path.inner-circle {
-            fill: #F97953;
-        }
-    }
-
-    &:focus {
-        box-shadow: 0 0 0 $c2lc-focus-indicator-width #FFFFFF;
-    }
-
-    &:hover:not(.RefreshButton--disabled) {
-        background-color: inherit;
-        svg path.inner-circle {
-            fill: #F1AE5B;
-        }
-    }
-    
-    &:hover:not(:focus) {
-        box-shadow: none;
-    }
 }
 
 .RefreshButton.RefreshButton--disabled,
@@ -43,15 +18,6 @@
     .refresh-icon {
         fill: #67717E;
         stroke: #9DA4AF;        
-    }
-
-    circle {
-        stroke: none;
-        fill: #9DA4AF;
-    }
-
-    path.inner-circle {
-        fill: #B9BEC6;
     }
 
     rect.refresh-icon {

@@ -21,6 +21,7 @@ class PlayButton extends React.Component<PlayButtonProps, {}> {
     render() {
         const classes = classNames(
             this.props.className,
+            'PlayControlButton',
             'PlayButton',
             this.props.interpreterIsRunning && 'PlayButton--pause',
             !this.props.interpreterIsRunning && 'PlayButton--play'
@@ -32,7 +33,7 @@ class PlayButton extends React.Component<PlayButtonProps, {}> {
                         this.props.intl.formatMessage({id:'PlayButton.pause'}) :
                         this.props.intl.formatMessage({id:'PlayButton.play'})}
                 className={classes}
-                disabledClassName='PlayButton--disabled'
+                disabledClassName='PlayButton--disabled PlayControlButton--disabled'
                 disabled={this.props.disabled}
                 onClick={this.props.onClick}
             >
