@@ -37,6 +37,7 @@ follows.
 | < | decreaseProgramSpeed |
 | > | increaseProgramSpeed |
 | ? | showHide |
+| + | expandAddNode |
 | Ctrl + Alt + x, a, b, 1 | selectBackward1 |
 | Ctrl + Alt + x, a, b, 2 | selectBackward2 |
 | Ctrl + Alt + x, a, b, 3 | selectBackward3 |
@@ -92,6 +93,7 @@ with the starting key of a sequence.  Those key bindings are as follows:
 | < | decreaseProgramSpeed |
 | > | increaseProgramSpeed |
 | ? | showHide |
+| + | expandAddNode |
 | Alt + x, a, b, 1 | selectBackward1 |
 | Alt + x, a, b, 2 | selectBackward2 |
 | Alt + x, a, b, 3 | selectBackward3 |

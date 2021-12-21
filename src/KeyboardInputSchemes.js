@@ -21,6 +21,7 @@ export type ActionName =
     | "addCommandToBeginning"
     | "addCommandToEnd"
     | "deleteCurrentStep"
+    | "expandAddNode"
     | "announceScene"
     | "decreaseProgramSpeed"
     | "increaseProgramSpeed"
@@ -321,6 +322,10 @@ const AltInputScheme: KeyboardInputScheme = Object.assign({
     stopProgram: {
         keyDef: { code: "KeyS", key: "s", altKey: true},
         actionName: "stopProgram"
+    },
+    expandAddNode: {
+        keyDef: { key: "+"},
+        actionName: "expandAddNode"
     }
 }, ExtendedKeyboardSequences);
 
@@ -387,6 +392,10 @@ const ControlAltInputScheme = Object.assign({
         keyDef: {code: "KeyS", key: "s", altKey: true, ctrlKey: true},
         actionName: "stopProgram"
     },
+    expandAddNode: {
+        keyDef: { key: "+", shiftKey: true},
+        actionName: "expandAddNode"
+    }
 }, ControlAltExtendedKeyboardSequences);
 
 export const KeyboardInputSchemes:KeyboardInputSchemesType = {

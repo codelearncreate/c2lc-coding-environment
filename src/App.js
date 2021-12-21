@@ -859,6 +859,10 @@ export class App extends React.Component<AppProps, AppState> {
                                 this.handleChangeCharacterPosition('turnRight');
                             }
                             break;
+                        case("expandAddNode"):
+                            const currentAddNodeState = this.state.settings.addNodeExpandedMode;
+                            this.handleChangeAddNodeExpandedMode(!currentAddNodeState);
+                            break;
                         case("changeToDefaultTheme"):
                             this.setStateSettings({theme: "mixed"});
                             break;
