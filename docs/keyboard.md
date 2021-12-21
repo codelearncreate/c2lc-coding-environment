@@ -34,6 +34,7 @@ follows.
 | Ctrl + Alt + p | playPauseProgram |
 | Ctrl + Alt + r | refreshScene |
 | Ctrl + Alt + s | stopProgram |
+| Ctrl + Alt + n | penDownToggle |
 | < | decreaseProgramSpeed |
 | > | increaseProgramSpeed |
 | ? | showHide |
@@ -89,6 +90,7 @@ with the starting key of a sequence.  Those key bindings are as follows:
 | Alt + p | playPauseProgram |
 | Alt + r | refreshScene |
 | Alt + s | stopProgram |
+| Alt + n | penDownToggle |
 | < | decreaseProgramSpeed |
 | > | increaseProgramSpeed |
 | ? | showHide |
