@@ -63,15 +63,7 @@ export default class ProgramChangeController {
             // Check that the step to delete hasn't changed since the
             // user made the deletion
             if (command === state.programSequence.getProgramStepAt(index)) {
-                // Play the announcement
-                const commandString = this.intl.formatMessage({
-                    id: "Announcement." + command
-                });
-                this.audioManager.playAnnouncement(
-                    'delete',
-                    this.intl,
-                    { command: commandString }
-                );
+                this.playAnnouncementForDelete(command);
 
                 // If there are steps following the one being deleted, focus
                 // the next step. Otherwise, focus the final add node.
@@ -94,14 +86,43 @@ export default class ProgramChangeController {
         });
     }
 
+    deleteLastStep(programBlockEditor: ?ProgramBlockEditor) {
+        this.app.setState((state) => {
+            const index = state.programSequence.getProgramLength() - 1;
+            if (index >= 0) {
+                const command = state.programSequence.getProgramStepAt(index);
+                this.playAnnouncementForDelete(command);
+
+                // As we are deleting the last step, focus the final add node.
+                if (programBlockEditor) {
+                    programBlockEditor.focusAddNodeAfterUpdate(index);
+                }
+
+                return {
+                    programSequence: state.programSequence.deleteStep(index)
+                };
+            } else {
+                return {};
+            }
+        });
+    }
+
     // Internal methods
 
     playAnnouncementForAdd(command: string) {
+        this.playAnnouncementForChange(command, 'add');
+    }
+
+    playAnnouncementForDelete(command:string) {
+        this.playAnnouncementForChange(command, 'delete');
+    }
+
+    playAnnouncementForChange(command:string, changeType: string) {
         const commandString = this.intl.formatMessage({
-            id: "Announcement." + (command || "")
+            id: "Announcement." + command
         });
         this.audioManager.playAnnouncement(
-            'add',
+            changeType,
             this.intl,
             { command: commandString }
         );
