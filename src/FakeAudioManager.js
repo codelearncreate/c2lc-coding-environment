@@ -3,7 +3,9 @@
 import type {AudioManager} from './types';
 
 export default class FakeAudioManager implements AudioManager {
-    playAnnouncement() {};
+    playFeedbackAnnouncement() {};
+    playPreviewAnnouncement() {};
+    playStringMessage() {};
     playSoundForCharacterState() {};
     setAnnouncementsEnabled() {};
     setAudioEnabled() {};

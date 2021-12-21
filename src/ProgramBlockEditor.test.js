@@ -299,8 +299,8 @@ describe('Delete All button', () => {
         const deleteAllButton = getProgramDeleteAllButton(wrapper).at(0);
         deleteAllButton.simulate('click');
         // Then the 'deleteAll' announcement should be played
-        expect(audioManagerMock.playAnnouncement.mock.calls.length).toBe(1);
-        expect(audioManagerMock.playAnnouncement.mock.calls[0][0]).toBe('deleteAll');
+        expect(audioManagerMock.playFeedbackAnnouncement.mock.calls.length).toBe(1);
+        expect(audioManagerMock.playFeedbackAnnouncement.mock.calls[0][0]).toBe('delete all movements?');
         // And the dialog should be shown
         expect(confirmDeleteAllModalIsOpen(wrapper)).toBe(true);
     });
@@ -426,16 +426,16 @@ describe('Replace program steps', () => {
             replaceButton.simulate('click');
 
             // An announcement should be played.
-            expect(audioManagerMock.playAnnouncement.mock.calls.length).toBe(1);
+            expect(audioManagerMock.playFeedbackAnnouncement.mock.calls.length).toBe(1);
 
             if (selectedAction) {
-                expect(audioManagerMock.playAnnouncement.mock.calls[0][0]).toBe('replace');
+                expect(audioManagerMock.playFeedbackAnnouncement.mock.calls[0][0]).toBe('movement forward 1 square replaced with turn right 45 degrees');
 
                 // The program should be updated
                 expect(mockChangeProgramSequenceHandler.mock.calls.length).toBe(1);
                 expect(mockChangeProgramSequenceHandler.mock.calls[0][0].program).toStrictEqual(expectedProgram);
             } else {
-                expect(audioManagerMock.playAnnouncement.mock.calls[0][0]).toBe('noMovementSelected');
+                expect(audioManagerMock.playFeedbackAnnouncement.mock.calls[0][0]).toBe('no movement selected');
 
                 // The program should not be updated
                 expect(mockChangeProgramSequenceHandler.mock.calls.length).toBe(0);
@@ -469,14 +469,14 @@ describe('Move to previous program step', () => {
 
             if (stepNum > 0) {
                 // The 'mockToPrevious' announcement should be played
-                expect(audioManagerMock.playAnnouncement.mock.calls.length).toBe(1);
-                expect(audioManagerMock.playAnnouncement.mock.calls[0][0]).toBe('moveToPrevious');
+                expect(audioManagerMock.playFeedbackAnnouncement.mock.calls.length).toBe(1);
+                expect(audioManagerMock.playFeedbackAnnouncement.mock.calls[0][0]).toBe('moved to left');
                 // The program should be updated
                 expect(mockChangeProgramSequenceHandler.mock.calls.length).toBe(1);
                 expect(mockChangeProgramSequenceHandler.mock.calls[0][0].program).toStrictEqual(expectedProgram);
             } else {
                 // No sound should be played
-                expect(audioManagerMock.playAnnouncement.mock.calls.length).toBe(0);
+                expect(audioManagerMock.playFeedbackAnnouncement.mock.calls.length).toBe(0);
                 // The program should not be updated
                 expect(mockChangeProgramSequenceHandler.mock.calls.length).toBe(0);
                 expect(wrapper.props().programSequence.getProgram()).toStrictEqual(expectedProgram);
@@ -509,14 +509,14 @@ describe('Move to next program step', () => {
 
             if (stepNum < 3) {
                 // The 'mockToNext' announcement should be played
-                expect(audioManagerMock.playAnnouncement.mock.calls.length).toBe(1);
-                expect(audioManagerMock.playAnnouncement.mock.calls[0][0]).toBe('moveToNext');
+                expect(audioManagerMock.playFeedbackAnnouncement.mock.calls.length).toBe(1);
+                expect(audioManagerMock.playFeedbackAnnouncement.mock.calls[0][0]).toBe('moved to right');
                 // The program should be updated
                 expect(mockChangeProgramSequenceHandler.mock.calls.length).toBe(1);
                 expect(mockChangeProgramSequenceHandler.mock.calls[0][0].program).toStrictEqual(expectedProgram);
             } else {
                 // No announcement should be played
-                expect(audioManagerMock.playAnnouncement.mock.calls.length).toBe(0);
+                expect(audioManagerMock.playFeedbackAnnouncement.mock.calls.length).toBe(0);
                 // The program should not be updated
                 expect(mockChangeProgramSequenceHandler.mock.calls.length).toBe(0);
                 expect(wrapper.props().programSequence.getProgram()).toStrictEqual(expectedProgram);

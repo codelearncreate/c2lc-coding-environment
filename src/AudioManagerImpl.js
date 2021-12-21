@@ -2,7 +2,6 @@
 
 import { Midi, Panner, Sampler} from 'tone';
 import CharacterState from './CharacterState';
-import type {IntlShape} from 'react-intl';
 import {AudioManager} from './types';
 import SceneDimensions from './SceneDimensions';
 
@@ -188,6 +187,9 @@ export function getNoteForState (characterState: CharacterState) : string {
 export default class AudioManagerImpl implements AudioManager {
     audioEnabled: boolean;
     announcementsEnabled: boolean;
+    feedbackIsPlaying: boolean;
+    previousFeedbackUtterance: ?SpeechSynthesisUtterance;
+    queuedPreviewAnnouncement: ?string;
     panner: Panner;
     samplers: {
         backward1: Sampler,
@@ -207,6 +209,9 @@ export default class AudioManagerImpl implements AudioManager {
     constructor(audioEnabled: boolean, announcementsEnabled: boolean) {
         this.audioEnabled = audioEnabled;
         this.announcementsEnabled = announcementsEnabled;
+        this.feedbackIsPlaying = false;
+        this.previousFeedbackUtterance = null;
+        this.queuedPreviewAnnouncement = null;
 
         this.panner = new Panner();
         this.panner.toDestination();
@@ -221,15 +226,54 @@ export default class AudioManagerImpl implements AudioManager {
         });
     }
 
-    playAnnouncement(messageIdSuffix: string, intl: IntlShape, messagePayload: any) {
+    playFeedbackAnnouncement(message: string) {
         if (this.announcementsEnabled) {
-            if (window.speechSynthesis.speaking || window.speechSynthesis.pending) {
-                window.speechSynthesis.cancel();
+            if (this.previousFeedbackUtterance) {
+                // Remove the event handlers for the previous utterance so that they are not fired when we cancel the existing speech
+                this.previousFeedbackUtterance.onerror = null;
+                this.previousFeedbackUtterance.onend = null;
             }
-            const messageId = "Announcement." + messageIdSuffix;
-            const toAnnounce = intl.formatMessage({ id: messageId}, messagePayload);
-            const utterance = new SpeechSynthesisUtterance(toAnnounce);
+            window.speechSynthesis.cancel();
+            const utterance = new SpeechSynthesisUtterance(message);
+            utterance.onend = () => {
+                this.feedbackIsPlaying = false;
+                if (this.queuedPreviewAnnouncement) {
+                    const utterance = new SpeechSynthesisUtterance(this.queuedPreviewAnnouncement);
+                    window.speechSynthesis.speak(utterance);
+                }
+                this.queuedPreviewAnnouncement = null;
+            }
+
+            // In Safari, utterance onend is often not get fired, and throws an error
+            utterance.onerror = () => {
+                // When error occurs, onend event is not going to be fired, and currently we are
+                // unsure of why the error occurs in Safari. So let the feedback announcement play
+                // for a second without interruption on error to somewhat match the onend event handler
+                // to provide expected announcement behaviour.
+                setTimeout(() => {
+                    this.feedbackIsPlaying = false;
+                    if (this.queuedPreviewAnnouncement) {
+                        const utterance = new SpeechSynthesisUtterance(this.queuedPreviewAnnouncement);
+                        window.speechSynthesis.speak(utterance);
+                    }
+                    this.queuedPreviewAnnouncement = null;
+                }, 1000);
+            };
+            this.previousFeedbackUtterance = utterance;
+            this.feedbackIsPlaying = true;
             window.speechSynthesis.speak(utterance);
+        }
+    }
+
+    playPreviewAnnouncement(message: string) {
+        if (!this.feedbackIsPlaying) {
+            if (this.announcementsEnabled) {
+                window.speechSynthesis.cancel();
+                const utterance = new SpeechSynthesisUtterance(message);
+                window.speechSynthesis.speak(utterance);
+            }
+        } else {
+            this.queuedPreviewAnnouncement = message;
         }
     }
 

@@ -67,11 +67,8 @@ export default class ProgramChangeController {
                 const commandString = this.intl.formatMessage({
                     id: "Announcement." + command
                 });
-                this.audioManager.playAnnouncement(
-                    'delete',
-                    this.intl,
-                    { command: commandString }
-                );
+                const announcementMessage = this.intl.formatMessage({ id: 'Announcement.delete'}, { command: commandString });
+                this.audioManager.playFeedbackAnnouncement(announcementMessage);
 
                 // If there are steps following the one being deleted, focus
                 // the next step. Otherwise, focus the final add node.
@@ -100,11 +97,8 @@ export default class ProgramChangeController {
         const commandString = this.intl.formatMessage({
             id: "Announcement." + (command || "")
         });
-        this.audioManager.playAnnouncement(
-            'add',
-            this.intl,
-            { command: commandString }
-        );
+        const addAnnouncement = this.intl.formatMessage({ id: 'Announcement.add' }, { command: commandString });
+        this.audioManager.playFeedbackAnnouncement(addAnnouncement);
     }
 
     doActivitiesForAdd(programBlockEditor: ?ProgramBlockEditor, index: number) {
