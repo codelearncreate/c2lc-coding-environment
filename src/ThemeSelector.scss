@@ -7,7 +7,7 @@
     padding: 1.4rem 1.5rem;
     font-weight: 500;
     font-size: 18px;
-    color: #1E1E1E;
+    color: $c2lc-black;
     align-items: center;
     label {
         margin-bottom: 0;
@@ -17,7 +17,7 @@
     }
     &:focus {
         outline: none;
-        box-shadow: inset 0 0 0 $c2lc-focus-indicator-width #1E1E1E;
+        box-shadow: inset 0 0 0 $c2lc-focus-indicator-width $c2lc-black;
     }
 }
 

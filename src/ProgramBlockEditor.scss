@@ -63,7 +63,7 @@
         background-color: #4C9990;
         .ToggleSwitch__switch-inner-circle {
             svg path {
-                stroke: black;
+                stroke: $c2lc-black;
             }
         }
     }
@@ -79,7 +79,7 @@
 
 
 .ProgramBlockEditor__program-deleteAll-button svg {
-    stroke: #000;
+    stroke:  $c2lc-black;
 }
 
 .ProgramBlockEditor__program-deleteAll-button--disabled svg {

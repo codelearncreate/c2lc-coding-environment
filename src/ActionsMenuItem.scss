@@ -10,14 +10,14 @@
     align-items: center;
 
     &:focus {
-        box-shadow: 0 0 0 $c2lc-focus-indicator-width black;
+        box-shadow: 0 0 0 $c2lc-focus-indicator-width $c2lc-black;
         outline: none;
     }
 
     &:hover {
         background-color: #F5C58A;
         .ActionsMenuItem__icon {
-            box-shadow: 0 0 0 1px #1e1e1e;
+            box-shadow: 0 0 0 1px $c2lc-black;
         }
     }
 }
@@ -35,7 +35,7 @@
 .ActionsMenuItem__icon {
     text-align: center;
     border-radius: 0.2rem;
-    box-shadow: 0 3px 4px 0 #1e1e1e, -1px 2px 4px;
+    box-shadow: 0 3px 4px 0 $c2lc-black, -1px 2px 4px;
     width: 2.5rem;
     height: 2.5rem;
     min-width: 45px;

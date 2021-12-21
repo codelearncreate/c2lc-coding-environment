@@ -44,7 +44,7 @@ body.light-theme {
 
     button.btn.command-block:focus {
         border: 2px solid #EBFAF8;
-        box-shadow: 0 0 0 $c2lc-focus-indicator-width black;
+        box-shadow: 0 0 0 $c2lc-focus-indicator-width $c2lc-black;
     }
 
     // Use both IDs and classnames here to overpower styles inherited from react-bootstrap's $theme-colors
@@ -190,7 +190,7 @@ body.light-theme {
 
     .ProgramBlockEditor__header {
         background-color: #CCE6E2;
-        color: #1E1E1E;
+        color: $c2lc-black;
     }
 
     .ProgramBlockEditor__character-column {
@@ -207,7 +207,7 @@ body.light-theme {
     }
 
     .ProgramBlockEditor__start-indicator {
-        background-color: black;
+        background-color: $c2lc-black;
     }
 
     button.btn.WorldIcon {
@@ -270,7 +270,7 @@ body.light-theme {
         &:focus {
             box-shadow:
                 0 0 0 0.1rem #F1F2F4,
-                0 0 0 $c2lc-focus-indicator-width black;
+                0 0 0 $c2lc-focus-indicator-width $c2lc-black;
         }
     }
 
@@ -314,7 +314,7 @@ body.light-theme {
 
         &:focus {
             border: $c2lc-add-node-expanded-border-width solid white;
-            box-shadow: 0 0 0 $c2lc-focus-indicator-width black;
+            box-shadow: 0 0 0 $c2lc-focus-indicator-width $c2lc-black;
         }
     }
 
@@ -324,7 +324,7 @@ body.light-theme {
 
     .RefreshButton {
         &:focus {
-            box-shadow: 0 0 0 $c2lc-focus-indicator-width #1E1E1E;
+            box-shadow: 0 0 0 $c2lc-focus-indicator-width $c2lc-black;
         }
     }
 
@@ -360,11 +360,16 @@ body.light-theme {
         }
     }
 
+    .ShareButton {
+        color: $c2lc-black;
+        background-color: #F1F2F4;
+    }
+
     .StopButton:focus {
         box-shadow:
-            0 0 0 0.2rem #1E1E1E,
+            0 0 0 0.2rem $c2lc-black,
             0 0 0 0.4rem #D5D8DD,
-            0 0 0 0.6rem #1E1E1E;
+            0 0 0 0.6rem $c2lc-black;
     }
 
     .StopButton--disabled {
@@ -378,7 +383,7 @@ body.light-theme {
             box-shadow:
                 0 0 0 0.2rem #67717E,
                 0 0 0 0.4rem #D5D8DD,
-                0 0 0 0.6rem #1E1E1E;
+                0 0 0 0.6rem $c2lc-black;
         }
     }
 
@@ -432,11 +437,11 @@ body.light-theme {
         &:focus {
             box-shadow:
                 0 0 0 0.1rem #D5D8DD,
-                0 0 0 $c2lc-focus-indicator-width #1E1E1E;
+                0 0 0 $c2lc-focus-indicator-width $c2lc-black;
         }
         &:hover {
             background-color: #F5C58A;
-            color: #1E1E1E;
+            color: $c2lc-black;
         }
     }
 }
@@ -653,8 +658,8 @@ body.dark-theme {
     .AddNode__collapsed-icon {
         background-color: white;
         svg {
-            stroke: black;
-            fill: black;
+            stroke: $c2lc-black;
+            fill: $c2lc-black;
         }
     }
 
@@ -667,7 +672,7 @@ body.dark-theme {
         }
         &:hover {
             svg path {
-                stroke: black;
+                stroke: $c2lc-black;
             }
         }
 
@@ -678,7 +683,7 @@ body.dark-theme {
 
     .StopButton:focus {
         box-shadow:
-            0 0 0 0.2rem #1E1E1E,
+            0 0 0 0.2rem $c2lc-black,
             0 0 0 0.4rem #67717E,
             0 0 0 0.6rem #FFFFFF;
     }
@@ -787,7 +792,7 @@ body.gray-theme {
     button.btn.ModalWithFooter__secondaryButton,
     button.btn.ModalWithFooter__primaryButton {
         background-color: #aaa;
-        color: black;
+        color: $c2lc-black;
 
         &:hover {
             background-color:#D5D8DD;
@@ -1133,7 +1138,7 @@ body.gray-theme {
     button.btn.ConfirmDeleteAllModal__option-button {
         background-color: #F1F2F4;
         border-color: #F1F2F4;
-        color: black;
+        color: $c2lc-black;
 
 
         &:hover {
@@ -1281,7 +1286,7 @@ body.gray-theme {
                 fill: #67717E;
             }
             path.triangle {
-                fill: #1E1E1E;
+                fill: $c2lc-black;
             }
         }
 
@@ -1299,7 +1304,7 @@ body.gray-theme {
                     fill: #67717E;
                 }
                 path.triangle {
-                    fill: #1E1E1E;
+                    fill: $c2lc-black;
                 }
             }
         }
@@ -1332,7 +1337,7 @@ body.gray-theme {
         box-shadow: 0 0 0 0.2rem #67717E;
 
         svg rect {
-            fill: #1E1E1E;
+            fill: $c2lc-black;
         }
 
         &:hover {
@@ -1381,7 +1386,7 @@ body.gray-theme {
 
         &::-moz-range-thumb {
             border-radius: 0;
-            border: 2px solid black;
+            border: 2px solid $c2lc-black;
             background-color: #F1F2F4;
             box-shadow: -8rem 0 0 8rem #F1F2F4;
         }
@@ -1427,7 +1432,7 @@ body.gray-theme {
 
     button.btn.ShareButton {
         background-color: #F1F2F4;
-        color: black;
+        color: $c2lc-black;
 
         &:hover {
             background: #505862;
@@ -1444,14 +1449,14 @@ body.gray-theme {
 
 /* High Contrast "Mono" Theme */
 body.contrast-theme {
-    background-color: black;
+    background-color: $c2lc-black;
 
     .App__container {
-        background-color: black;
+        background-color: $c2lc-black;
     }
 
     .App__header {
-        background-color: black;
+        background-color: $c2lc-black;
     }
 
     .App__app-heading > a {
@@ -1462,11 +1467,11 @@ body.contrast-theme {
         background-color: white;
 
         svg path {
-            fill: black;
+            fill: $c2lc-black;
         }
 
         &:hover:not(.IconButton--disabled) {
-            background-color: black;
+            background-color: $c2lc-black;
 
             .App__header-keyboard-icon {
                 path {
@@ -1494,47 +1499,47 @@ body.contrast-theme {
 
         &:focus {
             box-shadow:
-                0 0 0 2px black,
+                0 0 0 2px $c2lc-black,
                 0 0 0 6px white;
         }
 
         .App__header-keyboard-icon {
             path {
-                fill: black;
+                fill: $c2lc-black;
             }
         }
 
         .App__world-selector-icon {
-            stroke: black;
+            stroke: $c2lc-black;
             rect,
             path {
-                stroke: black;
+                stroke: $c2lc-black;
             }
             circle {
-                fill: black;
+                fill: $c2lc-black;
             }
         }
     }
 
     .KeyboardInputModal__content__toggle {
         background-color: white;
-        border: 2px solid black;
+        border: 2px solid $c2lc-black;
         padding: 0.2rem;
         color: white;
 
         &:focus {
             box-shadow: 0 0 0 $c2lc-focus-indicator-width white;
-            border: 2px solid black;
+            border: 2px solid $c2lc-black;
         }
 
         .ToggleSwitch__switch-inner-circle {
-            background-color: black;
+            background-color: $c2lc-black;
         }
 
 
         &.ToggleSwitch--checked:not(:hover), &:hover {
-            background-color: black;
-            color: black;
+            background-color: $c2lc-black;
+            color: $c2lc-black;
             .ToggleSwitch__switch-inner-circle {
                 background-color: white;
             }
@@ -1543,37 +1548,37 @@ body.contrast-theme {
 
     button.btn.ModalWithFooter__secondaryButton,
     button.btn.ModalWithFooter__primaryButton {
-        background-color: black;
+        background-color: $c2lc-black;
         color: white;
 
         &:focus {
             box-shadow:
                 0 0 0 0.1rem white,
-                0 0 0 0.2rem black;
+                0 0 0 0.2rem $c2lc-black;
         }
 
         &:hover {
             background-color: white;
-            color: black;
-            box-shadow: 0 0 0 0.1rem black;
+            color: $c2lc-black;
+            box-shadow: 0 0 0 0.1rem $c2lc-black;
         }
 
         &:hover:focus {
-            box-shadow: 0 0 0 0.2rem black;
+            box-shadow: 0 0 0 0.2rem $c2lc-black;
         }
     }
 
     .KeyboardInputModal__content__toggle.ToggleSwitch {
-        background-color: black;
+        background-color: $c2lc-black;
         border: 2px solid white;
         padding: 0.2rem;
 
         &:hover {
-            border: 2px solid black;
+            border: 2px solid $c2lc-black;
             background-color: white;
 
             .ToggleSwitch__switch-inner-circle {
-                background-color: black;
+                background-color: $c2lc-black;
                 svg {
                     path {
                         fill: white;
@@ -1585,34 +1590,34 @@ body.contrast-theme {
 
         &:focus {
             box-shadow: 0 0 0 $c2lc-focus-indicator-width white;
-            border: 2px solid black;
+            border: 2px solid $c2lc-black;
         }
 
         .ToggleSwitch__switch-inner-circle {
             background-color: white;
             svg {
                 path {
-                    fill: black;
+                    fill: $c2lc-black;
                 }
             }
         }
     }
 
     .AudioFeedbackToggleSwitch {
-        background-color: black;
+        background-color: $c2lc-black;
         border: 2px solid white;
         padding: 0.2rem;
 
         &:focus {
             box-shadow: 0 0 0 $c2lc-focus-indicator-width white;
-            border: 2px solid black;
+            border: 2px solid $c2lc-black;
         }
 
         .ToggleSwitch__switch-inner-circle {
             background-color: white;
             svg {
                 path {
-                    fill: black;
+                    fill: $c2lc-black;
                 }
             }
         }
@@ -1620,7 +1625,7 @@ body.contrast-theme {
         &.ToggleSwitch--checked:not(:hover), &:hover {
             background-color: white;
             .ToggleSwitch__switch-inner-circle {
-                background-color: black;
+                background-color: $c2lc-black;
                 svg {
                     path {
                         fill: white;
@@ -1631,14 +1636,14 @@ body.contrast-theme {
     }
 
     .AudioFeedbackToggleSwitch.ToggleSwitch--checked:not(:hover) {
-        background-color: black;
+        background-color: $c2lc-black;
         border: 2px solid white;
 
         .ToggleSwitch__switch-inner-circle {
             background-color: white;
             svg {
                 path {
-                    fill: black;
+                    fill: $c2lc-black;
                 }
             }
         }
@@ -1653,21 +1658,21 @@ body.contrast-theme {
     }
 
     .App__command-palette-command-container {
-        background-color: black;
+        background-color: $c2lc-black;
     }
 
     .App__command-palette-command-container {
         &::-webkit-scrollbar {
-            background-color: black;
+            background-color: $c2lc-black;
         }
         &::-webkit-scrollbar-thumb {
-            background-color: black;
+            background-color: $c2lc-black;
             border: 2px solid white;
         }
     }
 
     .App__world-container {
-        background-color: black;
+        background-color: $c2lc-black;
     }
 
     .App__world-selector {
@@ -1694,17 +1699,17 @@ body.contrast-theme {
 
         svg {
             path, circle {
-                stroke: black;
+                stroke: $c2lc-black;
             }
             circle, path.filled {
-                fill: black;
+                fill: $c2lc-black;
             }
         }
 
         &:hover {
             border: 2px solid white;
             border-radius: 0.2rem;
-            background-color: black;
+            background-color: $c2lc-black;
 
             svg {
                 path, rect, circle {
@@ -1726,43 +1731,43 @@ body.contrast-theme {
         &.command-block--pressed,
         &.command-block--pressed:hover,
         &.command-block--pressed:active {
-            border: 2px solid black;
-            border-color: black;
+            border: 2px solid $c2lc-black;
+            border-color: $c2lc-black;
             box-shadow: 0 0 0 $c2lc-focus-indicator-width white;
         }
 
         &:not(:disabled):not(.disabled):active {
-            background-color: black;
+            background-color: $c2lc-black;
         }
     }
 
     .ActionsMenuItem {
         &:focus {
-            box-shadow: 0 0 0 0.2rem black;
+            box-shadow: 0 0 0 0.2rem $c2lc-black;
         }
 
         &:hover {
-            background-color: #1E1E1E;
+            background-color: $c2lc-black;
             color: white;
         }
 
         &:hover:focus {
             box-shadow:
                 0 0 0 0.1rem white,
-                0 0 0 0.2rem black;
+                0 0 0 0.2rem $c2lc-black;
         }
     }
 
     .ActionsMenuItem__icon:not(.ActionsMenuItem__icon--disabled) {
         background-color: white;
-        border: 1px solid black;
+        border: 1px solid $c2lc-black;
 
         svg {
             path, circle {
-                stroke: black;
+                stroke: $c2lc-black;
             }
             circle, path.filled {
-                fill: black;
+                fill: $c2lc-black;
             }
         }
     }
@@ -1797,8 +1802,8 @@ body.contrast-theme {
 
     button.ProgramBlockEditor__program-block--active {
         box-shadow: 0 0 0 $c2lc-focus-indicator-width white;
-        border: 2px solid black;
-        border-color: black;
+        border: 2px solid $c2lc-black;
+        border-color: $c2lc-black;
     }
 
     .App__command-palette-heading {
@@ -1810,7 +1815,7 @@ body.contrast-theme {
     }
 
     .CharacterPositionController__character-column {
-        background-color: black;
+        background-color: $c2lc-black;
         border-top: 1px solid white;
     }
 
@@ -1829,7 +1834,7 @@ body.contrast-theme {
                 stroke-width: 4px;
             }
             path.inner {
-                stroke: black;
+                stroke: $c2lc-black;
             }
         }
     }
@@ -1856,7 +1861,7 @@ body.contrast-theme {
         .CharacterPositionController__character-position-button:not(.CharacterPositionController__character-position-button--disabled) {
             &:hover {
                 path.filled {
-                    fill: black;
+                    fill: $c2lc-black;
                     stroke: white;
                 }
             }
@@ -1877,7 +1882,7 @@ body.contrast-theme {
     }
 
     .Scene {
-        background-color: black;
+        background-color: $c2lc-black;
     }
 
     .Scene__header-corner {
@@ -1890,9 +1895,9 @@ body.contrast-theme {
 
     .PenDownToggleSwitch, .PenDownToggleSwitch.ToggleSwitch--checked:hover {
         background-color: white;
-        border: 1px solid black;
+        border: 1px solid $c2lc-black;
         .ToggleSwitch__switch-inner-circle {
-            background-color: black;
+            background-color: $c2lc-black;
             svg {
                 path {
                     stroke: white;
@@ -1907,21 +1912,21 @@ body.contrast-theme {
     }
 
     .PenDownToggleSwitch:hover, .PenDownToggleSwitch.ToggleSwitch--checked {
-        background-color: black;
+        background-color: $c2lc-black;
         border: 2px solid white;
         padding: 0.2rem;
         .ToggleSwitch__switch-inner-circle {
             background-color: white;
             svg {
                 path {
-                    stroke: black;
+                    stroke: $c2lc-black;
                 }
             }
         }
     }
 
     .WorldSelector {
-        background-color: black;
+        background-color: $c2lc-black;
 
         svg.HeaderIcon {
             circle {
@@ -1930,7 +1935,7 @@ body.contrast-theme {
         }
 
         button.btn.WorldIcon:not(.WorldIcon--disabled):hover {
-            background-color: black;
+            background-color: $c2lc-black;
             border: 1px solid white;
         }
 
@@ -1942,7 +1947,7 @@ body.contrast-theme {
         button.btn:focus {
             background-color: white;
             box-shadow: 0 0 0 0.2rem white;
-            border: 0.2rem solid black;
+            border: 0.2rem solid $c2lc-black;
         }
 
         button.btn.WorldIcon--disabled {
@@ -1956,17 +1961,17 @@ body.contrast-theme {
 
     .ProgramBlockEditor__header {
         background-color: white;
-        color: black;
+        color: $c2lc-black;
     }
 
     .ProgramBlockEditor__add-node-toggle-switch, div.ProgramBlockEditor__add-node-toggle-switch.ToggleSwitch--checked:hover {
-        background-color: black;
+        background-color: $c2lc-black;
 
         .ToggleSwitch__switch-inner-circle {
             background-color: white;
             svg {
                 path {
-                    stroke: black;
+                    stroke: $c2lc-black;
                 }
             }
         }
@@ -1979,11 +1984,11 @@ body.contrast-theme {
 
     .ProgramBlockEditor__add-node-toggle-switch.ToggleSwitch--checked, .ProgramBlockEditor__add-node-toggle-switch.ToggleSwitch:hover {
         background-color: white;
-        border: 2px solid black;
+        border: 2px solid $c2lc-black;
         padding: 0.2rem;
 
         .ToggleSwitch__switch-inner-circle {
-            background-color: black;
+            background-color: $c2lc-black;
             svg {
                 path {
                     stroke: white;
@@ -1992,12 +1997,12 @@ body.contrast-theme {
         }
 
         &:focus {
-            border: 2px solid black;
+            border: 2px solid $c2lc-black;
         }
     }
 
     .ProgramBlockEditor__program-deleteAll-button {
-        background-color: black;
+        background-color: $c2lc-black;
         border: 2px solid white;
         svg path {
             stroke: white;
@@ -2005,22 +2010,22 @@ body.contrast-theme {
 
         &:hover:not(.ProgramBlockEditor__program-deleteAll-button--disabled) {
             background-color: white;
-            border: 2px solid black;
+            border: 2px solid $c2lc-black;
             svg path {
-                stroke: black;
+                stroke: $c2lc-black;
                 fill: inherit;
             }
         }
 
         &:focus {
-            box-shadow: 0 0 0 $c2lc-focus-indicator-width black;
+            box-shadow: 0 0 0 $c2lc-focus-indicator-width $c2lc-black;
         }
     }
 
     .ProgramBlockEditor__program-deleteAll-button--disabled,
     .ProgramBlockEditor__program-deleteAll-button--disabled:hover {
         background-color: white;
-        border: 2px solid black;
+        border: 2px solid $c2lc-black;
         svg path {
             stroke: #818A98;
             fill:inherit;
@@ -2028,47 +2033,47 @@ body.contrast-theme {
     }
 
     button.btn.ConfirmDeleteAllModal__option-button {
-        background-color: black;
+        background-color: $c2lc-black;
         color: white;
         border-color: white;
 
         &:focus {
             box-shadow:
                 0 0 0 0.1rem white,
-                0 0 0 0.2rem black;
+                0 0 0 0.2rem $c2lc-black;
         }
 
         &:hover {
             background-color: white;
-            color: black;
-            box-shadow: 0 0 0 0.1rem black;
+            color: $c2lc-black;
+            box-shadow: 0 0 0 0.1rem $c2lc-black;
         }
 
         &:hover:focus {
-            box-shadow: 0 0 0 0.2rem black;
+            box-shadow: 0 0 0 0.2rem $c2lc-black;
         }
 
         &.btn-primary {
             &:not(:disabled):not(.disabled):active {
                 background-color: white;
-                color: black;
+                color: $c2lc-black;
             }
         }
     }
 
     .ProgramBlockEditor__character-column {
-        background-color: black;
+        background-color: $c2lc-black;
         border-right: 2px solid #9DA4AF;
     }
 
     .ProgramBlockEditor__program-sequence-scroll-container {
-        background-color: black;
+        background-color: $c2lc-black;
     }
 
     .ProgramBlockEditor__program-sequence-scroll-container--isDragging {
-        box-shadow: 0 0 0 0.2rem black,
+        box-shadow: 0 0 0 0.2rem $c2lc-black,
         0 0 0 0.4rem white,
-        0 0 0 0.6rem black;
+        0 0 0 0.6rem $c2lc-black;
     }
 
     .ProgramBlockEditor__start-indicator {
@@ -2084,8 +2089,8 @@ body.contrast-theme {
         background-color: white;
         svg path {
             stroke-width: 6px;
-            stroke: black;
-            fill: black;
+            stroke: $c2lc-black;
+            fill: $c2lc-black;
         }
     }
 
@@ -2095,7 +2100,7 @@ body.contrast-theme {
 
     .AddNode__expanded-button {
         border: $c2lc-add-node-expanded-border-width solid white;
-        background-color: black;
+        background-color: $c2lc-black;
         box-shadow: none;
         svg path {
             stroke: white;
@@ -2108,8 +2113,8 @@ body.contrast-theme {
 
         &:hover {
             svg path {
-                stroke: black;
-                fill: black;
+                stroke: $c2lc-black;
+                fill: $c2lc-black;
             }
         }
     }
@@ -2124,7 +2129,7 @@ body.contrast-theme {
     }
 
     button.btn.ActionPanel__action-buttons {
-        background-color: black;
+        background-color: $c2lc-black;
 
         svg {
             path.stroked {
@@ -2136,14 +2141,14 @@ body.contrast-theme {
         }
 
         &:hover {
-            border: 1px solid black;
+            border: 1px solid $c2lc-black;
             background-color: white;
             svg {
                 path.stroked {
-                    stroke: black;
+                    stroke: $c2lc-black;
                 }
                 path.filled {
-                    fill: black;
+                    fill: $c2lc-black;
                 }
             }
         }
@@ -2174,7 +2179,7 @@ body.contrast-theme {
     }
 
     button.ProgramBlockEditor__program-block--paused {
-        border: 1px solid black;
+        border: 1px solid $c2lc-black;
         animation-timing-function: ease;
         animation: pausedContrastAnimation 2s infinite;
     }
@@ -2184,7 +2189,7 @@ body.contrast-theme {
     }
 
     .App__shareButton-container button {
-        background-color: #1E1E1E;
+        background-color: $c2lc-black;
         color: #FFFFFF;
     }
 
@@ -2209,16 +2214,16 @@ body.contrast-theme {
                     fill: white;
                 }
                 path.inner-circle {
-                    fill: #1E1E1E;
+                    fill: $c2lc-black;
                 }
                 circle {
-                    fill: black;
+                    fill: $c2lc-black;
                 }
             }
         }
 
         &:focus {
-            box-shadow: 0 0 0 $c2lc-focus-indicator-width #1E1E1E;
+            box-shadow: 0 0 0 $c2lc-focus-indicator-width $c2lc-black;
         }
     }
 
@@ -2226,7 +2231,7 @@ body.contrast-theme {
         &:hover {
             svg {
                 path.inner-circle {
-                    fill: #1E1E1E;
+                    fill: $c2lc-black;
                 }
                 path.triangle {
                     fill: #FFFFFF;
@@ -2234,7 +2239,7 @@ body.contrast-theme {
             }
         }
         &:focus {
-            box-shadow: 0 0 0 $c2lc-focus-indicator-width #1E1E1E;
+            box-shadow: 0 0 0 $c2lc-focus-indicator-width $c2lc-black;
         }
 
         svg {
@@ -2248,7 +2253,7 @@ body.contrast-theme {
         svg {
             fill: #FFFFFF;
             circle, path.triangle {
-                fill: #1E1E1E;
+                fill: $c2lc-black;
             }
         }
     }
@@ -2260,12 +2265,12 @@ body.contrast-theme {
                     fill: #FFFFFF;
                 }
                 path.inner-circle {
-                    fill: #1E1E1E;
+                    fill: $c2lc-black;
                 }
             }
         }
         &:focus {
-            box-shadow: 0 0 0 $c2lc-focus-indicator-width #1E1E1E;
+            box-shadow: 0 0 0 $c2lc-focus-indicator-width $c2lc-black;
         }
     }
 
@@ -2279,7 +2284,7 @@ body.contrast-theme {
             }
         }
         &:focus {
-            box-shadow: 0 0 0 $c2lc-focus-indicator-width #1E1E1E;
+            box-shadow: 0 0 0 $c2lc-focus-indicator-width $c2lc-black;
         }
     }
 
@@ -2299,7 +2304,7 @@ body.contrast-theme {
     }
 
     .StopButton {
-        box-shadow: 0 0 0 0.2rem #1E1E1E;
+        box-shadow: 0 0 0 0.2rem $c2lc-black;
 
         svg rect {
             fill: #FFFFFF;
@@ -2307,27 +2312,27 @@ body.contrast-theme {
 
         &:hover:not(.StopButton--disabled) {
             box-shadow:
-                0 0 0 0.2rem #1E1E1E,
+                0 0 0 0.2rem $c2lc-black,
                 0 0 0 0.4rem white;
 
             svg rect {
                 fill: #ffffff
             }
-            background-color: #1E1E1E;
+            background-color: $c2lc-black;
         }
 
         &:focus {
             box-shadow:
-                0 0 0 0.2rem #1E1E1E,
+                0 0 0 0.2rem $c2lc-black,
                 0 0 0 0.4rem #FFFFFF,
-                0 0 0 0.6rem #1E1E1E;
+                0 0 0 0.6rem $c2lc-black;
         }        
     }
 
     .StopButton:not(:hover):not(.StopButton--disabled) {
         background-color: #FFFFFF;
         svg rect {
-            fill: #1E1E1E;
+            fill: $c2lc-black;
         }
     }
 
@@ -2339,7 +2344,7 @@ body.contrast-theme {
             box-shadow:
                 0 0 0 0.2rem #8E8E8E,
                 0 0 0 0.4rem #FFFFFF,
-                0 0 0 0.6rem #1E1E1E;
+                0 0 0 0.6rem $c2lc-black;
         }
 
         svg rect {
@@ -2349,19 +2354,19 @@ body.contrast-theme {
 
     .ProgramSpeedController__slider {
         &::-webkit-slider-runnable-track {
-            background-color: black;
-            border: 2px solid black;
+            background-color: $c2lc-black;
+            border: 2px solid $c2lc-black;
         }
 
         &::-webkit-slider-thumb {
-            border: 2px solid black;
+            border: 2px solid $c2lc-black;
             background-color: #0078FF;
             box-shadow: -8rem 0 0 8rem #0078FF;
         }
 
         &::-moz-range-thumb {
             border-radius: 0;
-            border: 2px solid black;
+            border: 2px solid $c2lc-black;
             background-color: #0078FF;
             box-shadow: -8rem 0 0 8rem #0078FF;
         }
@@ -2371,7 +2376,7 @@ body.contrast-theme {
         }
 
         &::-moz-range-track {
-            background-color: black;
+            background-color: $c2lc-black;
         }
 
         &::-ms-fill-lower {
@@ -2379,7 +2384,7 @@ body.contrast-theme {
         }
 
         &::-ms-fill-upper {
-            background-color: black;
+            background-color: $c2lc-black;
         }
 
         &:hover {
@@ -2402,7 +2407,7 @@ body.contrast-theme {
         }
 
         &:focus {
-            outline-color: #1E1E1E;
+            outline-color: $c2lc-black;
         }
     }
 
@@ -2410,17 +2415,17 @@ body.contrast-theme {
         &:focus {
             box-shadow:
                 0 0 0 0.1rem white,
-                0 0 0 0.2rem black;
+                0 0 0 0.2rem $c2lc-black;
         }
 
         &:hover {
             background-color: white;
-            color: black;
-            box-shadow: 0 0 0 0.1rem black;
+            color: $c2lc-black;
+            box-shadow: 0 0 0 0.1rem $c2lc-black;
         }
 
         &:hover:focus {
-            box-shadow: 0 0 0 0.2rem black;
+            box-shadow: 0 0 0 0.2rem $c2lc-black;
         }
     }
 }

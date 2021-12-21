@@ -5,11 +5,11 @@
     width: 2rem;
     font-size: 1.2rem;
 
-    box-shadow: 0 0 0 0.2rem #1E1E1E;
+    box-shadow: 0 0 0 0.2rem $c2lc-black;
 
     &:focus {
         box-shadow:
-            0 0 0 0.2rem #1E1E1E,
+            0 0 0 0.2rem $c2lc-black,
             0 0 0 0.4rem #67717E,
             0 0 0 0.6rem #FFFFFF;
         outline: none;

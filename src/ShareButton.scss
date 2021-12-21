@@ -3,7 +3,7 @@
 button.btn.ShareButton {
     background-color: #CCE6E2;
     border: 0;
-    color: #1E1E1E;
+    color: $c2lc-black;
     padding: 0.2rem;
     width: 10rem;
 
@@ -19,6 +19,6 @@ button.btn.ShareButton {
 
     &:hover {
         background-color: #F5C58A;
-        color: #1E1E1E;
+        color: $c2lc-black;
     }
 }

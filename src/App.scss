@@ -64,7 +64,7 @@ body {
 }
 
 .App__app-heading > a {
-    color: black;
+    color: $c2lc-black;
     &:hover {
         text-decoration: none;
     }
@@ -145,7 +145,7 @@ body {
    
     &:focus {
         box-shadow:
-            0 0 0 0.1rem black;
+            0 0 0 0.1rem $c2lc-black;
         outline: none;
     }
 
