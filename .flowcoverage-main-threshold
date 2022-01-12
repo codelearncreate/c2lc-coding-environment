@@ -1,0 +1,14 @@
+{
+  "concurrentFiles": 1,
+  "globExcludePatterns": [
+    "node_modules/**",
+    "src/vendor/**",
+    "src/**/*.test.js"
+  ],
+  "globIncludePatterns": [
+    "src/**/*.js"
+  ],
+  "outputDir": "flow-coverage-main",
+  "threshold": 94,
+  "reportTypes": "text"
+}
