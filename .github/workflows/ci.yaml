@@ -38,7 +38,7 @@ jobs:
       - name: Flow
         run: npx flow check
       - name: Flow Type Coverage (HTML report)
-        run: npx flow-coverage-report --config .flowcoverage-all
+        run: npx --ignore-existing flow-coverage-report --config .flowcoverage-all
       - name: Archive Flow Type Coverage Report
         continue-on-error: true
         uses: actions/upload-artifact@v2
@@ -54,8 +54,8 @@ jobs:
           name: Test Code Coverage Report
           path: coverage/
       - name: Flow Type Coverage (main coverage threshold)
-        run: npx flow-coverage-report --config .flowcoverage-main-threshold
+        run: npx --ignore-existing flow-coverage-report --config .flowcoverage-main-threshold
       - name: Flow Type Coverage (test coverage threshold)
-        run: npx flow-coverage-report --config .flowcoverage-tests-threshold
+        run: npx --ignore-existing flow-coverage-report --config .flowcoverage-tests-threshold
       - name: Lint Documentation
         run: npm run markdownlint
