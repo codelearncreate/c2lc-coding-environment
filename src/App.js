@@ -920,20 +920,6 @@ export class App extends React.Component<AppProps, AppState> {
         });
     }
 
-    handleToggleAllowedCommand = (event: Event, commandName: CommandName) => {
-        // TODO: Use the function form of setState() as the new state
-        //       depends on the current state
-        const currentIsAllowed = this.state.allowedActions[commandName];
-        if (this.state.programSequence.usesAction(commandName) && currentIsAllowed) {
-            event.preventDefault();
-        }
-        else {
-            const newAllowedActions= Object.assign({}, this.state.allowedActions);
-            newAllowedActions[commandName] = !currentIsAllowed;
-            this.setState({ allowedActions: newAllowedActions})
-        }
-    }
-
     changeProgramSpeedIndex = (newSpeedIndex: number) => {
         if (newSpeedIndex >= 0 && newSpeedIndex <= (this.speedLookUp.length - 1)) {
             this.interpreter.setStepTime(this.speedLookUp[newSpeedIndex]);
@@ -1382,6 +1368,7 @@ export class App extends React.Component<AppProps, AppState> {
                     onConfirm={this.handleChangeAllowedActions}
                     allowedActions={this.state.allowedActions}
                     programSequence={this.state.programSequence}
+                    selectedAction={this.state.selectedAction}
                 />
             </React.Fragment>
         );

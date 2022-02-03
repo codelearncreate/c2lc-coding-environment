@@ -23,6 +23,8 @@ type ActionsSimplificationModalProps = {
     menuItems: Array<CommandName>,
     programSequence: ProgramSequence,
     allowedActions: ActionToggleRegister,
+    // TODO: Make this and App.js use CommandName.
+    selectedAction?: null|string,
     show: boolean
 };
 
@@ -124,6 +126,7 @@ class ActionsSimplificationModal extends React.Component<ActionsSimplificationMo
                     intl={this.props.intl}
                     isAllowed={isAllowed}
                     isUsed={isUsed}
+                    isSelected={this.props.selectedAction === itemKey}
                     itemKey={itemKey}
                     key={itemKey}
                     onChange={itemChangeHandler}

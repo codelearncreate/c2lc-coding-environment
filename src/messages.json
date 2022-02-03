@@ -21,6 +21,7 @@
         "ActionsMenuItem.command.right180": "Turn right 180 degrees",
         "ActionsMenuItem.unusedItemToggleLabel": "{action}",
         "ActionsMenuItem.usedItemToggleLabel": "(Used)",
+        "ActionsMenuItem.selectedActionToggleLabel": "(Selected)",
         "ActionsSimplificationModal.cancel": "Cancel",
         "ActionsSimplificationModal.save": "Save",
         "ActionsSimplificationModal.title": "Available Actions",

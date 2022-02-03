@@ -12,6 +12,7 @@ import './ActionsMenuItem.scss';
 type ActionsMenuItemProps = {
     intl: IntlShape,
     isAllowed?: boolean,
+    isSelected?: boolean,
     isUsed?: boolean,
     itemKey: string,
     onChange: (event: Event) => void
@@ -26,7 +27,7 @@ export class ActionsMenuItem extends React.Component< ActionsMenuItemProps, {} >
 
     handleChange = (event: Event) => {
         // Always reenabled disallowed commands, but do not disable used ones.
-        if (!this.props.isAllowed || !this.props.isUsed) {
+        if (!this.props.isAllowed || !(this.props.isSelected || this.props.isUsed)) {
             event.preventDefault();
             this.props.onChange(event);
         }
@@ -38,6 +39,10 @@ export class ActionsMenuItem extends React.Component< ActionsMenuItemProps, {} >
         const usedLabel = this.props.intl.formatMessage({ id: 'ActionsMenuItem.usedItemToggleLabel' });
         if (this.props.isUsed) {
             commandName += " " + usedLabel;
+        }
+        if (this.props.isSelected) {
+            const selectedLabel = this.props.intl.formatMessage({ id: 'ActionsMenuItem.selectedActionToggleLabel' });
+            commandName += " " + selectedLabel
         }
 
         const checkboxId = `actions-menu-item-${this.props.itemKey}`;
@@ -55,7 +60,7 @@ export class ActionsMenuItem extends React.Component< ActionsMenuItemProps, {} >
         }
 
         // Disable the checkbox if the button is allowed and used.
-        const isCheckboxDisabled = (this.props.isAllowed && this.props.isUsed);
+        const isCheckboxDisabled = (this.props.isAllowed && (this.props.isUsed || this.props.isSelected));
 
         return (
             <div
