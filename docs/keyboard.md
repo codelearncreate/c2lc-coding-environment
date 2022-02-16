@@ -71,8 +71,6 @@ conflicting with entering international characters in some keyboard layouts.
 | Ctrl + Shift + x, t, 5 | changeToHighContrastTheme |
 | Ctrl + Shift + x, x | toggleFeedbackAnnouncements |
 
-
-## NVDA Key Bindings
 ## Control+Alt (Apple: Control+Option) Key Bindings
 
 NVDA has many commands that make use of the alt key, to avoid conflicting with
