@@ -8,34 +8,3 @@
     border-top: 2px solid #F1F2F4;
 }
 
-button.btn.ModalWithFooter__secondaryButton,
-button.btn.ModalWithFooter__primaryButton {
-    border: 0;
-    padding: 0.2rem;
-    width: 8rem;
-
-    &:active {
-        background-color: #ED972C;
-    }
-
-    &:hover {
-        background-color: #F5C58A;
-        color: black;
-    }
-
-    &:focus {
-        box-shadow:
-            0 0 0 0.1rem #D5D8DD,
-            0 0 0 $c2lc-focus-indicator-width black;
-    }
-}
-
-button.btn.ModalWithFooter__secondaryButton {
-    background-color: #CCE6E2;
-    color: #1E1E1E;
-}
-
-button.btn.ModalWithFooter__primaryButton {
-    background-color: #33717F;
-    color: #FFFFFF;
-}

@@ -7,7 +7,8 @@ export type CommandName =
     'forward1' | 'forward2' | 'forward3' |
     'backward1' | 'backward2' | 'backward3' |
     'left45' | 'left90' | 'left180' |
-    'right45' | 'right90' | 'right180';
+    'right45' | 'right90' | 'right180' |
+    'loop';
 
 export type DeviceConnectionStatus = 'notConnected' | 'connecting' | 'connected';
 
@@ -26,7 +27,13 @@ export type EditorMode = 'text' | 'block';
 */
 export type ThemeName = 'default' | 'light' | 'dark' | 'gray' | 'contrast';
 
-export type Program = Array<string>;
+export type ProgramBlock = {
+    block: string,
+    iterations?: number,
+    label?: string
+};
+
+export type Program = Array<ProgramBlock>;
 
 // use running, paused, stopped
 export type RunningState = 'running' | 'stopRequested' | 'stopped' | 'pauseRequested' | 'paused';
@@ -54,6 +61,7 @@ export interface AudioManager {
     playSoundForCharacterState(samplerKey: string, releaseTimeInMs: number, characterState: CharacterState, sceneDimension: SceneDimensions) : void;
     setAnnouncementsEnabled(value: boolean) : void;
     setAudioEnabled(value: boolean) : void;
+    setSonificationEnabled(value: boolean) : void;
 }
 
 // https://developer.mozilla.org/en-US/docs/Web/API/SpeechGrammar
@@ -124,5 +132,6 @@ export type ActionToggleRegister = {
     left180?: boolean,
     right45?: boolean,
     right90?: boolean,
-    right180?: boolean
+    right180?: boolean,
+    loop?: boolean
 };

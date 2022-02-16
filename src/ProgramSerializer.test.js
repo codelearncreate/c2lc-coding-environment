@@ -4,44 +4,61 @@ test('Serialize program', () => {
     const programSerializer = new ProgramSerializer();
 
     expect(programSerializer.serialize([])).toStrictEqual('');
-    expect(programSerializer.serialize(['forward1'])).toStrictEqual('1');
-    expect(programSerializer.serialize(['forward2'])).toStrictEqual('2');
-    expect(programSerializer.serialize(['forward3'])).toStrictEqual('3');
-    expect(programSerializer.serialize(['backward1'])).toStrictEqual('4');
-    expect(programSerializer.serialize(['backward2'])).toStrictEqual('5');
-    expect(programSerializer.serialize(['backward3'])).toStrictEqual('6');
-    expect(programSerializer.serialize(['left45'])).toStrictEqual('A');
-    expect(programSerializer.serialize(['left90'])).toStrictEqual('B');
-    expect(programSerializer.serialize(['left180'])).toStrictEqual('D');
-    expect(programSerializer.serialize(['right45'])).toStrictEqual('a');
-    expect(programSerializer.serialize(['right90'])).toStrictEqual('b');
-    expect(programSerializer.serialize(['right180'])).toStrictEqual('d');
+    expect(programSerializer.serialize([{block: 'forward1'}])).toStrictEqual('1');
+    expect(programSerializer.serialize([{block: 'forward2'}])).toStrictEqual('2');
+    expect(programSerializer.serialize([{block: 'forward3'}])).toStrictEqual('3');
+    expect(programSerializer.serialize([{block: 'backward1'}])).toStrictEqual('4');
+    expect(programSerializer.serialize([{block: 'backward2'}])).toStrictEqual('5');
+    expect(programSerializer.serialize([{block: 'backward3'}])).toStrictEqual('6');
+    expect(programSerializer.serialize([{block: 'left45'}])).toStrictEqual('A');
+    expect(programSerializer.serialize([{block: 'left90'}])).toStrictEqual('B');
+    expect(programSerializer.serialize([{block: 'left180'}])).toStrictEqual('D');
+    expect(programSerializer.serialize([{block: 'right45'}])).toStrictEqual('a');
+    expect(programSerializer.serialize([{block: 'right90'}])).toStrictEqual('b');
+    expect(programSerializer.serialize([{block: 'right180'}])).toStrictEqual('d');
     expect(programSerializer.serialize([
-        'forward1', 'forward2', 'forward3',
-        'backward1', 'backward2', 'backward3',
-        'left45', 'left90', 'left180',
-        'right45', 'right90', 'right180'
-    ])).toStrictEqual('123456ABDabd');
+        {block: 'startLoop', iterations: 2, label: 'A'},
+        {block: 'endLoop', label: 'A'}
+    ])).toStrictEqual('sA2sz');
+    expect(programSerializer.serialize([
+        {block: 'forward1'}, {block: 'forward2'}, {block: 'forward3'},
+        {block: 'backward1'}, {block: 'backward2'}, {block: 'backward3'},
+        {block: 'left45'}, {block: 'left90'}, {block: 'left180'},
+        {block: 'right45'}, {block: 'right90'}, {block: 'right180'},
+        {block: 'startLoop', iterations: 2, label: 'A'},
+        {block: 'endLoop', label: 'A'}
+    ])).toStrictEqual('123456ABDabdsA2sz');
 });
 
 test('Serializing an unsupported command should throw an Error', () => {
     expect(() => {
-        (new ProgramSerializer()).serialize(['unsupported-command']);
+        (new ProgramSerializer()).serialize([{block: 'unsupported-command'}]);
     }).toThrowError(/^Unrecognized program command when serializing program: unsupported-command$/);
 });
 
 test('Deserialize program', () => {
     const programSerializer = new ProgramSerializer();
-    expect(programSerializer.deserialize('')).toStrictEqual([]);
-    expect(programSerializer.deserialize('21a')).toStrictEqual(['forward2', 'forward1', 'right45']);
+    expect(programSerializer.deserialize('')).toStrictEqual({
+        program: [],
+        highestLoopNumber: 0
+    });
+    expect(programSerializer.deserialize('21a')).toStrictEqual({
+        program: [{block: 'forward2'}, {block: 'forward1'}, {block: 'right45'}],
+        highestLoopNumber: 0
+    });
 });
 
 test('Roundtrip program', () => {
     const programSerializer = new ProgramSerializer();
     const program = [
-        'forward1', 'forward2', 'forward3',
-        'left45', 'left90', 'left180',
-        'right45', 'right90', 'right180'
+        {block: 'forward1'}, {block: 'forward2'}, {block: 'forward3'},
+        {block: 'backward1'}, {block: 'backward2'}, {block: 'backward3'},
+        {block: 'left45'}, {block: 'left90'}, {block: 'left180'},
+        {block: 'right45'}, {block: 'right90'}, {block: 'right180'},
+        {block: 'startLoop', iterations: 2, label: 'A'},
+        {block: 'endLoop', label: 'A'}
     ];
-    expect(programSerializer.deserialize(programSerializer.serialize(program))).toStrictEqual(program);
+    const parseResult = programSerializer.deserialize(programSerializer.serialize(program));
+    expect(parseResult.program).toStrictEqual(program);
+    expect(parseResult.highestLoopNumber).toEqual(1);
 });

@@ -56,11 +56,11 @@ function getThemeSelectorRadioButton(wrapper) {
 }
 
 function getCancelButton(wrapper) {
-    return wrapper.find('.ModalWithFooter__secondaryButton');
+    return wrapper.find('.TextButton--secondaryButton');
 }
 
 function getSaveButton(wrapper) {
-    return wrapper.find('.ModalWithFooter__primaryButton');
+    return wrapper.find('.TextButton--primaryButton');
 }
 
 describe('When rendering selector options', () => {

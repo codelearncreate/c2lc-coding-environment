@@ -15,6 +15,7 @@ function createShallowToggleSwitch(props) {
             ToggleSwitch,
             Object.assign(
                 {
+                    disabled: false,
                     ariaLabel: '',
                     value: false,
                     className: undefined,
@@ -136,5 +137,36 @@ describe('When there is className property', () => {
         const { wrapper } = createShallowToggleSwitch({ className: className });
         const toggleSwitch = getToggleSwitch(wrapper);
         expect(toggleSwitch.prop('className').includes(className)).toBe(true);
+    });
+});
+
+describe('Given the ToggleSwitch is disabed', () => {
+    let wrapper, mockChangeHandler;
+
+    beforeEach(() => {
+        ({ wrapper, mockChangeHandler } = createShallowToggleSwitch({
+            disabled: true
+        }));
+    });
+
+    test('Then aria-disabled should be set to true', () => {
+        expect.assertions(2);
+        const toggleSwitch = getToggleSwitch(wrapper);
+        expect(toggleSwitch.props()['aria-disabled']).toBe(true);
+        expect(toggleSwitch.props().tabIndex).toBe('0');
+    });
+
+    test('When clicked, then the onChange handler should not be called', () => {
+        expect.assertions(1);
+        const toggleSwitch = getToggleSwitch(wrapper);
+        toggleSwitch.simulate('click');
+        expect(mockChangeHandler.mock.calls.length).toBe(0);
+    });
+
+    test('When the space key is pressed, then the onChange handler should not be called', () => {
+        expect.assertions(1);
+        const toggleSwitch = getToggleSwitch(wrapper);
+        toggleSwitch.simulate('keyDown', {key: ' ', preventDefault: ()=>{}});
+        expect(mockChangeHandler.mock.calls.length).toBe(0);
     });
 });

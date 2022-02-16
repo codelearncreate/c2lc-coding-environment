@@ -16,6 +16,9 @@ import { ReactComponent as Left180 } from './svg/Left180.svg';
 import { ReactComponent as Right45 } from './svg/Right45.svg';
 import { ReactComponent as Right90 } from './svg/Right90.svg';
 import { ReactComponent as Right180 } from './svg/Right180.svg';
+import { ReactComponent as Loop } from './svg/Loop.svg';
+import { ReactComponent as LoopStart } from './svg/LoopStart.svg';
+import { ReactComponent as LoopEnd } from './svg/LoopEnd.svg';
 
 type CommandBlockProps = {
     commandName: string,
@@ -38,7 +41,10 @@ export const commandBlockIconTypes = new Map<string, any>([
     ['left180', Left180],
     ['right45', Right45],
     ['right90', Right90],
-    ['right180', Right180]
+    ['right180', Right180],
+    ['loop', Loop],
+    ['startLoop', LoopStart],
+    ['endLoop', LoopEnd]
 ]);
 
 export default React.forwardRef<CommandBlockProps, Button>(

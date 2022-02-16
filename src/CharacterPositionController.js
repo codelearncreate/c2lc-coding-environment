@@ -5,7 +5,7 @@ import type {IntlShape} from 'react-intl';
 import React from 'react';
 import CharacterState from './CharacterState';
 import classNames from 'classnames';
-import { getWorldCharacter } from './Worlds';
+import { getWorldCharacter, getWorldProperties } from './Worlds';
 import { ReactComponent as MovePositionUp } from './svg/MovePositionUp.svg';
 import { ReactComponent as MovePositionRight } from './svg/MovePositionRight.svg';
 import { ReactComponent as MovePositionDown } from './svg/MovePositionDown.svg';
@@ -99,13 +99,18 @@ class CharacterPositionController extends React.Component<CharacterPositionContr
         }
     }
 
+    getWorldEnableFlipCharacter(): boolean {
+        return getWorldProperties(this.props.world).enableFlipCharacter;
+    }
+
     getWorldCharacter() {
         // We use a CSS approach because Safari doesn't support scale transforms whole svgs (and ignores the rotation
         // if you include scaling in the transform).  See:
         // https://stackoverflow.com/questions/48248512/svg-transform-rotate180-does-not-work-in-safari-11
         const worldCharacterClassName = classNames(
             'CharacterPositionController__character-column-character',
-            'CharacterPositionController__character-column-character--angle' + this.props.characterState.direction
+            'CharacterPositionController__character-column-character--angle' + this.props.characterState.direction,
+            this.getWorldEnableFlipCharacter() && 'CharacterPositionController__character-column-character--enable-flip'
         );
 
         const character = getWorldCharacter(this.props.theme, this.props.world);

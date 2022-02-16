@@ -2,7 +2,7 @@
 
 import { injectIntl, FormattedMessage } from 'react-intl';
 import type {IntlShape} from 'react-intl';
-import type {AudioManager, RunningState, ThemeName} from './types';
+import type {AudioManager, RunningState, ThemeName, ProgramBlock} from './types';
 import type { WorldName } from './Worlds';
 import React from 'react';
 import CharacterState from './CharacterState';
@@ -214,14 +214,15 @@ export class ProgramBlockEditor extends React.Component<ProgramBlockEditorProps,
 
     handleActionPanelDeleteStep = (index: number) => {
         this.props.onDeleteProgramStep(index,
-            this.props.programSequence.getProgramStepAt(index));
+            this.props.programSequence.getProgramStepAt(index).block);
         this.closeActionPanel();
     };
 
     handleActionPanelReplaceStep = (index: number) => {
         if (this.props.selectedAction) {
-            if (this.props.programSequence.getProgramStepAt(index) !== this.props.selectedAction) {
-                const oldCommandString = this.props.intl.formatMessage({ id: "Announcement." + this.props.programSequence.getProgramStepAt(index)});
+            const programStep = this.props.programSequence.getProgramStepAt(index);
+            if (programStep.block !== this.props.selectedAction) {
+                const oldCommandString = this.props.intl.formatMessage({ id: "Announcement." + programStep.block});
                 //$FlowFixMe: Flow thinks `this.props.selectedAction` might be null even though we check it above.
                 const newCommandString = this.props.intl.formatMessage({ id: "Announcement." + this.props.selectedAction});
 
@@ -253,8 +254,9 @@ export class ProgramBlockEditor extends React.Component<ProgramBlockEditorProps,
 
     handleActionPanelMoveToPreviousStep = (index: number) => {
         this.props.audioManager.playAnnouncement('moveToPrevious', this.props.intl);
-        if (this.props.programSequence.getProgramStepAt(index - 1) != null) {
-            const previousStepIndex = index - 1;
+        const previousStepIndex = index - 1;
+        const previousStep = this.props.programSequence.getProgramStepAt(previousStepIndex);
+        if (previousStep != null) {
             this.setState({
                 focusedActionPanelOptionName: 'moveToPreviousStep'
             });
@@ -267,8 +269,9 @@ export class ProgramBlockEditor extends React.Component<ProgramBlockEditorProps,
 
     handleActionPanelMoveToNextStep = (index: number) => {
         this.props.audioManager.playAnnouncement('moveToNext', this.props.intl);
-        if (this.props.programSequence.getProgramStepAt(index + 1) != null) {
-            const nextStepIndex = index + 1;
+        const nextStepIndex = index + 1;
+        const nextStep = this.props.programSequence.getProgramStepAt(nextStepIndex);
+        if (nextStep != null) {
             this.setState({
                 focusedActionPanelOptionName: 'moveToNextStep'
             });
@@ -383,7 +386,7 @@ export class ProgramBlockEditor extends React.Component<ProgramBlockEditorProps,
 
     // Rendering
 
-    makeProgramBlock(programStepNumber: number, command: string) {
+    makeProgramBlock(programStepNumber: number, programBlock: ProgramBlock) {
         const active = this.programStepIsActive(programStepNumber);
         // When the runningState is 'paused', show the pause indicator on
         // programSequence.getProgramCounter(). And when the runningState is
@@ -407,11 +410,16 @@ export class ProgramBlockEditor extends React.Component<ProgramBlockEditorProps,
             hasActionPanelControl && 'focus-trap-action-panel__program-block',
             paused && 'ProgramBlockEditor__program-block--paused'
         );
-        const ariaLabel = this.props.intl.formatMessage(
-            { id: 'ProgramBlockEditor.command' },
+        const command = programBlock.block;
+        const loopLabel = programBlock.label ? programBlock.label : null;
+        const ariaLabel = this.props.intl.formatMessage({
+            id: 'ProgramBlockEditor.command' },
             {
-                index: programStepNumber + 1 ,
-                command: this.props.intl.formatMessage({id: `Command.${command}`})
+                index: programStepNumber + 1,
+                command: this.props.intl.formatMessage(
+                    {id: `Command.${command}`},
+                    {loopLabel}
+                )
             }
         );
 
@@ -437,25 +445,30 @@ export class ProgramBlockEditor extends React.Component<ProgramBlockEditorProps,
     }
 
     makeAddNodeAriaLabel(programStepNumber: number, isEndOfProgramAddNode: boolean) {
-        if (this.props.selectedAction != null) {
+        const selectedAction = this.props.selectedAction;
+        if (selectedAction != null) {
             if (isEndOfProgramAddNode) {
                 return this.props.intl.formatMessage(
                     { id: 'ProgramBlockEditor.lastBlock' },
-                    { command: this.props.intl.formatMessage({id: `Command.${this.props.selectedAction}`}) }
+                    { command: this.props.intl.formatMessage({id: `Command.${selectedAction}`}) }
                 );
             } else if (programStepNumber === 0) {
                 // The add node before the start of the program
                 return this.props.intl.formatMessage(
                     { id: 'ProgramBlockEditor.beginningBlock' },
-                    { command: this.props.intl.formatMessage({id: `Command.${this.props.selectedAction}`}) }
+                    { command: this.props.intl.formatMessage({id: `Command.${selectedAction}`}) }
                 );
             } else {
+                const prevCommand = this.props.programSequence.getProgramStepAt(programStepNumber - 1);
+                const postCommand = this.props.programSequence.getProgramStepAt(programStepNumber);
+                const prevCommandLabel = prevCommand.label ? prevCommand.label : null;
+                const postCommandLabel = postCommand.label ? postCommand.label : null;
                 return this.props.intl.formatMessage(
                     { id: 'ProgramBlockEditor.betweenBlocks' },
                     {
-                        command: this.props.intl.formatMessage({id: `Command.${this.props.selectedAction}`}),
-                        prevCommand: `${programStepNumber}, ${this.props.intl.formatMessage({id: `Command.${this.props.programSequence.getProgramStepAt(programStepNumber-1)}`})}`,
-                        postCommand: `${programStepNumber+1}, ${this.props.intl.formatMessage({id: `Command.${this.props.programSequence.getProgramStepAt(programStepNumber)}`})}`
+                        command: this.props.intl.formatMessage({id: `Command.${selectedAction}`}),
+                        prevCommand: `${programStepNumber}, ${this.props.intl.formatMessage({id: `Command.${prevCommand.block}`}, {loopLabel: prevCommandLabel})}`,
+                        postCommand: `${programStepNumber+1}, ${this.props.intl.formatMessage({id: `Command.${postCommand.block}`}, {loopLabel: postCommandLabel})}`
                     }
                 );
             }
@@ -466,7 +479,7 @@ export class ProgramBlockEditor extends React.Component<ProgramBlockEditorProps,
         }
     }
 
-    makeProgramBlockSection(programStepNumber: number, command: string) {
+    makeProgramBlockSection(programStepNumber: number, programBlock: ProgramBlock) {
         const showActionPanel = (this.props.actionPanelStepIndex === programStepNumber);
         return (
             <React.Fragment key={programStepNumber}>
@@ -500,7 +513,7 @@ export class ProgramBlockEditor extends React.Component<ProgramBlockEditorProps,
                             </div>
                         }
                     </div>
-                    {this.makeProgramBlock(programStepNumber, command)}
+                    {this.makeProgramBlock(programStepNumber, programBlock)}
                 </div>
             </React.Fragment>
         );
@@ -528,8 +541,8 @@ export class ProgramBlockEditor extends React.Component<ProgramBlockEditorProps,
     }
 
     render() {
-        const contents = this.props.programSequence.getProgram().map((command, stepNumber) => {
-            return this.makeProgramBlockSection(stepNumber, command);
+        const contents = this.props.programSequence.getProgram().map((programBlock, stepNumber) => {
+            return this.makeProgramBlockSection(stepNumber, programBlock);
         });
 
         contents.push(this.makeEndOfProgramAddNodeSection(this.props.programSequence.getProgramLength()));

@@ -23,8 +23,8 @@ export default class C2lcURLParams {
         return this.urlSearchParams.get('t');
     }
 
-    getAllowedActions() {
-        return this.urlSearchParams.get('a');
+    getDisallowedActions() {
+        return this.urlSearchParams.get('d');
     }
 
     getWorld() {

@@ -62,7 +62,7 @@ export default class ProgramChangeController {
         this.app.setState((state) => {
             // Check that the step to delete hasn't changed since the
             // user made the deletion
-            if (command === state.programSequence.getProgramStepAt(index)) {
+            if (command === state.programSequence.getProgramStepAt(index).block) {
                 // Play the announcement
                 const commandString = this.intl.formatMessage({
                     id: "Announcement." + command
