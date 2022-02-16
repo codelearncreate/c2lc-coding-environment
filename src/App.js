@@ -889,6 +889,21 @@ export class App extends React.Component<AppProps, AppState> {
                         case("changeToHighContrastTheme"):
                             this.setStateSettings({theme: "contrast"});
                             break;
+                        case("changeToDeepOceanWorld"):
+                            this.setStateSettings({ world: "DeepOcean"});
+                            break;
+                        case("changeToJungleWorld"):
+                            this.setStateSettings({ world: "Jungle"});
+                            break;
+                        case("changeToLandmarksWorld"):
+                            this.setStateSettings({ world: "Landmarks"});
+                            break;
+                        case("changeToSketchpadWorld"):
+                            this.setStateSettings({ world: "Sketchpad"});
+                            break;
+                        case("changeToSpaceWorld"):
+                            this.setStateSettings({ world: "Space"});
+                            break;
                         default:
                             break;
                     }

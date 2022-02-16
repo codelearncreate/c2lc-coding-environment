@@ -31,12 +31,12 @@ follows.
 | Ctrl + Alt + e | addCommandToEnd |
 | Ctrl + Alt + d | deleteCurrentStep |
 | Ctrl + Alt + i | announceScene |
-| Ctrl + Alt + p | playPauseProgram |
-| Ctrl + Alt + r | refreshScene |
-| Ctrl + Alt + s | stopProgram |
 | < | decreaseProgramSpeed |
 | > | increaseProgramSpeed |
+| Ctrl + Alt + p | playPauseProgram |
+| Ctrl + Alt + r | refreshScene |
 | ? | showHide |
+| Ctrl + Alt + s | stopProgram |
 | Ctrl + Alt + x, a, b, 1 | selectBackward1 |
 | Ctrl + Alt + x, a, b, 2 | selectBackward2 |
 | Ctrl + Alt + x, a, b, 3 | selectBackward3 |
@@ -63,14 +63,19 @@ follows.
 | Ctrl + Alt + x, f, q | focusProgramSequence |
 | Ctrl + Alt + x, f, s | focusScene |
 | Ctrl + Alt + x, f, t | focusAddNodeToggle |
+| Ctrl + Alt + x, f, w | focusWorldSelector |
 | Ctrl + Alt + x, f, x | focusCharacterColumnInput |
 | Ctrl + Alt + x, f, y | focusCharacterRowInput |
-| Ctrl + Alt + x, f, w | focusWorldSelector |
 | Ctrl + Alt + x, t, 1 | changeToDefaultTheme |
 | Ctrl + Alt + x, t, 2 | changeToLightTheme |
 | Ctrl + Alt + x, t, 3 | changeToDarkTheme |
 | Ctrl + Alt + x, t, 4 | changeToGrayscaleTheme |
 | Ctrl + Alt + x, t, 5 | changeToHighContrastTheme |
+| Ctrl + Alt + x, w, 1 | changeToSketchpadWorld |
+| Ctrl + Alt + x, w, 2 | changeToJungleWorld |
+| Ctrl + Alt + x, w, 3 | changeToSpaceWorld |
+| Ctrl + Alt + x, w, 4 | changeToDeepOceanWorld |
+| Ctrl + Alt + x, w, 5 | changeToLandmarksWorld |
 | Ctrl + Alt + x, x | toggleFeedbackAnnouncements |
 
 ## Alt (Apple: Option) Key Bindings
@@ -86,12 +91,12 @@ with the starting key of a sequence.  Those key bindings are as follows:
 | Alt + e | addCommandToEnd |
 | Alt + d | deleteCurrentStep |
 | Alt + i | announceScene |
-| Alt + p | playPauseProgram |
-| Alt + r | refreshScene |
-| Alt + s | stopProgram |
 | < | decreaseProgramSpeed |
 | > | increaseProgramSpeed |
+| Alt + p | playPauseProgram |
+| Alt + r | refreshScene |
 | ? | showHide |
+| Alt + s | stopProgram |
 | Alt + x, a, b, 1 | selectBackward1 |
 | Alt + x, a, b, 2 | selectBackward2 |
 | Alt + x, a, b, 3 | selectBackward3 |
@@ -118,12 +123,17 @@ with the starting key of a sequence.  Those key bindings are as follows:
 | Alt + x, f, q | focusProgramSequence |
 | Alt + x, f, s | focusScene |
 | Alt + x, f, t | focusAddNodeToggle |
+| Alt + x, f, w | focusWorldSelector |
 | Alt + x, f, x | focusCharacterColumnInput |
 | Alt + x, f, y | focusCharacterRowInput |
-| Alt + x, f, w | focusWorldSelector |
 | Alt + x, t, 1 | changeToDefaultTheme |
 | Alt + x, t, 2 | changeToLightTheme |
 | Alt + x, t, 3 | changeToDarkTheme |
 | Alt + x, t, 4 | changeToGrayscaleTheme |
 | Alt + x, t, 5 | changeToHighContrastTheme |
+| Alt + x, w, 1 | changeToSketchpadWorld |
+| Alt + x, w, 2 | changeToJungleWorld |
+| Alt + x, w, 3 | changeToSpaceWorld |
+| Alt + x, w, 4 | changeToDeepOceanWorld |
+| Alt + x, w, 5 | changeToLandmarksWorld |
 | Alt + x, x | toggleFeedbackAnnouncements |
