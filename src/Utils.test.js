@@ -1,6 +1,6 @@
 // @flow
 
-import { extend, generateEncodedProgramURL, getThemeFromString, getWorldFromString, focusByQuerySelector, generateLoopLabel, parseLoopLabel } from './Utils.js';
+import { extend, generateEncodedProgramURL, getThemeFromString, getWorldFromString, focusByQuerySelector, generateLoopLabel, parseLoopLabel, overlayModifierKeys } from './Utils.js';
 import React from 'react';
 import Adapter from 'enzyme-adapter-react-16';
 import { mount, configure } from 'enzyme';
@@ -91,4 +91,14 @@ test('parseLoopLabel', () => {
     expect(parseLoopLabel('AB')).toEqual(28);
     expect(parseLoopLabel('AZ')).toEqual(52);
     expect(parseLoopLabel('BA')).toEqual(53);
+});
+
+test('Overlay modifiers on a key binding definition (shallow)', () => {
+    const modifiedBinding = overlayModifierKeys({ escape: { keyDef: { code: "esc" }}}, { altKey: true});
+    expect(modifiedBinding).toEqual({ escape: { keyDef: { code: "esc", altKey: true}}});
+});
+
+test('Overlay modifiers on a key binding definition (deep)', () => {
+    const modifiedBinding = overlayModifierKeys({ escape: { keyDef: { code: "esc", x: { keyDef: { code: "x"}} }}}, { ctrlKey: true}, true);
+    expect(modifiedBinding).toEqual({ escape: { keyDef: { code: "esc", ctrlKey: true, x: { keyDef: { code: "x", ctrlKey: true}}}}});
 });

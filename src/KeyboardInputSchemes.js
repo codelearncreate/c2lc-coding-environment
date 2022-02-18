@@ -1,10 +1,10 @@
 //@flow
-import {extend} from './Utils';
+import {overlayModifierKeys} from './Utils';
 
 export type KeyboardInputSchemeName = "controlshift" | "controlalt" | "alt";
 
 export function isKeyboardInputSchemeName(str: ?string): boolean {
-    return str === 'controlalt' || str === 'alt';
+    return str === 'controlalt' || str === 'alt' || str === 'controlshift';
 }
 
 export type KeyDef = {
@@ -83,11 +83,11 @@ export type ActionKeyStep = {
 
 export type KeySequenceStep = {
     keyDef: KeyDef,
-    [string]: KeySequenceStep | ActionKeyStep
+    [subDefKey: string]: KeySequenceStep | ActionKeyStep
 };
 
 export type KeyboardInputScheme = {
-    [string]: KeySequenceStep | ActionKeyStep
+    [subDefKey: string]: KeySequenceStep | ActionKeyStep
 };
 
 export type KeyboardInputSchemesType = {
@@ -96,9 +96,53 @@ export type KeyboardInputSchemesType = {
     "alt":  KeyboardInputScheme
 };
 
-const ExtendedKeyboardSequences: KeyboardInputScheme = {
+const BaseKeyboardSequences: KeyboardInputScheme = {
+    addCommand: {
+        keyDef: { code: "KeyA", key: "a"},
+        actionName: "addCommand"
+    },
+    addCommandToBeginning: {
+        keyDef: { code: "KeyB", key: "b"},
+        actionName: "addCommandToBeginning"
+    },
+    addCommandToEnd: {
+        keyDef: { code: "KeyE", key: "e"},
+        actionName: "addCommandToEnd"
+    },
+    deleteCurrentStep: {
+        keyDef: { code: "KeyD", key: "d"},
+        actionName: "deleteCurrentStep"
+    },
+    announceScene: {
+        keyDef: { code: "KeyI", key: "i"},
+        actionName: "announceScene"
+    },
+    decreaseProgramSpeed: {
+        keyDef: { key: "<", hidden: true},
+        actionName: "decreaseProgramSpeed"
+    },
+    increaseProgramSpeed: {
+        keyDef: { key: ">", hidden: true},
+        actionName: "increaseProgramSpeed"
+    },
+    playPauseProgram: {
+        keyDef: { code: "KeyP", key: "p"},
+        actionName: "playPauseProgram"
+    },
+    refreshScene: {
+        keyDef: { code: "KeyR", key: "r"},
+        actionName: "refreshScene"
+    },
+    showHide: {
+        keyDef: { key: "?"},
+        actionName: "showHide"
+    },
+    stopProgram: {
+        keyDef: { code: "KeyS", key: "s"},
+        actionName: "stopProgram"
+    },
     extraSettings: {
-        keyDef: { code: "KeyX", key: "x", altKey: true, hidden: true},
+        keyDef: { code: "KeyX", key: "x"},
         audioFeedback: {
             keyDef: { code: "KeyX", key: "x"},
             actionName: "toggleFeedbackAnnouncements"
@@ -155,60 +199,60 @@ const ExtendedKeyboardSequences: KeyboardInputScheme = {
             forward: {
                 keyDef: { code: "KeyF", key: "f" },
                 forward1: {
-                    keyDef: { key: "1"},
+                    keyDef: { key: "1", keyCode: "49"},
                     actionName: "selectForward1"
                 },
                 forward2: {
-                    keyDef: { key: "2"},
+                    keyDef: { key: "2", keyCode: "50"},
                     actionName: "selectForward2"
                 },
                 forward3: {
-                    keyDef: { key: "3"},
+                    keyDef: { key: "3", keyCode: "51"},
                     actionName: "selectForward3"
                 }
             },
             backward: {
                 keyDef: { code: "KeyB", key: "b" },
                 backward1: {
-                    keyDef: { key: "1"},
+                    keyDef: { key: "1", keyCode: "49"},
                     actionName: "selectBackward1"
                 },
                 backward2: {
-                    keyDef: { key: "2"},
+                    keyDef: { key: "2", keyCode: "50"},
                     actionName: "selectBackward2"
                 },
                 backward3: {
-                    keyDef: { key: "3"},
+                    keyDef: { key: "3", keyCode: "51"},
                     actionName: "selectBackward3"
                 }
             },
             left: {
                 keyDef: { code: "KeyL", key: "l" },
                 left45: {
-                    keyDef: { key: "1"},
+                    keyDef: { key: "1", keyCode: "49"},
                     actionName: "selectLeft45"
                 },
                 left90: {
-                    keyDef: { key: "2"},
+                    keyDef: { key: "2", keyCode: "50"},
                     actionName: "selectLeft90"
                 },
                 left180: {
-                    keyDef: { key: "3"},
+                    keyDef: { key: "3", keyCode: "51"},
                     actionName: "selectLeft180"
                 }
             },
             right: {
                 keyDef: { code: "KeyR", key: "r" },
                 right45: {
-                    keyDef: { key: "1"},
+                    keyDef: { key: "1", keyCode: "49"},
                     actionName: "selectRight45"
                 },
                 right90: {
-                    keyDef: { key: "2"},
+                    keyDef: { key: "2", keyCode: "50"},
                     actionName: "selectRight90"
                 },
                 right180: {
-                    keyDef: { key: "3"},
+                    keyDef: { key: "3", keyCode: "51"},
                     actionName: "selectRight180"
                 }
             }
@@ -251,23 +295,23 @@ const ExtendedKeyboardSequences: KeyboardInputScheme = {
         changeTheme: {
             keyDef: { code: "KeyT", key: "t" },
             default: {
-                keyDef: { key: "1"},
+                keyDef: { key: "1", keyCode: "49"},
                 actionName: "changeToDefaultTheme"
             },
             light: {
-                keyDef: { key: "2"},
+                keyDef: { key: "2", keyCode: "50"},
                 actionName: "changeToLightTheme"
             },
             dark: {
-                keyDef: { key: "3"},
+                keyDef: { key: "3", keyCode: "51"},
                 actionName: "changeToDarkTheme"
             },
             grayscale: {
-                keyDef: { key: "4"},
+                keyDef: { key: "4", keyCode: "52"},
                 actionName: "changeToGrayscaleTheme"
             },
             highContrast: {
-                keyDef: { key: "5"},
+                keyDef: { key: "5", keyCode: "53"},
                 actionName: "changeToHighContrastTheme"
             }
         },
@@ -279,182 +323,11 @@ const ExtendedKeyboardSequences: KeyboardInputScheme = {
     }
 }
 
-const AltInputScheme: KeyboardInputScheme = Object.assign({
-    addCommand: {
-        keyDef: { code: "KeyA", key: "a", altKey: true},
-        actionName: "addCommand"
-    },
-    addCommandToBeginning: {
-        keyDef: { code: "KeyB", key: "b", altKey: true},
-        actionName: "addCommandToBeginning"
-    },
-    addCommandToEnd: {
-        keyDef: { code: "KeyE", key: "e", altKey: true},
-        actionName: "addCommandToEnd"
-    },
-    deleteCurrentStep: {
-        keyDef: { code: "KeyD", key: "d", altKey: true},
-        actionName: "deleteCurrentStep"
-    },
-    announceScene: {
-        keyDef: { code: "KeyI", key: "i", altKey: true},
-        actionName: "announceScene"
-    },
-    decreaseProgramSpeed: {
-        keyDef: { key: "<", hidden: true},
-        actionName: "decreaseProgramSpeed"
-    },
-    increaseProgramSpeed: {
-        keyDef: { key: ">", hidden: true},
-        actionName: "increaseProgramSpeed"
-    },
-    playPauseProgram: {
-        keyDef: { code: "KeyP", key: "p", altKey: true},
-        actionName: "playPauseProgram"
-    },
-    refreshScene: {
-        keyDef: { code: "KeyR", key: "r", altKey: true},
-        actionName: "refreshScene"
-    },
-    showHide: {
-        keyDef: { key: "?"},
-        actionName: "showHide"
-    },
-    stopProgram: {
-        keyDef: { code: "KeyS", key: "s", altKey: true},
-        actionName: "stopProgram"
-    }
-}, ExtendedKeyboardSequences);
+const AltInputScheme: KeyboardInputScheme = overlayModifierKeys(BaseKeyboardSequences, { altKey: true });
 
-const ControlAltExtendedKeyboardSequences = extend(ExtendedKeyboardSequences, {
-    extraSettings: {
-        keyDef: { ctrlKey: true }
-    },
+const ControlAltInputScheme: KeyboardInputScheme = overlayModifierKeys(BaseKeyboardSequences, { altKey: true, ctrlKey: true });
 
-    focusChange: {
-        keyDef: {ctrlKey: true }
-    },
-
-    selectedActionChange: {
-        keyDef: { ctrlKey: true }
-    },
-
-    characterPosition: {
-        keyDef: { ctrlKey: true }
-    }
-});
-
-const ControlAltInputScheme = Object.assign({
-    addCommand: {
-        keyDef: { code: "KeyA", key: "a", altKey: true, ctrlKey: true},
-        actionName: "addCommand"
-    },
-    addCommandToBeginning: {
-        keyDef: { code: "KeyB", key: "b", altKey: true, ctrlKey: true},
-        actionName: "addCommandToBeginning"
-    },
-    addCommandToEnd: {
-        keyDef: { code: "KeyE", key: "e", altKey: true, ctrlKey: true},
-        actionName: "addCommandToEnd"
-    },
-    deleteCurrentStep: {
-        keyDef: { code: "KeyD", key: "d", altKey: true, ctrlKey: true},
-        actionName: "deleteCurrentStep"
-    },
-    announceScene: {
-        keyDef: {code: "KeyI", key: "i", altKey: true, ctrlKey: true},
-        actionName: "announceScene"
-    },
-    decreaseProgramSpeed: {
-        keyDef: { key: "<", shiftKey: true, hidden: true},
-        actionName: "decreaseProgramSpeed"
-    },
-    increaseProgramSpeed: {
-        keyDef: { key: ">", shiftKey: true, hidden: true},
-        actionName: "increaseProgramSpeed"
-    },
-    playPauseProgram: {
-        keyDef: { code: "KeyP", key: "p", altKey: true, ctrlKey: true},
-        actionName: "playPauseProgram"
-    },
-    refreshScene: {
-        keyDef: { code: "KeyR", key: "r", altKey: true, ctrlKey: true },
-        actionName: "refreshScene"
-    },
-    showHide: {
-        keyDef: { key: "?" },
-        actionName: "showHide"
-    },
-    stopProgram: {
-        keyDef: {code: "KeyS", key: "s", altKey: true, ctrlKey: true},
-        actionName: "stopProgram"
-    },
-}, ControlAltExtendedKeyboardSequences);
-
-const CtrlShiftExtendedKeyboardSequences = extend(ExtendedKeyboardSequences, {
-    extraSettings: {
-        keyDef: { ctrlKey: true, shiftKey: true, altKey: false }
-    },
-
-    focusChange: {
-        keyDef: {ctrlKey: true, shiftKey: true, altKey: false }
-    },
-
-    selectedActionChange: {
-        keyDef: { ctrlKey: true, shiftKey: true, altKey: false }
-    },
-
-    characterPosition: {
-        keyDef: { ctrlKey: true, shiftKey: true, altKey: false }
-    }
-});
-
-const CtrlShiftInputScheme = Object.assign({
-    addCommand: {
-        keyDef: { code: "KeyA", key: "a", ctrlKey: true, shiftKey: true},
-        actionName: "addCommand"
-    },
-    addCommandToBeginning: {
-        keyDef: { code: "KeyB", key: "b", ctrlKey: true, shiftKey: true},
-        actionName: "addCommandToBeginning"
-    },
-    addCommandToEnd: {
-        keyDef: { code: "KeyE", key: "e", ctrlKey: true, shiftKey: true},
-        actionName: "addCommandToEnd"
-    },
-    deleteCurrentStep: {
-        keyDef: { code: "KeyD", key: "d", ctrlKey: true, shiftKey: true},
-        actionName: "deleteCurrentStep"
-    },
-    announceScene: {
-        keyDef: {code: "KeyI", key: "i", ctrlKey: true, shiftKey: true},
-        actionName: "announceScene"
-    },
-    decreaseProgramSpeed: {
-        keyDef: { key: "<", shiftKey: true, hidden: true},
-        actionName: "decreaseProgramSpeed"
-    },
-    increaseProgramSpeed: {
-        keyDef: { key: ">", shiftKey: true, hidden: true},
-        actionName: "increaseProgramSpeed"
-    },
-    playPauseProgram: {
-        keyDef: { code: "KeyP", key: "p", ctrlKey: true, shiftKey: true},
-        actionName: "playPauseProgram"
-    },
-    refreshScene: {
-        keyDef: { code: "KeyR", key: "r", ctrlKey: true, shiftKey: true},
-        actionName: "refreshScene"
-    },
-    showHide: {
-        keyDef: { key: "?" },
-        actionName: "showHide"
-    },
-    stopProgram: {
-        keyDef: {code: "KeyS", key: "s", ctrlKey: true, shiftKey: true},
-        actionName: "stopProgram"
-    },
-}, CtrlShiftExtendedKeyboardSequences);
+const CtrlShiftInputScheme: KeyboardInputScheme = overlayModifierKeys(BaseKeyboardSequences, { shiftKey: true, ctrlKey: true }, true);
 
 export const KeyboardInputSchemes:KeyboardInputSchemesType = {
     "controlshift": CtrlShiftInputScheme,
