@@ -18,16 +18,16 @@ import './ActionsSimplificationModal.scss';
 type ActionsSimplificationModalProps = {
     intl: IntlShape,
     onCancel: () => void,
-    onConfirm: (allowedActions: ActionToggleRegister) => void,
+    onConfirm: (disallowedActions: ActionToggleRegister) => void,
     // TODO: Flesh this definition out.
     menuItems: Array<CommandName>,
     programSequence: ProgramSequence,
-    allowedActions: ActionToggleRegister,
+    disallowedActions: ActionToggleRegister,
     show: boolean
 };
 
 type ActionsSimplificationModalState = {
-    allowedActions: ActionToggleRegister
+    disallowedActions: ActionToggleRegister
 }
 
 class ActionsSimplificationModal extends React.Component<ActionsSimplificationModalProps, ActionsSimplificationModalState> {
@@ -51,7 +51,7 @@ class ActionsSimplificationModal extends React.Component<ActionsSimplificationMo
     constructor(props: ActionsSimplificationModalProps) {
         super(props);
         this.state = {
-            allowedActions: this.props.allowedActions
+            disallowedActions: this.props.disallowedActions
         }
     }
 
@@ -93,20 +93,25 @@ class ActionsSimplificationModal extends React.Component<ActionsSimplificationMo
 
     handleOnCancel = () => {
         this.setState({
-            allowedActions: this.props.allowedActions
+            disallowedActions: this.props.disallowedActions
         });
         this.props.onCancel();
     }
 
     saveChanges = () => {
-        this.props.onConfirm(this.state.allowedActions);
+        this.props.onConfirm(this.state.disallowedActions);
     }
 
     toggleSingleItem = (itemKey: string) => {
         this.setState((prevState) => {
-            const newAllowedActions = extend({}, prevState.allowedActions);
-            newAllowedActions[itemKey] = !(newAllowedActions[itemKey])
-            return { allowedActions: newAllowedActions};
+            const newDisallowedActions = extend({}, prevState.disallowedActions);
+            if (prevState.disallowedActions[itemKey]) {
+                delete newDisallowedActions[itemKey];
+            }
+            else {
+                newDisallowedActions[itemKey] = true;
+            }
+            return { disallowedActions: newDisallowedActions};
         });
     }
 
@@ -114,7 +119,7 @@ class ActionsSimplificationModal extends React.Component<ActionsSimplificationMo
         const actionsMenuItems = [];
         // TODO: Discuss how to evolve this into a deeper structure when we add groups and things other than actions.
         for (const itemKey of this.props.menuItems) {
-            const isAllowed: boolean = !!this.state.allowedActions[itemKey];
+            const isDisallowed: boolean = !!this.state.disallowedActions[itemKey];
             const isUsed: boolean = this.props.programSequence.usesAction(itemKey);
             const itemChangeHandler = () => {
                 this.toggleSingleItem(itemKey);
@@ -122,7 +127,7 @@ class ActionsSimplificationModal extends React.Component<ActionsSimplificationMo
             actionsMenuItems.push(
                 <ActionsMenuItem
                     intl={this.props.intl}
-                    isAllowed={isAllowed}
+                    isDisallowed={isDisallowed}
                     isUsed={isUsed}
                     itemKey={itemKey}
                     key={itemKey}
@@ -142,9 +147,9 @@ class ActionsSimplificationModal extends React.Component<ActionsSimplificationMo
 
     // Required to avoid a phantom state where we persist the defaults even after they are updated from local storage.
     componentDidUpdate (prevProps: ActionsSimplificationModalProps) {
-        if (prevProps.allowedActions !== this.props.allowedActions) {
+        if (prevProps.disallowedActions !== this.props.disallowedActions) {
             this.setState({
-                allowedActions: this.props.allowedActions
+                disallowedActions: this.props.disallowedActions
             });
         }
     }

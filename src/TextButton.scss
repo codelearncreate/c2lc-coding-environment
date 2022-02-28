@@ -1,0 +1,41 @@
+@import '_variables';
+
+.TextButton {
+    border: 0;
+    border-radius: 0.2rem;
+    font-weight: 400;
+    background-color: #CCE6E2;
+    color: #1E1E1E;
+    padding: 0.2rem;
+    width: 8rem;
+    outline: 0;
+
+    &:active {
+        background-color: #ED972C;
+    }
+
+    &:hover {
+        background-color: #F5C58A;
+        color: black;
+    }
+
+    &:focus {
+        box-shadow:
+            0 0 0 0.1rem #D5D8DD,
+            0 0 0 $c2lc-focus-indicator-width black;
+    }
+}
+
+.TextButton--secondaryButton {
+    background-color: #CCE6E2;
+    color: #1E1E1E;
+    &:hover {
+        background-color: #F5C58A;
+        color: #1E1E1E;
+    }
+}
+
+.TextButton--primaryButton {
+    background-color: #33717F;
+    color: #FFFFFF;
+}

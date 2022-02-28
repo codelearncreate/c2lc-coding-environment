@@ -211,11 +211,11 @@ class KeyboardInputModal extends React.Component<KeyboardInputModalProps, Keyboa
                 <ModalBody>
                     <div className='KeyboardInputModal__content'>
                         <div className="KeyboardInputModal__content__toggleBar">
-                            <div className="KeyboardInputModal__content__toggleBar__label">
+                            <div aria-hidden='true' className="KeyboardInputModal__content__toggleBar__label">
                                 <FormattedMessage id='KeyboardInputModal.Toggle.Label'/>
                             </div>
                             <div className="KeyboardInputModal__content__toggleBar__toggle">
-                                <div>
+                                <div aria-hidden='true'>
                                     <FormattedMessage id='KeyboardInputModal.Toggle.Off'/>
                                 </div>
                                 <ToggleSwitch
@@ -227,7 +227,7 @@ class KeyboardInputModal extends React.Component<KeyboardInputModalProps, Keyboa
                                     value={this.state.keyBindingsEnabled}
                                     onChange={this.handleChangeKeyBindingsEnabled}
                                 />
-                                <div>
+                                <div aria-hidden='true'>
                                     <FormattedMessage id='KeyboardInputModal.Toggle.On'/>
                                 </div>
                             </div>

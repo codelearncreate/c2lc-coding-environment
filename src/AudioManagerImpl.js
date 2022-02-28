@@ -188,6 +188,7 @@ export function getNoteForState (characterState: CharacterState) : string {
 export default class AudioManagerImpl implements AudioManager {
     audioEnabled: boolean;
     announcementsEnabled: boolean;
+    sonificationEnabled: boolean;
     panner: Panner;
     samplers: {
         backward1: Sampler,
@@ -204,9 +205,10 @@ export default class AudioManagerImpl implements AudioManager {
         right180: Sampler
     };
 
-    constructor(audioEnabled: boolean, announcementsEnabled: boolean) {
+    constructor(audioEnabled: boolean, announcementsEnabled: boolean, sonificationEnabled: boolean) {
         this.audioEnabled = audioEnabled;
         this.announcementsEnabled = announcementsEnabled;
+        this.sonificationEnabled = sonificationEnabled;
 
         this.panner = new Panner();
         this.panner.toDestination();
@@ -222,7 +224,7 @@ export default class AudioManagerImpl implements AudioManager {
     }
 
     playAnnouncement(messageIdSuffix: string, intl: IntlShape, messagePayload: any) {
-        if (this.announcementsEnabled) {
+        if (this.audioEnabled && this.announcementsEnabled) {
             if (window.speechSynthesis.speaking || window.speechSynthesis.pending) {
                 window.speechSynthesis.cancel();
             }
@@ -236,7 +238,7 @@ export default class AudioManagerImpl implements AudioManager {
     // TODO: Add a better type for pitch.
     // TODO: Make this private, as it doesn't respect the audioEnabled setting.
     playPitchedSample(sampler: Sampler, pitch: string, releaseTime: number) {
-        if (this.audioEnabled) {
+        if (this.audioEnabled && this.sonificationEnabled) {
             // We can only play the sound if it's already loaded.
             if (sampler.loaded) {
                 sampler.triggerAttackRelease([pitch], releaseTime);
@@ -245,7 +247,7 @@ export default class AudioManagerImpl implements AudioManager {
     }
 
     playSoundForCharacterState(samplerKey: string, releaseTimeInMs: number, characterState: CharacterState, sceneDimensions: SceneDimensions) {
-        if (this.audioEnabled) {
+        if (this.audioEnabled && this.sonificationEnabled) {
             const releaseTime = releaseTimeInMs / 1000;
             const noteName = getNoteForState(characterState);
 
@@ -279,5 +281,9 @@ export default class AudioManagerImpl implements AudioManager {
 
     setAudioEnabled(value: boolean) {
         this.audioEnabled = value;
+    }
+
+    setSonificationEnabled(sonificationEnabled: boolean) {
+        this.sonificationEnabled = sonificationEnabled;
     }
 };

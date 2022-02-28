@@ -68,7 +68,8 @@ export type WorldProperties = {|
     characterContrast: React.ComponentType<{}>,
     startingX: number,
     startingY: number,
-    startingDirection: number
+    startingDirection: number,
+    enableFlipCharacter: boolean
 |};
 
 const worlds: {|
@@ -127,7 +128,8 @@ const worlds: {|
         characterContrast: SubmarineContrast,
         startingX: 1,
         startingY: 2,
-        startingDirection: 2 // East
+        startingDirection: 2, // East
+        enableFlipCharacter: true
     },
     'Jungle': {
         background: Jungle,
@@ -176,7 +178,8 @@ const worlds: {|
         characterContrast: SafariJeepContrast,
         startingX: 1,
         startingY: 2,
-        startingDirection: 2 // East
+        startingDirection: 2, // East
+        enableFlipCharacter: true
     },
     'Landmarks': {
         background: LandmarksWorld,
@@ -218,7 +221,8 @@ const worlds: {|
         characterContrast: BotContrast,
         startingX: 1,
         startingY: 2,
-        startingDirection: 2 // East
+        startingDirection: 2, // East
+        enableFlipCharacter: false
     },
     'Sketchpad': {
         background: null,
@@ -234,7 +238,8 @@ const worlds: {|
         characterContrast: Robot,
         startingX: 1,
         startingY: 1,
-        startingDirection: 2 // East
+        startingDirection: 2, // East
+        enableFlipCharacter: true
     },
     'Space': {
         background: Space,
@@ -275,7 +280,8 @@ const worlds: {|
         characterContrast: SpaceShipContrast,
         startingX: 1,
         startingY: 2,
-        startingDirection: 2 // East
+        startingDirection: 2, // East
+        enableFlipCharacter: true
     }
 };
 

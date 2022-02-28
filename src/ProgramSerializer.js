@@ -1,6 +1,7 @@
 // @flow
 
 import type {Program} from './types';
+import type {ProgramParserResult} from './ProgramParser';
 import ProgramParser from './ProgramParser';
 
 export default class ProgramSerializer {
@@ -13,7 +14,8 @@ export default class ProgramSerializer {
     serialize(program: Program): string {
         let programText = '';
         for (let i=0; i<program.length; i++) {
-            switch(program[i]) {
+            const programCommandBlock = program[i].block;
+            switch(programCommandBlock) {
                 case ('forward1') :
                     programText += '1';
                     break;
@@ -33,31 +35,44 @@ export default class ProgramSerializer {
                     programText += '6';
                     break;
                 case ('left45') :
-                    programText += 'A'
+                    programText += 'A';
                     break;
                 case ('left90') :
-                    programText += 'B'
+                    programText += 'B';
                     break;
                 case ('left180') :
-                    programText += 'D'
+                    programText += 'D';
                     break;
                 case ('right45') :
-                    programText += 'a'
+                    programText += 'a';
                     break;
                 case ('right90') :
-                    programText += 'b'
+                    programText += 'b';
                     break;
                 case ('right180') :
-                    programText += 'd'
+                    programText += 'd';
+                    break;
+                case ('startLoop') :
+                    programText += 's';
+                    if (program[i].iterations != null && program[i].label) {
+                        const label = program[i].label;
+                        const iterations = program[i].iterations;
+                        programText += label;
+                        programText += iterations;
+                    }
+                    programText += 's';
+                    break;
+                case ('endLoop') :
+                    programText += 'z';
                     break;
                 default:
-                    throw new Error(`Unrecognized program command when serializing program: ${program[i]}`);
+                    throw new Error(`Unrecognized program command when serializing program: ${programCommandBlock}`);
             }
         }
         return programText;
     }
 
-    deserialize(programText: string): Program {
+    deserialize(programText: string): ProgramParserResult {
         return this.programParser.parse(programText);
     }
 };

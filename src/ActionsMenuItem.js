@@ -11,7 +11,7 @@ import './ActionsMenuItem.scss';
 
 type ActionsMenuItemProps = {
     intl: IntlShape,
-    isAllowed?: boolean,
+    isDisallowed?: boolean,
     isUsed?: boolean,
     itemKey: string,
     onChange: (event: Event) => void
@@ -26,7 +26,7 @@ export class ActionsMenuItem extends React.Component< ActionsMenuItemProps, {} >
 
     handleChange = (event: Event) => {
         // Always reenabled disallowed commands, but do not disable used ones.
-        if (!this.props.isAllowed || !this.props.isUsed) {
+        if (this.props.isDisallowed || !this.props.isUsed) {
             event.preventDefault();
             this.props.onChange(event);
         }
@@ -55,13 +55,13 @@ export class ActionsMenuItem extends React.Component< ActionsMenuItemProps, {} >
         }
 
         // Disable the checkbox if the button is allowed and used.
-        const isCheckboxDisabled = (this.props.isAllowed && this.props.isUsed);
+        const isCheckboxDisabled = (!this.props.isDisallowed && this.props.isUsed);
 
         return (
             <div
                 className="ActionsMenuItem"
                 role="checkbox"
-                aria-checked={this.props.isAllowed}
+                aria-checked={!this.props.isDisallowed}
                 aria-label={commandName}
                 aria-disabled={isCheckboxDisabled}
                 tabIndex={0}
@@ -74,7 +74,7 @@ export class ActionsMenuItem extends React.Component< ActionsMenuItemProps, {} >
                         type="checkbox"
                         id={checkboxId}
                         aria-hidden={true}
-                        checked={this.props.isAllowed}
+                        checked={!this.props.isDisallowed}
                         disabled={isCheckboxDisabled}
                         readOnly={true}
                         tabIndex={-1}

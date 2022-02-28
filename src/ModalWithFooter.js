@@ -2,8 +2,8 @@
 
 import React from 'react';
 import Modal from './Modal';
-import classNames from 'classnames';
-import { Button } from 'react-bootstrap';
+import TextButton from './TextButton';
+import type {TextButtonProps} from './TextButton'
 import './ModalWithFooter.scss';
 
 type ModalWithFooterProps = {
@@ -15,26 +15,21 @@ type ModalWithFooterProps = {
     ariaDescribedById?: string,
     children?: any,
     onClose: () => void,
-    buttonProperties: Array<{id?: string, label: string, onClick: () => void, isPrimary?: boolean}>
+    buttonProperties: Array<TextButtonProps>
 };
 
 class ModalWithFooter extends React.Component<ModalWithFooterProps, {}> {
     renderFooterButtons = () => {
         const footerButtons = [];
-        for (const buttonProp of this.props.buttonProperties) {
-            const buttonClassName = classNames(
-                buttonProp.isPrimary && 'ModalWithFooter__primaryButton',
-                !buttonProp.isPrimary && 'ModalWithFooter__secondaryButton'
+        for (const buttonProps of this.props.buttonProperties) {
+            const buttonPropsWithKey = Object.assign(
+                {},
+                buttonProps,
+                {
+                    key: `footerButton-${footerButtons.length}`
+                }
             );
-            footerButtons.push(
-                <Button
-                    id={buttonProp.id}
-                    key={`footerButton-${footerButtons.length}`}
-                    className={buttonClassName}
-                    onClick={buttonProp.onClick}>
-                    {buttonProp.label}
-                </Button>
-            )
+            footerButtons.push(React.createElement(TextButton, buttonPropsWithKey));
         }
         return footerButtons;
     }

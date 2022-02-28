@@ -7,4 +7,5 @@ export default class FakeAudioManager implements AudioManager {
     playSoundForCharacterState() {};
     setAnnouncementsEnabled() {};
     setAudioEnabled() {};
+    setSonificationEnabled() {};
 };
