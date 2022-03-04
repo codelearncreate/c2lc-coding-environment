@@ -217,7 +217,7 @@ class CharacterPositionController extends React.Component<CharacterPositionContr
                         aria-label={this.props.intl.formatMessage({id:'CharacterPositionController.editPosition.columnPosition'})}
                         aria-disabled={this.props.editingDisabled}
                         maxLength='1'
-                        size='2'
+                        size='1'
                         type='text'
                         value={this.state.characterColumnLabel}
                         onChange={!this.props.editingDisabled ? this.handleChangeCharacterPositionLabel : () => {}}
@@ -228,8 +228,8 @@ class CharacterPositionController extends React.Component<CharacterPositionContr
                         className={characterPositionRowTextInputClassName}
                         aria-label={this.props.intl.formatMessage({id:'CharacterPositionController.editPosition.rowPosition'})}
                         aria-disabled={this.props.editingDisabled}
-                        maxLength='2'
-                        size='2'
+                        maxLength='1'
+                        size='1'
                         type='text'
                         value={this.state.characterRowLabel}
                         onChange={!this.props.editingDisabled ? this.handleChangeCharacterPositionLabel : () => {}}
