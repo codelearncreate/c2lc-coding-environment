@@ -149,6 +149,21 @@ body.light-theme {
         }
     }
 
+    button.command-block.btn-command-block--startLoop,
+    button.command-block.btn-command-block--endLoop {
+        background-color: #9D9D9D;
+        .command-block-loop-label-container {
+            background-color: #858383;
+            color: #FFFFFF;
+        }
+        &:hover {
+            background-color: #787878;
+            .command-block-loop-label-container {
+                background-color: #5E5D5D;
+            }
+        }
+    }
+
     .ActionsMenuItem__icon--right45, .ActionsMenuItem__icon--right90, .ActionsMenuItem__icon--right180 {
         &:not(.ActionsMenuItem__icon--disabled) {
             background-color: #C13925;
@@ -897,6 +912,21 @@ body.gray-theme {
 
         &.command-block--pressed {
             border: 3px solid #505862;
+        }
+    }
+
+    button.command-block.btn-command-block--startLoop,
+    button.command-block.btn-command-block--endLoop {
+        background-color: #B9BEC6;
+        .command-block-loop-label-container {
+            background-color: #989DA7;
+            color: #FFFFFF;
+        }
+        &:hover {
+            background-color: #818A98;
+            .command-block-loop-label-container {
+                background-color: #626A78;
+            }
         }
     }
 
@@ -1760,6 +1790,24 @@ body.contrast-theme {
             background-color: black;
         }
     }
+
+    button.command-block.btn-command-block--startLoop,
+    button.command-block.btn-command-block--endLoop {
+        background-color: #FFFFFF;
+        .command-block-loop-label-container {
+            background-color: #FFFFFF;
+            color: black;
+        }
+        &:hover {
+            border: 2px solid #FFFFFF;
+            background-color: black;
+            .command-block-loop-label-container {
+                background-color: black;
+                color: #FFFFFF;
+            }
+        }
+    }
+
 
     .ActionsMenuItem {
         &:focus {

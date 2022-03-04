@@ -125,6 +125,17 @@ function getProgramBlockAtPosition(programBlockEditorWrapper, index: number) {
     return getProgramBlocks(programBlockEditorWrapper).at(index);
 }
 
+function getProgramBlockLoopLabel(programBlockEditorWrapper, index: number) {
+    return getProgramBlocks(programBlockEditorWrapper).at(index)
+        .find('.command-block-loop-label-container').getDOMNode().textContent;
+}
+
+function getProgramBlockLoopIterations(programBlockEditorWrapper, index: number) {
+    return ((getProgramBlocks(programBlockEditorWrapper).at(index)
+        .find('.command-block-loop-iterations')
+        .getDOMNode(): any): HTMLInputElement).value;
+}
+
 function getAddNodeButtonAtPosition(programBlockEditorWrapper, index: number) {
     const addNodeButton = programBlockEditorWrapper.find(AriaDisablingButton).filter('.AddNode__expanded-button');
     return addNodeButton.at(index);
@@ -148,6 +159,29 @@ describe('Program rendering', () => {
         expect(getProgramBlocks(wrapper).at(1).prop('data-command')).toBe('left45');
         expect(getProgramBlocks(wrapper).at(2).prop('data-command')).toBe('forward1');
         expect(getProgramBlocks(wrapper).at(3).prop('data-command')).toBe('left45');
+    });
+    test('Loop blocks should render with additional properties about specific loops', () => {
+        expect.assertions(7);
+        const { wrapper } = createMountProgramBlockEditor({
+            programSequence: new ProgramSequence(
+                [
+                    {block: 'startLoop', label: 'A', iterations: 2},
+                    {block: 'endLoop', label: 'A'}
+                ],
+                0,
+                0,
+                new Map([['A', 1]])
+            ),
+            runningState: 'paused'
+        });
+        expect(getProgramBlocks(wrapper).length).toBe(2);
+        expect(getProgramBlocks(wrapper).at(0).prop('data-command')).toBe('startLoop');
+        expect(getProgramBlockLoopLabel(wrapper, 0)).toBe('A');
+        expect(getProgramBlockLoopIterations(wrapper, 0)).toBe('1');
+        expect(getProgramBlocks(wrapper).at(1).prop('data-command')).toBe('endLoop');
+        expect(getProgramBlockLoopLabel(wrapper, 1)).toBe('A');
+        wrapper.setProps({ runningState: 'stopped' });
+        expect(getProgramBlockLoopIterations(wrapper, 0)).toBe('2');
     });
 });
 

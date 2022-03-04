@@ -27,10 +27,13 @@ export type EditorMode = 'text' | 'block';
 */
 export type ThemeName = 'default' | 'light' | 'dark' | 'gray' | 'contrast';
 
+export type ProgramBlockCache = Map<string, number | string>;
+
 export type ProgramBlock = {
     block: string,
     iterations?: number,
-    label?: string
+    label?: string,
+    cache?: ProgramBlockCache;
 };
 
 export type Program = Array<ProgramBlock>;

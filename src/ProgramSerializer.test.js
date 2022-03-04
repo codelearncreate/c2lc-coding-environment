@@ -21,6 +21,10 @@ test('Serialize program', () => {
         {block: 'endLoop', label: 'A'}
     ])).toStrictEqual('sA2sz');
     expect(programSerializer.serialize([
+        {block: 'startLoop', iterations: 0, label: 'B'},
+        {block: 'endLoop', label: 'B'}
+    ])).toStrictEqual('sB0sz');
+    expect(programSerializer.serialize([
         {block: 'forward1'}, {block: 'forward2'}, {block: 'forward3'},
         {block: 'backward1'}, {block: 'backward2'}, {block: 'backward3'},
         {block: 'left45'}, {block: 'left90'}, {block: 'left180'},

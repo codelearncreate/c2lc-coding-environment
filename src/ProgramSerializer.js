@@ -54,7 +54,7 @@ export default class ProgramSerializer {
                     break;
                 case ('startLoop') :
                     programText += 's';
-                    if (program[i].iterations && program[i].label) {
+                    if (program[i].iterations != null && program[i].label) {
                         const label = program[i].label;
                         const iterations = program[i].iterations;
                         programText += label;
