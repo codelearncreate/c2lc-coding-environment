@@ -2,6 +2,7 @@
 
 import {App} from './App';
 import ProgramSequence from './ProgramSequence';
+import type { ProgramBlock } from './types';
 
 export type CommandHandler = { (stepTimeMs: number): Promise<void> };
 
@@ -85,20 +86,80 @@ export default class Interpreter {
                 // We're at the end, nothing to do
                 resolve();
             } else {
-                this.doCommand(programSequence.getCurrentProgramStep()).then(() => {
-                    // When the command has completed, increment
-                    // the programCounter and resolve the step Promise
-                    this.app.incrementProgramCounter(() => {
-                        resolve();
+                const currentProgramStep = programSequence.getCurrentProgramStep();
+                const command = currentProgramStep.block;
+                if (command === 'startLoop') {
+                    this.doStartLoop(programSequence, currentProgramStep, resolve);
+                } else if (command === 'endLoop') {
+                    this.doEndLoop(programSequence, currentProgramStep, resolve);
+                } else {
+                    this.doCommand(currentProgramStep).then(() => {
+                        // When the command has completed, increment
+                        // the programCounter and resolve the step Promise
+                        this.app.incrementProgramCounter(() => {
+                            resolve();
+                        });
+                    }, (error: Error) => {
+                        reject(error);
                     });
-                }, (error: Error) => {
-                    reject(error);
-                });
+                }
             }
         });
     }
 
-    doCommand(command: string): Promise<any> {
+    doStartLoop(programSequence: ProgramSequence, currentProgramStep: ProgramBlock, callback: () => void) {
+        this.app.incrementProgramCounter(callback);
+    }
+
+    doEndLoop(programSequence: ProgramSequence, currentProgramStep: ProgramBlock, callback: () => void) {
+        const loopIterationsLeft = new Map(programSequence.getLoopIterationsLeft());
+        const label = currentProgramStep.label;
+        let programCounter = programSequence.getProgramCounter();
+        if (label != null) {
+            const currentIterationsLeft = loopIterationsLeft.get(label);
+            if (currentIterationsLeft != null) {
+                // Decrement the iterations left for the loop, if it's > 0
+                let newIterationsLeft = currentIterationsLeft;
+                if (currentIterationsLeft > 0) {
+                    newIterationsLeft = currentIterationsLeft - 1
+                    loopIterationsLeft.set(label, newIterationsLeft);
+                }
+                if (newIterationsLeft > 0) {
+                    for (let i = programCounter; i > -1; i--) {
+                        const block = programSequence.program[i];
+                        // Look for startLoop blocks
+                        if (block.block === 'startLoop') {
+                            // Check if the startLoop has same label as the endLoop itself
+                            if (block.label != null && block.label === label) {
+                                // Set the programCounter to the start of the loop
+                                programCounter = i;
+                                break;
+                            } else {
+                                // When startLoop has a different label, we have found
+                                // a nested loop: reset its iterationsLeft
+                                const nestedLoopLabel = programSequence.program[i].label;
+                                const nestLoopIterations = programSequence.program[i].iterations;
+                                if (nestedLoopLabel != null && nestLoopIterations != null) {
+                                    loopIterationsLeft.set(nestedLoopLabel, nestLoopIterations);
+                                }
+                            }
+                        }
+                    }
+                } else {
+                    // When there's no more iterations left, increment the programCounter
+                    programCounter += 1;
+                }
+            }
+        }
+        this.app.updateProgramCounterAndLoopIterationsLeft(
+            programCounter,
+            loopIterationsLeft,
+            callback
+        );
+    }
+
+    doCommand(programStep: ProgramBlock): Promise<any> {
+        const command = programStep.block;
         const handlers = this.lookUpCommandHandlers(command);
         if (handlers.length === 0) {
             return Promise.reject(new Error(`Unknown command: ${command}`));

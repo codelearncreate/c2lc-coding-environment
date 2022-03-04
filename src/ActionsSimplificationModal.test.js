@@ -11,21 +11,6 @@ import ProgramSequence from './ProgramSequence';
 
 configure({ adapter: new Adapter()});
 
-const mockAllowedActions = {
-    "forward1": true,
-    "forward2": true,
-    "forward3": true,
-    "backward1": true,
-    "backward2": true,
-    "backward3": true,
-    "left45": true,
-    "left90": true,
-    "left180": true,
-    "right45": true,
-    "right90": true,
-    "right180": true
-};
-
 function createActionsMenu(props) {
     const mockOnCancel = jest.fn();
     const mockOnConfirm = jest.fn();
@@ -36,8 +21,8 @@ function createActionsMenu(props) {
             Object.assign(
                 {
                     show: true,
-                    allowedActions: mockAllowedActions,
-                    programSequence: new ProgramSequence([], 0),
+                    disallowedActions: {},
+                    programSequence: new ProgramSequence([], 0, 0, new Map()),
                     onCancel: mockOnCancel,
                     onConfirm: mockOnConfirm
                 },
@@ -70,15 +55,15 @@ describe("When a checkbox is clicked.", () => {
 
         const {wrapper, modal} = createActionsMenu();
 
-        expect(modal.state.allowedActions.left90).toBe(true);
+        expect(modal.state.disallowedActions.left90).toBe(undefined);
 
         const left90Checkbox = wrapper.find('#actions-menu-item-left90');
         left90Checkbox.simulate('click');
 
-        expect(modal.state.allowedActions.left90).toBe(false);
+        expect(modal.state.disallowedActions.left90).toBe(true);
 
         left90Checkbox.simulate('click');
-        expect(modal.state.allowedActions.left90).toBe(true);
+        expect(modal.state.disallowedActions.left90).toBe(undefined);
 
         wrapper.unmount();
     });
@@ -90,16 +75,16 @@ describe("When the cancel button is clicked.", ()=> {
 
         const {wrapper, modal} = createActionsMenu();
 
-        expect(modal.state.allowedActions.left90).toBe(true);
+        expect(modal.state.disallowedActions.left90).toBe(undefined);
 
         const left90Checkbox = wrapper.find('#actions-menu-item-left90');
         left90Checkbox.simulate('click');
 
-        expect(modal.state.allowedActions.left90).toBe(false);
+        expect(modal.state.disallowedActions.left90).toBe(true);
 
-        const cancelButton = wrapper.find("Button.ModalWithFooter__secondaryButton");
+        const cancelButton = wrapper.find(".TextButton--secondaryButton");
         cancelButton.simulate('click');
-        expect(modal.state.allowedActions.left90).toBe(true);
+        expect(modal.state.disallowedActions.left90).toBe(undefined);
 
         wrapper.unmount();
     });
@@ -108,7 +93,7 @@ describe("When the cancel button is clicked.", ()=> {
 
         const {wrapper, mockOnCancel} = createActionsMenu();
 
-        const cancelButton = wrapper.find("Button.ModalWithFooter__secondaryButton");
+        const cancelButton = wrapper.find(".TextButton--secondaryButton");
         cancelButton.simulate('click');
 
         expect(mockOnCancel.mock.calls.length).toBe(1);
@@ -126,11 +111,11 @@ describe("When the done button is clicked.", ()=> {
         const left90Checkbox = wrapper.find('#actions-menu-item-left90');
         left90Checkbox.simulate('click');
 
-        const saveButton = wrapper.find("Button#ActionSimplificationModal-done");
+        const saveButton = wrapper.find(".TextButton--primaryButton");
         saveButton.simulate('click');
 
         expect(mockOnConfirm.mock.calls.length).toBe(1);
-        expect(mockOnConfirm.mock.calls[0][0].left90).toBe(false);
+        expect(mockOnConfirm.mock.calls[0][0].left90).toBe(true);
 
         wrapper.unmount();
     });

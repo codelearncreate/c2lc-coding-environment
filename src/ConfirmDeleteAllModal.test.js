@@ -3,7 +3,6 @@
 import React from 'react';
 import Adapter from 'enzyme-adapter-react-16';
 import { mount, configure } from 'enzyme';
-import { Button } from 'react-bootstrap';
 import { IntlProvider } from 'react-intl';
 import messages from './messages.json';
 import ConfirmDeleteAllModal from './ConfirmDeleteAllModal';
@@ -11,13 +10,13 @@ import ConfirmDeleteAllModal from './ConfirmDeleteAllModal';
 configure({ adapter: new Adapter()});
 
 function getDeleteAllButton(confirmDeleteAllModalWrapper) {
-    return confirmDeleteAllModalWrapper.find(Button)
-        .filter('.ModalWithFooter__primaryButton').at(0);
+    return confirmDeleteAllModalWrapper.find("button")
+        .filter('.TextButton--primaryButton').at(0);
 }
 
 function getCancelButton(confirmDeleteAllModalWrapper) {
-    return confirmDeleteAllModalWrapper.find(Button)
-        .filter('.ModalWithFooter__secondaryButton').at(0);
+    return confirmDeleteAllModalWrapper.find("button")
+        .filter('.TextButton--secondaryButton').at(0);
 }
 
 function createMountDeleteAllModal() {

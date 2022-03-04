@@ -15,9 +15,9 @@ function createActionsMenuItem(props) {
     const wrapper = mount(
         React.createElement(
             ActionsMenuItem,
+            // $FlowFixMe: Flow is confused about the optional isDisallowed parameter.
             Object.assign(
                 {
-                    isAllowed: true,
                     isUsed: false,
                     itemKey: 'forward1',
                     onChange: mockChangeHandler
@@ -49,8 +49,8 @@ it('Renders without crashing when it is flag as "used".', () => {
     createActionsMenuItem({ isUsed: true });
 });
 
-it('Renders without crashing when it is flag as "not allowed".', () => {
-    createActionsMenuItem({ isAllowed: false });
+it('Renders without crashing when it is flag as disallowed.', () => {
+    createActionsMenuItem({ isDisallowed: true });
 });
 
 it("Changes on click.", () => {
@@ -102,7 +102,7 @@ it("Does not allow hiding 'used' items.", () => {
 });
 
 it("Allows reenabling 'used' items that are hidden.", () => {
-    const { wrapper, mockChangeHandler } = createActionsMenuItem({ isUsed: true, isAllowed: false });
+    const { wrapper, mockChangeHandler } = createActionsMenuItem({ isUsed: true, isDisallowed: true });
 
     const input = wrapper.find(".ActionsMenuItem");
 
@@ -112,15 +112,15 @@ it("Allows reenabling 'used' items that are hidden.", () => {
 });
 
 test.each([
-    // allowed, used , expectedDisabled
-    [  false  , false, false  ],
-    [  false  , true , false  ],
-    [  true   , false, false  ],
-    [  true   , true , true   ],
+    // disallowed, used , expectedDisabled
+    [  false, false, false  ],
+    [  false, true , true   ],
+    [  true , false, false  ],
+    [  true , true , false  ],
 ])("The menu item is disabled when 'allowed' and 'used'.",
-    (allowed: boolean, used: boolean, expectedDisabled: boolean) => {
+    (disallowed: boolean, used: boolean, expectedDisabled: boolean) => {
         expect.assertions(2);
-        const { wrapper } = createActionsMenuItem({ isAllowed: allowed, isUsed: used });
+        const { wrapper } = createActionsMenuItem({ isDisallowed: disallowed, isUsed: used });
 
         const input = wrapper.find(".ActionsMenuItem");
         expect(input.prop("aria-disabled")).toBe(expectedDisabled);

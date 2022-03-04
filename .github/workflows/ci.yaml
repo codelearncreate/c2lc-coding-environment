@@ -9,7 +9,7 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-18.04]
-        node-version: [12.x, 14.x]
+        node-version: [14.x, 16.x]
     runs-on: ${{ matrix.os }}
     env:
       CI: true
@@ -36,14 +36,6 @@ jobs:
         run: npm run build
       - name: Flow
         run: npx flow check
-      - name: Flow Type Coverage (HTML report)
-        run: npx flow-coverage-report --config .flowcoverage-all
-      - name: Archive Flow Type Coverage Report
-        continue-on-error: true
-        uses: actions/upload-artifact@v2
-        with:
-          name: Flow Type Coverage Report
-          path: flow-coverage/
       - name: Test
         run: npm test -- --verbose --coverage
       - name: Archive Test Code Coverage Report
@@ -52,9 +44,5 @@ jobs:
         with:
           name: Test Code Coverage Report
           path: coverage/
-      - name: Flow Type Coverage (main coverage threshold)
-        run: npx flow-coverage-report --config .flowcoverage-main-threshold
-      - name: Flow Type Coverage (test coverage threshold)
-        run: npx flow-coverage-report --config .flowcoverage-tests-threshold
       - name: Lint Documentation
         run: npm run markdownlint

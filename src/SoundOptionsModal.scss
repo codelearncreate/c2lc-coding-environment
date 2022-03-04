@@ -1,0 +1,41 @@
+.SoundOptions__option-container {
+    display: flex;
+    justify-content: space-between;
+    padding: 1rem;
+}
+
+.SoundOptions__toggle-container {
+    display: flex;
+    column-gap: 0.6rem;
+}
+
+.SoundOptions__option--disabled {
+    opacity: 0.5;
+    pointer-events: none;
+}
+
+.ToggleSwitch:not(.ToggleSwitch--checked).SoundOptionsToggle {
+    background-color: #B9BEC6;
+}
+
+.ToggleSwitch.SoundOptionsToggle {
+    background-color: #4C9990;
+    height: 1.65rem;
+    width: 2.5rem;
+    padding: 0.2rem;
+    .ToggleSwitch__switch-inner-circle {
+        width: 1.25rem;
+        height: 1.25rem;
+        margin-bottom: 0;
+        margin-top: 0;
+    }
+    &:hover {
+        background-color: #F5C58A;
+    }
+}
+
+.ToggleSwitch--checked.SoundOptionsToggle {
+    .ToggleSwitch__switch-inner-circle {
+        margin-left: 0.9rem;
+    }
+}

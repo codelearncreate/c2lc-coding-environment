@@ -62,24 +62,42 @@ export default class ProgramChangeController {
         this.app.setState((state) => {
             // Check that the step to delete hasn't changed since the
             // user made the deletion
-            if (command === state.programSequence.getProgramStepAt(index)) {
+            const currentStep = state.programSequence.getProgramStepAt(index);
+            if (command === currentStep.block) {
                 // Play the announcement
-                const commandString = this.intl.formatMessage({
-                    id: "Announcement." + command
-                });
+                const commandString = this.intl.formatMessage(
+                    { id: "Announcement." + command },
+                    { loopLabel: currentStep.label }
+                );
                 this.audioManager.playAnnouncement(
                     'delete',
                     this.intl,
                     { command: commandString }
                 );
 
-                // If there are steps following the one being deleted, focus
-                // the next step. Otherwise, focus the final add node.
                 if (programBlockEditor) {
-                    if (index < state.programSequence.getProgramLength() - 1) {
-                        programBlockEditor.focusCommandBlockAfterUpdate(index);
+                    // If there are steps following the one being deleted, focus
+                    // the next step. Otherwise, focus the final add node.
+                    if (currentStep.block === 'startLoop') {
+                        // On delete of a startLoop, we need to aware of its endLoop block position
+                        if (index < state.programSequence.getProgramLength() - 2) {
+                            programBlockEditor.focusCommandBlockAfterUpdate(index);
+                        } else {
+                            programBlockEditor.focusAddNodeAfterUpdate(index);
+                        }
+                    } else if (currentStep.block === 'endLoop') {
+                        // On delete of an endLoop, we lose one more index from deleting its startLoop block
+                        if (index < state.programSequence.getProgramLength() - 1) {
+                            programBlockEditor.focusCommandBlockAfterUpdate(index - 1);
+                        } else {
+                            programBlockEditor.focusAddNodeAfterUpdate(index - 1);
+                        }
                     } else {
-                        programBlockEditor.focusAddNodeAfterUpdate(index);
+                        if (index < state.programSequence.getProgramLength() - 1) {
+                            programBlockEditor.focusCommandBlockAfterUpdate(index);
+                        } else {
+                            programBlockEditor.focusAddNodeAfterUpdate(index);
+                        }
                     }
                 }
 

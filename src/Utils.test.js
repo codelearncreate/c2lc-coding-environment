@@ -1,6 +1,6 @@
 // @flow
 
-import { extend, generateEncodedProgramURL, getThemeFromString, getWorldFromString, focusByQuerySelector } from './Utils.js';
+import { extend, generateEncodedProgramURL, getThemeFromString, getWorldFromString, focusByQuerySelector, generateLoopLabel, parseLoopLabel } from './Utils.js';
 import React from 'react';
 import Adapter from 'enzyme-adapter-react-16';
 import { mount, configure } from 'enzyme';
@@ -9,9 +9,9 @@ import { makeTestDiv } from './TestUtils';
 configure({ adapter: new Adapter()});
 
 test('Test URL encoding', () => {
-    expect(generateEncodedProgramURL('version=5', 'light', 'default', 'f1=f2=f3', '0ab', 'f1=f2=f3')).toBe('?v=version%3D5&t=light&w=default&p=f1%3Df2%3Df3&c=0ab&a=f1%3Df2%3Df3');
-    expect(generateEncodedProgramURL('version?5', 'dark', 'space', 'f1?f2?f3', '0aab0c0', 'f1?f2?f3')).toBe('?v=version%3F5&t=dark&w=space&p=f1%3Ff2%3Ff3&c=0aab0c0&a=f1%3Ff2%3Ff3');
-    expect(generateEncodedProgramURL('version 5', 'contrast', 'forest', 'f1 f2 f3', '0a b c', 'f1 f2 f3')).toBe('?v=version%205&t=contrast&w=forest&p=f1%20f2%20f3&c=0a%20b%20c&a=f1%20f2%20f3');
+    expect(generateEncodedProgramURL('version=5', 'light', 'default', 'f1=f2=f3', '0ab', 'f1=f2=f3')).toBe('?v=version%3D5&t=light&w=default&p=f1%3Df2%3Df3&c=0ab&d=f1%3Df2%3Df3');
+    expect(generateEncodedProgramURL('version?5', 'dark', 'space', 'f1?f2?f3', '0aab0c0', 'f1?f2?f3')).toBe('?v=version%3F5&t=dark&w=space&p=f1%3Ff2%3Ff3&c=0aab0c0&d=f1%3Ff2%3Ff3');
+    expect(generateEncodedProgramURL('version 5', 'contrast', 'forest', 'f1 f2 f3', '0a b c', 'f1 f2 f3')).toBe('?v=version%205&t=contrast&w=forest&p=f1%20f2%20f3&c=0a%20b%20c&d=f1%20f2%20f3');
 });
 
 test('Test getThemeFromString', () => {
@@ -71,4 +71,24 @@ test('Test focusByQuerySelector', () => {
 
     // make sure to detach after attach
     testFixture.detach();
+});
+
+test('generateLoopLabel', () => {
+    expect(generateLoopLabel(1)).toEqual('A');
+    expect(generateLoopLabel(2)).toEqual('B');
+    expect(generateLoopLabel(26)).toEqual('Z');
+    expect(generateLoopLabel(27)).toEqual('AA');
+    expect(generateLoopLabel(28)).toEqual('AB');
+    expect(generateLoopLabel(52)).toEqual('AZ');
+    expect(generateLoopLabel(53)).toEqual('BA');
+});
+
+test('parseLoopLabel', () => {
+    expect(parseLoopLabel('A')).toEqual(1);
+    expect(parseLoopLabel('B')).toEqual(2);
+    expect(parseLoopLabel('Z')).toEqual(26);
+    expect(parseLoopLabel('AA')).toEqual(27);
+    expect(parseLoopLabel('AB')).toEqual(28);
+    expect(parseLoopLabel('AZ')).toEqual(52);
+    expect(parseLoopLabel('BA')).toEqual(53);
 });
