@@ -37,23 +37,43 @@
     transform: rotate(45deg);
 }
 
-// S:  4
+// S:  4  Unflipped
 .CharacterPositionController__character-column-character--angle4 {
+    transform: rotate(90deg);
+}
+
+// SW: 5  Unflipped
+.CharacterPositionController__character-column-character--angle5 {
+    transform: rotate(135deg);
+}
+
+// W:  6  Unflipped
+.CharacterPositionController__character-column-character--angle6 {
+    transform: rotate(180deg);
+}
+
+// NW: 7  Unflipped
+.CharacterPositionController__character-column-character--angle7 {
+    transform: rotate(225deg);
+}
+
+// S:  4  Flipped
+.CharacterPositionController__character-column-character--angle4.CharacterPositionController__character-column-character--enable-flip {
     transform: rotate(90deg) scaleY(-1);
 }
 
-// SW: 5
-.CharacterPositionController__character-column-character--angle5 {
+// SW: 5  Flipped
+.CharacterPositionController__character-column-character--angle5.CharacterPositionController__character-column-character--enable-flip {
     transform: rotate(135deg) scaleY(-1);
 }
 
-// W:  6
-.CharacterPositionController__character-column-character--angle6 {
+// W:  6  Flipped
+.CharacterPositionController__character-column-character--angle6.CharacterPositionController__character-column-character--enable-flip {
     transform: rotate(180deg) scaleY(-1);
 }
 
-// NW: 7
-.CharacterPositionController__character-column-character--angle7 {
+// NW: 7  Flipped
+.CharacterPositionController__character-column-character--angle7.CharacterPositionController__character-column-character--enable-flip {
     transform: rotate(225deg) scaleY(-1);
 }
 

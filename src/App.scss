@@ -37,15 +37,20 @@ body {
 }
 
 .App__header-menu {
-    // Uncomment background-color and border radius later when we change all the setting
-    // menu items as buttons
-    // background-color: #CCE6E2;
-    // border-radius: 3px;
+    background-color: #CCE6E2;
+    border-radius: 3px;
     display: grid;
     grid-template-columns: min-content min-content;
     justify-content: center;
-    column-gap: 0.5rem;
-    padding: 0.5rem 0;
+    column-gap: 0.7rem;
+    row-gap: 0.7rem;
+    padding: 1rem 0;
+}
+
+.App__header-menu > .IconButton {
+    svg path {
+        fill: #1E1E1E;
+    }
 }
 
 .App__header-audio-toggle {
@@ -251,6 +256,51 @@ body {
     grid-column-start: 2;
     grid-column-end: 3;
     justify-content: center;
+}
+
+
+.App__ShareButton {
+    background-color: #CCE6E2;
+    border: 0;
+    border-radius: 0.2rem;
+    color: #1E1E1E;
+    font-weight: 400;
+    padding: 0.5rem 2rem;
+    width: 10rem;
+    display:flex;
+    column-gap: 0.5rem;
+    align-items: center;
+    outline: 0;
+
+    &:active {
+        background-color: #ED972C;
+    }
+
+    &:focus {
+        box-shadow:
+            0 0 0 0.1rem #30444E,
+            0 0 0 $c2lc-focus-indicator-width #FFFFFF;
+    }
+
+    &:hover {
+        background-color: #F5C58A;
+        color: #1E1E1E;
+        svg path {
+            fill: #1E1E1E;
+        }
+    }
+}
+
+.App__ShareButton__icon {
+    width: 1rem;
+    height: 1rem;
+    path {
+        fill: #1E1E1E;
+    }
+}
+
+.App__ShareButton__label {
+    margin: auto;
 }
 
 @media only screen and (max-width: 768px) {

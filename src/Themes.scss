@@ -149,6 +149,21 @@ body.light-theme {
         }
     }
 
+    button.command-block.btn-command-block--startLoop,
+    button.command-block.btn-command-block--endLoop {
+        background-color: #9D9D9D;
+        .command-block-loop-label-container {
+            background-color: #858383;
+            color: #FFFFFF;
+        }
+        &:hover {
+            background-color: #787878;
+            .command-block-loop-label-container {
+                background-color: #5E5D5D;
+            }
+        }
+    }
+
     .ActionsMenuItem__icon--right45, .ActionsMenuItem__icon--right90, .ActionsMenuItem__icon--right180 {
         &:not(.ActionsMenuItem__icon--disabled) {
             background-color: #C13925;
@@ -425,8 +440,8 @@ body.light-theme {
             background-color: #33717F; 
         }
     }
-    
-    button.btn.ShareButton {
+
+    .App__ShareButton {
         background-color: #33717F;
         color: #FFFFFF;
         &:focus {
@@ -437,6 +452,15 @@ body.light-theme {
         &:hover {
             background-color: #F5C58A;
             color: #1E1E1E;
+            svg path {
+                fill: #1E1E1E;
+            }
+        }
+    }
+
+    .App__ShareButton__icon {
+        path {
+            fill: #FFFFFF;
         }
     }
 }
@@ -450,10 +474,8 @@ body.dark-theme {
         background-color: #18252C;
     }
 
-    .AudioFeedbackToggleSwitch {
-        &:focus {
-            box-shadow: 0 0 0 $c2lc-focus-indicator-width white;
-        }
+    .App__header-menu {
+        background-color: #30444E;
     }
 
     .IconButton {
@@ -689,8 +711,15 @@ body.dark-theme {
             0 0 0 0.4rem #67717E,
             0 0 0 0.6rem #FFFFFF;
     }
-}
 
+    .App__ShareButton {
+        &:focus {
+            box-shadow:
+                0 0 0 0.1rem #30444E,
+                0 0 0 $c2lc-focus-indicator-width white;
+        }
+    }
+}
 
 /* Grayscale Theme */
 body.gray-theme {
@@ -728,6 +757,16 @@ body.gray-theme {
 
     .App__command-palette-heading {
         color: #818A98;
+    }
+
+    .App__header-menu {
+        background-color: #D5D8DD;
+    }
+
+    .App__header-menu > .IconButton {
+        svg path {
+            fill: #FFFFFF;
+        }
     }
 
     .IconButton {
@@ -785,7 +824,8 @@ body.gray-theme {
     }
 
     button.btn.ModalWithFooter__secondaryButton,
-    button.btn.ModalWithFooter__primaryButton {
+    button.btn.ModalWithFooter__primaryButton,
+    .TextButton {
         background-color: #aaa;
         color: black;
 
@@ -822,25 +862,6 @@ body.gray-theme {
 
     .KeyboardInputModal__content__toggle.ToggleSwitch--checked {
         background-color: #818A98;
-    }
-
-    .AudioFeedbackToggleSwitch {
-        background-color: #B9BEC6;
-
-        &:focus {
-            box-shadow: 0 0 0 $c2lc-focus-indicator-width #505862;
-        }
-
-        &.ToggleSwitch--checked{
-            background-color: #818A98;
-        }
-
-        &:hover {
-            background-color: #505862;
-            .ToggleSwitch__switch-inner-circle {
-                background-color: #B9BEC6;
-            }
-        }
     }
 
     .App__ActionsMenu__header {
@@ -891,6 +912,21 @@ body.gray-theme {
 
         &.command-block--pressed {
             border: 3px solid #505862;
+        }
+    }
+
+    button.command-block.btn-command-block--startLoop,
+    button.command-block.btn-command-block--endLoop {
+        background-color: #B9BEC6;
+        .command-block-loop-label-container {
+            background-color: #989DA7;
+            color: #FFFFFF;
+        }
+        &:hover {
+            background-color: #818A98;
+            .command-block-loop-label-container {
+                background-color: #626A78;
+            }
         }
     }
 
@@ -1242,6 +1278,21 @@ body.gray-theme {
         }
     }
 
+    .ShareModal__form__copyButton {
+        background-color: #aaa;
+        color: black;
+
+        &:hover {
+            background-color:#D5D8DD;
+        }
+
+        &:focus {
+            box-shadow:
+                0 0 0 0.15rem #d5d8dd,
+                0 0 0 0.25rem #505862;
+        }
+    }
+
     @keyframes pausedGreyscaleAnimation {
         0% {box-shadow: 0 0 0 $c2lc-paused-button-outer-width #505862;}
         50% {box-shadow: 0 0 0 $c2lc-active-button-width #505862;}
@@ -1363,6 +1414,17 @@ body.gray-theme {
         }
     }
 
+    .ToggleSwitch:not(.ToggleSwitch--checked).SoundOptionsToggle {
+        background-color: #B9BEC6;
+    }
+
+    .ToggleSwitch.SoundOptionsToggle {
+        background-color: #818A98;
+        &:hover {
+            background-color: #505862;
+        }
+    }
+
     .ProgramSpeedController__container svg path {
         fill: #67717E;
     }
@@ -1425,13 +1487,31 @@ body.gray-theme {
         }
     }
 
-    button.btn.ShareButton {
+
+    button.btn.PlayButton--play.PlayButton--disabled {
+        background-color: inherit;
+        cursor: default;
+
+        svg {
+            path.triangle {
+                fill: #30444E;
+            }
+        }
+    }
+
+    .App__ShareButton {
         background-color: #F1F2F4;
-        color: black;
+        color: #1E1E1E;
+        svg path {
+            fill: #1E1E1E;
+        }
 
         &:hover {
             background: #505862;
-            color: White;
+            color: #ffffff;
+            svg path {
+                fill: #ffffff;
+            }
         }
 
         &:focus {
@@ -1454,8 +1534,28 @@ body.contrast-theme {
         background-color: black;
     }
 
+    .App__header-menu {
+        background-color: black;
+        border: 2px solid white;
+    }
+
+    .App__header-menu > .IconButton {
+        box-shadow: 0 0 0 2px black;
+    }
+
     .App__app-heading > a {
         color: white;
+    }
+
+    .IconButton.App__header-soundOptions {
+        svg path {
+            fill: #1E1E1E;
+        }
+        &:hover {
+            svg path {
+                fill: #FFFFFF;
+            }
+        }
     }
 
     .IconButton {
@@ -1542,7 +1642,8 @@ body.contrast-theme {
     }
 
     button.btn.ModalWithFooter__secondaryButton,
-    button.btn.ModalWithFooter__primaryButton {
+    button.btn.ModalWithFooter__primaryButton,
+    .TextButton {
         background-color: black;
         color: white;
 
@@ -1587,52 +1688,6 @@ body.contrast-theme {
             box-shadow: 0 0 0 $c2lc-focus-indicator-width white;
             border: 2px solid black;
         }
-
-        .ToggleSwitch__switch-inner-circle {
-            background-color: white;
-            svg {
-                path {
-                    fill: black;
-                }
-            }
-        }
-    }
-
-    .AudioFeedbackToggleSwitch {
-        background-color: black;
-        border: 2px solid white;
-        padding: 0.2rem;
-
-        &:focus {
-            box-shadow: 0 0 0 $c2lc-focus-indicator-width white;
-            border: 2px solid black;
-        }
-
-        .ToggleSwitch__switch-inner-circle {
-            background-color: white;
-            svg {
-                path {
-                    fill: black;
-                }
-            }
-        }
-
-        &.ToggleSwitch--checked:not(:hover), &:hover {
-            background-color: white;
-            .ToggleSwitch__switch-inner-circle {
-                background-color: black;
-                svg {
-                    path {
-                        fill: white;
-                    }
-                }
-            }
-        }
-    }
-
-    .AudioFeedbackToggleSwitch.ToggleSwitch--checked:not(:hover) {
-        background-color: black;
-        border: 2px solid white;
 
         .ToggleSwitch__switch-inner-circle {
             background-color: white;
@@ -1736,6 +1791,24 @@ body.contrast-theme {
         }
     }
 
+    button.command-block.btn-command-block--startLoop,
+    button.command-block.btn-command-block--endLoop {
+        background-color: #FFFFFF;
+        .command-block-loop-label-container {
+            background-color: #FFFFFF;
+            color: black;
+        }
+        &:hover {
+            border: 2px solid #FFFFFF;
+            background-color: black;
+            .command-block-loop-label-container {
+                background-color: black;
+                color: #FFFFFF;
+            }
+        }
+    }
+
+
     .ActionsMenuItem {
         &:focus {
             box-shadow: 0 0 0 0.2rem black;
@@ -1806,7 +1879,7 @@ body.contrast-theme {
     }
 
     .App__world-container {
-        border: 1px solid white;
+        border: 2px solid white;
     }
 
     .CharacterPositionController__character-column {
@@ -2347,6 +2420,47 @@ body.contrast-theme {
         }
     }
 
+    .ToggleSwitch:not(.ToggleSwitch--checked).SoundOptionsToggle {
+        box-shadow: 0 0 0 0.1rem #1E1E1E;
+        background-color: #FFFFFF;
+        .ToggleSwitch__switch-inner-circle {
+            background-color: #1E1E1E;
+        }
+        &:hover {
+            background-color: #1E1E1E;
+            .ToggleSwitch__switch-inner-circle {
+                background-color: #FFFFFF;
+            }
+        }
+        &:focus {
+            box-shadow: 
+                0 0 0 0.1rem #1E1E1E,
+                0 0 0 0.3rem #FFFFFF,
+                0 0 0 0.5rem #1E1E1E
+        }
+    }
+
+    .ToggleSwitch.SoundOptionsToggle {
+        box-shadow: 0 0 0 0.1rem #FFFFFF;
+        background-color: #1E1E1E;
+        .ToggleSwitch__switch-inner-circle {
+            background-color: #FFFFFF;
+        }
+        &:hover {
+            box-shadow: 0 0 0 0.1rem #1E1E1E;
+            background-color: #FFFFFF;
+            .ToggleSwitch__switch-inner-circle {
+                background-color: #1E1E1E;
+            }
+        }
+        &:focus {
+            box-shadow: 
+                0 0 0 0.1rem #1E1E1E,
+                0 0 0 0.3rem #FFFFFF,
+                0 0 0 0.5rem #1E1E1E
+        }
+    }
+
     .ProgramSpeedController__slider {
         &::-webkit-slider-runnable-track {
             background-color: black;
@@ -2406,7 +2520,39 @@ body.contrast-theme {
         }
     }
 
-    button.btn.ShareButton {
+    .App__ShareButton {
+        &:focus {
+            box-shadow:
+                0 0 0 0.1rem white,
+                0 0 0 0.2rem black;
+        }
+
+        &:hover {
+            background-color: white;
+            color: black;
+            box-shadow: 0 0 0 0.1rem black;
+            svg path {
+                fill: black;
+            }
+
+        }
+
+        &:hover:focus {
+            box-shadow: 0 0 0 0.2rem black;
+        }
+    }
+
+    .App__ShareButton__icon {
+        path {
+            fill: white;
+        }
+    }
+
+
+    .ShareModal__form__copyButton {
+        background-color: black;
+        color: white;
+
         &:focus {
             box-shadow:
                 0 0 0 0.1rem white,

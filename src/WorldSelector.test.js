@@ -57,11 +57,11 @@ function getWorldSelectorThumbnailIcon(wrapper) {
 }
 
 function getCancelButton(wrapper) {
-    return wrapper.find('.ModalWithFooter__secondaryButton');
+    return wrapper.find('.TextButton--secondaryButton');
 }
 
 function getDoneButton(wrapper) {
-    return wrapper.find('.ModalWithFooter__primaryButton');
+    return wrapper.find('.TextButton--primaryButton');
 }
 
 describe('When rendering selector options', () => {

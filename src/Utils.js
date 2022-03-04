@@ -22,8 +22,8 @@ function makeDelayedPromise(timeMs: number): Promise<void> {
     });
 }
 
-function generateEncodedProgramURL(versionString: string, themeString: string, worldString: string, programString: string, characterStateString: string, allowedActionsString: string): string {
-    return `?v=${encodeURIComponent(versionString)}&t=${themeString}&w=${worldString}&p=${encodeURIComponent(programString)}&c=${encodeURIComponent(characterStateString)}&a=${encodeURIComponent(allowedActionsString)}`;
+function generateEncodedProgramURL(versionString: string, themeString: string, worldString: string, programString: string, characterStateString: string, disallowedActionsString: string): string {
+    return `?v=${encodeURIComponent(versionString)}&t=${themeString}&w=${worldString}&p=${encodeURIComponent(programString)}&c=${encodeURIComponent(characterStateString)}&d=${encodeURIComponent(disallowedActionsString)}`;
 }
 
 
@@ -86,11 +86,30 @@ function extend(...toMerge:Object) {
     return merged;
 }
 
-function focusByQuerySelector (selectors: string) {
+function focusByQuerySelector(selectors: string) {
     const element = document.querySelector(selectors);
     if (element && element.focus) {
         element.focus();
     }
 }
 
-export { extend, focusByQuerySelector, generateId, makeDelayedPromise, generateEncodedProgramURL, getThemeFromString, getWorldFromString };
+function generateLoopLabel(n: number): string {
+    let label = '';
+    while (n > 0) {
+        label = String.fromCharCode('A'.charCodeAt(0) + ((n - 1) % 26)) + label;
+        n = Math.floor((n - 1) / 26);
+    }
+    return label;
+};
+
+function parseLoopLabel(label: string): number {
+    let n = 0;
+    while (label.length > 0) {
+        n *= 26;
+        n += label.charCodeAt(0) - 'A'.charCodeAt(0) + 1;
+        label = label.substring(1);
+    }
+    return n;
+};
+
+export { extend, focusByQuerySelector, generateId, makeDelayedPromise, generateEncodedProgramURL, getThemeFromString, getWorldFromString, generateLoopLabel, parseLoopLabel };

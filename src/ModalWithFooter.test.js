@@ -2,7 +2,6 @@
 import React from 'react';
 import Adapter from 'enzyme-adapter-react-16';
 import { configure, mount } from 'enzyme';
-import { Button } from 'react-bootstrap';
 import ModalWithFooter from './ModalWithFooter';
 
 configure({ adapter: new Adapter()});
@@ -29,15 +28,15 @@ function createMountModalWithFooter(props) {
 }
 
 function hasPrimaryButton(wrapper) {
-    return wrapper.exists('.ModalWithFooter__primaryButton');
+    return wrapper.exists('.TextButton--primaryButton');
 }
 
 function hasSecondaryButton(wrapper) {
-    return wrapper.exists('.ModalWithFooter__secondaryButton');
+    return wrapper.exists('.TextButton--secondaryButton');
 }
 
 function getFooterButtons(wrapper) {
-    return wrapper.find(Button);
+    return wrapper.find("button");
 }
 
 describe('ModalWithFooter renders buttons with properties specified in buttonProperties properties', () => {
