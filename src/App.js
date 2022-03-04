@@ -125,7 +125,7 @@ export class App extends React.Component<AppProps, AppState> {
     constructor(props: any) {
         super(props);
 
-        this.version = '1.2';
+        this.version = '1.3';
 
         this.appContext = {
             bluetoothApiIsAvailable: FeatureDetection.bluetoothApiIsAvailable()
@@ -888,6 +888,21 @@ export class App extends React.Component<AppProps, AppState> {
                             break;
                         case("changeToHighContrastTheme"):
                             this.setStateSettings({theme: "contrast"});
+                            break;
+                        case("changeToDeepOceanWorld"):
+                            this.setStateSettings({ world: "DeepOcean"});
+                            break;
+                        case("changeToJungleWorld"):
+                            this.setStateSettings({ world: "Jungle"});
+                            break;
+                        case("changeToLandmarksWorld"):
+                            this.setStateSettings({ world: "Landmarks"});
+                            break;
+                        case("changeToSketchpadWorld"):
+                            this.setStateSettings({ world: "Sketchpad"});
+                            break;
+                        case("changeToSpaceWorld"):
+                            this.setStateSettings({ world: "Space"});
                             break;
                         default:
                             break;

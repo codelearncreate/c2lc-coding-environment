@@ -71,6 +71,13 @@ export type ActionName =
     | "changeToGrayscaleTheme"
     | "changeToHighContrastTheme"
 
+    // Change World
+    | "changeToDeepOceanWorld"
+    | "changeToJungleWorld"
+    | "changeToLandmarksWorld"
+    | "changeToSketchpadWorld"
+    | "changeToSpaceWorld"
+
     // Update Program
     | "deleteAll"
     ;
@@ -267,6 +274,30 @@ const ExtendedKeyboardSequences: KeyboardInputScheme = {
             highContrast: {
                 keyDef: { key: "5"},
                 actionName: "changeToHighContrastTheme"
+            }
+        },
+
+        changeWorld: {
+            keyDef: { code: "KeyW", key: "w" },
+            sketchpad: {
+                keyDef: { key: "1"},
+                actionName: "changeToSketchpadWorld"
+            },
+            jungle: {
+                keyDef: { key: "2"},
+                actionName: "changeToJungleWorld"
+            },
+            space: {
+                keyDef: { key: "3"},
+                actionName: "changeToSpaceWorld"
+            },
+            deepOcean: {
+                keyDef: { key: "4"},
+                actionName: "changeToDeepOceanWorld"
+            },
+            landmarks: {
+                keyDef: { key: "5"},
+                actionName: "changeToLandmarksWorld"
             }
         },
 
