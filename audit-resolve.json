@@ -91,6 +91,26 @@
     "1005174|react-scripts>react-dev-utils>browserslist": {
       "decision": "ignore",
       "madeAt": 1639470140071
+    },
+    "1027994|react-scripts>webpack-dev-server>http-proxy-middleware>http-proxy>follow-redirects": {
+      "decision": "ignore",
+      "madeAt": 1646645448509
+    },
+    "1028047|react-scripts>webpack-dev-server>http-proxy-middleware>http-proxy>follow-redirects": {
+      "decision": "ignore",
+      "madeAt": 1646645448509
+    },
+    "1028040|react-scripts>webpack-dev-server>selfsigned>node-forge": {
+      "decision": "ignore",
+      "madeAt": 1646645470276
+    },
+    "1028059|react-scripts>webpack-dev-server>selfsigned>node-forge": {
+      "decision": "ignore",
+      "madeAt": 1646645470276
+    },
+    "1028061|react-scripts>webpack-dev-server>selfsigned>node-forge": {
+      "decision": "ignore",
+      "madeAt": 1646645470276
     }
   },
   "rules": {},
