@@ -17,6 +17,60 @@ divided using commas. For example, the shortcut `Ctrl + Alt + x, x` is
 activated by holding control, alt, and x at the same time, releasing all keys,
 and then hitting the x key again by itself.
 
+## Control + Shift Key Bindings
+
+The default key bindings using control and shift for most commands, to avoid
+conflicting with entering international characters in some keyboard layouts.
+
+| Keys | Command |
+| ---- | ------- |
+| Ctrl + Shift + a | addCommand |
+| Ctrl + Shift + b | addCommandToBeginning |
+| Ctrl + Shift + e | addCommandToEnd |
+| Ctrl + Shift + d | deleteCurrentStep |
+| Ctrl + Shift + i | announceScene |
+| < | decreaseProgramSpeed |
+| > | increaseProgramSpeed |
+| Ctrl + Shift + p | playPauseProgram |
+| Ctrl + Shift + r | refreshScene |
+| ? | showHide |
+| Ctrl + Shift + s | stopProgram |
+| Ctrl + Shift + x, a, b, 1 | selectBackward1 |
+| Ctrl + Shift + x, a, b, 2 | selectBackward2 |
+| Ctrl + Shift + x, a, b, 3 | selectBackward3 |
+| Ctrl + Shift + x, a, f, 1 | selectForward1 |
+| Ctrl + Shift + x, a, f, 2 | selectForward2 |
+| Ctrl + Shift + x, a, f, 3 | selectForward3 |
+| Ctrl + Shift + x, a, l, 1 | selectLeft45 |
+| Ctrl + Shift + x, a, l, 2 | selectLeft90 |
+| Ctrl + Shift + x, a, l, 3 | selectLeft180 |
+| Ctrl + Shift + x, a, r, 1 | selectRight45 |
+| Ctrl + Shift + x, a, r, 2 | selectRight90 |
+| Ctrl + Shift + x, a, r, 3 | selectRight180 |
+| Ctrl + Shift + x, c, m, d | moveCharacterDown |
+| Ctrl + Shift + x, c, m, l | moveCharacterLeft |
+| Ctrl + Shift + x, c, m, r | moveCharacterRight |
+| Ctrl + Shift + x, c, m, u | moveCharacterUp |
+| Ctrl + Shift + x, c, t, l | turnCharacterLeft |
+| Ctrl + Shift + x, c, t, r | turnCharacterRight |
+| Ctrl + Shift + x, d | deleteAll |
+| Ctrl + Shift + x, f, a | focusActions |
+| Ctrl + Shift + x, f, c | focusCharacterPositionControls |
+| Ctrl + Shift + x, f, h | focusAppHeader |
+| Ctrl + Shift + x, f, p | focusPlayShare |
+| Ctrl + Shift + x, f, q | focusProgramSequence |
+| Ctrl + Shift + x, f, s | focusScene |
+| Ctrl + Shift + x, f, t | focusAddNodeToggle |
+| Ctrl + Shift + x, f, w | focusWorldSelector |
+| Ctrl + Shift + x, f, x | focusCharacterColumnInput |
+| Ctrl + Shift + x, f, y | focusCharacterRowInput |
+| Ctrl + Shift + x, t, 1 | changeToDefaultTheme |
+| Ctrl + Shift + x, t, 2 | changeToLightTheme |
+| Ctrl + Shift + x, t, 3 | changeToDarkTheme |
+| Ctrl + Shift + x, t, 4 | changeToGrayscaleTheme |
+| Ctrl + Shift + x, t, 5 | changeToHighContrastTheme |
+| Ctrl + Shift + x, x | toggleFeedbackAnnouncements |
+
 ## Control+Alt (Apple: Control+Option) Key Bindings
 
 NVDA has many commands that make use of the alt key, to avoid conflicting with

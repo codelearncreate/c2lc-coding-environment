@@ -418,7 +418,7 @@ export class App extends React.Component<AppProps, AppState> {
             showWorldSelector: false,
             showShareModal: false,
             showActionsSimplificationMenu: false,
-            keyboardInputSchemeName: "controlalt"
+            keyboardInputSchemeName: "controlshift"
         };
 
         // For FakeRobotDriver, replace with:

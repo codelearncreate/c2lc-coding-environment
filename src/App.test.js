@@ -102,23 +102,24 @@ it('Should be able to handle escaping out of a sequence', () => {
 
     app.setState({ keyBindingsEnabled: true});
 
-    expect(app.state().announcementsEnabled).toBe(true);
+    expect(app.state().settings.theme).toBe("default");
 
     const sequenceWithEscape = [
-        new KeyboardEvent('keydown', { code: "KeyX", ctrlKey: true, altKey: true }),
-        new KeyboardEvent('keydown', { code: "KeyA" }),
+        new KeyboardEvent('keydown', { code: "KeyX", ctrlKey: true, shiftKey: true }),
+        new KeyboardEvent('keydown', { code: "KeyA", ctrlKey: true, shiftKey: true }),
         // At this point our sequence of (Ctrl+Alt+x, a) matches the beginning
         // part of the 'select action' group of sequences.
         // Sending an Escape will break us out of the in-progress sequence.
         new KeyboardEvent('keydown', { key: "Escape" }),
         // So that we can send the key sequence to toggle the announcements
-        new KeyboardEvent('keydown', { code: "KeyX", ctrlKey: true, altKey: true }),
-        new KeyboardEvent('keydown', { code: "KeyX" }),
+        new KeyboardEvent('keydown', { code: "KeyX", ctrlKey: true, shiftKey: true }),
+        new KeyboardEvent('keydown', { code: "KeyT", ctrlKey: true, shiftKey: true }),
+        new KeyboardEvent('keydown', { key: "5", ctrlKey: true, shiftKey: true })
     ];
 
     for (const keyboardEvent of sequenceWithEscape) {
         window.document.dispatchEvent(keyboardEvent);
     }
 
-    expect(app.state().announcementsEnabled).toBe(false);
+    expect(app.state().settings.theme).toBe("contrast");
 });

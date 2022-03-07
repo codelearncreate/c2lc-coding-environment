@@ -3,6 +3,7 @@
 import { isWorldName } from './Worlds';
 import type { ThemeName } from './types';
 import type { WorldName } from './Worlds';
+import type { KeyDef, KeyboardInputScheme} from './KeyboardInputSchemes';
 
 let idCounter: number = 0;
 
@@ -112,4 +113,37 @@ function parseLoopLabel(label: string): number {
     return n;
 };
 
-export { extend, focusByQuerySelector, generateId, makeDelayedPromise, generateEncodedProgramURL, getThemeFromString, getWorldFromString, generateLoopLabel, parseLoopLabel };
+function overlayModifierKeys (originalBindings: KeyboardInputScheme, modifiers: KeyDef, deep: ?boolean): KeyboardInputScheme {
+    const modifiedBindings = {};
+    const excludedBindingKeys = ["showHide", "decreaseProgramSpeed", "increaseProgramSpeed"];
+
+    for (const key in originalBindings) {
+        const value = originalBindings[key]
+        const isExcluded = excludedBindingKeys.indexOf(key) !== -1;
+        // $FlowFixMe: Flow doesn't understand that shiftKey shouldn't have to match the [string] rules.
+        modifiedBindings[key] = isExcluded ? value : overlaySingleLevel(value, modifiers, deep);
+    }
+    return modifiedBindings;
+}
+
+function overlaySingleLevel (originalLevel: KeyDef, modifiers: KeyDef, deep: ?boolean ): KeyDef {
+    const modifiedLevel = {};
+
+    for (const key in originalLevel) {
+        const originalValue = originalLevel[key];
+        if (key === "keyDef") {
+            modifiedLevel[key] = extend({}, originalValue, modifiers);
+        }
+        else {
+            modifiedLevel[key] = originalValue;
+        }
+
+        if (deep && typeof originalValue === "object" && !Array.isArray(originalValue)) {
+            modifiedLevel[key] = overlaySingleLevel(modifiedLevel[key], modifiers, deep);
+        }
+    }
+
+    return modifiedLevel;
+}
+
+export { extend, focusByQuerySelector, generateId, makeDelayedPromise, generateEncodedProgramURL, getThemeFromString, getWorldFromString, generateLoopLabel, parseLoopLabel, overlayModifierKeys };

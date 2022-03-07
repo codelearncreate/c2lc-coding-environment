@@ -113,6 +113,20 @@ class KeyboardInputModal extends React.Component<KeyboardInputModalProps, Keyboa
                     {singleKeyString}
                 </div>);
 
+                if (keyDef.shiftKey) {
+                    const shiftKeyLabel = this.props.intl.formatMessage(
+                        { id: "KeyboardInputModal.KeyLabels.Shift" }
+                    );
+                    labelKeySegments.unshift(shiftKeyLabel);
+
+                    const shiftKeyIcon = this.props.intl.formatMessage(
+                        { id: "KeyboardInputModal.KeyIcons.Shift" }
+                    );
+                    icons.unshift(<div key="shift-modifier" className="KeyboardInputModal__binding__icon">
+                        {shiftKeyIcon}
+                    </div>);
+                }
+
                 if (keyDef.altKey) {
                     const altKeyLabel = this.props.intl.formatMessage(
                         { id: "KeyboardInputModal.KeyLabels.Alt" }
