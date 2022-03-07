@@ -50,6 +50,30 @@ If you have any questions about accessibility, please feel free to ask
 questions. The [W3C's WCAG guidelines](https://www.w3.org/WAI/standards-guidelines/wcag/)
 are a good place to start learning about accessibility on the web.
 
+## Security
+
+All dependencies used in this project are monitored to ensure that we are aware
+of and fix security issues that would affect our end users.  For this purpose
+we use [npm-audit-resolver](https://www.npmjs.com/package/npm-audit-resolver).
+All pulls are checked to ensure that they do not introduce security
+dependencies.  If you are adding a new dependency (development or otherwise),
+it is recommended that you check for security issues using a command like
+the following:
+
+```shell
+node node_modules/.bin/check-audit
+```
+
+This script ignores known issues found in the `audit-resolve.json` file in the
+root of the repository.  If, after reviewing the output of `check-audit`, the
+team is able to determine that a dependency does not pose a risk to end users
+(for example because it is only used as part of the build chain), a security
+issue can be excluded from further checks using a command like the following:
+
+```shell
+node node_modules/.bin/resolve-audit
+```
+
 ## Technologies and Coding Conventions Used
 
 ### React
