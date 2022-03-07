@@ -111,6 +111,10 @@
     "1028061|react-scripts>webpack-dev-server>selfsigned>node-forge": {
       "decision": "ignore",
       "madeAt": 1646645470276
+    },
+    "1028044|markdownlint-cli2>markdownlint>markdown-it": {
+      "decision": "ignore",
+      "madeAt": 1646645573292
     }
   },
   "rules": {},
