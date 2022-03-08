@@ -476,6 +476,13 @@ export class ProgramBlockEditor extends React.Component<ProgramBlockEditorProps,
             );
         }
 
+        const loopIterationsAriaLabel = this.props.intl.formatMessage(
+            { id: 'ProgramBlockEditor.loopIterations' },
+            {
+                loopLabel: loopLabel
+            }
+        );
+
         let loopIterations = programBlock.iterations;
 
         // Show loopItertionsLeft when program is not stopped, or else, show iterations
@@ -503,6 +510,7 @@ export class ProgramBlockEditor extends React.Component<ProgramBlockEditorProps,
                 className={classes}
                 loopLabel={programBlock.label}
                 loopIterations={loopIterations}
+                loopIterationsAriaLabel={loopIterationsAriaLabel}
                 stepNumber={programStepNumber}
                 aria-label={ariaLabel}
                 aria-controls={hasActionPanelControl ? 'ActionPanel' : undefined}

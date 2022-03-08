@@ -8,6 +8,7 @@ import LoopIterationsInput from './LoopIterationsInput';
 configure({ adapter: new Adapter() });
 
 const defaultLoopIterationsInputProps = {
+    loopIterationsAriaLabel: 'Number of iterations for loop A',
     loopIterationsStr: '2',
     loopLabel: 'A',
     stepNumber: 2,

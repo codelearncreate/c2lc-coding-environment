@@ -4,6 +4,7 @@ import type { RunningState } from './types';
 import React from 'react';
 
 type LoopIterationsInputProps = {
+    loopIterationsAriaLabel: ?string,
     loopIterationsStr: string,
     loopLabel: string,
     stepNumber: number,
@@ -66,7 +67,7 @@ export default class LoopIterationsInput extends React.Component<LoopIterationsI
     render() {
         return (
             <input
-                // TODO: ARIA label
+                aria-label={this.props.loopIterationsAriaLabel}
                 className='command-block-loop-iterations'
                 maxLength='2'
                 size='2'
