@@ -345,7 +345,10 @@ export default class ProgramSequence {
 
     usesAction(action: CommandName): boolean {
         for (let index = 0; index < this.program.length; index++) {
-            if (this.program[index].block === action) { return true; }
+            const stepAction = this.program[index].block;
+            if (stepAction === action || (action === "loop" && (stepAction === "startLoop" || stepAction === "endLoop")) ) {
+                return true;
+            }
         }
 
         return false;

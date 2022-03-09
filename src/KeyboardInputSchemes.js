@@ -32,11 +32,7 @@ export type ActionName =
 
     // Select Command Sequences
     | "selectForward1"
-    | "selectForward2"
-    | "selectForward3"
     | "selectBackward1"
-    | "selectBackward2"
-    | "selectBackward3"
     | "selectLeft45"
     | "selectLeft90"
     | "selectLeft180"
@@ -155,14 +151,6 @@ const ExtendedKeyboardSequences: KeyboardInputScheme = {
                 forward1: {
                     keyDef: { key: "1"},
                     actionName: "selectForward1"
-                },
-                forward2: {
-                    keyDef: { key: "2"},
-                    actionName: "selectForward2"
-                },
-                forward3: {
-                    keyDef: { key: "3"},
-                    actionName: "selectForward3"
                 }
             },
             backward: {
@@ -170,14 +158,6 @@ const ExtendedKeyboardSequences: KeyboardInputScheme = {
                 backward1: {
                     keyDef: { key: "1"},
                     actionName: "selectBackward1"
-                },
-                backward2: {
-                    keyDef: { key: "2"},
-                    actionName: "selectBackward2"
-                },
-                backward3: {
-                    keyDef: { key: "3"},
-                    actionName: "selectBackward3"
                 }
             },
             left: {

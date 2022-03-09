@@ -30,7 +30,7 @@ import ProgramSequence from './ProgramSequence';
 import ProgramSpeedController from './ProgramSpeedController';
 import ProgramSerializer from './ProgramSerializer';
 import ActionsSimplificationModal from './ActionsSimplificationModal';
-import type { ActionToggleRegister, AudioManager, CommandName, DeviceConnectionStatus, RobotDriver, RunningState, ThemeName } from './types';
+import type { ActionToggleRegister, AudioManager, DeviceConnectionStatus, DisplayedCommandName, RobotDriver, RunningState, ThemeName } from './types';
 import type { WorldName } from './Worlds';
 import { getWorldProperties } from './Worlds';
 import WorldSelector from './WorldSelector';
@@ -50,7 +50,7 @@ import { ReactComponent as AudioIcon } from './svg/Audio.svg';
 import { ReactComponent as KeyboardModalToggleIcon} from './svg/Keyboard.svg';
 import { ReactComponent as ThemeIcon } from './svg/Theme.svg';
 import { ReactComponent as WorldIcon } from './svg/World.svg';
-import { ReactComponent as ActionsMenuToggleIcon } from './svg/ActionsMenuToggle.svg'
+import { ReactComponent as ActionsMenuToggleIcon } from './svg/Simplification.svg'
 import ProgramChangeController from './ProgramChangeController';
 
 /* Dash connection removed for version 0.5
@@ -781,20 +781,8 @@ export class App extends React.Component<AppProps, AppState> {
                         case("selectForward1"):
                             this.setState({ "selectedAction": "forward1" });
                             break;
-                        case("selectForward2"):
-                            this.setState({ "selectedAction": "forward2" });
-                            break;
-                        case("selectForward3"):
-                            this.setState({ "selectedAction": "forward3" });
-                            break;
                         case("selectBackward1"):
                             this.setState({ "selectedAction": "backward1" });
-                            break;
-                        case("selectBackward2"):
-                            this.setState({ "selectedAction": "backward2" });
-                            break;
-                        case("selectBackward3"):
-                            this.setState({ "selectedAction": "backward3" });
                             break;
                         case("selectLeft45"):
                             this.setState({ "selectedAction": "left45" });
@@ -949,7 +937,7 @@ export class App extends React.Component<AppProps, AppState> {
         this.interpreter.setStepTime(stepTimeMs);
     }
 
-    renderCommandBlocks = (commands: Array<CommandName>) => {
+    renderCommandBlocks = (commands: Array<DisplayedCommandName>) => {
         const commandBlocks = [];
 
         for (const [index, value] of commands.entries()) {
@@ -1091,16 +1079,6 @@ export class App extends React.Component<AppProps, AppState> {
         }
     }
 
-    handleKeyDownActionsSimplificationIcon = (event: KeyboardEvent) => {
-        if (!this.editingIsDisabled()) {
-            if (event.key === "Enter" || event.key === " ") {
-                this.setState({
-                    showActionsSimplificationMenu: true
-                });
-            }
-        }
-    }
-
     handleChangeDisallowedActions = (disallowedActions: ActionToggleRegister) => {
         this.setState({
             showActionsSimplificationMenu: false,
@@ -1185,6 +1163,14 @@ export class App extends React.Component<AppProps, AppState> {
                                 >
                                     <KeyboardModalToggleIcon className='App__header-keyboard-icon'/>
                                 </IconButton>
+
+                                <IconButton className="App__ActionsMenu__toggle-button"
+                                    ariaLabel={this.props.intl.formatMessage({ id: 'ActionsMenu.toggleActionsMenu' })}
+                                    disabled={this.editingIsDisabled()}
+                                    onClick={this.handleClickActionsSimplificationIcon}
+                                >
+                                    <ActionsMenuToggleIcon className='App__header-actionsMenu-icon'/>
+                                </IconButton>
                             </div>
                             {/* Dash connection removed for version 0.5
                             <DeviceConnectControl
@@ -1253,35 +1239,48 @@ export class App extends React.Component<AppProps, AppState> {
                             <h2 className='App__ActionsMenu__header-heading'>
                                 <FormattedMessage id='ActionsMenu.title' />
                             </h2>
-
-                            <div className="App__ActionsMenu__toggle-button"
-                                aria-label={this.props.intl.formatMessage({ id: 'ActionsMenu.toggleActionsMenu' })}
-                                aria-disabled={this.editingIsDisabled()}
-                                role="button"
-                                onClick={this.handleClickActionsSimplificationIcon}
-                                onKeyDown={this.handleKeyDownActionsSimplificationIcon}
-                                tabIndex={0}
-                            >
-                                <ActionsMenuToggleIcon/>
-                            </div>
                         </div>
                         <div className='App__command-palette-command-container'>
-                            <div className='App__command-palette-commands'>
-                                {this.renderCommandBlocks([
-                                    'forward1', 'forward2', 'forward3',
-                                    'backward1', 'backward2', 'backward3'
-                                ])}
+                            <div className='App__command-palette-section'>
+                                <div className='App__command-palette-section-heading-container'>
+                                    <h3 className='App__command-palette-section-heading'>
+                                        <FormattedMessage id='CommandPalette.movementsTitle'/>
+                                    </h3>
+                                </div>
+                                <div className='App__command-palette-section-body'>
+                                    <div className='App__command-palette-commands'>
+                                        {this.renderCommandBlocks(['forward1'])}
+                                    </div>
+                                    <div className='App__command-palette-commands'>
+                                        {this.renderCommandBlocks(['backward1'])}
+                                    </div>
+                                    <div className='App__command-palette-commands'>
+                                        {this.renderCommandBlocks([
+                                            'left45', 'left90'
+                                        ])}
+                                    </div>
+                                    <div className='App__command-palette-commands'>
+                                        {this.renderCommandBlocks([
+                                            'right45', 'right90'
+                                        ])}
+                                    </div>
+                                </div>
                             </div>
-                            <div className='App__command-palette-commands'>
-                                {this.renderCommandBlocks([
-                                    'left45', 'left90', 'left180',
-                                    'right45', 'right90', 'right180',
-                                ])}
-                            </div>
-                            <div className='App__command-palette-commands'>
-                                {this.renderCommandBlocks([
-                                    'loop'
-                                ])}
+
+                            <div className='App__command-palette-section'>
+                                <div className='App__command-palette-section-heading-container'>
+                                    <h3 className='App__command-palette-section-heading'>
+                                        <FormattedMessage id='CommandPalette.controlsTitle'/>
+                                    </h3>
+                                </div>
+
+                                <div className='App__command-palette-section-body'>
+                                    <div className='App__command-palette-controls'>
+                                        {this.renderCommandBlocks([
+                                            'loop'
+                                        ])}
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
