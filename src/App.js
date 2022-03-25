@@ -132,6 +132,7 @@ export class App extends React.Component<AppProps, AppState> {
     disallowedActionsSerializer: DisallowedActionsSerializer;
     speedLookUp: Array<number>;
     pushStateTimeoutID: ?TimeoutID;
+    lastPushStateTime: ?number;
     speedControlRef: { current: null | HTMLElement };
     programBlockEditorRef: { current: any };
     sequenceInProgress: Array<KeyboardEvent>;
@@ -160,6 +161,8 @@ export class App extends React.Component<AppProps, AppState> {
         this.disallowedActionsSerializer = new DisallowedActionsSerializer();
 
         this.pushStateTimeoutID = null;
+
+        this.lastPushStateTime = null;
 
         this.sequenceInProgress = [];
 
@@ -1651,6 +1654,7 @@ export class App extends React.Component<AppProps, AppState> {
             // too frequent: "SecurityError: Attempt to use history.pushState()
             // more than 100 times per 30 seconds".
             const pushStateDelayMs = 350;
+            const timer = new Date();
             clearTimeout(this.pushStateTimeoutID);
             this.pushStateTimeoutID = setTimeout(() => {
                 window.history.pushState(
@@ -1665,7 +1669,25 @@ export class App extends React.Component<AppProps, AppState> {
                     Utils.generateEncodedProgramURL(this.version, this.state.settings.theme, this.state.settings.world, serializedProgram, serializedCharacterState, serializedDisallowedActions),
                     '',
                 );
+                this.lastPushStateTime = timer.getTime();
             }, pushStateDelayMs);
+
+            // $FlowFixMe: can't perform arithmetic operation on maybe null
+            if ((timer.getTime() - this.lastPushStateTime) > pushStateDelayMs) {
+                window.history.pushState(
+                    {
+                        p: serializedProgram,
+                        c: serializedCharacterState,
+                        t: this.state.settings.theme,
+                        d: serializedDisallowedActions,
+                        w: this.state.settings.world
+                    },
+                    '',
+                    Utils.generateEncodedProgramURL(this.version, this.state.settings.theme, this.state.settings.world, serializedProgram, serializedCharacterState, serializedDisallowedActions),
+                    '',
+                );
+                this.lastPushStateTime = timer.getTime();
+            }
 
             window.localStorage.setItem('c2lc-version', this.version);
             window.localStorage.setItem('c2lc-program', serializedProgram);
