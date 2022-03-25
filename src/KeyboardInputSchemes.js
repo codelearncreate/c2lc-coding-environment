@@ -47,7 +47,7 @@ export type ActionName =
     | "focusCharacterPositionControls"
     | "focusCharacterColumnInput"
     | "focusCharacterRowInput"
-    | "focusPlayShare"
+    | "focusPlayPause"
     | "focusProgramSequence"
     | "focusScene"
     | "focusWorldSelector"
@@ -143,10 +143,9 @@ const ExtendedKeyboardSequences: KeyboardInputScheme = {
                 icon: "FocusCharacterPositionRow.png",
                 altText: "Focus character position row input icon"
             },
-            // TODO: rename this since we move focus to the play button, not an area
-            playShare: {
+            playPause: {
                 keyDef: { code: "KeyP", key: "p" },
-                actionName: "focusPlayShare",
+                actionName: "focusPlayPause",
                 description: "Move focus to the play button",
                 icon: "FocusPlay.png",
                 altText: "Focus play button icon"

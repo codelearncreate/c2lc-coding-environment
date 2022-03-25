@@ -850,8 +850,8 @@ export class App extends React.Component<AppProps, AppState> {
                         case("focusCharacterRowInput"):
                             Utils.focusByQuerySelector(".ProgramBlock__character-position-coordinate-box-row");
                             break;
-                        case("focusPlayShare"):
-                            Utils.focusByQuerySelector(".PlayButton--play");
+                        case("focusPlayPause"):
+                            Utils.focusByQuerySelector(".PlayButton");
                             break;
                         case("focusProgramSequence"):
                             Utils.focusByQuerySelector(".AddNode__expanded-button");
