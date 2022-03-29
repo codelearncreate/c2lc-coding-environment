@@ -14,7 +14,7 @@ import type { PathSegment } from './types';
 // W:  6
 // NW: 7
 
-const characterStateMaxPathLength = 200;
+const characterStateMaxPathLength = 600;
 
 type MovementResult = {
     x: number,
