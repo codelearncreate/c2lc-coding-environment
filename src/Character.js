@@ -12,23 +12,29 @@ type CharacterProps = {
     width: number,
 };
 
-export default class Character extends React.Component<CharacterProps, {}> {
-    render() {
-        const character = getWorldCharacter(this.props.theme, this.props.world);
+// $FlowFixMe: Flow doesn't know about SVG g element
+export default React.forwardRef<CharacterProps, any>(
+    (props, ref) => {
+        const character = getWorldCharacter(props.theme, props.world);
         return (
-            <g
-                className='Character'
-                transform={this.props.transform}>
-                {React.createElement(character,
+            React.createElement(
+                'g',
+                {
+                    ref,
+                    className: 'Character',
+                    transform: props.transform,
+                },
+                React.createElement(
+                    character,
                     {
                         className: 'Character__icon',
-                        x: -this.props.width/2,
-                        y: -this.props.width/2,
-                        width: this.props.width,
-                        height: this.props.width
+                        x: -props.width/2,
+                        y: -props.width/2,
+                        width: props.width,
+                        height: props.width
                     }
-                )}
-            </g>
+                )
+            )
         );
     }
-}
+)

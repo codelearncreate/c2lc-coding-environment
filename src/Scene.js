@@ -383,6 +383,7 @@ class Scene extends React.Component<SceneProps, {}> {
                                     width={startingGridCellPointSize}
                                 />
                                 <Character
+                                    ref={this.characterBackgroundRef}
                                     world={this.props.world}
                                     theme={this.props.theme}
                                     transform={characterTransform}
