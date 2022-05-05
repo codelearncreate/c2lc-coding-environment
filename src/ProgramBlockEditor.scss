@@ -202,6 +202,15 @@
     }
 }
 
+.ProgramBlockEditor__loopContainer--active {
+    border: 0.2rem solid #FFFFFF;
+    z-index: 2;
+    background-color: #3F5574;
+    > .ProgramBlockEditor__program-block-connector-loop {
+        display: none;
+    }
+}
+
 .ProgramBlockEditor__start-indicator {
     background-color: #D5D8DD;
     width: 10px;

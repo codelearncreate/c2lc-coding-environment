@@ -268,7 +268,34 @@ test('Loop container should have focus style when its start or end loop block is
     expect(wrapper.html()).toContain('ProgramBlockEditor__loopContainer--focused');
     startLoopBlock.simulate('blur');
     expect(wrapper.html()).not.toContain('ProgramBlockEditor__loopContainer--focused');
-})
+});
+
+test('Loop container should have active style when its content is getting executed', () => {
+    expect.assertions(6);
+    const { wrapper } = createMountProgramBlockEditor({
+        programSequence: new ProgramSequence(
+            [
+                {block: 'startLoop', label: 'A', iterations: 2},
+                {block: 'forward1'},
+                {block: 'endLoop', label: 'A'}
+            ],
+            0,
+            0,
+            new Map([['A', 2]])
+        )
+    });
+    expect(wrapper.html()).not.toContain('ProgramBlockEditor__loopContainer--active');
+    wrapper.setProps({ runningState: 'running' });
+    expect(wrapper.html()).toContain('ProgramBlockEditor__loopContainer--active');
+    wrapper.setProps({ runningState: 'stopped' });
+    expect(wrapper.html()).not.toContain('ProgramBlockEditor__loopContainer--active');
+    wrapper.setProps({ runningState: 'pauseRequested' });
+    expect(wrapper.html()).toContain('ProgramBlockEditor__loopContainer--active');
+    wrapper.setProps({ runningState: 'stopped' });
+    expect(wrapper.html()).not.toContain('ProgramBlockEditor__loopContainer--active');
+    wrapper.setProps({ runningState: 'stopRequested' });
+    expect(wrapper.html()).toContain('ProgramBlockEditor__loopContainer--active');
+});
 
 describe('The expand add node toggle switch should be configurable via properties', () => {
     describe('Given that addNodeExpandedMode is false', () => {

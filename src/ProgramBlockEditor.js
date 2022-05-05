@@ -90,7 +90,12 @@ export class ProgramBlockEditor extends React.Component<ProgramBlockEditorProps,
         if (this.programSequenceContainerRef.current) {
             const containerElem = this.programSequenceContainerRef.current;
             if (toElement != null && toElement.dataset.stepnumber === '0') {
-                containerElem.scrollTo(0, 0);
+                try {
+                    containerElem.scrollTo(0, 0);
+                } catch {
+                    // eslint-disable-next-line no-console
+                    console.log('Error auto scrolling program sequence container');
+                }
             } else if (toElement != null){
                 const containerLeft = containerElem.getBoundingClientRect().left;
                 const containerWidth = containerElem.clientWidth;
@@ -133,6 +138,23 @@ export class ProgramBlockEditor extends React.Component<ProgramBlockEditorProps,
 
     scrollToAddNodeAfterUpdate(index: number) {
         this.scrollToAddNodeIndex = index;
+    }
+
+    isPausedOnLastLoopBlock(programStepNumber: number) {
+        if (this.props.runningState === 'paused') {
+            const programCounter = this.props.programSequence.getProgramCounter();
+            const nextProgramStep = this.props.programSequence.getProgramStepAt(programCounter + 1);
+            if (nextProgramStep != null && nextProgramStep.block === 'endLoop') {
+                const currentStep = this.props.programSequence.getProgramStepAt(programStepNumber);
+                if (currentStep.cache) {
+                    const containingLoopPosition = currentStep.cache.get('containingLoopPosition');
+                    if (containingLoopPosition != null && containingLoopPosition === 1) {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
     }
 
     programStepIsActive(programStepNumber: number) {
@@ -436,15 +458,17 @@ export class ProgramBlockEditor extends React.Component<ProgramBlockEditorProps,
             && programStepNumber === this.props.programSequence.getProgramCounter() + 1
             && !this.props.programSequence.currentStepIsControlBlock());
         const hasActionPanelControl = this.props.actionPanelStepIndex === programStepNumber;
-        const classes = classNames(
-            'ProgramBlockEditor__program-block',
-            active && 'ProgramBlockEditor__program-block--active',
-            hasActionPanelControl && 'focus-trap-action-panel__program-block',
-            paused && 'ProgramBlockEditor__program-block--paused'
-        );
         const command = programBlock.block;
         const loopLabel = programBlock.label;
         const cachedLoopData = programBlock.cache;
+        let loopIterations = programBlock.iterations;
+        // Show loopItertionsLeft when program is not stopped, or else, show iterations
+        if (this.props.runningState !== 'stopped') {
+            if (loopLabel != null && this.props.programSequence.getLoopIterationsLeft().get(loopLabel) != null) {
+                loopIterations = this.props.programSequence.getLoopIterationsLeft().get(loopLabel);
+            }
+        }
+
         let ariaLabel = this.props.intl.formatMessage(
             { id: 'ProgramBlockEditor.command' },
             {
@@ -455,6 +479,7 @@ export class ProgramBlockEditor extends React.Component<ProgramBlockEditorProps,
                 )
             }
         );
+        let pauseOnTheEndLoop = false;
         if (cachedLoopData != null &&
             cachedLoopData.get('containingLoopPosition') != null &&
             cachedLoopData.get('containingLoopLabel')) {
@@ -469,16 +494,27 @@ export class ProgramBlockEditor extends React.Component<ProgramBlockEditorProps,
                     )
                 },
             );
-        }
-
-        let loopIterations = programBlock.iterations;
-
-        // Show loopItertionsLeft when program is not stopped, or else, show iterations
-        if (this.props.runningState !== 'stopped') {
-            if (loopLabel != null && this.props.programSequence.getLoopIterationsLeft().get(loopLabel) != null) {
-                loopIterations = this.props.programSequence.getLoopIterationsLeft().get(loopLabel);
+            if (this.props.runningState === 'paused' &&
+                cachedLoopData.get('containingLoopPosition') === 1 &&
+                cachedLoopData.get('containingLoopLabel') != null &&
+                this.props.programSequence.getCurrentProgramStep().block === 'endLoop') {
+                const containingLoopLabel = cachedLoopData.get('containingLoopLabel');
+                if (containingLoopLabel != null) {
+                    const containingLoopIterationsLeft = this.props.programSequence.getLoopIterationsLeft().get(`${containingLoopLabel}`);
+                    if (containingLoopIterationsLeft != null && containingLoopIterationsLeft > 1) {
+                        pauseOnTheEndLoop = true;
+                    }
+                }
             }
         }
+
+
+        const classes = classNames(
+            'ProgramBlockEditor__program-block',
+            active && 'ProgramBlockEditor__program-block--active',
+            hasActionPanelControl && 'focus-trap-action-panel__program-block',
+            ((paused && command !== 'endLoop') || pauseOnTheEndLoop) && 'ProgramBlockEditor__program-block--paused'
+        );
 
         let key = `${programStepNumber}-${command}`;
         if ((command === 'startLoop' || command === 'endLoop') && loopLabel != null) {
@@ -810,6 +846,26 @@ export class ProgramBlockEditor extends React.Component<ProgramBlockEditorProps,
             } else if (lastAddNode){
                 this.scrollProgramSequenceContainer(lastAddNode);
             }
+        }
+        if (this.props.runningState === 'running'
+            || this.props.runningState === 'stopRequested'
+            || this.props.runningState === 'pauseRequested') {
+            const activeProgramStep = this.props.programSequence.getCurrentProgramStep();
+            if (activeProgramStep && activeProgramStep.block === 'startLoop') {
+                const loopLabel = activeProgramStep.label;
+                if (loopLabel != null && this.loopContainerRefs.get(loopLabel) != null) {
+                    this.loopContainerRefs.get(loopLabel)?.classList.add('ProgramBlockEditor__loopContainer--active');
+                }
+            } else if (activeProgramStep && activeProgramStep.block === 'endLoop') {
+                // const loopLabel = activeProgramStep.label;
+                // if (loopLabel != null && this.loopContainerRefs.get(loopLabel) != null) {
+                //     this.loopContainerRefs.get(loopLabel)?.classList.remove('ProgramBlockEditor__loopContainer--active');
+                // }
+            }
+        } else {
+            // for (const loopContainer of this.loopContainerRefs.values()) {
+            //     loopContainer.classList.remove('ProgramBlockEditor__loopContainer--active');
+            // }
         }
         if (this.props.actionPanelStepIndex != null) {
             if (this.state.replaceIsActive) {
