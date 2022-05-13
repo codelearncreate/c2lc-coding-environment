@@ -857,15 +857,28 @@ export class ProgramBlockEditor extends React.Component<ProgramBlockEditorProps,
                     this.loopContainerRefs.get(loopLabel)?.classList.add('ProgramBlockEditor__loopContainer--active');
                 }
             } else if (activeProgramStep && activeProgramStep.block === 'endLoop') {
-                // const loopLabel = activeProgramStep.label;
-                // if (loopLabel != null && this.loopContainerRefs.get(loopLabel) != null) {
-                //     this.loopContainerRefs.get(loopLabel)?.classList.remove('ProgramBlockEditor__loopContainer--active');
-                // }
+                const loopLabel = activeProgramStep.label;
+                const loopIterationsLeft = loopLabel ? this.props.programSequence.getLoopIterationsLeft().get(loopLabel) : null;
+                if (loopLabel != null &&
+                    this.loopContainerRefs.get(loopLabel) != null &&
+                    loopIterationsLeft != null &&
+                    loopIterationsLeft === 1) {
+                    this.loopContainerRefs.get(loopLabel)?.classList.remove('ProgramBlockEditor__loopContainer--active');
+                }
+            } else {
+                if (activeProgramStep && activeProgramStep.cache) {
+                    const containingLoopLabel = activeProgramStep.cache.get('containingLoopLabel');
+                    // $FlowFixMe: key should be string, but loopContainerRefs.get returns type string | number
+                    if (containingLoopLabel != null && this.loopContainerRefs.get(containingLoopLabel) != null) {
+                        // $FlowFixMe: key should be string, but loopContainerRefs.get returns type string | number
+                        this.loopContainerRefs.get(containingLoopLabel)?.classList.add('ProgramBlockEditor__loopContainer--active');
+                    }
+                }
             }
         } else {
-            // for (const loopContainer of this.loopContainerRefs.values()) {
-            //     loopContainer.classList.remove('ProgramBlockEditor__loopContainer--active');
-            // }
+            for (const loopContainer of this.loopContainerRefs.values()) {
+                loopContainer.classList.remove('ProgramBlockEditor__loopContainer--active');
+            }
         }
         if (this.props.actionPanelStepIndex != null) {
             if (this.state.replaceIsActive) {

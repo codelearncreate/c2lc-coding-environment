@@ -192,7 +192,7 @@
     }
 }
 
-.ProgramBlockEditor__loopContainer--focused {
+.ProgramBlockEditor__loopContainer--focused:not(.ProgramBlockEditor__loopContainer--active) {
     padding: 0.2rem;
     z-index: 2;
     background-color: #3F5574;

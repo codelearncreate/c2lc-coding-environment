@@ -843,8 +843,8 @@ describe('When runningState property is pauseRequested and programCounter is 0',
     });
 });
 
-describe('When runningState is running, stopRequested, or pauseRequested, and programCounter is 0', () => {
-    test('className of step 0 should have --active', () => {
+describe('When runningState is running, stopRequested, or pauseRequested', () => {
+    test('programCounter is 0 then className of step 0 should have --active', () => {
         const { wrapper } = createMountProgramBlockEditor({ runningState: 'running' });
         let currentStep = getProgramBlockAtPosition(wrapper, 0);
 
@@ -864,5 +864,106 @@ describe('When runningState is running, stopRequested, or pauseRequested, and pr
         wrapper.setProps({ runningState: 'stopped'});
         currentStep = getProgramBlockAtPosition(wrapper, 0);
         expect(currentStep.get(0).props.className.includes('ProgramBlockEditor__program-block--active')).toBe(false);
+    });
+
+    test('programCounter is 0 and step 0 is a startLoop, its loop container should have --active class', () => {
+        const { wrapper } = createMountProgramBlockEditor({
+            programSequence: new ProgramSequence(
+                [
+                    {block: 'startLoop', label: 'A', iterations: 2},
+                    {block: 'endLoop', label: 'A'}
+                ],
+                0,
+                0,
+                new Map([['A', 1]])
+            )
+        });
+
+        expect(wrapper.html().includes('ProgramBlockEditor__loopContainer--active')).toBe(false);
+
+        wrapper.setProps({runningState: 'running'});
+        expect(wrapper.html().includes('ProgramBlockEditor__loopContainer--active')).toBe(true);
+
+        wrapper.setProps({runningState: 'paused'});
+        expect(wrapper.html().includes('ProgramBlockEditor__loopContainer--active')).toBe(false);
+
+        wrapper.setProps({runningState: 'stopRequested'});
+        expect(wrapper.html().includes('ProgramBlockEditor__loopContainer--active')).toBe(true);
+
+        wrapper.setProps({runningState: 'stopped'});
+        expect(wrapper.html().includes('ProgramBlockEditor__loopContainer--active')).toBe(false);
+
+        wrapper.setProps({runningState: 'pauseRequested'});
+        expect(wrapper.html().includes('ProgramBlockEditor__loopContainer--active')).toBe(true);
+    });
+
+    test('programCounter is at a step inside of a loop, its containing loop container should have --active class', () => {
+        const { wrapper } = createMountProgramBlockEditor({
+            programSequence: new ProgramSequence(
+                [
+                    {block: 'startLoop', label: 'A', iterations: 2},
+                    {
+                        block: 'forward1',
+                        cache: new Map([
+                            ['containingLoopLabel', 'A'],
+                            ['containingLoopPosition', 1]
+                        ])
+                    },
+                    {block: 'endLoop', label: 'A'}
+                ],
+                1,
+                0,
+                new Map([['A', 1]])
+            )
+        });
+
+        expect(wrapper.html().includes('ProgramBlockEditor__loopContainer--active')).toBe(false);
+
+        wrapper.setProps({runningState: 'running'});
+        expect(wrapper.html().includes('ProgramBlockEditor__loopContainer--active')).toBe(true);
+
+        wrapper.setProps({runningState: 'paused'});
+        expect(wrapper.html().includes('ProgramBlockEditor__loopContainer--active')).toBe(false);
+
+        wrapper.setProps({runningState: 'stopRequested'});
+        expect(wrapper.html().includes('ProgramBlockEditor__loopContainer--active')).toBe(true);
+
+        wrapper.setProps({runningState: 'stopped'});
+        expect(wrapper.html().includes('ProgramBlockEditor__loopContainer--active')).toBe(false);
+
+        wrapper.setProps({runningState: 'pauseRequested'});
+        expect(wrapper.html().includes('ProgramBlockEditor__loopContainer--active')).toBe(true);
+    });
+
+    test('programCounter is at an endLoop block and its iterationsLeft is 1, its containing loop should remove --active class', () => {
+        const { wrapper } = createMountProgramBlockEditor({
+            programSequence: new ProgramSequence(
+                [
+                    {block: 'startLoop', label: 'A', iterations: 2},
+                    {block: 'endLoop', label: 'A'}
+                ],
+                0,
+                0,
+                new Map([['A', 2]])
+            )
+        });
+
+        expect(wrapper.html().includes('ProgramBlockEditor__loopContainer--active')).toBe(false);
+
+        wrapper.setProps({runningState: 'running'});
+        expect(wrapper.html().includes('ProgramBlockEditor__loopContainer--active')).toBe(true);
+
+        wrapper.setProps({
+            programSequence: new ProgramSequence(
+                [
+                    {block: 'startLoop', label: 'A', iterations: 2},
+                    {block: 'endLoop', label: 'A'}
+                ],
+                1,
+                0,
+                new Map([['A', 1]])
+            )
+        });
+        expect(wrapper.html().includes('ProgramBlockEditor__loopContainer--active')).toBe(false);
     });
 });

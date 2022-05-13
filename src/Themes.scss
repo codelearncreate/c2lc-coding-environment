@@ -213,9 +213,18 @@ body.light-theme {
         border: 2px solid transparent;
     }
 
-    .ProgramBlockEditor__loopContainer--focused {
+    .ProgramBlockEditor__loopContainer--focused:not(.ProgramBlockEditor__loopContainer--active) {
         background-color: #EAEEF3;
         outline: 0.2rem solid #30444E;
+    }
+
+    .ProgramBlockEditor__loopContainer--active {
+        border: 0.2rem solid #30444E;
+        z-index: 2;
+        background-color: #EAEEF3;
+        > .ProgramBlockEditor__program-block-connector-loop {
+            display: none;
+        }
     }
 
     .ProgramBlockEditor__loopContainer--nested {
@@ -1107,9 +1116,18 @@ body.gray-theme {
         border: 2px solid transparent;
     }
 
-    .ProgramBlockEditor__loopContainer--focused {
+    .ProgramBlockEditor__loopContainer--focused:not(.ProgramBlockEditor__loopContainer--active) {
         background-color: #F1F2F4;
         outline: 0.2rem solid #505862;
+    }
+
+    .ProgramBlockEditor__loopContainer--active {
+        border: 0.2rem solid #505862;
+        z-index: 2;
+        background-color: #F1F2F4;
+        > .ProgramBlockEditor__program-block-connector-loop {
+            display: none;
+        }
     }
 
     .ProgramBlockEditor__loopContainer--nested {
@@ -2093,9 +2111,20 @@ body.contrast-theme {
         border: 2px solid transparent;
     }
 
-    .ProgramBlockEditor__loopContainer--focused {
+    .ProgramBlockEditor__loopContainer--focused:not(.ProgramBlockEditor__loopContainer--active) {
         background-color: #000000;
         outline: 0.2rem solid #FFFFFF;
+    }
+
+    .ProgramBlockEditor__loopContainer--active {
+        box-shadow: 
+            0 0 0 0.2rem #000000,
+            0 0 0 0.4rem #FFFFFF;
+        z-index: 2;
+        background-color: #000000;
+        > .ProgramBlockEditor__program-block-connector-loop {
+            display: none;
+        }
     }
 
     .ActionsMenuItem {
