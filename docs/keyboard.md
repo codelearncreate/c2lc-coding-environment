@@ -37,6 +37,7 @@ Those key bindings are as follows.
 | Move the current step to right | Ctrl + Alt + ] | ![Move to next icon](board-imgs/MoveNext.png) |
 | Play or pause the program | Ctrl + Alt + p | ![Play or pause program icon](board-imgs/PlayPause.png) |
 | Refresh the scene | Ctrl + Alt + r | ![Refresh scene icon](board-imgs/RefreshScene.png) |
+| Replace the current program step | Ctrl + Alt + c | Not available |
 | Show the keyboard shortcuts menu | ? | ![Show keyboard shortcuts menu icon](board-imgs/ShowKeyboardShortcuts.png) |
 | Stop the program from playing | Ctrl + Alt + s | ![Stop program icon](board-imgs/StopProgram.png) |
 | Change the current visual theme to the dark theme | Ctrl + Alt + x, t, 3 | ![Change to dark theme icon](board-imgs/ChangeToDarkTheme.png) |
@@ -51,9 +52,12 @@ Those key bindings are as follows.
  | Move focus to the character position column input field | Ctrl + Alt + x, f, x | ![Focus character position column input icon](board-imgs/FocusCharacterPositionColumn.png) |
  | Move focus to the character position controls | Ctrl + Alt + x, f, c | ![Focus character position controls icon](board-imgs/FocusCharacterPositionControls.png) |
  | Move focus to the character position row input field | Ctrl + Alt + x, f, y | ![Focus character position row input icon](board-imgs/FocusCharacterPositionRow.png) |
+ | Move focus to the loop iterations input field | Ctrl + Alt + x, f, l | ![Focus loop iterations input icon](board-imgs/FocusLoopIterationsInput.png) |
+ | Move focus to the next program block | Ctrl + Alt + x, f, ] | Not available |
  | Move focus to the page title | Ctrl + Alt + x, f, h | ![Focus Weavly logo icon](board-imgs/FocusLogo.png) |
  | Move focus to the pen toggle | Ctrl + Alt + x, f, s | ![Focus pen toggle icon](board-imgs/FocusPenToggle.png) |
  | Move focus to the play button | Ctrl + Alt + x, f, p | ![Focus play button icon](board-imgs/FocusPlay.png) |
+ | Move focus to the previous program block | Ctrl + Alt + x, f, [ | Not available |
  | Move focus to the world selector | Ctrl + Alt + x, f, w | ![Focus world selector icon](board-imgs/FocusWorldSelector.png) |
  | Move the character down | Ctrl + Alt + x, p, m, d | ![Move character down icon](board-imgs/MoveCharacterDown.png) |
  | Move the character left | Ctrl + Alt + x, p, m, l | ![Move character left icon](board-imgs/MoveCharacterLeft.png) |
@@ -90,6 +94,7 @@ Those key bindings are as follows:
 | Move the current step to right | Alt + ] | ![Move to next icon](board-imgs/MoveNext.png) |
 | Play or pause the program | Alt + p | ![Play or pause program icon](board-imgs/PlayPause.png) |
 | Refresh the scene | Alt + r | ![Refresh scene icon](board-imgs/RefreshScene.png) |
+| Replace the current program step | Alt + c | Not available |
 | Show the keyboard shortcuts menu | ? | ![Show keyboard shortcuts menu icon](board-imgs/ShowKeyboardShortcuts.png) |
 | Stop the program from playing | Alt + s | ![Stop program icon](board-imgs/StopProgram.png) |
 | Change the current visual theme to the dark theme | Alt + x, t, 3 | ![Change to dark theme icon](board-imgs/ChangeToDarkTheme.png) |
@@ -104,9 +109,12 @@ Those key bindings are as follows:
  | Move focus to the character position column input field | Alt + x, f, x | ![Focus character position column input icon](board-imgs/FocusCharacterPositionColumn.png) |
  | Move focus to the character position controls | Alt + x, f, c | ![Focus character position controls icon](board-imgs/FocusCharacterPositionControls.png) |
  | Move focus to the character position row input field | Alt + x, f, y | ![Focus character position row input icon](board-imgs/FocusCharacterPositionRow.png) |
+ | Move focus to the loop iterations input field | Alt + x, f, l | ![Focus loop iterations input icon](board-imgs/FocusLoopIterationsInput.png) |
+ | Move focus to the next program block | Alt + x, f, ] | Not available |
  | Move focus to the page title | Alt + x, f, h | ![Focus Weavly logo icon](board-imgs/FocusLogo.png) |
  | Move focus to the pen toggle | Alt + x, f, s | ![Focus pen toggle icon](board-imgs/FocusPenToggle.png) |
  | Move focus to the play button | Alt + x, f, p | ![Focus play button icon](board-imgs/FocusPlay.png) |
+ | Move focus to the previous program block | Alt + x, f, [ | Not available |
  | Move focus to the world selector | Alt + x, f, w | ![Focus world selector icon](board-imgs/FocusWorldSelector.png) |
  | Move the character down | Alt + x, p, m, d | ![Move character down icon](board-imgs/MoveCharacterDown.png) |
  | Move the character left | Alt + x, p, m, l | ![Move character left icon](board-imgs/MoveCharacterLeft.png) |

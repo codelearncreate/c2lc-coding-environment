@@ -32,7 +32,7 @@ test('Pressed state is false when selecedCommandName is null', () => {
             intl={intl}
             commandName='forward1'
             selectedCommandName={null}
-            onChange={() => {}}/>
+            onSelect={() => {}}/>
     );
     expect(hasPressedClass(wrapper)).toBe(false);
     expect(getAriaPressedValue(wrapper)).toBe(false);
@@ -44,7 +44,7 @@ test('Pressed state is false when selecedCommandName is another command', () => 
             intl={intl}
             commandName='forward1'
             selectedCommandName='left45'
-            onChange={() => {}}/>
+            onSelect={() => {}}/>
     );
     expect(hasPressedClass(wrapper)).toBe(false);
     expect(getAriaPressedValue(wrapper)).toBe(false);
@@ -56,36 +56,36 @@ test('Pressed state is true when selecedCommandName is this command', () => {
             intl={intl}
             commandName='forward1'
             selectedCommandName='forward1'
-            onChange={() => {}}/>
+            onSelect={() => {}}/>
     );
     expect(hasPressedClass(wrapper)).toBe(true);
     expect(getAriaPressedValue(wrapper)).toBe(true);
 });
 
-test('Clicking the button toggles selectedCommandName', () => {
-    const mockChangeHandler = jest.fn();
+test('Clicking the button calls the callback onSelect with commandName', () => {
+    const mockSelectHandler = jest.fn();
 
     const wrapper = shallow(
         <CommandPaletteCommand.WrappedComponent
             intl={intl}
             commandName='forward1'
             selectedCommandName={null}
-            onChange={mockChangeHandler}/>
+            onSelect={mockSelectHandler}/>
     );
 
     const button = wrapper.find(CommandBlock);
 
     // Initially the command is not selected
     button.simulate('click');
-    // Verify that onChange is called with the commandName
-    expect(mockChangeHandler.mock.calls.length).toBe(1);
-    expect(mockChangeHandler.mock.calls[0][0]).toBe('forward1');
+    // Verify that onSelect is called with the commandName
+    expect(mockSelectHandler.mock.calls.length).toBe(1);
+    expect(mockSelectHandler.mock.calls[0][0]).toBe('forward1');
     // Update the selectedCommandName
     wrapper.setProps({selectedCommandName: 'forward1'});
     wrapper.update();
     // Click again
     button.simulate('click');
-    // And verify that the command is toggled off
-    expect(mockChangeHandler.mock.calls.length).toBe(2);
-    expect(mockChangeHandler.mock.calls[1][0]).toBe(null);
+    // And verify that onSelect is called again with the commandName
+    expect(mockSelectHandler.mock.calls.length).toBe(2);
+    expect(mockSelectHandler.mock.calls[1][0]).toBe('forward1');
 });

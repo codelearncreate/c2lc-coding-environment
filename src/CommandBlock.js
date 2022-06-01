@@ -5,6 +5,7 @@ import AriaDisablingButton from './AriaDisablingButton';
 import LoopIterationsInput from './LoopIterationsInput';
 import { Button } from 'react-bootstrap';
 import classNames from 'classnames';
+import type { KeyboardInputSchemeName } from './KeyboardInputSchemes';
 import type { RunningState } from './types';
 import { ReactComponent as Forward1 } from './svg/Forward1.svg';
 import { ReactComponent as Forward2 } from './svg/Forward2.svg';
@@ -31,6 +32,7 @@ type CommandBlockProps = {
     stepNumber?: number,
     className?: string,
     runningState?: RunningState,
+    keyboardInputSchemeName?: KeyboardInputSchemeName,
     onClick: (evt: SyntheticEvent<HTMLButtonElement>) => void,
     onChangeLoopIterations?: (stepNumber: number, loopLabel: string, loopIterations: number) => void
 };
@@ -66,6 +68,7 @@ export default React.forwardRef<CommandBlockProps, Button>(
             stepNumber,
             className,
             runningState,
+            keyboardInputSchemeName,
             onClick,
             onChangeLoopIterations,
             ...otherProps
@@ -94,6 +97,7 @@ export default React.forwardRef<CommandBlockProps, Button>(
                             && loopLabel != null
                             && stepNumber != null
                             && runningState != null
+                            && keyboardInputSchemeName != null
                             && onChangeLoopIterations != null
                             &&
                         <LoopIterationsInput
@@ -101,6 +105,7 @@ export default React.forwardRef<CommandBlockProps, Button>(
                             loopLabel={loopLabel}
                             stepNumber={stepNumber}
                             runningState={runningState}
+                            keyboardInputSchemeName={keyboardInputSchemeName}
                             onChangeLoopIterations={onChangeLoopIterations}
                         />
                     }

@@ -20,6 +20,7 @@ function createMountActionPanel(props) {
         React.createElement(
             ActionPanel,
             Object.assign(
+                {},
                 {
                     focusedOptionName: null,
                     selectedCommandName: 'right45',
@@ -94,6 +95,17 @@ describe('ActionPanel options', () => {
         replaceCurrentStepButton.simulate('click');
         expect(mockReplaceHandler.mock.calls.length).toBe(1);
         expect(mockReplaceHandler.mock.calls[0][0]).toBe(pressedStepIndex);
+    });
+
+    test('Given that there is no selected action, then the Replace button should be disabled', () => {
+        const { wrapper } = createMountActionPanel({
+            pressedStepIndex: 1,
+            selectedCommandName: null
+        });
+        const replaceButton = getActionPanelOptionButtons(wrapper, 'replaceCurrentStep');
+        const expectedAriaLabel = 'Replace Step 2 turn left 45 degrees ';
+        expect(replaceButton.get(0).props['aria-label']).toBe(expectedAriaLabel);
+        expect(replaceButton.get(0).props['disabled']).toBe(true);
     });
 
     test('When the moveToPreviousStep option is selected on second step turn left 45 of the program', () => {

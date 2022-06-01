@@ -4,6 +4,7 @@ import { FormattedMessage } from 'react-intl';
 import { injectIntl } from 'react-intl';
 import type {IntlShape} from 'react-intl';
 import DisallowedActionsSerializer from './DisallowedActionsSerializer';
+import AnnouncementBuilder from './AnnouncementBuilder';
 import AudioManagerImpl from './AudioManagerImpl';
 import CharacterAriaLive from './CharacterAriaLive';
 import CharacterState from './CharacterState';
@@ -30,7 +31,7 @@ import ProgramSequence from './ProgramSequence';
 import ProgramSpeedController from './ProgramSpeedController';
 import ProgramSerializer from './ProgramSerializer';
 import ActionsSimplificationModal from './ActionsSimplificationModal';
-import type { ActionToggleRegister, AudioManager, DeviceConnectionStatus, DisplayedCommandName, ProgramStepMovementDirection, RobotDriver, RunningState, ThemeName } from './types';
+import type { ActionToggleRegister, AudioManager, DeviceConnectionStatus, DisplayedCommandName, RobotDriver, RunningState, ThemeName } from './types';
 import type { WorldName } from './Worlds';
 import { getWorldProperties } from './Worlds';
 import WorldSelector from './WorldSelector';
@@ -91,7 +92,7 @@ type AppProps = {
     audioManager?: AudioManager
 };
 
-type AppState = {
+export type AppState = {
     programSequence: ProgramSequence,
     characterState: CharacterState,
     settings: AppSettings,
@@ -116,7 +117,10 @@ type AppState = {
     showWorldSelector: boolean,
     showShareModal: boolean,
     showActionsSimplificationMenu: boolean,
-    showPrivacyModal: boolean
+    showPrivacyModal: boolean,
+    startingX: number,
+    startingY: number,
+    startingDirection: number
 };
 
 export class App extends React.Component<AppProps, AppState> {
@@ -135,13 +139,14 @@ export class App extends React.Component<AppProps, AppState> {
     speedControlRef: { current: null | HTMLElement };
     programBlockEditorRef: { current: any };
     sequenceInProgress: Array<KeyboardEvent>;
+    announcementBuilder: AnnouncementBuilder;
     programChangeController: ProgramChangeController;
     defaultWorld: WorldName;
 
     constructor(props: any) {
         super(props);
 
-        this.version = '1.3';
+        this.version = '1.5';
 
         this.appContext = {
             bluetoothApiIsAvailable: FeatureDetection.bluetoothApiIsAvailable()
@@ -401,14 +406,14 @@ export class App extends React.Component<AppProps, AppState> {
             }
         );
 
-        // We have to calculate the allowed commands and initialise the state here because this is the point at which
-        // the interpreter's commands are populated.
-
-        const disallowedActions = {};
+        // Initialize startingX, startingY, and startingDirection to the world starting position
+        const startingX = getWorldProperties(this.defaultWorld).startingX;
+        const startingY = getWorldProperties(this.defaultWorld).startingY;
+        const startingDirection = getWorldProperties(this.defaultWorld).startingDirection;
 
         this.state = {
             programSequence: new ProgramSequence([], 0, 0, new Map()),
-            characterState: this.makeStartingCharacterState(this.defaultWorld),
+            characterState: this.makeStartingCharacterState(startingX, startingY, startingDirection),
             settings: {
                 language: 'en',
                 addNodeExpandedMode: true,
@@ -427,7 +432,7 @@ export class App extends React.Component<AppProps, AppState> {
             sceneDimensions: this.sceneDimensions,
             drawingEnabled: true,
             runningState: 'stopped',
-            disallowedActions: disallowedActions,
+            disallowedActions: {},
             keyBindingsEnabled: false,
             showKeyboardModal: false,
             showSoundOptionsModal: false,
@@ -436,6 +441,9 @@ export class App extends React.Component<AppProps, AppState> {
             showShareModal: false,
             showActionsSimplificationMenu: false,
             showPrivacyModal: false,
+            startingX: startingX,
+            startingY: startingY,
+            startingDirection: startingDirection,
             keyboardInputSchemeName: "controlalt"
         };
 
@@ -454,6 +462,8 @@ export class App extends React.Component<AppProps, AppState> {
         }
 
         this.focusTrapManager = new FocusTrapManager();
+
+        this.announcementBuilder = new AnnouncementBuilder(this.props.intl);
 
         this.programChangeController = new ProgramChangeController(this,
             this.props.intl, this.audioManager);
@@ -531,7 +541,7 @@ export class App extends React.Component<AppProps, AppState> {
         this.setState({
             programSequence: programSequence
         });
-    }
+    };
 
     handleProgramBlockEditorInsertSelectedAction = (index: number, selectedAction: ?string) => {
         this.programChangeController.insertSelectedActionIntoProgram(
@@ -539,7 +549,7 @@ export class App extends React.Component<AppProps, AppState> {
             index,
             selectedAction
         );
-    }
+    };
 
     handleProgramBlockEditorDeleteStep = (index: number, command: string) => {
         this.programChangeController.deleteProgramStep(
@@ -547,17 +557,33 @@ export class App extends React.Component<AppProps, AppState> {
             index,
             command
         );
-    }
+    };
 
-    handleProgramBlockEditorMoveStep = (indexFrom: number, direction: ProgramStepMovementDirection, commandAtIndexFrom: string) => {
-        this.programChangeController.moveProgramStep(
+    handleProgramBlockEditorReplaceStep = (index: number, selectedAction: ?string) => {
+        this.programChangeController.replaceProgramStep(
+            this.programBlockEditorRef.current,
+            index,
+            selectedAction
+        );
+    };
+
+    handleProgramBlockEditorMoveStepNext = (indexFrom: number, commandAtIndexFrom: string) => {
+        this.programChangeController.moveProgramStepNext(
             this.programBlockEditorRef.current,
             indexFrom,
-            direction,
             commandAtIndexFrom,
             'focusActionPanel'
         )
-    }
+    };
+
+    handleProgramBlockEditorMoveStepPrevious = (indexFrom: number, commandAtIndexFrom: string) => {
+        this.programChangeController.moveProgramStepPrevious(
+            this.programBlockEditorRef.current,
+            indexFrom,
+            commandAtIndexFrom,
+            'focusActionPanel'
+        )
+    };
 
     handlePlay = () => {
         switch (this.state.runningState) {
@@ -591,7 +617,7 @@ export class App extends React.Component<AppProps, AppState> {
 
     handleStop = () => {
         this.setRunningState('stopRequested');
-    }
+    };
 
     handleClickConnectDash = () => {
         this.setState({
@@ -627,16 +653,10 @@ export class App extends React.Component<AppProps, AppState> {
         });
     };
 
-    handleCommandFromCommandPalette = (command: ?string) => {
-        if (command) {
-            this.setState({
-                selectedAction: command
-            });
-        } else {
-            this.setState({
-                selectedAction: null
-            });
-        }
+    handleCommandFromCommandPalette = (command: string) => {
+        this.setState({
+            selectedAction: command
+        });
     };
 
     handleDragStartCommand = (command: string) => {
@@ -773,6 +793,23 @@ export class App extends React.Component<AppProps, AppState> {
                                 }
                             }
                             break;
+                        case("replaceCurrentStep"):
+                            if (!this.editingIsDisabled()) {
+                                const currentElement = document.activeElement;
+                                if (currentElement) {
+                                    if (currentElement.dataset.controltype === 'programStep') {
+                                        const index = parseInt(currentElement.dataset.stepnumber, 10);
+                                        if (index != null) {
+                                            this.programChangeController.replaceProgramStep(
+                                                this.programBlockEditorRef.current,
+                                                index,
+                                                this.state.selectedAction
+                                            );
+                                        }
+                                    }
+                                }
+                            }
+                            break;
                         case("deleteAll"): {
                             if (!this.editingIsDisabled()) {
                                 const newProgramSequence = this.state.programSequence.updateProgram([]);
@@ -850,6 +887,27 @@ export class App extends React.Component<AppProps, AppState> {
                         case("focusCharacterRowInput"):
                             Utils.focusByQuerySelector(".ProgramBlock__character-position-coordinate-box-row");
                             break;
+                        case("focusPreviousProgramBlock"): {
+                            this.focusPreviousProgramBlock();
+                            break;
+                        }
+                        case("focusNextProgramBlock"): {
+                            this.focusNextProgramBlock();
+                            break;
+                        }
+                        case("focusLoopIterationsInput"):
+                            if (!this.editingIsDisabled()) {
+                                const currentElement = document.activeElement;
+                                if (currentElement) {
+                                    if (currentElement.dataset.controltype === 'programStep' && currentElement.dataset.command === 'startLoop') {
+                                        const iterationsInput = currentElement.querySelector('input');
+                                        if (iterationsInput != null && iterationsInput.focus) {
+                                            iterationsInput.focus();
+                                        }
+                                    }
+                                }
+                            }
+                            break;
                         case("focusPlayPause"):
                             Utils.focusByQuerySelector(".PlayButton");
                             break;
@@ -865,40 +923,36 @@ export class App extends React.Component<AppProps, AppState> {
                         case("moveToPreviousStep"):
                             if (!this.editingIsDisabled()) {
                                 const currentElement = document.activeElement;
-                                let index = null;
-                                // $FlowFixMe: Not all elements have dataset property
-                                if (currentElement.dataset.controltype === 'programStep') {
-                                    index = parseInt(currentElement.dataset.stepnumber, 10);
-                                }
-                                if (index != null && !Utils.moveToPreviousStepDisabled(this.state.programSequence, index)) {
-                                    this.programChangeController.moveProgramStep(
-                                        this.programBlockEditorRef.current,
-                                        index,
-                                        'previous',
-                                        // $FlowFixMe: Not all elements have dataset property
-                                        currentElement.dataset.command,
-                                        'focusBlockMoved'
-                                    )
+                                if (currentElement) {
+                                    if (currentElement.dataset.controltype === 'programStep') {
+                                        const index = parseInt(currentElement.dataset.stepnumber, 10);
+                                        if (index != null) {
+                                            this.programChangeController.moveProgramStepPrevious(
+                                                this.programBlockEditorRef.current,
+                                                index,
+                                                currentElement.dataset.command,
+                                                'focusBlockMoved'
+                                            )
+                                        }
+                                    }
                                 }
                             }
                             break;
                         case("moveToNextStep"):
                             if (!this.editingIsDisabled()) {
                                 const currentElement = document.activeElement;
-                                let index = null;
-                                // $FlowFixMe: Not all elements have dataset property
-                                if (currentElement.dataset.controltype === 'programStep') {
-                                    index = parseInt(currentElement.dataset.stepnumber, 10);
-                                }
-                                if (index != null && !Utils.moveToNextStepDisabled(this.state.programSequence, index)) {
-                                    this.programChangeController.moveProgramStep(
-                                        this.programBlockEditorRef.current,
-                                        index,
-                                        'next',
-                                        // $FlowFixMe: Not all elements have dataset property
-                                        currentElement.dataset.command,
-                                        'focusBlockMoved'
-                                    )
+                                if (currentElement) {
+                                    if (currentElement.dataset.controltype === 'programStep') {
+                                        const index = parseInt(currentElement.dataset.stepnumber, 10);
+                                        if (index != null) {
+                                            this.programChangeController.moveProgramStepNext(
+                                                this.programBlockEditorRef.current,
+                                                index,
+                                                currentElement.dataset.command,
+                                                'focusBlockMoved'
+                                            )
+                                        }
+                                    }
                                 }
                             }
                             break;
@@ -957,6 +1011,83 @@ export class App extends React.Component<AppProps, AppState> {
             }
         }
     };
+
+    focusPreviousProgramBlock() {
+        const programBlocks = document.querySelectorAll('.ProgramBlockEditor__program-block');
+        if (programBlocks.length > 0) {
+            const currentElement = document.activeElement;
+            if (currentElement && currentElement.dataset.controltype === 'programStep') {
+                const currentStepNumber = currentElement.dataset.stepnumber;
+                if (currentStepNumber != null) {
+                    this.focusBlockBefore(parseInt(currentStepNumber, 10), programBlocks);
+                }
+            } else if (currentElement && currentElement.dataset.controltype === 'addNode') {
+                const currentAddNodeNumber = currentElement.dataset.stepnumber;
+                if (currentAddNodeNumber != null) {
+                    this.focusBlockBefore(parseInt(currentAddNodeNumber, 10), programBlocks);
+                }
+            } else if (this.state.actionPanelStepIndex != null) {
+                this.focusBlockBefore(this.state.actionPanelStepIndex, programBlocks);
+            } else {
+                // If focus is not set, or set on an element other than a
+                // program block or add node, focus the last step of program
+                Utils.focusLastInNodeList(programBlocks);
+            }
+        }
+        this.setState({ actionPanelStepIndex: null });
+    }
+
+    focusBlockBefore(index: number, programBlocks: NodeList<HTMLElement>) {
+        if (index > 0) {
+            const previousBlock = programBlocks[index - 1];
+            if (previousBlock && previousBlock.focus) {
+                previousBlock.focus();
+            }
+        } else {
+            // Wrap around to the last step of the program
+            Utils.focusLastInNodeList(programBlocks);
+        }
+    }
+
+    focusNextProgramBlock() {
+        const programBlocks = document.querySelectorAll('.ProgramBlockEditor__program-block');
+        if (programBlocks.length > 0) {
+            const currentElement = document.activeElement;
+            if (currentElement && currentElement.dataset.controltype === 'programStep') {
+                const currentStepNumber = currentElement.dataset.stepnumber;
+                if (currentStepNumber != null) {
+                    this.focusBlockAfter(parseInt(currentStepNumber, 10), programBlocks);
+                }
+            } else if (currentElement && currentElement.dataset.controltype === 'addNode') {
+                const currentAddNodeNumber = currentElement.dataset.stepnumber;
+                if (currentAddNodeNumber != null) {
+                    // We pass stepmumber - 1 to focusBlockAfter() for the add
+                    // node case as the block that we want to focus has the same
+                    // stepnumber as the add node
+                    this.focusBlockAfter(parseInt(currentAddNodeNumber, 10) - 1, programBlocks);
+                }
+            } else if (this.state.actionPanelStepIndex != null) {
+                this.focusBlockAfter(this.state.actionPanelStepIndex, programBlocks);
+            } else {
+                // If focus is not set, or set on an element other than a
+                // program block or add node, focus the first step of program
+                Utils.focusFirstInNodeList(programBlocks);
+            }
+        }
+        this.setState({ actionPanelStepIndex: null });
+    }
+
+    focusBlockAfter(index: number, programBlocks: NodeList<HTMLElement>) {
+        if (index < programBlocks.length - 1) {
+            const nextBlock = programBlocks[index + 1];
+            if (nextBlock && nextBlock.focus) {
+                nextBlock.focus();
+            }
+        } else {
+            // Wrap around to the first step of the program
+            Utils.focusFirstInNodeList(programBlocks);
+        }
+    }
 
     handleKeyboardModalClose = () => {
         this.setState({showKeyboardModal: false});
@@ -1030,7 +1161,7 @@ export class App extends React.Component<AppProps, AppState> {
                         selectedCommandName={this.getSelectedCommandName()}
                         audioManager={this.audioManager}
                         isDraggingCommand={this.state.isDraggingCommand}
-                        onChange={this.handleCommandFromCommandPalette}
+                        onSelect={this.handleCommandFromCommandPalette}
                         onDragStart={this.handleDragStartCommand}
                         onDragEnd={this.handleDragEndCommand}/>
                 );
@@ -1041,21 +1172,25 @@ export class App extends React.Component<AppProps, AppState> {
         return commandBlocks;
     }
 
-    makeStartingCharacterState(world: WorldName): CharacterState {
-        const worldProperties = getWorldProperties(world);
+    makeStartingCharacterState(startingX: number, startingY: number, startingDirection: number): CharacterState {
         return new CharacterState(
-            worldProperties.startingX,
-            worldProperties.startingY,
-            worldProperties.startingDirection,
+            startingX,
+            startingY,
+            startingDirection,
             [],
             this.sceneDimensions
         );
     }
 
     handleRefresh = () => {
-        const currentWorld = this.state.settings.world;
-        this.setState({
-            characterState: this.makeStartingCharacterState(currentWorld)
+        this.setState((state) => {
+            return {
+                characterState: this.makeStartingCharacterState(
+                    state.startingX,
+                    state.startingY,
+                    state.startingDirection
+                )
+            };
         });
     }
 
@@ -1074,43 +1209,67 @@ export class App extends React.Component<AppProps, AppState> {
         switch(positionName) {
             case 'turnLeft':
                 this.setState((state) => {
+                    const updatedCharacterState = state.characterState.turnLeft(1);
                     return {
-                        characterState: state.characterState.turnLeft(1)
+                        characterState: updatedCharacterState,
+                        startingX: updatedCharacterState.xPos,
+                        startingY: updatedCharacterState.yPos,
+                        startingDirection: updatedCharacterState.direction,
                     }
                 });
                 break;
             case 'turnRight':
                 this.setState((state) => {
+                    const updatedCharacterState = state.characterState.turnRight(1);
                     return {
-                        characterState: state.characterState.turnRight(1)
+                        characterState: updatedCharacterState,
+                        startingX: updatedCharacterState.xPos,
+                        startingY: updatedCharacterState.yPos,
+                        startingDirection: updatedCharacterState.direction,
                     }
                 });
                 break;
             case 'up':
                 this.setState((state) => {
+                    const updatedCharacterState = state.characterState.moveUpPosition();
                     return {
-                        characterState: state.characterState.moveUpPosition()
+                        characterState: updatedCharacterState,
+                        startingX: updatedCharacterState.xPos,
+                        startingY: updatedCharacterState.yPos,
+                        startingDirection: updatedCharacterState.direction,
                     }
                 });
                 break;
             case 'right':
                 this.setState((state) => {
+                    const updatedCharacterState = state.characterState.moveRightPosition();
                     return {
-                        characterState: state.characterState.moveRightPosition()
+                        characterState: updatedCharacterState,
+                        startingX: updatedCharacterState.xPos,
+                        startingY: updatedCharacterState.yPos,
+                        startingDirection: updatedCharacterState.direction,
                     }
                 });
                 break;
             case 'down':
                 this.setState((state) => {
+                    const updatedCharacterState = state.characterState.moveDownPosition();
                     return {
-                        characterState: state.characterState.moveDownPosition()
+                        characterState: updatedCharacterState,
+                        startingX: updatedCharacterState.xPos,
+                        startingY: updatedCharacterState.yPos,
+                        startingDirection: updatedCharacterState.direction,
                     }
                 });
                 break;
             case 'left':
                 this.setState((state) => {
+                    const updatedCharacterState = state.characterState.moveLeftPosition();
                     return {
-                        characterState: state.characterState.moveLeftPosition()
+                        characterState: updatedCharacterState,
+                        startingX: updatedCharacterState.xPos,
+                        startingY: updatedCharacterState.yPos,
+                        startingDirection: updatedCharacterState.direction,
                     }
                 });
                 break;
@@ -1120,16 +1279,22 @@ export class App extends React.Component<AppProps, AppState> {
     }
 
     handleChangeCharacterXPosition = (columnLabel: string) => {
-        const currentCharacterState = this.state.characterState;
+        const updatedCharacterState = this.state.characterState.changeXPosition(columnLabel);
         this.setState({
-            characterState: currentCharacterState.changeXPosition(columnLabel)
+            characterState: updatedCharacterState,
+            startingX: updatedCharacterState.xPos,
+            startingY: updatedCharacterState.yPos,
+            startingDirection: updatedCharacterState.direction,
         });
     }
 
     handleChangeCharacterYPosition = (rowLabel: string) => {
-        const currentCharacterState = this.state.characterState;
+        const updatedCharacterState = this.state.characterState.changeYPosition(parseInt(rowLabel, 10));
         this.setState({
-            characterState: currentCharacterState.changeYPosition(parseInt(rowLabel, 10))
+            characterState: updatedCharacterState,
+            startingX: updatedCharacterState.xPos,
+            startingY: updatedCharacterState.yPos,
+            startingDirection: updatedCharacterState.direction,
         });
     }
 
@@ -1291,6 +1456,8 @@ export class App extends React.Component<AppProps, AppState> {
                             characterState={this.state.characterState}
                             theme={this.state.settings.theme}
                             world={this.state.settings.world}
+                            startingX={this.state.startingX}
+                            startingY={this.state.startingY}
                         />
                     </div>
                     <div className="App__world-container">
@@ -1382,6 +1549,7 @@ export class App extends React.Component<AppProps, AppState> {
                             editingDisabled={this.editingIsDisabled()}
                             programSequence={this.state.programSequence}
                             runningState={this.state.runningState}
+                            keyboardInputSchemeName={this.state.keyboardInputSchemeName}
                             selectedAction={this.state.selectedAction}
                             isDraggingCommand={this.state.isDraggingCommand}
                             audioManager={this.audioManager}
@@ -1392,7 +1560,9 @@ export class App extends React.Component<AppProps, AppState> {
                             onChangeProgramSequence={this.handleProgramSequenceChange}
                             onInsertSelectedActionIntoProgram={this.handleProgramBlockEditorInsertSelectedAction}
                             onDeleteProgramStep={this.handleProgramBlockEditorDeleteStep}
-                            onMoveProgramStep={this.handleProgramBlockEditorMoveStep}
+                            onReplaceProgramStep={this.handleProgramBlockEditorReplaceStep}
+                            onMoveProgramStepNext={this.handleProgramBlockEditorMoveStepNext}
+                            onMoveProgramStepPrevious={this.handleProgramBlockEditorMoveStepPrevious}
                             onChangeActionPanelStepIndexAndOption={this.handleChangeActionPanelStepIndexAndOption}
                             onChangeAddNodeExpandedMode={this.handleChangeAddNodeExpandedMode}
                         />
@@ -1510,6 +1680,7 @@ export class App extends React.Component<AppProps, AppState> {
             const themeQuery = params.getTheme();
             const disallowedActionsQuery = params.getDisallowedActions();
             const worldQuery = params.getWorld();
+            const startingPositionQuery = params.getStartingPosition();
 
             if (programQuery != null) {
                 try {
@@ -1551,9 +1722,25 @@ export class App extends React.Component<AppProps, AppState> {
                 }
             }
 
+            const world = Utils.getWorldFromString(worldQuery, this.defaultWorld);
+            const startingPosition = Utils.getStartingPositionFromString(
+                startingPositionQuery,
+                this.state.sceneDimensions.getMaxX(),
+                this.state.sceneDimensions.getMaxY(),
+                getWorldProperties(world).startingX,
+                getWorldProperties(world).startingY,
+                getWorldProperties(world).startingDirection
+            );
+
+            this.setState({
+                startingX: startingPosition.x,
+                startingY: startingPosition.y,
+                startingDirection: startingPosition.direction
+            });
+
             this.setStateSettings({
                 theme: Utils.getThemeFromString(themeQuery, 'default'),
-                world: Utils.getWorldFromString(worldQuery, this.defaultWorld)
+                world: world
             });
         } else {
             const localProgram = window.localStorage.getItem('c2lc-program');
@@ -1561,6 +1748,7 @@ export class App extends React.Component<AppProps, AppState> {
             const localTheme = window.localStorage.getItem('c2lc-theme');
             const localDisallowedActions = window.localStorage.getItem('c2lc-disallowedActions');
             const localWorld = window.localStorage.getItem('c2lc-world');
+            const localStartingPosition = window.localStorage.getItem('c2lc-startingPosition');
 
             if (localProgram != null) {
                 try {
@@ -1603,9 +1791,25 @@ export class App extends React.Component<AppProps, AppState> {
                 }
             }
 
+            const world = Utils.getWorldFromString(localWorld, this.defaultWorld);
+            const startingPosition = Utils.getStartingPositionFromString(
+                localStartingPosition,
+                this.state.sceneDimensions.getMaxX(),
+                this.state.sceneDimensions.getMaxY(),
+                getWorldProperties(world).startingX,
+                getWorldProperties(world).startingY,
+                getWorldProperties(world).startingDirection
+            );
+
+            this.setState({
+                startingX: startingPosition.x,
+                startingY: startingPosition.y,
+                startingDirection: startingPosition.direction
+            });
+
             this.setStateSettings({
                 theme: Utils.getThemeFromString(localTheme, 'default'),
-                world: Utils.getWorldFromString(localWorld, this.defaultWorld)
+                world: world
             });
         }
 
@@ -1641,10 +1845,14 @@ export class App extends React.Component<AppProps, AppState> {
             || this.state.characterState !== prevState.characterState
             || this.state.settings.theme !== prevState.settings.theme
             || this.state.disallowedActions !== prevState.disallowedActions
+            || this.state.startingX !== prevState.startingX
+            || this.state.startingY !== prevState.startingY
+            || this.state.startingDirection !== prevState.startingDirection
             || this.state.settings.world !== prevState.settings.world) {
             const serializedProgram = this.programSerializer.serialize(this.state.programSequence.getProgram());
             const serializedCharacterState = this.characterStateSerializer.serialize(this.state.characterState);
             const serializedDisallowedActions = this.disallowedActionsSerializer.serialize(this.state.disallowedActions);
+            const serializedStartingPosition = `${Utils.encodeCoordinate(this.state.startingX)}${Utils.encodeCoordinate(this.state.startingY)}${Utils.encodeDirection(this.state.startingDirection)}`;
 
             // Use setTimeout() to limit how often we call history.pushState().
             // Safari will throw an error if calls to history.pushState() are
@@ -1659,10 +1867,11 @@ export class App extends React.Component<AppProps, AppState> {
                         c: serializedCharacterState,
                         t: this.state.settings.theme,
                         d: serializedDisallowedActions,
-                        w: this.state.settings.world
+                        w: this.state.settings.world,
+                        s: serializedStartingPosition
                     },
                     '',
-                    Utils.generateEncodedProgramURL(this.version, this.state.settings.theme, this.state.settings.world, serializedProgram, serializedCharacterState, serializedDisallowedActions),
+                    Utils.generateEncodedProgramURL(this.version, this.state.settings.theme, this.state.settings.world, serializedProgram, serializedCharacterState, serializedDisallowedActions, serializedStartingPosition),
                     '',
                 );
             }, pushStateDelayMs);
@@ -1672,7 +1881,8 @@ export class App extends React.Component<AppProps, AppState> {
             window.localStorage.setItem('c2lc-characterState', serializedCharacterState);
             window.localStorage.setItem('c2lc-theme', this.state.settings.theme);
             window.localStorage.setItem('c2lc-disallowedActions', serializedDisallowedActions);
-            window.localStorage.setItem('c2lc-world', this.state.settings.world)
+            window.localStorage.setItem('c2lc-world', this.state.settings.world);
+            window.localStorage.setItem('c2lc-startingPosition', serializedStartingPosition);
         }
 
         if (this.state.keyBindingsEnabled !== prevState.keyBindingsEnabled
@@ -1695,18 +1905,11 @@ export class App extends React.Component<AppProps, AppState> {
             this.interpreter.startRun();
         }
 
-        if (this.state.selectedAction !== prevState.selectedAction) {
-            const messagePayload = {};
-            const announcementKey = this.state.selectedAction ?
-                "movementSelected" : "noMovementSelected";
-            if (this.state.selectedAction) {
-                const commandString = this.props.intl.formatMessage({
-                    id: "Announcement." + this.state.selectedAction
-                });
-                messagePayload.command = commandString;
-            }
-            this.audioManager.playAnnouncement(announcementKey,
-                    this.props.intl, messagePayload);
+        if (this.state.selectedAction !== prevState.selectedAction
+                && this.state.selectedAction != null) {
+            const announcementData = this.announcementBuilder.buildSelectActionAnnouncement(this.state.selectedAction);
+            this.audioManager.playAnnouncement(announcementData.messageIdSuffix,
+                    this.props.intl, announcementData.values);
         }
 
         if (this.state.programSequence !== prevState.programSequence) {

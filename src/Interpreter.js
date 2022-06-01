@@ -115,6 +115,7 @@ export default class Interpreter {
         const loopIterationsLeft = new Map(programSequence.getLoopIterationsLeft());
         const label = currentProgramStep.label;
         let programCounter = programSequence.getProgramCounter();
+        const isEmptyLoop = programSequence.getProgramStepAt(programCounter - 1).block === 'startLoop';
         if (label != null) {
             const currentIterationsLeft = loopIterationsLeft.get(label);
             if (currentIterationsLeft != null) {
@@ -151,11 +152,21 @@ export default class Interpreter {
                 }
             }
         }
-        this.app.updateProgramCounterAndLoopIterationsLeft(
-            programCounter,
-            loopIterationsLeft,
-            callback
-        );
+        if (isEmptyLoop) {
+            setTimeout(() => {
+                this.app.updateProgramCounterAndLoopIterationsLeft(
+                    programCounter,
+                    loopIterationsLeft,
+                    callback
+                );
+            }, this.stepTimeMs);
+        } else {
+            this.app.updateProgramCounterAndLoopIterationsLeft(
+                programCounter,
+                loopIterationsLeft,
+                callback
+            );
+        }
     }
 
     doCommand(programStep: ProgramBlock): Promise<any> {

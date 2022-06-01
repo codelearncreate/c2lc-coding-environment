@@ -12,6 +12,10 @@
     stroke: #FFC700;
 }
 
+.Scene__starting-grid-cell-point--Camping {
+    fill: #FFC700;    
+}
+
 .WorldSelector__option-image--Camping:hover {
     svg {
         .thumbnail-background {
@@ -37,6 +41,10 @@ body.gray-theme {
 
     .Scene__path-line--Camping {
         stroke: #FFFFFF;
+    }
+
+    .Scene__starting-grid-cell-point--Camping {
+        fill: #FFFFFF;    
     }
 
     .WorldSelector__option-image--Camping:hover {
@@ -65,6 +73,10 @@ body.contrast-theme {
 
     .Scene__path-line--Camping {
         stroke: #FF0000;
+    }
+
+    .Scene__starting-grid-cell-point--Camping {
+        fill: #FF0000;    
     }
 
     .WorldSelector__option-image--Camping:hover {
@@ -97,6 +109,10 @@ body.contrast-theme {
     stroke: #784234;
 }
 
+.Scene__starting-grid-cell-point--Landmarks {
+    fill: #784234;    
+}
+
 .WorldSelector__option-image--Landmarks:hover {
     svg {
         .thumbnail-background {
@@ -122,6 +138,10 @@ body.gray-theme {
 
     .Scene__path-line--Landmarks {
         stroke: #505862;
+    }
+
+    .Scene__starting-grid-cell-point--Landmarks {
+        fill: #505862;    
     }
 
     .WorldSelector__option-image--Landmarks:hover {
@@ -150,6 +170,10 @@ body.contrast-theme {
 
     .Scene__path-line--Landmarks {
         stroke: #FF0000;
+    }
+
+    .Scene__starting-grid-cell-point--Landmarks {
+        fill: #FF0000;    
     }
 
     .WorldSelector__option-image--Landmarks:hover {
@@ -194,7 +218,11 @@ body.contrast-theme {
 }
 
 .Scene__path-line--DeepOcean {
-    stroke: #A4D0DA;
+    stroke: #FFFFFF;
+}
+
+.Scene__starting-grid-cell-point--DeepOcean {
+    fill: #FFFFFF;    
 }
 
 .WorldSelector__option-image--DeepOcean:hover {
@@ -218,6 +246,10 @@ body.gray-theme {
         stroke: #505862;
     }
 
+    .Scene__starting-grid-cell-point--DeepOcean {
+        fill: #505862;    
+    }
+
     .WorldSelector__option-image--DeepOcean:hover {
         svg {
             .thumbnail-background {
@@ -238,6 +270,10 @@ body.contrast-theme {
 
     .Scene__path-line--DeepOcean {
         stroke: #FF0000;
+    }
+
+    .Scene__starting-grid-cell-point--DeepOcean {
+        fill: #FF0000;    
     }
 
     .WorldSelector__option-image--DeepOcean:hover {
@@ -276,6 +312,10 @@ body.contrast-theme {
     stroke: #784234;
 }
 
+.Scene__starting-grid-cell-point--Jungle {
+    fill: #784234;    
+}
+
 .WorldSelector__option-image--Jungle:hover {
     svg {
         .thumbnail-background {
@@ -295,6 +335,10 @@ body.gray-theme {
 
     .Scene__path-line--Jungle {
         stroke: #505862;
+    }
+
+    .Scene__starting-grid-cell-point--Jungle {
+        fill: #505862;    
     }
 
     .WorldSelector__option-image--Jungle:hover {
@@ -317,6 +361,10 @@ body.contrast-theme {
 
     .Scene__path-line--Jungle {
         stroke: #FF0000;
+    }
+
+    .Scene__starting-grid-cell-point--Jungle {
+        fill: #FF0000;    
     }
 
     .WorldSelector__option-image--Jungle:hover {
@@ -365,6 +413,10 @@ body.contrast-theme {
     stroke: #505862;
 }
 
+.Scene__starting-grid-cell-point--Sketchpad {
+    fill: #505862;    
+}
+
 .WorldSelector__option-image--Sketchpad:hover {
     svg {
         .thumbnail-background {
@@ -381,6 +433,10 @@ body.dark-theme {
     .Scene__path-line--Sketchpad {
         stroke: #FFFFFF;
     }
+
+    .Scene__starting-grid-cell-point--Sketchpad {
+        fill: #FFFFFF;    
+    }
 }
 
 body.gray-theme {
@@ -394,6 +450,10 @@ body.gray-theme {
 
     .Scene__path-line--Sketchpad {
         stroke: #505862;
+    }
+
+    .Scene__starting-grid-cell-point--Sketchpad {
+        fill: #505862;    
     }
 
     .WorldSelector__option-image--Sketchpad:hover {
@@ -416,6 +476,10 @@ body.contrast-theme {
 
     .Scene__path-line--Sketchpad {
         stroke: #FF0000;
+    }
+
+    .Scene__starting-grid-cell-point--Sketchpad {
+        fill: #FF0000;    
     }
 
     .WorldSelector__option-image--Sketchpad:hover {
@@ -455,6 +519,10 @@ body.contrast-theme {
     stroke: #F1AE5B;
 }
 
+.Scene__starting-grid-cell-point--Space {
+    fill: #F1AE5B;    
+}
+
 .WorldSelector__option-image--Space:hover {
     svg {
         .thumbnail-background {
@@ -474,6 +542,10 @@ body.gray-theme {
 
     .Scene__path-line--Space {
         stroke: #3A3F46;
+    }
+
+    .Scene__starting-grid-cell-point--Space {
+        fill: #3A3F46;    
     }
 
     .WorldSelector__option-image--Space:hover {
@@ -496,6 +568,10 @@ body.contrast-theme {
 
     .Scene__path-line--Space {
         stroke: #FF0000;
+    }
+
+    .Scene__starting-grid-cell-point--Space {
+        fill: #FF0000;    
     }
 
     .WorldSelector__option-image--Space:hover {
