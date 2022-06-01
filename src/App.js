@@ -908,8 +908,8 @@ export class App extends React.Component<AppProps, AppState> {
                                 }
                             }
                             break;
-                        case("focusPlayShare"):
-                            Utils.focusByQuerySelector(".PlayButton--play");
+                        case("focusPlayPause"):
+                            Utils.focusByQuerySelector(".PlayButton");
                             break;
                         case("focusProgramSequence"):
                             Utils.focusByQuerySelector(".AddNode__expanded-button");
