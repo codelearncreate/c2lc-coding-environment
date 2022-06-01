@@ -250,7 +250,7 @@ describe('ActionPanel options', () => {
             pressedStepIndex: 1
         });
         const moveToPreviousStepButton = getActionPanelOptionButtons(wrapper, 'moveToPreviousStep');
-        const expectedAriaLabel = "Move Step 1 forward 1 square out of loop A";
+        const expectedAriaLabel = "Move Step 1 forward 1 square out before loop A";
         moveToPreviousStepButton.simulate('click');
         expect(moveToPreviousStepButton.get(0).props['aria-label']).toBe(expectedAriaLabel);
         expect(mockMoveToPreviousStep.mock.calls.length).toBe(1);
@@ -271,7 +271,7 @@ describe('ActionPanel options', () => {
             pressedStepIndex: 2
         });
         const moveToPreviousStepButton = getActionPanelOptionButtons(wrapper, 'moveToPreviousStep');
-        const expectedAriaLabel = "Move Step 3 forward 1 square into loop A";
+        const expectedAriaLabel = "Move Step 3 forward 1 square into the end of loop A";
         moveToPreviousStepButton.simulate('click');
         expect(moveToPreviousStepButton.get(0).props['aria-label']).toBe(expectedAriaLabel);
         expect(mockMoveToPreviousStep.mock.calls.length).toBe(1);
@@ -460,7 +460,7 @@ describe('ActionPanel options', () => {
             pressedStepIndex: 1
         });
         const moveToNextStepButton = getActionPanelOptionButtons(wrapper, 'moveToNextStep');
-        const expectedAriaLabel = "Move Step 1 forward 1 square out of loop A";
+        const expectedAriaLabel = "Move Step 1 forward 1 square out after loop A";
         moveToNextStepButton.simulate('click');
         expect(moveToNextStepButton.get(0).props['aria-label']).toBe(expectedAriaLabel);
         expect(mockMoveToNextStep.mock.calls.length).toBe(1);
@@ -481,7 +481,7 @@ describe('ActionPanel options', () => {
             pressedStepIndex: 0
         });
         const moveToNextStepButton = getActionPanelOptionButtons(wrapper, 'moveToNextStep');
-        const expectedAriaLabel = "Move Step 1 forward 1 square into loop A";
+        const expectedAriaLabel = "Move Step 1 forward 1 square into the beginning of loop A";
         moveToNextStepButton.simulate('click');
         expect(moveToNextStepButton.get(0).props['aria-label']).toBe(expectedAriaLabel);
         expect(mockMoveToNextStep.mock.calls.length).toBe(1);
