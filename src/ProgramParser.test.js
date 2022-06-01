@@ -115,6 +115,21 @@ test('Parse startLoop', () => {
         highestLoopNumber: 1
     });
 
+    expect((new ProgramParser()).parse('sA99sz')).toStrictEqual({
+        program: [
+            {
+                block: 'startLoop',
+                iterations: 99,
+                label: 'A'
+            },
+            {
+                block: 'endLoop',
+                label: 'A'
+            }
+        ],
+        highestLoopNumber: 1
+    });
+
     expect((new ProgramParser()).parse('sAA12sz')).toStrictEqual({
         program: [
             {
@@ -159,8 +174,16 @@ test('Parse startLoop', () => {
     }).toThrowError(/^Missing loop number of iterations$/);
 
     expect(() => {
+        (new ProgramParser()).parse('sA0s');
+    }).toThrowError(/^Loop iterations must be in the range 1-99: 0$/);
+
+    expect(() => {
+        (new ProgramParser()).parse('sA00s');
+    }).toThrowError(/^Loop iterations must be in the range 1-99: 0$/);
+
+    expect(() => {
         (new ProgramParser()).parse('sA100s');
-    }).toThrowError(/^Loop has too many iterations: 100$/);
+    }).toThrowError(/^Loop iterations must be in the range 1-99: 100$/);
 
     expect(() => {
         (new ProgramParser()).parse('sA1');

@@ -13,16 +13,14 @@ type CommandPaletteCommandProps = {
     intl: IntlShape,
     isDraggingCommand: boolean,
     selectedCommandName: ?string,
-    onChange: (commandName: ?string) => void,
+    onSelect: (commandName: string) => void,
     onDragStart: (commandName: string) => void,
     onDragEnd: () => void
 };
 
 class CommandPaletteCommand extends React.Component<CommandPaletteCommandProps, {}> {
     handleClick = () => {
-        this.props.onChange(
-            this.props.commandName === this.props.selectedCommandName ? null : this.props.commandName
-        );
+        this.props.onSelect(this.props.commandName);
     };
 
     /* istanbul ignore next */
@@ -40,8 +38,7 @@ class CommandPaletteCommand extends React.Component<CommandPaletteCommandProps, 
 
         const classes = classNames(
             {'command-block--pressed' : pressed},
-            {'command-block--dragged' : this.props.isDraggingCommand},
-            'focus-trap-action-panel-replace__command_button'
+            {'command-block--dragged' : this.props.isDraggingCommand}
         );
 
         const ariaLabel: string = this.props.intl.formatMessage({

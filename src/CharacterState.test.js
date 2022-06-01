@@ -165,13 +165,24 @@ test('Turn Right moves clockwise and wraps at N', () => {
         .toHaveCharacterState(1, 1, 1, []);
 });
 
-test('Each Forward move should create a path segment', () => {
+test('Given an empty path, then moving Forward should add a new path segment', () => {
     const sceneDimensions = new SceneDimensions(1, 5, 1, 5);
-    (expect(new CharacterState(1, 1, 2, [], sceneDimensions).forward(1, true).forward(1, true)): any)
-        .toHaveCharacterState(3, 1, 2, [
-            {x1: 1, y1: 1, x2: 2, y2: 1},
-            {x1: 2, y1: 1, x2: 3, y2: 1}
+    (expect(new CharacterState(1, 1, 2, [], sceneDimensions).forward(1, true)): any)
+        .toHaveCharacterState(2, 1, 2, [
+            {x1: 1, y1: 1, x2: 2, y2: 1}
         ]);
+});
+
+test('When moving Forward in the same direction, the path segment should be extended', () => {
+    const sceneDimensions = new SceneDimensions(1, 5, 1, 5);
+    (expect(new CharacterState(2, 1, 2, [{x1: 1, y1: 1, x2: 2, y2: 1}], sceneDimensions).forward(1, true)): any)
+        .toHaveCharacterState(3, 1, 2, [
+            {x1: 1, y1: 1, x2: 3, y2: 1}
+        ]);
+});
+
+test('When moving Forward in a different direction, a new path segment should be added', () => {
+    const sceneDimensions = new SceneDimensions(1, 5, 1, 5);
     (expect(new CharacterState(1, 2, 2, [], sceneDimensions).forward(1, true).turnLeft(2).forward(1, true)): any)
         .toHaveCharacterState(2, 1, 0, [
             {x1: 1, y1: 2, x2: 2, y2: 2},
@@ -184,13 +195,32 @@ test('Each Forward move should create a path segment', () => {
         ]);
 });
 
-test('Each Backward move should create a path segment', () => {
+test('When Forward is retracing the last path segment, no path segment should be added', () => {
     const sceneDimensions = new SceneDimensions(1, 5, 1, 5);
-    (expect(new CharacterState(1, 1, 6, [], sceneDimensions).backward(1, true).backward(1, true)): any)
-        .toHaveCharacterState(3, 1, 6, [
-            {x1: 1, y1: 1, x2: 2, y2: 1},
-            {x1: 2, y1: 1, x2: 3, y2: 1}
+    (expect(new CharacterState(1, 1, 2, [{x1: 2, y1: 1, x2: 1, y2: 1}], sceneDimensions).forward(1, true)): any)
+        .toHaveCharacterState(2, 1, 2, [
+            {x1: 2, y1: 1, x2: 1, y2: 1}
         ]);
+});
+
+test('Given an empty path, then moving Backward should add a new path segment', () => {
+    const sceneDimensions = new SceneDimensions(1, 5, 1, 5);
+    (expect(new CharacterState(1, 1, 6, [], sceneDimensions).backward(1, true)): any)
+        .toHaveCharacterState(2, 1, 6, [
+            {x1: 1, y1: 1, x2: 2, y2: 1}
+        ]);
+});
+
+test('When moving Backward in the same direction, the path segment should be extended', () => {
+    const sceneDimensions = new SceneDimensions(1, 5, 1, 5);
+    (expect(new CharacterState(2, 1, 6, [{x1: 1, y1: 1, x2: 2, y2: 1}], sceneDimensions).backward(1, true)): any)
+        .toHaveCharacterState(3, 1, 6, [
+            {x1: 1, y1: 1, x2: 3, y2: 1}
+        ]);
+});
+
+test('When moving Backward in a different direction, a new path segment should be added', () => {
+    const sceneDimensions = new SceneDimensions(1, 5, 1, 5);
     (expect(new CharacterState(1, 2, 6, [], sceneDimensions).backward(1, true).turnLeft(2).backward(1, true)): any)
         .toHaveCharacterState(2, 1, 4, [
             {x1: 1, y1: 2, x2: 2, y2: 2},
@@ -203,6 +233,13 @@ test('Each Backward move should create a path segment', () => {
         ]);
 });
 
+test('When Backward is retracing the last path segment, no path segment should be added', () => {
+    const sceneDimensions = new SceneDimensions(1, 5, 1, 5);
+    (expect(new CharacterState(2, 1, 2, [{x1: 1, y1: 1, x2: 2, y2: 1}], sceneDimensions).backward(1, true)): any)
+        .toHaveCharacterState(1, 1, 2, [
+            {x1: 1, y1: 1, x2: 2, y2: 1}
+        ]);
+});
 
 test('Forward move should not create a path segment, when drawingEnabled is false', () => {
     const sceneDimensions = new SceneDimensions(1, 5, 1, 5);
@@ -210,8 +247,7 @@ test('Forward move should not create a path segment, when drawingEnabled is fals
         .toHaveCharacterState(2, 1, 2, []);
     (expect(new CharacterState(1, 1, 2, [], sceneDimensions).forward(1, false).forward(2, true)): any)
         .toHaveCharacterState(4, 1, 2, [
-            {x1: 2, y1: 1, x2: 3, y2: 1},
-            {x1: 3, y1: 1, x2: 4, y2: 1}
+            {x1: 2, y1: 1, x2: 4, y2: 1}
         ]);
     (expect(new CharacterState(1, 1, 2, [], sceneDimensions).forward(1, true).forward(2, false)): any)
         .toHaveCharacterState(4, 1, 2, [
@@ -227,8 +263,7 @@ test('Backward move should not create a path segment, when drawingEnabled is fal
         .toHaveCharacterState(1, 1, 2, []);
     (expect(new CharacterState(4, 1, 2, [], sceneDimensions).backward(1, false).backward(2, true)): any)
         .toHaveCharacterState(1, 1, 2, [
-            {x1: 3, y1: 1, x2: 2, y2: 1},
-            {x1: 2, y1: 1, x2: 1, y2: 1}
+            {x1: 3, y1: 1, x2: 1, y2: 1}
         ]);
     (expect(new CharacterState(4, 1, 2, [], sceneDimensions).backward(1, true).backward(2, false)): any)
         .toHaveCharacterState(1, 1, 2, [
@@ -366,6 +401,24 @@ test('When direction is not an integer in range 0-7, forward() and backward() sh
     expect(() => {
         (new CharacterState(0, 0, 0.5, [], sceneDimensions)).backward(1, false);
     }).toThrowError(/^CharacterState direction must be an integer in range 0-7 inclusive$/);
+});
+
+test('The number of path segments should be limited to maxPathLength', () => {
+    const sceneDimensions = new SceneDimensions(1, 10, 1, 10);
+    const characterState = new CharacterState(1, 4, 2, [
+        {x1: 1, y1: 1, x2: 2, y2: 1},
+        {x1: 1, y1: 2, x2: 2, y2: 2},
+        {x1: 1, y1: 3, x2: 2, y2: 3}
+    ], sceneDimensions);
+
+    characterState.maxPathLength = 3;
+
+    (expect(characterState.forward(1, true)): any)
+        .toHaveCharacterState(2, 4, 2, [
+            {x1: 1, y1: 2, x2: 2, y2: 2},
+            {x1: 1, y1: 3, x2: 2, y2: 3},
+            {x1: 1, y1: 4, x2: 2, y2: 4}
+        ]);
 });
 
 test('MoveUpPosition moves the character up one unit within the scene', () => {

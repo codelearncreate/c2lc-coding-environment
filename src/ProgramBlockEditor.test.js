@@ -29,6 +29,7 @@ const defaultProgramBlockEditorProps = {
     characterState: new CharacterState(1, 1, 2, [], new SceneDimensions(1, 100, 1, 100)),
     programSequence: new ProgramSequence([{block: 'forward1'}, {block: 'left45'}, {block: 'forward1'}, {block: 'left45'}], 0, 0, new Map()),
     runningState: 'stopped',
+    keyboardInputSchemeName: 'controlalt',
     actionPanelStepIndex: null,
     selectedAction: null,
     editingDisabled: false,
@@ -51,7 +52,10 @@ function createMountProgramBlockEditor(props) {
     const mockChangeProgramSequenceHandler = jest.fn();
     const mockInsertSelectedActionIntoProgramHandler = jest.fn();
     const mockDeleteProgramStepHandler = jest.fn();
-    const mockChangeActionPanelStepIndex = jest.fn();
+    const mockReplaceProgramStepHandler = jest.fn();
+    const mockMoveProgramStepNextHandler = jest.fn();
+    const mockMoveProgramStepPreviousHandler = jest.fn();
+    const mockChangeActionPanelStepIndexAndOption = jest.fn();
     const mockChangeAddNodeExpandedModeHandler = jest.fn();
 
     const programBlockEditorRef = React.createRef();
@@ -69,7 +73,10 @@ function createMountProgramBlockEditor(props) {
                     onChangeProgramSequence: mockChangeProgramSequenceHandler,
                     onInsertSelectedActionIntoProgram: mockInsertSelectedActionIntoProgramHandler,
                     onDeleteProgramStep: mockDeleteProgramStepHandler,
-                    onChangeActionPanelStepIndex: mockChangeActionPanelStepIndex,
+                    onReplaceProgramStep: mockReplaceProgramStepHandler,
+                    onMoveProgramStepNext: mockMoveProgramStepNextHandler,
+                    onMoveProgramStepPrevious: mockMoveProgramStepPreviousHandler,
+                    onChangeActionPanelStepIndexAndOption: mockChangeActionPanelStepIndexAndOption,
                     onChangeAddNodeExpandedMode: mockChangeAddNodeExpandedModeHandler
                 },
                 props
@@ -92,7 +99,10 @@ function createMountProgramBlockEditor(props) {
         mockChangeProgramSequenceHandler,
         mockInsertSelectedActionIntoProgramHandler,
         mockDeleteProgramStepHandler,
-        mockChangeActionPanelStepIndex,
+        mockReplaceProgramStepHandler,
+        mockMoveProgramStepNextHandler,
+        mockMoveProgramStepPreviousHandler,
+        mockChangeActionPanelStepIndexAndOption,
         mockChangeAddNodeExpandedModeHandler
     };
 }
@@ -186,14 +196,16 @@ describe('Program rendering', () => {
 });
 
 test('When a step is clicked, action panel should render next to the step', () => {
-    expect.assertions(12);
+    expect.assertions(16);
     for (let stepNum = 0; stepNum < 4; stepNum++) {
-        const { wrapper, mockChangeActionPanelStepIndex } = createMountProgramBlockEditor();
+        const { wrapper, mockChangeActionPanelStepIndexAndOption } = createMountProgramBlockEditor();
         const programBlock = getProgramBlockAtPosition(wrapper, stepNum);
         programBlock.simulate('click');
-        expect(mockChangeActionPanelStepIndex.mock.calls.length).toBe(1);
-        const actionPanelStepIndex = mockChangeActionPanelStepIndex.mock.calls[0][0];
+        expect(mockChangeActionPanelStepIndexAndOption.mock.calls.length).toBe(1);
+        const actionPanelStepIndex = mockChangeActionPanelStepIndexAndOption.mock.calls[0][0];
         expect(actionPanelStepIndex).toBe(stepNum);
+        // Verify that no focused option is set at open
+        expect(mockChangeActionPanelStepIndexAndOption.mock.calls[0][1]).toBeNull();
         wrapper.setProps({actionPanelStepIndex});
         const actionPanelContainer = getProgramBlockWithActionPanel(wrapper).at(stepNum).childAt(1);
         // $FlowFixMe: The flow-typed definitions for enzyme introduce a type-checking error here.
@@ -399,18 +411,11 @@ describe('Delete program steps', () => {
         [ 3 ]
     ])('When the delete step button is clicked for step %i, then the onDeleteProgramStep callback should be called',
         (stepNum) => {
-            const { wrapper, mockDeleteProgramStepHandler, mockChangeActionPanelStepIndex } = createMountProgramBlockEditor();
-            const programBlock = getProgramBlockAtPosition(wrapper, stepNum);
-            programBlock.simulate('click');
-
-            // ActionPanel should be rendered on click of a program block
-            expect(mockChangeActionPanelStepIndex.mock.calls.length).toBe(1);
-            const actionPanelStepIndex = mockChangeActionPanelStepIndex.mock.calls[0][0];
-            expect(actionPanelStepIndex).toBe(stepNum);
-            wrapper.setProps({actionPanelStepIndex});
-            const actionPanelContainer = getProgramBlockWithActionPanel(wrapper).at(stepNum).childAt(1);
-            // $FlowFixMe: The flow-typed definitions for enzyme introduce a type-checking error here.
-            expect(actionPanelContainer.containsMatchingElement(ActionPanel)).toBe(true);
+            expect.assertions(2);
+            const { wrapper, mockDeleteProgramStepHandler }
+            = createMountProgramBlockEditor({
+                actionPanelStepIndex: stepNum
+            });
 
             const deleteStepButton = getActionPanelActionButtons(wrapper).at(0);
             deleteStepButton.simulate('click');
@@ -424,125 +429,68 @@ describe('Delete program steps', () => {
 
 describe('Replace program steps', () => {
     test.each([
-        [ 0, [{block: 'right45'}, {block: 'left45'}, {block: 'forward1'}, {block: 'left45'}], 'right45'],
-        [ 0, [{block: 'forward1'}, {block: 'left45'}, {block: 'forward1'}, {block: 'left45'}], null]
-    ]) ('Replace a program if selectedAction is not null',
-        (stepNum, expectedProgram, selectedAction) => {
-            expect.assertions(7);
-            const { wrapper, audioManagerMock, mockChangeProgramSequenceHandler, mockChangeActionPanelStepIndex } = createMountProgramBlockEditor({
-                selectedAction
+        [ 0 ],
+        [ 3 ]
+    ]) ('When the replace step button is clicked for step %i, then the onReplaceProgramStep callback should be called',
+        (stepNum) => {
+            expect.assertions(3);
+            const { wrapper, mockReplaceProgramStepHandler }
+            = createMountProgramBlockEditor({
+                actionPanelStepIndex: stepNum,
+                selectedAction: 'right45'
             });
-            const programBlock = getProgramBlockAtPosition(wrapper, stepNum);
-            programBlock.simulate('click');
-
-            // ActionPanel should be rendered on click of a program block
-            expect(mockChangeActionPanelStepIndex.mock.calls.length).toBe(1);
-            const actionPanelStepIndex = mockChangeActionPanelStepIndex.mock.calls[0][0];
-            expect(actionPanelStepIndex).toBe(stepNum);
-            wrapper.setProps({actionPanelStepIndex});
-            const actionPanelContainer = getProgramBlockWithActionPanel(wrapper).at(stepNum).childAt(1);
-            // $FlowFixMe: The flow-typed definitions for enzyme introduce a type-checking error here.
-            expect(actionPanelContainer.containsMatchingElement(ActionPanel)).toBe(true);
 
             const replaceButton = getActionPanelActionButtons(wrapper).at(1);
             replaceButton.simulate('click');
 
-            // An announcement should be played.
-            expect(audioManagerMock.playAnnouncement.mock.calls.length).toBe(1);
-
-            if (selectedAction) {
-                expect(audioManagerMock.playAnnouncement.mock.calls[0][0]).toBe('replace');
-
-                // The program should be updated
-                expect(mockChangeProgramSequenceHandler.mock.calls.length).toBe(1);
-                expect(mockChangeProgramSequenceHandler.mock.calls[0][0].program).toStrictEqual(expectedProgram);
-            } else {
-                expect(audioManagerMock.playAnnouncement.mock.calls[0][0]).toBe('noMovementSelected');
-
-                // The program should not be updated
-                expect(mockChangeProgramSequenceHandler.mock.calls.length).toBe(0);
-                expect(wrapper.props().programSequence.getProgram()).toStrictEqual(expectedProgram);
-            }
+            // Then the onReplaceProgramStep callback should be called
+            expect(mockReplaceProgramStepHandler.mock.calls.length).toBe(1);
+            expect(mockReplaceProgramStepHandler.mock.calls[0][0]).toBe(stepNum);
+            expect(mockReplaceProgramStepHandler.mock.calls[0][1]).toBe('right45');
         }
     );
 });
 
 describe('Move to previous program step', () => {
     test.each([
-        [ 0, [{block: 'forward1'}, {block: 'left45'}, {block: 'forward1'}, {block: 'left45'}]],
-        [ 2, [{block: 'forward1'}, {block: 'forward1'}, {block: 'left45'}, {block: 'left45'}]]
-    ]) ('Changes position with a step before, if there is a step',
-        (stepNum, expectedProgram) => {
-            const { wrapper, audioManagerMock, mockChangeProgramSequenceHandler, mockChangeActionPanelStepIndex } = createMountProgramBlockEditor();
-            const programBlock = getProgramBlockAtPosition(wrapper, stepNum);
-            programBlock.simulate('click');
-
-            // ActionPanel should be rendered on click of a program block
-            expect(mockChangeActionPanelStepIndex.mock.calls.length).toBe(1);
-            const actionPanelStepIndex = mockChangeActionPanelStepIndex.mock.calls[0][0];
-            expect(actionPanelStepIndex).toBe(stepNum);
-            wrapper.setProps({actionPanelStepIndex});
-            const actionPanelContainer = getProgramBlockWithActionPanel(wrapper).at(stepNum).childAt(1);
-            // $FlowFixMe: The flow-typed definitions for enzyme introduce a type-checking error here.
-            expect(actionPanelContainer.containsMatchingElement(ActionPanel)).toBe(true);
+        [ 1, 'left45' ],
+        [ 2, 'forward1' ]
+    ])('When the move to previous button is clicked for step %i, then the onMoveProgramStepPrevious callback should be called',
+        (stepNum, expectedCommandToMove) => {
+            const { wrapper, mockMoveProgramStepPreviousHandler }
+            = createMountProgramBlockEditor({
+                actionPanelStepIndex: stepNum
+            });
 
             const moveToPreviousButton = getActionPanelActionButtons(wrapper).at(2);
             moveToPreviousButton.simulate('click');
 
-            if (stepNum > 0) {
-                // The 'mockToPrevious' announcement should be played
-                expect(audioManagerMock.playAnnouncement.mock.calls.length).toBe(1);
-                expect(audioManagerMock.playAnnouncement.mock.calls[0][0]).toBe('moveToPrevious');
-                // The program should be updated
-                expect(mockChangeProgramSequenceHandler.mock.calls.length).toBe(1);
-                expect(mockChangeProgramSequenceHandler.mock.calls[0][0].program).toStrictEqual(expectedProgram);
-            } else {
-                // No sound should be played
-                expect(audioManagerMock.playAnnouncement.mock.calls.length).toBe(0);
-                // The program should not be updated
-                expect(mockChangeProgramSequenceHandler.mock.calls.length).toBe(0);
-                expect(wrapper.props().programSequence.getProgram()).toStrictEqual(expectedProgram);
-            }
+            // The onMoveProgramStep callback should be called
+            expect(mockMoveProgramStepPreviousHandler.mock.calls.length).toBe(1);
+            expect(mockMoveProgramStepPreviousHandler.mock.calls[0][0]).toBe(stepNum);
+            expect(mockMoveProgramStepPreviousHandler.mock.calls[0][1]).toBe(expectedCommandToMove);
         }
     )
 });
 
 describe('Move to next program step', () => {
     test.each([
-        [ 0, [{block: 'left45'}, {block: 'forward1'}, {block: 'forward1'}, {block: 'left45'}]],
-        [ 3, [{block: 'forward1'}, {block: 'left45'}, {block: 'forward1'}, {block: 'left45'}]]
-    ]) ('Changes position with a step after, if there is a step',
-        (stepNum, expectedProgram) => {
-            const { wrapper, audioManagerMock, mockChangeProgramSequenceHandler, mockChangeActionPanelStepIndex } = createMountProgramBlockEditor();
-            const programBlock = getProgramBlockAtPosition(wrapper, stepNum);
-            programBlock.simulate('click');
-
-            // ActionPanel should be rendered on click of a program block
-            expect(mockChangeActionPanelStepIndex.mock.calls.length).toBe(1);
-            const actionPanelStepIndex = mockChangeActionPanelStepIndex.mock.calls[0][0];
-            expect(actionPanelStepIndex).toBe(stepNum);
-            wrapper.setProps({actionPanelStepIndex});
-            const actionPanelContainer = getProgramBlockWithActionPanel(wrapper).at(stepNum).childAt(1);
-            // $FlowFixMe: The flow-typed definitions for enzyme introduce a type-checking error here.
-            expect(actionPanelContainer.containsMatchingElement(ActionPanel)).toBe(true);
+        [ 1, 'left45' ],
+        [ 2, 'forward1' ]
+    ])('When the move to next button is clicked for step %i, then the onMoveProgramStepNext callback should be called',
+        (stepNum, expectedCommandToMove) => {
+            const { wrapper, mockMoveProgramStepNextHandler }
+            = createMountProgramBlockEditor({
+                actionPanelStepIndex: stepNum
+            });
 
             const moveToNextButton = getActionPanelActionButtons(wrapper).at(3);
             moveToNextButton.simulate('click');
 
-            if (stepNum < 3) {
-                // The 'mockToNext' announcement should be played
-                expect(audioManagerMock.playAnnouncement.mock.calls.length).toBe(1);
-                expect(audioManagerMock.playAnnouncement.mock.calls[0][0]).toBe('moveToNext');
-                // The program should be updated
-                expect(mockChangeProgramSequenceHandler.mock.calls.length).toBe(1);
-                expect(mockChangeProgramSequenceHandler.mock.calls[0][0].program).toStrictEqual(expectedProgram);
-            } else {
-                // No announcement should be played
-                expect(audioManagerMock.playAnnouncement.mock.calls.length).toBe(0);
-                // The program should not be updated
-                expect(mockChangeProgramSequenceHandler.mock.calls.length).toBe(0);
-                expect(wrapper.props().programSequence.getProgram()).toStrictEqual(expectedProgram);
-            }
+            // The onMoveProgramStep callback should be called
+            expect(mockMoveProgramStepNextHandler.mock.calls.length).toBe(1);
+            expect(mockMoveProgramStepNextHandler.mock.calls[0][0]).toBe(stepNum);
+            expect(mockMoveProgramStepNextHandler.mock.calls[0][1]).toBe(expectedCommandToMove);
         }
     )
 });

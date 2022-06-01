@@ -49,7 +49,8 @@ export class ActionsMenuItem extends React.Component< ActionsMenuItemProps, {} >
 
         // $FlowFixMe: Flow is confused about what itemKey is.
         let icon = null;
-        const iconType = commandBlockIconTypes.get(this.props.itemKey);
+        const key = this.props.itemKey === 'loop' ? 'loopWithShadow' : this.props.itemKey;
+        const iconType = commandBlockIconTypes.get(key);
         if (iconType) {
             icon = React.createElement(iconType);
         }

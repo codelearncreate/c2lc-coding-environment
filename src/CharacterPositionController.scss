@@ -77,15 +77,9 @@
     transform: rotate(225deg) scaleY(-1);
 }
 
-.CharacterPositionController__character-column-character-container {
-    position: relative;
-    border-radius: 50%;
-}
-
 .CharacterPositionController__character-column-character {
     width: 2.5rem;
     height: 2.5rem;
-    padding: 0.4rem;
 }
 
 .CharacterPositionController__character-turn-positions {

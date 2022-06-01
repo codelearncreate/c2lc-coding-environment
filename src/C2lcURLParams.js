@@ -30,4 +30,8 @@ export default class C2lcURLParams {
     getWorld() {
         return this.urlSearchParams.get('w');
     }
+
+    getStartingPosition() {
+        return this.urlSearchParams.get('s');
+    }
 }

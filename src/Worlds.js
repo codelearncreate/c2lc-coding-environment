@@ -3,6 +3,17 @@
 import * as React from 'react';
 import type { ThemeName } from './types';
 
+// Camping
+import { ReactComponent as Camping } from './svg/Camping.svg';
+import { ReactComponent as CampingGray } from './svg/Camping-gray.svg';
+import { ReactComponent as CampingContrast } from './svg/Camping-contrast.svg';
+import { ReactComponent as CampingThumbnail } from './svg/CampingThumbnail.svg';
+import { ReactComponent as CampingThumbnailGray } from './svg/CampingThumbnail-gray.svg';
+import { ReactComponent as CampingThumbnailContrast } from './svg/CampingThumbnail-contrast.svg';
+import { ReactComponent as Squirrel } from './svg/Squirrel.svg';
+import { ReactComponent as SquirrelGray } from './svg/Squirrel-gray.svg';
+import { ReactComponent as SquirrelContrast } from './svg/Squirrel-contrast.svg';
+
 // DeepOcean
 import { ReactComponent as DeepOcean } from './svg/DeepOcean.svg';
 import { ReactComponent as DeepOceanGray } from './svg/DeepOcean-gray.svg';
@@ -42,6 +53,8 @@ import { ReactComponent as SketchpadThumbnailDark } from './svg/SketchpadThumbna
 import { ReactComponent as SketchpadThumbnailGray } from './svg/SketchpadThumbnail-gray.svg';
 import { ReactComponent as SketchpadThumbnailContrast } from './svg/SketchpadThumbnail-contrast.svg';
 import { ReactComponent as Robot } from './svg/Robot.svg';
+import { ReactComponent as RobotGray } from './svg/RobotGray.svg';
+import { ReactComponent as RobotContrast } from './svg/RobotContrast.svg';
 
 // Space
 import { ReactComponent as Space } from './svg/Space.svg';
@@ -73,12 +86,92 @@ export type WorldProperties = {|
 |};
 
 const worlds: {|
+    'Camping': WorldProperties,
     'DeepOcean': WorldProperties,
     'Jungle': WorldProperties,
     'Landmarks': WorldProperties,
     'Sketchpad': WorldProperties,
     'Space': WorldProperties
 |} = {
+    'Camping': {
+        background: Camping,
+        backgroundGray: CampingGray,
+        backgroundContrast: CampingContrast,
+        backgroundInfo: {
+            A1: 'trunk',
+            B1: 'trunk',
+            A2: 'trunk',
+            B2: 'trunk',
+            C2: 'branch',
+            D2: 'branch',
+            E2: 'branch',
+            F2: 'branch',
+            G2: 'branch',
+            H2: 'branch',
+            I2: 'ladder',
+            J2: 'branch',
+            A3: 'trunk',
+            B3: 'trunk',
+            I3: 'ladder',
+            A4: 'trunk',
+            B4: 'trunk',
+            C4: 'bear',
+            D4: 'bear',
+            E4: 'lake',
+            F4: 'lake',
+            G4: 'lake',
+            H4: 'lake',
+            I4: 'ladder',
+            J4: 'lake',
+            A5: 'trunk',
+            B5: 'bear',
+            C5: 'bear',
+            D5: 'bear',
+            F5: 'fire',
+            G5: 'fire',
+            H5: 'fire',
+            I5: 'ladder',
+            K5: 'tentdoor',
+            A6: 'trunk',
+            B6: 'bear',
+            C6: 'bear',
+            D6: 'bear',
+            E6: 'bear',
+            F6: 'fire',
+            G6: 'fire',
+            H6: 'fire',
+            I6: 'ladder',
+            K6: 'tentdoor',
+            A7: 'trunk',
+            B7: 'trunk',
+            C7: 'bear',
+            D7: 'bear',
+            E7: 'bear',
+            F7: 'fire',
+            G7: 'fire',
+            H7: 'fire',
+            I7: 'ladder',
+            K7: 'tentdoor',
+            L7: 'tentdoor',
+            A8: 'trunk',
+            B8: 'trunk',
+            D8: 'bear',
+            E8: 'bear',
+            K8: 'tentdoor',
+            L8: 'tentdoor'
+        },
+        thumbnail: CampingThumbnail,
+        thumbnailDark: CampingThumbnail,
+        thumbnailGray: CampingThumbnailGray,
+        thumbnailContrast: CampingThumbnailContrast,
+        character: Squirrel,
+        characterGray: SquirrelGray,
+        characterContrast: SquirrelContrast,
+        startingX: 1,
+        startingY: 2,
+        startingDirection: 2, // East
+        enableFlipCharacter: true
+    },
     'DeepOcean': {
         background: DeepOcean,
         backgroundGray: DeepOceanGray,
@@ -234,10 +327,10 @@ const worlds: {|
         thumbnailGray: SketchpadThumbnailGray,
         thumbnailContrast: SketchpadThumbnailContrast,
         character: Robot,
-        characterGray: Robot,
-        characterContrast: Robot,
+        characterGray: RobotGray,
+        characterContrast: RobotContrast,
         startingX: 1,
-        startingY: 1,
+        startingY: 2,
         startingDirection: 2, // East
         enableFlipCharacter: true
     },

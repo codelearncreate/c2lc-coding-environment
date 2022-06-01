@@ -16,7 +16,9 @@ const defaultSceneProps = {
     dimensions: new SceneDimensions(1, 1, 1, 1),
     characterState: new CharacterState(0, 0, 2, [], new SceneDimensions(1, 1, 1, 1)),
     theme: 'default',
-    world: 'Sketchpad'
+    world: 'Sketchpad',
+    startingX: 1,
+    startingY: 2
 };
 
 function createMountScene(props) {
@@ -76,6 +78,10 @@ function findColumnHeader(sceneWrapper) {
 
 function findSceneBackground(sceneWrapper) {
     return sceneWrapper.find('.Scene__background');
+}
+
+function findStartingPositionGridCellPoint(sceneWrapper) {
+    return sceneWrapper.find('.Scene__starting-grid-cell-point');
 }
 
 // TODO: This function is reproducing logic from Scene (the 0.8) and
@@ -216,6 +222,25 @@ describe('When the Scene renders', () => {
         expect(findCharacterIcon(sceneWrapper).get(0).props.height)
             .toBeCloseTo(expectedCharacterDimensions.height, 5);
     });
+    test('Should mark starting position cell', () => {
+        const startingX = 3;
+        const startingY = 3;
+        const sceneWrapper = createMountScene({
+            dimensions: new SceneDimensions(1, 8, 1, 9),
+            startingX,
+            startingY
+        });
+        const startingPositionGridCellPoint = findStartingPositionGridCellPoint(sceneWrapper);
+
+        // Check starting position indicator is rendered
+        expect(startingPositionGridCellPoint.length).toBe(1);
+
+        const expectedStartingPositionGridCellPointX = startingX - startingPositionGridCellPoint.get(0).props.width/2;
+        const expectedStartingPositionGridCellPointY = startingY - startingPositionGridCellPoint.get(0).props.height/2;
+
+        expect(startingPositionGridCellPoint.get(0).props.x).toBe(expectedStartingPositionGridCellPointX);
+        expect(startingPositionGridCellPoint.get(0).props.y).toBe(expectedStartingPositionGridCellPointY);
+    })
 });
 
 describe('When the character renders, transform should apply', (sceneDimensions = new SceneDimensions(1, 100, 1, 100)) => {

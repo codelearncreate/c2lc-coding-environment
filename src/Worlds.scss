@@ -1,11 +1,102 @@
-/* Landmarks */
+/* Camping */
 
-.Character-background--Landmarks {
-    fill: #FFE5B4;
-    stroke: none;
+.ProgramBlockEditor__character-column-character-container--Camping {
+    background-color: #A3BA8B;
 }
 
-.CharacterPositionController__character-column-character-container--Landmarks,
+.Scene__grid-line--Camping {
+    stroke: #8F8F8F;
+}
+
+.Scene__path-line--Camping {
+    stroke: #FFC700;
+}
+
+.Scene__starting-grid-cell-point--Camping {
+    fill: #FFC700;    
+}
+
+.WorldSelector__option-image--Camping:hover {
+    svg {
+        .thumbnail-background {
+            fill: #67804C;
+        }
+        .thumbnail-fur-light {
+            fill: #714503;
+        }
+        .thumbnail-fur-dark {
+            fill: #3A2402;
+        }
+    }
+}
+
+body.gray-theme {
+    .ProgramBlockEditor__character-column-character-container--Camping {
+        background-color: #D3D3D3;
+    }
+
+    .Scene__grid-line--Camping {
+        stroke: #8F8F8F;
+    }
+
+    .Scene__path-line--Camping {
+        stroke: #FFFFFF;
+    }
+
+    .Scene__starting-grid-cell-point--Camping {
+        fill: #FFFFFF;    
+    }
+
+    .WorldSelector__option-image--Camping:hover {
+        svg {
+            .thumbnail-background {
+                fill: #8F8F8F;
+            }
+            .thumbnail-fur-light {
+                fill: #605F5F;
+            }
+            .thumbnail-fur-dark {
+                fill: #0F0F0F;
+            }
+        }
+    }
+}
+
+body.contrast-theme {
+    .ProgramBlockEditor__character-column-character-container--Camping {
+        background-color: #FFFFFF;
+    }
+
+    .Scene__grid-line--Camping {
+        stroke: #0078FF;
+    }
+
+    .Scene__path-line--Camping {
+        stroke: #FF0000;
+    }
+
+    .Scene__starting-grid-cell-point--Camping {
+        fill: #FF0000;    
+    }
+
+    .WorldSelector__option-image--Camping:hover {
+        svg {
+            .thumbnail-background {
+                fill: #000000;
+            }
+            .thumbnail-fur-light {
+                fill: #000000;
+                stroke: #FFFFFF;
+            }
+            .thumbnail-fur-dark {
+                fill: #FFFFFF;
+            }
+        }
+    }
+}
+
+/* Landmarks */
+
 .ProgramBlockEditor__character-column-character-container--Landmarks {
     background-color: #FFE5B4;
 }
@@ -16,6 +107,10 @@
 
 .Scene__path-line--Landmarks {
     stroke: #784234;
+}
+
+.Scene__starting-grid-cell-point--Landmarks {
+    fill: #784234;    
 }
 
 .WorldSelector__option-image--Landmarks:hover {
@@ -33,24 +128,22 @@
 }
 
 body.gray-theme {
-    .Character-background--Landmarks {
-        fill: #505862;
-        stroke: none;
-    }
-    
-    .CharacterPositionController__character-column-character-container--Landmarks,
     .ProgramBlockEditor__character-column-character-container--Landmarks {
-        background-color: #505862;
+        background-color: #FFFFFF;
     }
-    
+
     .Scene__grid-line--Landmarks {
         stroke: #FFFFFF;
     }
-    
+
     .Scene__path-line--Landmarks {
         stroke: #505862;
     }
-    
+
+    .Scene__starting-grid-cell-point--Landmarks {
+        fill: #505862;    
+    }
+
     .WorldSelector__option-image--Landmarks:hover {
         svg {
             .thumbnail-background {
@@ -67,12 +160,6 @@ body.gray-theme {
 }
 
 body.contrast-theme {
-    .Character-background--Landmarks {
-        fill: #FFFFFF;
-        stroke: none;
-    }
-
-    .CharacterPositionController__character-column-character-container--Landmarks,
     .ProgramBlockEditor__character-column-character-container--Landmarks {
         background-color: #FFFFFF;
     }
@@ -83,6 +170,10 @@ body.contrast-theme {
 
     .Scene__path-line--Landmarks {
         stroke: #FF0000;
+    }
+
+    .Scene__starting-grid-cell-point--Landmarks {
+        fill: #FF0000;    
     }
 
     .WorldSelector__option-image--Landmarks:hover {
@@ -118,14 +209,8 @@ body.contrast-theme {
 
 /* DeepOcean */
 
-.Character-background--DeepOcean {
-    fill: #003C50;
-    stroke: none;
-}
-
-.CharacterPositionController__character-column-character-container--DeepOcean,
 .ProgramBlockEditor__character-column-character-container--DeepOcean {
-    background-color: #003C50;
+    background-color: #1B2432;
 }
 
 .Scene__grid-line--DeepOcean {
@@ -133,7 +218,11 @@ body.contrast-theme {
 }
 
 .Scene__path-line--DeepOcean {
-    stroke: #A4D0DA;
+    stroke: #FFFFFF;
+}
+
+.Scene__starting-grid-cell-point--DeepOcean {
+    fill: #FFFFFF;    
 }
 
 .WorldSelector__option-image--DeepOcean:hover {
@@ -145,11 +234,6 @@ body.contrast-theme {
 }
 
 body.gray-theme {
-    .Character-background--DeepOcean {
-        fill: #67717E;
-    }
-
-    .CharacterPositionController__character-column-character-container--DeepOcean,
     .ProgramBlockEditor__character-column-character-container--DeepOcean {
         background-color: #67717E;
     }
@@ -162,6 +246,10 @@ body.gray-theme {
         stroke: #505862;
     }
 
+    .Scene__starting-grid-cell-point--DeepOcean {
+        fill: #505862;    
+    }
+
     .WorldSelector__option-image--DeepOcean:hover {
         svg {
             .thumbnail-background {
@@ -172,21 +260,20 @@ body.gray-theme {
 }
 
 body.contrast-theme {
-    .Character-background--DeepOcean {
-        fill: #FFFFFF;
-    }
-
-    .CharacterPositionController__character-column-character-container--DeepOcean,
     .ProgramBlockEditor__character-column-character-container--DeepOcean {
         background-color: #FFFFFF;
     }
-
+    
     .Scene__grid-line--DeepOcean {
         stroke: #0078FF;
     }
 
     .Scene__path-line--DeepOcean {
         stroke: #FF0000;
+    }
+
+    .Scene__starting-grid-cell-point--DeepOcean {
+        fill: #FF0000;    
     }
 
     .WorldSelector__option-image--DeepOcean:hover {
@@ -213,12 +300,6 @@ body.contrast-theme {
 
 /* Jungle */
 
-.Character-background--Jungle {
-    fill: #FFE5B4;
-    stroke: none;
-}
-
-.CharacterPositionController__character-column-character-container--Jungle,
 .ProgramBlockEditor__character-column-character-container--Jungle {
     background-color: #FFE5B4;
 }
@@ -231,6 +312,10 @@ body.contrast-theme {
     stroke: #784234;
 }
 
+.Scene__starting-grid-cell-point--Jungle {
+    fill: #784234;    
+}
+
 .WorldSelector__option-image--Jungle:hover {
     svg {
         .thumbnail-background {
@@ -240,11 +325,6 @@ body.contrast-theme {
 }
 
 body.gray-theme {
-    .Character-background--Jungle {
-        fill: #505862;
-    }
-
-    .CharacterPositionController__character-column-character-container--Jungle,
     .ProgramBlockEditor__character-column-character-container--Jungle {
         background-color: #505862;
     }
@@ -257,6 +337,10 @@ body.gray-theme {
         stroke: #505862;
     }
 
+    .Scene__starting-grid-cell-point--Jungle {
+        fill: #505862;    
+    }
+
     .WorldSelector__option-image--Jungle:hover {
         svg {
             .thumbnail-background {
@@ -267,11 +351,6 @@ body.gray-theme {
 }
 
 body.contrast-theme {
-    .Character-background--Jungle {
-        fill: #FFFFFF;
-    }
-
-    .CharacterPositionController__character-column-character-container--Jungle,
     .ProgramBlockEditor__character-column-character-container--Jungle {
         background-color: #FFFFFF;
     }
@@ -282,6 +361,10 @@ body.contrast-theme {
 
     .Scene__path-line--Jungle {
         stroke: #FF0000;
+    }
+
+    .Scene__starting-grid-cell-point--Jungle {
+        fill: #FF0000;    
     }
 
     .WorldSelector__option-image--Jungle:hover {
@@ -318,12 +401,6 @@ body.contrast-theme {
 
 /* Sketchpad */
 
-.Character-background--Sketchpad {
-    fill: #4C9990;
-    stroke: none;
-}
-
-.CharacterPositionController__character-column-character-container--Sketchpad,
 .ProgramBlockEditor__character-column-character-container--Sketchpad {
     background-color: #4C9990;
 }
@@ -334,6 +411,10 @@ body.contrast-theme {
 
 .Scene__path-line--Sketchpad {
     stroke: #505862;
+}
+
+.Scene__starting-grid-cell-point--Sketchpad {
+    fill: #505862;    
 }
 
 .WorldSelector__option-image--Sketchpad:hover {
@@ -352,16 +433,15 @@ body.dark-theme {
     .Scene__path-line--Sketchpad {
         stroke: #FFFFFF;
     }
+
+    .Scene__starting-grid-cell-point--Sketchpad {
+        fill: #FFFFFF;    
+    }
 }
 
 body.gray-theme {
-    .Character-background--Sketchpad {
-        fill: #818A98;
-    }
-
-    .CharacterPositionController__character-column-character-container--Sketchpad,
     .ProgramBlockEditor__character-column-character-container--Sketchpad {
-        background-color: #818A98;
+        background-color: #9DA4AF;
     }
 
     .Scene__grid-line--Sketchpad {
@@ -370,6 +450,10 @@ body.gray-theme {
 
     .Scene__path-line--Sketchpad {
         stroke: #505862;
+    }
+
+    .Scene__starting-grid-cell-point--Sketchpad {
+        fill: #505862;    
     }
 
     .WorldSelector__option-image--Sketchpad:hover {
@@ -382,11 +466,6 @@ body.gray-theme {
 }
 
 body.contrast-theme {
-    .Character-background--Sketchpad {
-        fill: #FFFFFF;
-    }
-
-    .CharacterPositionController__character-column-character-container--Sketchpad,
     .ProgramBlockEditor__character-column-character-container--Sketchpad {
         background-color: #FFFFFF;
     }
@@ -397,6 +476,10 @@ body.contrast-theme {
 
     .Scene__path-line--Sketchpad {
         stroke: #FF0000;
+    }
+
+    .Scene__starting-grid-cell-point--Sketchpad {
+        fill: #FF0000;    
     }
 
     .WorldSelector__option-image--Sketchpad:hover {
@@ -424,12 +507,6 @@ body.contrast-theme {
 
 /* Space */
 
-.Character-background--Space {
-    fill: #1B2432;
-    stroke: none;
-}
-
-.CharacterPositionController__character-column-character-container--Space,
 .ProgramBlockEditor__character-column-character-container--Space {
     background-color: #1B2432;
 }
@@ -442,6 +519,10 @@ body.contrast-theme {
     stroke: #F1AE5B;
 }
 
+.Scene__starting-grid-cell-point--Space {
+    fill: #F1AE5B;    
+}
+
 .WorldSelector__option-image--Space:hover {
     svg {
         .thumbnail-background {
@@ -451,11 +532,6 @@ body.contrast-theme {
 }
 
 body.gray-theme {
-    .Character-background--Space {
-        fill: #505862;
-    }
-
-    .CharacterPositionController__character-column-character-container--Space,
     .ProgramBlockEditor__character-column-character-container--Space {
         background-color: #505862;
     }
@@ -468,6 +544,10 @@ body.gray-theme {
         stroke: #3A3F46;
     }
 
+    .Scene__starting-grid-cell-point--Space {
+        fill: #3A3F46;    
+    }
+
     .WorldSelector__option-image--Space:hover {
         svg {
             .thumbnail-background {
@@ -478,11 +558,6 @@ body.gray-theme {
 }
 
 body.contrast-theme {
-    .Character-background--Space {
-        fill: #FFFFFF;
-    }
-
-    .CharacterPositionController__character-column-character-container--Space,
     .ProgramBlockEditor__character-column-character-container--Space {
         background-color: #FFFFFF;
     }
@@ -493,6 +568,10 @@ body.contrast-theme {
 
     .Scene__path-line--Space {
         stroke: #FF0000;
+    }
+
+    .Scene__starting-grid-cell-point--Space {
+        fill: #FF0000;    
     }
 
     .WorldSelector__option-image--Space:hover {

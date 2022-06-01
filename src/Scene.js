@@ -12,22 +12,26 @@ import './Worlds.scss';
 import type { ThemeName } from './types';
 import type { WorldName } from './Worlds';
 
+const startingGridCellPointSize = 0.25;
+
 export type SceneProps = {
     dimensions: SceneDimensions,
     characterState: CharacterState,
     theme: ThemeName,
     world: WorldName,
+    startingX: number,
+    startingY: number,
     intl: IntlShape
 };
 
 class Scene extends React.Component<SceneProps, {}> {
-    characterBackgroundRef: { current: null | Element };
     sceneRef: { current: null | HTMLDivElement };
+    sceneSvgRef: { current: null | Element };
 
     constructor (props: SceneProps) {
         super(props);
-        this.characterBackgroundRef = React.createRef();
         this.sceneRef = React.createRef();
+        this.sceneSvgRef = React.createRef();
     }
 
     drawGrid(): any {
@@ -257,46 +261,58 @@ class Scene extends React.Component<SceneProps, {}> {
     componentDidUpdate = (prevProps) => {
         // Required to avoid the lack of scrollIntoView on SVG elements in Safari.
         /* istanbul ignore next */
-        if ((prevProps.characterState.xPos !== this.props.characterState.xPos ||
-            prevProps.characterState.yPos !== this.props.characterState.yPos) &&
-            this.sceneRef.current !== null && this.characterBackgroundRef.current !== null) {
-            const newCharacterBackgroundBounds = this.characterBackgroundRef.current.getBoundingClientRect();
-            if (newCharacterBackgroundBounds) {
-                // $FlowFixMe: Flow doesn't understand that the scene has this method.
-                const sceneBounds = this.sceneRef.current.getBoundingClientRect();
+        if ((prevProps.characterState.xPos !== this.props.characterState.xPos
+                || prevProps.characterState.yPos !== this.props.characterState.yPos)
+                && this.sceneRef.current !== null && this.sceneSvgRef.current !== null) {
 
-                // Check to see if the character is visible. If not, scroll to bring it into view. We do this ourselves
-                // for two reasons:
-                //
-                // 1. On Safari, scrollIntoView doesn't work on SVG elements (C2LC-347).
-                // 2. On Firefox, scrollIntoView seems to scroll to the center of the character rather than bringing it
-                //    completely into view (C2LC-343).
-                //
-                // We add some padding to the position checking (0.5 times the
-                // width or height) to ensure that we always leave some room
-                // between the character and the edge of the scene (unless we
-                // are in the first or last row/col).
-                if (newCharacterBackgroundBounds.left - (0.5 * newCharacterBackgroundBounds.width) < sceneBounds.left) {
-                    // Scroll left.
-                    // $FlowFixMe: Flow doesn't understand that this element has a scrollLeft.
-                    this.sceneRef.current.scrollLeft -= (sceneBounds.left - newCharacterBackgroundBounds.left + newCharacterBackgroundBounds.width);
-                }
-                else if ((newCharacterBackgroundBounds.left + (1.5 * newCharacterBackgroundBounds.width)) > (sceneBounds.left + sceneBounds.width)) {
-                    // Scroll right.
-                    // $FlowFixMe: Flow doesn't understand that this element has a scrollLeft.
-                    this.sceneRef.current.scrollLeft += (newCharacterBackgroundBounds.left + newCharacterBackgroundBounds.width) - (sceneBounds.left + sceneBounds.width) + newCharacterBackgroundBounds.width;
-                }
+            const sceneElem = this.sceneRef.current;
+            const sceneSvgElem = this.sceneSvgRef.current;
 
-                if (newCharacterBackgroundBounds.top - (0.5 * newCharacterBackgroundBounds.height) < sceneBounds.top) {
-                    // Scroll up.  For whatever reason we have to overshoot on the scroll to avoid leaving the icon half out of bounds and constantly triggering scrolls.
-                    // $FlowFixMe: Flow doesn't understand that this element has a scrollTop.
-                    this.sceneRef.current.scrollTop -= (sceneBounds.top - newCharacterBackgroundBounds.top + newCharacterBackgroundBounds.height);
-                }
-                else if ((newCharacterBackgroundBounds.top + (1.5 * newCharacterBackgroundBounds.height)) > (sceneBounds.top + sceneBounds.height)) {
-                    // Scroll down.
-                    // $FlowFixMe: Flow doesn't understand that this element has a scrollTop.
-                    this.sceneRef.current.scrollTop += (newCharacterBackgroundBounds.top + newCharacterBackgroundBounds.height) - (sceneBounds.top + sceneBounds.height) + newCharacterBackgroundBounds.height;
-                }
+            const sceneBounds = sceneElem.getBoundingClientRect();
+            const sceneSvgBounds = sceneSvgElem.getBoundingClientRect();
+
+            // Calculate the grid cell width in pixels by dividing the width
+            // of the scene in pixels by the number of columns in the scene
+            const cellWidth = sceneSvgBounds.width / this.props.dimensions.getWidth();
+            // Calculate the grid cell height in pixels by dividing the height
+            // of the scene in pixels by the number of rows in the scene
+            const cellHeight = sceneSvgBounds.height / this.props.dimensions.getHeight();
+
+            // Check to see if the character is visible. If not, scroll to
+            // bring it into view. We do this ourselves for two reasons:
+            //
+            // 1. On Safari, scrollIntoView doesn't work on SVG elements
+            //    (C2LC-347)
+            // 2. On Firefox, scrollIntoView seems to scroll to the center of
+            //    the character rather than bringing it completely into view
+            //    (C2LC-343)
+
+            // We add some padding to the position checking to ensure that we
+            // always leave some room between the character and the edge of the
+            // scene (unless we are in the first or last row/col)
+            const paddingH = 0.75 * cellWidth;
+            const paddingV = 0.75 * cellHeight;
+
+            // Calculate the location of the grid cell that the character is on
+            const cellLeft = (this.props.characterState.xPos - this.props.dimensions.getMinX()) * cellWidth;
+            const cellRight = cellLeft + cellWidth;
+            const cellTop = (this.props.characterState.yPos - this.props.dimensions.getMinY()) * cellHeight;
+            const cellBottom = cellTop + cellHeight;
+
+            if (cellLeft - paddingH < sceneElem.scrollLeft) {
+                // Off screen to the left
+                sceneElem.scrollLeft = cellLeft - paddingH;
+            } else if (cellRight + paddingH > sceneElem.scrollLeft + sceneBounds.width) {
+                // Off screen to the right
+                sceneElem.scrollLeft = cellRight + paddingH - sceneBounds.width;
+            }
+
+            if (cellTop - paddingV < sceneElem.scrollTop) {
+                // Off screen above
+                sceneElem.scrollTop = cellTop - paddingV;
+            } else if (cellBottom + paddingV > sceneElem.scrollTop + sceneBounds.height) {
+                // Off screen below
+                sceneElem.scrollTop = cellBottom + paddingV - sceneBounds.height;
             }
         }
     }
@@ -320,9 +336,6 @@ class Scene extends React.Component<SceneProps, {}> {
         if (this.getWorldEnableFlipCharacter() && this.props.characterState.direction > 3) {
             characterTransform += ` scale(1 -1)`
         }
-
-        // For the background, use the same translation, but skip the rotation and mirroring.
-        const characterBackgroundTransform = `translate(${this.props.characterState.xPos} ${this.props.characterState.yPos})`;
 
         return (
             <React.Fragment>
@@ -358,7 +371,8 @@ class Scene extends React.Component<SceneProps, {}> {
                         ref={this.sceneRef}>
                         <svg
                             xmlns='http://www.w3.org/2000/svg'
-                            viewBox={`${minX} ${minY} ${width} ${height}`}>
+                            viewBox={`${minX} ${minY} ${width} ${height}`}
+                            ref={this.sceneSvgRef}>
                             <defs>
                                 <clipPath id='Scene-clippath'>
                                     <rect x={minX} y={minY} width={width} height={height} />
@@ -369,13 +383,17 @@ class Scene extends React.Component<SceneProps, {}> {
                             <g clipPath='url(#Scene-clippath)'>
                                 {this.drawCharacterPath()}
                                 <rect
-                                    className={`Character-background--${this.props.world}`}
-                                    x={-0.5}
-                                    y={-0.5}
-                                    height={1}
-                                    width={1}
-                                    ref={this.characterBackgroundRef}
-                                    transform={characterBackgroundTransform}
+                                    // Starting position indicator
+                                    className={`Scene__starting-grid-cell-point Scene__starting-grid-cell-point--${this.props.world}`}
+                                    // The centre of the starting cell is (startingX, startingY).
+                                    // Calculate the top left corner of the indicator
+                                    // by subtracting half of the indicator size from
+                                    // each of the startingX and startingY.
+                                    x={this.props.startingX - (startingGridCellPointSize / 2)}
+                                    y={this.props.startingY - (startingGridCellPointSize / 2)}
+                                    rx={0.06}
+                                    height={startingGridCellPointSize}
+                                    width={startingGridCellPointSize}
                                 />
                                 <Character
                                     world={this.props.world}

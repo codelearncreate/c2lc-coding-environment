@@ -72,6 +72,7 @@ describe('Rendering commands', () => {
             commandName: 'startLoop',
             disabled: false,
             runningState: 'stopped',
+            keyboardInputSchemeName: 'controlalt',
             loopLabel: 'A',
             stepNumber: 1,
             onChangeLoopIterations: () => {}

@@ -140,8 +140,8 @@ export default class ProgramParser {
         const iterations = parseInt(iterationsStr, 10);
 
         // Check the number of iterations
-        if (iterations > 99) {
-            throw new Error(`Loop has too many iterations: ${iterations}`);
+        if (iterations < 1 || iterations > 99) {
+            throw new Error(`Loop iterations must be in the range 1-99: ${iterations}`);
         }
 
         // Check for terminating 's'

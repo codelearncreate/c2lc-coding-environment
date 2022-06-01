@@ -10,7 +10,7 @@ import { ReactComponent as MovePreviousIcon } from './svg/MovePrevious.svg';
 import { ReactComponent as MoveNextIcon } from './svg/MoveNext.svg';
 import { ReactComponent as DeleteIcon } from './svg/Delete.svg';
 import { ReactComponent as ReplaceIcon } from './svg/replace.svg';
-import { focusByQuerySelector } from './Utils';
+import { focusByQuerySelector, isLoopBlock, moveToNextStepDisabled, moveToPreviousStepDisabled } from './Utils';
 import './ActionPanel.scss';
 
 type ActionPanelProps = {
@@ -192,33 +192,7 @@ class ActionPanel extends React.Component<ActionPanelProps, {}> {
     }
 
     getReplaceIsVisible(): boolean {
-        const currentStepName = this.props.programSequence.getProgramStepAt(this.props.pressedStepIndex).block;
-        return currentStepName !== 'startLoop' && currentStepName !== 'endLoop';
-    }
-
-    getMoveToNextStepDisabled(): boolean {
-        const programSequence = this.props.programSequence;
-        const programLastIndex = programSequence.getProgramLength() - 1;
-        const { block, label } = programSequence.getProgramStepAt(this.props.pressedStepIndex);
-        if (block === 'startLoop') {
-            const lastProgramStep = programSequence.getProgramStepAt(programLastIndex);
-            if (lastProgramStep.block === 'endLoop' && lastProgramStep.label === label) {
-                return true;
-            }
-        }
-        return this.props.pressedStepIndex === programLastIndex;
-    }
-
-    getMoveToPreviousStepDisabled(): boolean {
-        const programSequence = this.props.programSequence;
-        const { block, label } = programSequence.getProgramStepAt(this.props.pressedStepIndex);
-        if (block === 'endLoop') {
-            const firstProgramStep = programSequence.getProgramStepAt(0);
-            if (firstProgramStep.block === 'startLoop' && firstProgramStep.label === label) {
-                return true;
-            }
-        }
-        return this.props.pressedStepIndex === 0;
+        return !isLoopBlock(this.props.programSequence.getProgramStepAt(this.props.pressedStepIndex).block);
     }
 
     // handlers
@@ -241,9 +215,10 @@ class ActionPanel extends React.Component<ActionPanelProps, {}> {
 
     render() {
         const stepMessageData = this.makeStepMessageData();
-        const moveToNextStepIsDisabled = this.getMoveToNextStepDisabled();
-        const moveToPreviousStepIsDisabled = this.getMoveToPreviousStepDisabled();
+        const moveToNextStepIsDisabled = moveToNextStepDisabled(this.props.programSequence, this.props.pressedStepIndex);
+        const moveToPreviousStepIsDisabled = moveToPreviousStepDisabled(this.props.programSequence, this.props.pressedStepIndex);
         const replaceIsVisible = this.getReplaceIsVisible();
+        const replaceIsDisabled = this.props.selectedCommandName == null;
         return (
             <React.Fragment>
                 <div className="ActionPanel__background">
@@ -265,9 +240,10 @@ class ActionPanel extends React.Component<ActionPanelProps, {}> {
                     {replaceIsVisible &&
                         <AriaDisablingButton
                             name='replaceCurrentStep'
-                            disabled={false}
+                            disabled={replaceIsDisabled}
+                            disabledClassName='ActionPanel__action-buttons--disabled'
                             aria-label={this.props.intl.formatMessage({id:'ActionPanel.action.replace'}, stepMessageData)}
-                            className='ActionPanel__action-buttons focus-trap-action-panel__action-panel-button focus-trap-action-panel-replace__replace_button'
+                            className='ActionPanel__action-buttons focus-trap-action-panel__action-panel-button'
                             onClick={this.handleClickReplace}>
                             <ReplaceIcon className='ActionPanel__action-button-svg' />
                         </AriaDisablingButton>

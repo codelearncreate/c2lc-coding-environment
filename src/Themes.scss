@@ -35,11 +35,51 @@ body.light-theme {
     }
 
     .App__command-palette-command-container {
-        background-color: #EBFAF8;
+        background-color: #CCE6E2;
     }
 
     .App__command-palette-heading {
         color: #30444E;
+    }
+
+    .App__command-palette-section {
+        background-color: #EBFAF8;
+    }
+
+    .App__command-palette-section-heading {
+        color: #000000;
+    }
+
+    .App__command-palette-command-container .btn-command-block--loop {
+        svg {
+            path.filled-bracket {
+                fill: #30444E;
+            }
+            path.inner-arrow {
+                stroke: #FFFFFF;
+            }
+        }
+
+        &:hover {
+            path.filled-bracket {
+                fill: #4B4B4B;
+            }
+        }
+    }
+
+    .App__command-palette-command-container .btn-command-block--loop, .ActionsMenuItem__icon--loop {
+        svg {
+            path.filled-bracket {
+                fill: #787878;
+            }
+            path.inner-arrow {
+                stroke: #F1F2F4;
+            }
+        }
+    }
+
+    .App__command-palette-section {
+        box-shadow: 0px 3px 1px #AAD5CF;
     }
 
     button.btn.command-block:focus {
@@ -59,7 +99,8 @@ body.light-theme {
     #command-block--left180, .btn-command-block--left180,
     #command-block--right45, .btn-command-block--right45,
     #command-block--right90, .btn-command-block--right90,
-    #command-block--right180, .btn-command-block--right180
+    #command-block--right180, .btn-command-block--right180,
+    #command-block-loop, .btn-command-block--loop
     {
         svg {
             path, circle, rect {
@@ -75,7 +116,7 @@ body.light-theme {
         }
     }
 
-    .ActionsMenuItem__icon:not(.ActionsMenuItem__icon--hidden)
+    .ActionsMenuItem__icon:not(.ActionsMenuItem__icon--hidden):not(.ActionsMenuItem__icon--loop)
     {
         svg {
             path, circle, rect {
@@ -488,8 +529,27 @@ body.dark-theme {
         background-color: #18252C;
     }
 
-    .App__app-heading > a {
+    .App__logo-container {
+        a:focus {
+            border-color: #FFFFFF;
+        }
+
+        svg {
+            &:hover {
+                path.logo-title-letter {
+                    stroke: black;
+                    fill: black;
+                }
+            }
+        }
+    }
+
+    .App__PrivacyModal__toggle-button {
         color: white;
+    }
+
+    .App__PrivacyModal__toggle-button:focus {
+        border-color: #ffffff;
     }
 
     .App__command-palette {
@@ -511,20 +571,13 @@ body.dark-theme {
         color: #F1AE5B;
     }
 
+    .App__command-palette-section {
+        border: 2px solid #19282F;
+    }
+
     .App__ActionsMenu__header {
         background-color: #30444E;
         color: white;
-    }
-
-    .App__ActionsMenu__toggle-button {
-        &:focus {
-            box-shadow:
-                0 0 0 0.1rem white;
-        }
-
-        svg line {
-            stroke: white;
-        }
     }
 
     .App__ActionsMenu__menu {
@@ -538,7 +591,6 @@ body.dark-theme {
         background-color: #30444E;
         border: 2px solid #33717F;
     }
-
 
     .App__world-selector {
         border-color: #33717F;
@@ -729,6 +781,24 @@ body.gray-theme {
         background-color: #FFF;
     }
 
+    .App__logo-container {
+        a {
+            outline-color: #000000;
+        }
+
+        svg {
+            &:hover {
+                path.logo-tile {
+                    fill: #505862;
+                }
+                path.logo-title-letter {
+                    stroke: #FFFFFF;
+                    fill: #FFFFFF;
+                }
+            }
+        }
+    }
+
     .App__world-container {
         background-color: #D5D8DD;
     }
@@ -747,6 +817,8 @@ body.gray-theme {
     }
 
     .App__command-palette-command-container {
+        background-color: #D5D8DD;
+
         &::-webkit-scrollbar {
             background-color: #F1F2F4;
         }
@@ -759,18 +831,55 @@ body.gray-theme {
         color: #818A98;
     }
 
+    .App__command-palette-section {
+        background-color: #F1F2F4;
+        box-shadow: 0px 3px 1px #9DA4AF;
+    }
+
+    .App__command-palette-section-heading {
+        color: #818A98;
+    }
+
+    .App__command-palette-command-container .btn-command-block--loop, .ActionsMenuItem__icon--loop {
+        svg {
+            path.filled-bracket {
+                fill: #818A98;
+
+            }
+            path.inner-arrow {
+                stroke: #F1F2F4;
+            }
+        }
+    }
+
+    .App__command-palette-command-container .btn-command-block--loop:hover {
+        svg {
+            path.filled-bracket {
+                fill: #505862;
+            }
+        }
+    }    
+
     .App__header-menu {
         background-color: #D5D8DD;
     }
 
-    .App__header-menu > .IconButton {
+    .App__header-menu > .IconButton:not(.App__ActionsMenu__toggle-button) {
         svg path {
             fill: #FFFFFF;
         }
     }
 
     .IconButton {
-        background-color: #818A98;
+        &:not(.IconButton--disabled) {
+            background-color: #818A98;
+
+            .App__header-actionsMenu-icon {
+                path {
+                    stroke: white;
+                }
+            }    
+        }
 
         &:hover:not(.IconButton--disabled) {
             background-color: #505862;
@@ -802,7 +911,21 @@ body.gray-theme {
                 fill: white;
             }
         }
+
+        .App__header-theme-icon {
+            path {
+                fill: white;
+            }
+        }
     }
+
+    .IconButton--disabled {
+        background-color: #818A98;
+        svg path {
+            stroke: #D5D8DD;
+        }
+    }
+
 
     .KeyboardInputModal__content__toggle {
         background-color: #B9BEC6;
@@ -882,7 +1005,7 @@ body.gray-theme {
     #command-block--right90, .btn-command-block--right90,
     #command-block--right180, .btn-command-block--right180,
     // TODO: Add backward commands to the above.
-    .command-block {
+    .command-block:not(.btn-command-block--loop) {
         background-color: #818A98;
         border-color: #818A98;
 
@@ -915,6 +1038,12 @@ body.gray-theme {
         }
     }
 
+    #command-block--loop, .btn-command-block--loop {
+        &.command-block--pressed {
+            border: 3px solid #505862;
+        }    
+    }
+
     button.command-block.btn-command-block--startLoop,
     button.command-block.btn-command-block--endLoop {
         background-color: #B9BEC6;
@@ -940,7 +1069,7 @@ body.gray-theme {
         }
     }
 
-    .ActionsMenuItem__icon:not(.ActionsMenuItem__icon--disabled) {
+    .ActionsMenuItem__icon:not(.ActionsMenuItem__icon--disabled):not(.ActionsMenuItem__icon--loop) {
         background-color: #818A98;
         border-color: #818A98;
 
@@ -1543,8 +1672,30 @@ body.contrast-theme {
         box-shadow: 0 0 0 2px black;
     }
 
-    .App__app-heading > a {
+    .App__logo-container {
+        a:focus {
+            border-color: #FFFFFF;
+        }
+
+        svg {
+            &:hover {
+                path.logo-tile {
+                    fill: #FFFFFF;
+                }
+                path.logo-title-letter {
+                    stroke: #000000;
+                    fill: #000000;
+                }
+            }
+        }
+    }
+
+    .App__PrivacyModal__toggle-button {
         color: white;
+    }
+
+    .App__PrivacyModal__toggle-button:focus {
+        border-color: #ffffff;
     }
 
     .IconButton.App__header-soundOptions {
@@ -1560,10 +1711,6 @@ body.contrast-theme {
 
     .IconButton {
         background-color: white;
-
-        svg path {
-            fill: black;
-        }
 
         &:hover:not(.IconButton--disabled) {
             background-color: black;
@@ -1590,6 +1737,12 @@ body.contrast-theme {
                     fill: white;
                 }
             }
+
+            .App__header-actionsMenu-icon {
+                path {
+                    stroke: white;
+                }
+            }
         }
 
         &:focus {
@@ -1613,6 +1766,14 @@ body.contrast-theme {
             circle {
                 fill: black;
             }
+        }
+    }
+
+    .IconButton--disabled {
+        background-color: #1E1E1E;
+
+        svg path {
+            stroke: #818A98;
         }
     }
 
@@ -1708,16 +1869,52 @@ body.contrast-theme {
     }
 
     .App__command-palette-command-container {
-        background-color: black;
-    }
+        background-color:#FFFFFF;
 
-    .App__command-palette-command-container {
         &::-webkit-scrollbar {
             background-color: black;
         }
         &::-webkit-scrollbar-thumb {
             background-color: black;
             border: 2px solid white;
+        }
+    }
+
+    .App__command-palette-section {
+        background-color: #000000;
+
+        box-shadow: 0px 3px 1px #9DA4AF;
+    }
+
+    .App__command-palette-section-heading-container {
+        border-bottom: 2px solid #FFFFFF;
+    }
+
+    .App__command-palette-section-heading {
+        color: #FFFFFF;
+    }
+
+    .App__command-palette-command-container .btn-command-block--loop, .ActionsMenuItem__icon--loop {
+        svg {
+            path.filled-bracket {
+                fill: #FFFFFF;
+                stroke: #000000;
+            }
+            path.inner-arrow {
+                stroke: #22262A;
+            }
+        }
+    }
+
+    .App__command-palette-command-container .btn-command-block--loop:hover {
+        svg {
+            path.filled-bracket {
+                fill: #000000;
+                stroke: #FFFFFF;
+            }
+            path.inner-arrow {
+                stroke: #FFFFFF;
+            }
         }
     }
 
@@ -1826,7 +2023,7 @@ body.contrast-theme {
         }
     }
 
-    .ActionsMenuItem__icon:not(.ActionsMenuItem__icon--disabled) {
+    .ActionsMenuItem__icon:not(.ActionsMenuItem__icon--disabled):not(.ActionsMenuItem__icon--loop) {
         background-color: white;
         border: 1px solid black;
 

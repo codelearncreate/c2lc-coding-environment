@@ -35,7 +35,7 @@
 .ActionsMenuItem__icon {
     text-align: center;
     border-radius: 0.2rem;
-    box-shadow: 0 3px 4px 0 #1e1e1e, -1px 2px 4px;
+    box-shadow: 0 1px 1px 0 #000000, -1px 2px 2px;
     width: 2.5rem;
     height: 2.5rem;
     min-width: 45px;
@@ -49,6 +49,18 @@
     }
 }
 
+.ActionsMenuItem__icon--loop {
+    box-shadow: none;
+    height: 2.5rem;
+    width: 3.3rem;
+    min-width: 60px;
+    
+    svg {
+        margin: 0rem;
+        height: 2.5rem;
+        width: 3.3rem;
+    }
+}
 
 .ActionsMenuItem__icon--forward1, .ActionsMenuItem__icon--forward2, .ActionsMenuItem__icon--forward3 {
     background-color: $c2lc-forward-command-color;

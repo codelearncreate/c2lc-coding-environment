@@ -2,6 +2,7 @@
 
 import * as C2lcMath from './C2lcMath';
 import SceneDimensions from './SceneDimensions';
+import type { PathSegment } from './types';
 
 // Character direction is stored as eighths of a turn, as follows:
 // N:  0
@@ -13,12 +14,7 @@ import SceneDimensions from './SceneDimensions';
 // W:  6
 // NW: 7
 
-type PathSegment = {
-    x1: number,
-    y1: number,
-    x2: number,
-    y2: number
-};
+const characterStateMaxPathLength = 600;
 
 type MovementResult = {
     x: number,
@@ -32,6 +28,7 @@ export default class CharacterState {
     direction: number; // Eighths of a turn, see note above
     path: Array<PathSegment>;
     sceneDimensions: SceneDimensions;
+    maxPathLength: number;
 
     constructor(xPos: number, yPos: number, direction: number, path: Array<PathSegment>, sceneDimensions: SceneDimensions) {
         this.xPos = xPos;
@@ -39,6 +36,7 @@ export default class CharacterState {
         this.direction = direction;
         this.path = path;
         this.sceneDimensions = sceneDimensions;
+        this.maxPathLength = characterStateMaxPathLength;
     }
 
     getDirectionDegrees() {
@@ -66,7 +64,7 @@ export default class CharacterState {
             movementResult.x,
             movementResult.y,
             this.direction,
-            this.path.concat(movementResult.pathSegments),
+            this.mergePathSegments(this.path, movementResult.pathSegments),
             this.sceneDimensions
         );
     }
@@ -78,7 +76,7 @@ export default class CharacterState {
             movementResult.x,
             movementResult.y,
             this.direction,
-            this.path.concat(movementResult.pathSegments),
+            this.mergePathSegments(this.path, movementResult.pathSegments),
             this.sceneDimensions
         );
     }
@@ -206,7 +204,8 @@ export default class CharacterState {
         return String.fromCharCode(64 + this.xPos);
     }
 
-    // Internal implementation method.
+    // Internal implementation methods
+
     // Calculates the movement for the specified distance in the specified direction.
     // Returns the final position and any generated path segments.
     calculateMove(distance: number, direction: number, drawingEnabled: boolean): MovementResult {
@@ -230,7 +229,6 @@ export default class CharacterState {
         };
     }
 
-    // Internal implementation method.
     // Calculates the movement for one grid unit in the specified direction.
     // Returns the new position and, if movement was possible, a path segment.
     calculateMoveOneGridUnit(x: number, y: number, direction: number): MovementResult {
@@ -298,5 +296,51 @@ export default class CharacterState {
                 pathSegments: [pathSegment]
             };
         }
+    }
+
+    mergePathSegments(dest: Array<PathSegment>, src: Array<PathSegment>): Array<PathSegment> {
+        const pathSegments = dest.slice();
+
+        for (const newPathSegment of src) {
+            let addNewPathSegment = true;
+            if (pathSegments.length > 0) {
+                const lastPathSegment = pathSegments[pathSegments.length - 1];
+                const lastDirection = C2lcMath.pathSegmentDirection(lastPathSegment);
+                const newDirection = C2lcMath.pathSegmentDirection(newPathSegment);
+                if (newDirection === lastDirection
+                        && this.isConnected(lastPathSegment, newPathSegment)) {
+                    // The new path segment is in the same direction and is
+                    // connected to the last one: extend the last path segment
+                    pathSegments[pathSegments.length - 1] = {
+                        x1: lastPathSegment.x1,
+                        y1: lastPathSegment.y1,
+                        x2: newPathSegment.x2,
+                        y2: newPathSegment.y2
+                    };
+                    addNewPathSegment = false;
+                } else if (((newDirection === lastDirection)
+                            || C2lcMath.isOppositeDirection(newDirection, lastDirection))
+                        && C2lcMath.pathSegmentLiesWithin(newPathSegment, lastPathSegment)) {
+                    // The new path segment is in the same direction, or the
+                    // opposite direction, as the last path segment and lies
+                    // within it: we can ignore the new path segment as it
+                    // is retracing over the last path segment
+                    addNewPathSegment = false;
+                }
+            }
+            if (addNewPathSegment) {
+                pathSegments.push(newPathSegment);
+            }
+        }
+
+        if (pathSegments.length > this.maxPathLength) {
+            return pathSegments.slice(this.maxPathLength * -1);
+        } else {
+            return pathSegments;
+        }
+    }
+
+    isConnected(a: PathSegment, b: PathSegment): boolean {
+        return a.x2 === b.x1 && a.y2 === b.y1;
     }
 }

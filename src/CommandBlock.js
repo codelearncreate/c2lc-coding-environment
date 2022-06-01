@@ -5,6 +5,7 @@ import AriaDisablingButton from './AriaDisablingButton';
 import LoopIterationsInput from './LoopIterationsInput';
 import { Button } from 'react-bootstrap';
 import classNames from 'classnames';
+import type { KeyboardInputSchemeName } from './KeyboardInputSchemes';
 import type { RunningState } from './types';
 import { ReactComponent as Forward1 } from './svg/Forward1.svg';
 import { ReactComponent as Forward2 } from './svg/Forward2.svg';
@@ -19,6 +20,9 @@ import { ReactComponent as Right45 } from './svg/Right45.svg';
 import { ReactComponent as Right90 } from './svg/Right90.svg';
 import { ReactComponent as Right180 } from './svg/Right180.svg';
 import { ReactComponent as Loop } from './svg/Loop.svg';
+import { ReactComponent as LoopWithShadow } from './svg/LoopWithShadow.svg'
+import { ReactComponent as LoopStart } from './svg/LoopStart.svg';
+import { ReactComponent as LoopEnd } from './svg/LoopEnd.svg';
 
 type CommandBlockProps = {
     commandName: string,
@@ -29,6 +33,7 @@ type CommandBlockProps = {
     stepNumber?: number,
     className?: string,
     runningState?: RunningState,
+    keyboardInputSchemeName?: KeyboardInputSchemeName,
     onClick: (evt: SyntheticEvent<HTMLButtonElement>) => void,
     onChangeLoopIterations?: (stepNumber: number, loopLabel: string, loopIterations: number) => void
 };
@@ -48,7 +53,10 @@ export const commandBlockIconTypes = new Map<string, any>([
     ['right45', Right45],
     ['right90', Right90],
     ['right180', Right180],
-    ['loop', Loop]
+    ['loop', Loop],
+    ['loopWithShadow', LoopWithShadow],
+    ['startLoop', LoopStart],
+    ['endLoop', LoopEnd]
 ]);
 
 export default React.forwardRef<CommandBlockProps, Button>(
@@ -62,6 +70,7 @@ export default React.forwardRef<CommandBlockProps, Button>(
             stepNumber,
             className,
             runningState,
+            keyboardInputSchemeName,
             onClick,
             onChangeLoopIterations,
             ...otherProps
@@ -91,6 +100,7 @@ export default React.forwardRef<CommandBlockProps, Button>(
                             && loopLabel != null
                             && stepNumber != null
                             && runningState != null
+                            && keyboardInputSchemeName != null
                             && onChangeLoopIterations != null
                             &&
                         <LoopIterationsInput
@@ -99,6 +109,7 @@ export default React.forwardRef<CommandBlockProps, Button>(
                             loopLabel={loopLabel}
                             stepNumber={stepNumber}
                             runningState={runningState}
+                            keyboardInputSchemeName={keyboardInputSchemeName}
                             onChangeLoopIterations={onChangeLoopIterations}
                         />
                     }

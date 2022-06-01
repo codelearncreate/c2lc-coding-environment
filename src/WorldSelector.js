@@ -36,7 +36,7 @@ class WorldSelector extends React.Component<WorldSelectorProps, WorldSelectorSta
             selectedWorld: props.currentWorld,
             focusedWorld: null
         }
-        this.availableWorldOptions = ['Sketchpad', 'Space', 'Jungle', 'DeepOcean', 'Landmarks'];
+        this.availableWorldOptions = ['Sketchpad', 'Space', 'Jungle', 'DeepOcean', 'Camping', 'Landmarks'];
     }
 
     handleOnSelect = (e: Event) => {

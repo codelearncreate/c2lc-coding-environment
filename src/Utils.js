@@ -1,5 +1,6 @@
 // @flow
 
+import ProgramSequence from './ProgramSequence';
 import { isWorldName } from './Worlds';
 import type { ThemeName } from './types';
 import type { WorldName } from './Worlds';
@@ -22,10 +23,9 @@ function makeDelayedPromise(timeMs: number): Promise<void> {
     });
 }
 
-function generateEncodedProgramURL(versionString: string, themeString: string, worldString: string, programString: string, characterStateString: string, disallowedActionsString: string): string {
-    return `?v=${encodeURIComponent(versionString)}&t=${themeString}&w=${worldString}&p=${encodeURIComponent(programString)}&c=${encodeURIComponent(characterStateString)}&d=${encodeURIComponent(disallowedActionsString)}`;
+function generateEncodedProgramURL(versionString: string, themeString: string, worldString: string, programString: string, characterStateString: string, disallowedActionsString: string, startingPositionString: string): string {
+    return `?v=${encodeURIComponent(versionString)}&t=${themeString}&w=${worldString}&p=${encodeURIComponent(programString)}&c=${encodeURIComponent(characterStateString)}&d=${encodeURIComponent(disallowedActionsString)}&s=${encodeURIComponent(startingPositionString)}`;
 }
-
 
 /*
     "default"    => A mixture of light and dark elements, with colour.
@@ -63,6 +63,89 @@ function getWorldFromString(worldQuery: ?string, defaultWorldName: WorldName): W
     }
 }
 
+function getStartingPositionFromString(startingPositionQuery: ?string, maxX: number, maxY: number, defaultX: number, defaultY: number, defaultDirection: number): {| x: number, y: number, direction: number |} {
+    let x = defaultX;
+    let y = defaultY;
+    let direction = defaultDirection
+    if (startingPositionQuery && startingPositionQuery.length === 3) {
+        try {
+            const startingX = decodeCoordinate(startingPositionQuery.charAt(0));
+            const startingY = decodeCoordinate(startingPositionQuery.charAt(1));
+            const startingDirection = decodeDirection(startingPositionQuery.charAt(2));
+            if (startingX >= 0 && startingX <= maxX
+                    && startingY >= 0 && startingY <= maxY
+                    && startingDirection >= 0 && startingDirection <= 7) {
+                x = startingX;
+                y = startingY;
+                direction = startingDirection;
+            }
+        } catch(err) {
+            x = defaultX;
+            y = defaultY;
+            direction = defaultDirection;
+        }
+    }
+    return { x, y, direction };
+}
+
+function encodeCoordinate(value: number): string {
+    // Remove any fractional digits, to make sure we have an integer
+    value = Math.trunc(value);
+    if (value === 0) {
+        return '0';
+    } else if (value > 0 && value <= 26) {
+        return String.fromCharCode('a'.charCodeAt(0) - 1 + value);
+    } else if (value > 26) {
+        return 'z';
+    } else if (value < 0 && value >= -26) {
+        return String.fromCharCode('A'.charCodeAt(0) - 1 + Math.abs(value));
+    } else if (value < -26) {
+        return 'Z';
+    }
+    throw new Error(`Bad co-ordinate value: ${value}`);
+}
+
+function decodeCoordinate(character: string): number {
+    if (character === '0') {
+        return 0;
+    }
+    const charCode = character.charCodeAt(0);
+    if (charCode >= 'a'.charCodeAt(0) && charCode <= 'z'.charCodeAt(0)) {
+        return charCode - 'a'.charCodeAt(0) + 1;
+    } else if (charCode >= 'A'.charCodeAt(0) && charCode <= 'Z'.charCodeAt(0)) {
+        return (charCode - 'A'.charCodeAt(0) + 1) * -1;
+    }
+    throw new Error(`Bad co-ordinate character: '${character}'`);
+}
+
+function encodeDirection(direction: number): string {
+    switch(direction) {
+        case(0): return '0';
+        case(1): return 'a';
+        case(2): return 'b';
+        case(3): return 'c';
+        case(4): return 'd';
+        case(5): return 'e';
+        case(6): return 'f';
+        case(7): return 'g';
+        default: throw new Error(`Unrecognized direction ${direction}`);
+    }
+}
+
+function decodeDirection(character: string): number {
+    switch(character) {
+        case('0'): return 0;
+        case('a'): return 1;
+        case('b'): return 2;
+        case('c'): return 3;
+        case('d'): return 4;
+        case('e'): return 5;
+        case('f'): return 6;
+        case('g'): return 7;
+        default: throw new Error(`Unrecognized direction character ${character}`);
+    }
+}
+
 /**
  * A simplified pure JS equivalent of jQuery.extend that always performs a
  * "deep" merge.
@@ -93,6 +176,24 @@ function focusByQuerySelector(selectors: string) {
     }
 }
 
+function focusFirstInNodeList(elements: NodeList<HTMLElement>) {
+    if (elements.length > 0) {
+        const firstElem = elements[0];
+        if (firstElem && firstElem.focus) {
+            firstElem.focus();
+        }
+    }
+}
+
+function focusLastInNodeList(elements: NodeList<HTMLElement>) {
+    if (elements.length > 0) {
+        const lastElem = elements[elements.length - 1];
+        if (lastElem && lastElem.focus) {
+            lastElem.focus();
+        }
+    }
+}
+
 function generateLoopLabel(n: number): string {
     let label = '';
     while (n > 0) {
@@ -100,7 +201,7 @@ function generateLoopLabel(n: number): string {
         n = Math.floor((n - 1) / 26);
     }
     return label;
-};
+}
 
 function parseLoopLabel(label: string): number {
     let n = 0;
@@ -110,6 +211,53 @@ function parseLoopLabel(label: string): number {
         label = label.substring(1);
     }
     return n;
-};
+}
 
-export { extend, focusByQuerySelector, generateId, makeDelayedPromise, generateEncodedProgramURL, getThemeFromString, getWorldFromString, generateLoopLabel, parseLoopLabel };
+function isLoopBlock(blockType: string): boolean {
+    return blockType === 'startLoop' || blockType === 'endLoop';
+}
+
+function moveToNextStepDisabled(programSequence: ProgramSequence, stepIndex: number): boolean {
+    const programLastIndex = programSequence.getProgramLength() - 1;
+    const { block, label } = programSequence.getProgramStepAt(stepIndex);
+    if (block === 'startLoop') {
+        const lastProgramStep = programSequence.getProgramStepAt(programLastIndex);
+        if (lastProgramStep.block === 'endLoop' && lastProgramStep.label === label) {
+            return true;
+        }
+    }
+    return stepIndex === programLastIndex;
+}
+
+function moveToPreviousStepDisabled(programSequence: ProgramSequence, stepIndex: number): boolean {
+    const { block, label } = programSequence.getProgramStepAt(stepIndex);
+    if (block === 'endLoop') {
+        const firstProgramStep = programSequence.getProgramStepAt(0);
+        if (firstProgramStep.block === 'startLoop' && firstProgramStep.label === label) {
+            return true;
+        }
+    }
+    return stepIndex === 0;
+}
+
+export {
+    decodeCoordinate,
+    decodeDirection,
+    encodeCoordinate,
+    encodeDirection,
+    extend,
+    focusByQuerySelector,
+    focusFirstInNodeList,
+    focusLastInNodeList,
+    generateEncodedProgramURL,
+    generateId,
+    generateLoopLabel,
+    getThemeFromString,
+    getWorldFromString,
+    getStartingPositionFromString,
+    isLoopBlock,
+    makeDelayedPromise,
+    moveToNextStepDisabled,
+    moveToPreviousStepDisabled,
+    parseLoopLabel
+};

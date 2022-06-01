@@ -77,6 +77,44 @@ test('Step a program with 2 commands', (done) => {
     });
 });
 
+test('Step a program with an empty loop', (done) => {
+    expect.assertions(14);
+    const { interpreter, appMock } = createInterpreter();
+
+    const program = [
+        {block: 'startLoop', iterations: 2, label: 'A'},
+        {block: 'endLoop', label: 'A'}
+    ];
+
+    interpreter.step(new ProgramSequence(program, 0, 1, new Map([[ 'A', 2 ]]))).then(() => {
+        expect(appMock.incrementProgramCounter.mock.calls.length).toBe(1);
+        expect(appMock.updateProgramCounterAndLoopIterationsLeft.mock.calls.length).toBe(0);
+        interpreter.step(new ProgramSequence(program, 1, 1, new Map([[ 'A', 2 ]]))).then(() => {
+            expect(appMock.incrementProgramCounter.mock.calls.length).toBe(1);
+            expect(appMock.updateProgramCounterAndLoopIterationsLeft.mock.calls.length).toBe(1);
+            expect(appMock.updateProgramCounterAndLoopIterationsLeft.mock.calls[0][0]).toBe(0);
+            expect(appMock.updateProgramCounterAndLoopIterationsLeft.mock.calls[0][1])
+                .toStrictEqual(new Map([[ 'A', 1 ]]));
+            interpreter.step(new ProgramSequence(program, 0, 1, new Map([[ 'A', 1 ]]))).then(() => {
+                expect(appMock.incrementProgramCounter.mock.calls.length).toBe(2);
+                expect(appMock.updateProgramCounterAndLoopIterationsLeft.mock.calls.length).toBe(1);
+                interpreter.step(new ProgramSequence(program, 1, 1, new Map([[ 'A', 1 ]]))).then(() => {
+                    expect(appMock.incrementProgramCounter.mock.calls.length).toBe(2);
+                    expect(appMock.updateProgramCounterAndLoopIterationsLeft.mock.calls.length).toBe(2);
+                    expect(appMock.updateProgramCounterAndLoopIterationsLeft.mock.calls[1][0]).toBe(2);
+                    expect(appMock.updateProgramCounterAndLoopIterationsLeft.mock.calls[1][1])
+                        .toStrictEqual(new Map([[ 'A', 0 ]]));
+                    interpreter.step(new ProgramSequence(program, 2, 1, new Map([[ 'A', 0 ]]))).then(() => {
+                        expect(appMock.incrementProgramCounter.mock.calls.length).toBe(2);
+                        expect(appMock.updateProgramCounterAndLoopIterationsLeft.mock.calls.length).toBe(2);
+                        done();
+                    });
+                });
+            });
+        });
+    });
+});
+
 test('Step a program with a loop and a command', (done) => {
     expect.assertions(14);
     const { interpreter, appMock } = createInterpreter();
