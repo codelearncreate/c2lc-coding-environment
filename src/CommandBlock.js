@@ -29,6 +29,7 @@ type CommandBlockProps = {
     disabled: boolean,
     loopLabel?: string,
     loopIterations?: ?number,
+    loopIterationsAriaLabel?: ?string,
     stepNumber?: number,
     className?: string,
     runningState?: RunningState,
@@ -65,6 +66,7 @@ export default React.forwardRef<CommandBlockProps, Button>(
             disabled,
             loopLabel,
             loopIterations,
+            loopIterationsAriaLabel,
             stepNumber,
             className,
             runningState,
@@ -83,7 +85,8 @@ export default React.forwardRef<CommandBlockProps, Button>(
                     </div>
                     {commandName === 'startLoop' && disabled &&
                         <input
-                            // TODO: ARIA label
+                            aria-disabled={disabled}
+                            aria-label={loopIterationsAriaLabel}
                             className='command-block-loop-iterations'
                             maxLength='2'
                             size='2'
@@ -101,6 +104,7 @@ export default React.forwardRef<CommandBlockProps, Button>(
                             && onChangeLoopIterations != null
                             &&
                         <LoopIterationsInput
+                            loopIterationsAriaLabel={loopIterationsAriaLabel}
                             loopIterationsStr={loopIterations != null ? loopIterations.toString() : ''}
                             loopLabel={loopLabel}
                             stepNumber={stepNumber}

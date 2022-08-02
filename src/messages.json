@@ -253,6 +253,7 @@
         "ProgramBlockEditor.lastBlock": "Add selected action {command} to the end of the program",
         "ProgramBlockEditor.blocks.noCommandSelected": "Make sure an action is selected",
         "ProgramBlockEditor.command": "{command}, position {index} of current program",
+        "ProgramBlockEditor.loopIterations": "Number of iterations for loop {loopLabel}",
         "ProgramBlockEditor.nestedCommand": "{command}, position {index} of Loop {parentLoopLabel}",
         "ProgramBlockEditor.program.deleteAll": "Delete all steps of your program",
         "ProgramBlockEditor.programHeading": "Program",
