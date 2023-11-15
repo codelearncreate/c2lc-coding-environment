@@ -165,12 +165,24 @@ export default class CharacterState {
         );
     }
 
+    getColumnValueFromLabel(columnLabel: string): ?number {
+        if (columnLabel <= String.fromCharCode(64 + this.sceneDimensions.getWidth()) && columnLabel >='A') {
+            return columnLabel.charCodeAt(0) - 64;
+        } else if (columnLabel <= String.fromCharCode(96 + this.sceneDimensions.getWidth()) && columnLabel >='a') {
+            return columnLabel.charCodeAt(0) - 96;
+        }
+        return null;
+    }
+
+    isValidXPosition(columnLabel:string): boolean {
+        return this.getColumnValueFromLabel(columnLabel) != null;
+    }
+
     changeXPosition(columnLabel: string): CharacterState {
         let newXPos = this.xPos;
-        if (columnLabel <= String.fromCharCode(64 + this.sceneDimensions.getWidth()) && columnLabel >='A') {
-            newXPos = columnLabel.charCodeAt(0) - 64;
-        } else if (columnLabel <= String.fromCharCode(96 + this.sceneDimensions.getWidth()) && columnLabel >='a') {
-            newXPos = columnLabel.charCodeAt(0) - 96;
+        const columnValue = this.getColumnValueFromLabel(columnLabel);
+        if (columnValue != null) {
+            newXPos = columnValue;
         }
         return new CharacterState(
             newXPos,
@@ -181,10 +193,22 @@ export default class CharacterState {
         );
     }
 
+    getRowValueFromLabel(rowLabel: number): ?number {
+        if (rowLabel <= this.sceneDimensions.getHeight() && rowLabel >= 1) {
+            return rowLabel;
+        }
+        return null;
+    }
+
+    isValidYPosition(rowLabel: number): boolean {
+        return this.getRowValueFromLabel(rowLabel) != null;
+    }
+
     changeYPosition(rowLabel: number): CharacterState {
         let newYPos = this.yPos;
-        if (rowLabel <= this.sceneDimensions.getHeight() && rowLabel >= 1) {
-            newYPos = rowLabel;
+        const rowValue = this.getRowValueFromLabel(rowLabel);
+        if (rowValue != null) {
+            newYPos = rowValue;
         }
         return new CharacterState(
             this.xPos,

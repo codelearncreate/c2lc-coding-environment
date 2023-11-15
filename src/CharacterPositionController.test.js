@@ -325,3 +325,63 @@ describe('Using change character position by column/row labels', () => {
         expect(getCharacterIcon(wrapper).hasClass(characterEnableFlipClassName)).toBe(false);
     });
 });
+
+describe('Character position row/column input Blur event', () => {
+    test('When there is no changes in row/column value, blur event does not update', () => {
+        expect.assertions(2);
+        const { wrapper, mockChangeCharacterYPosition, mockChangeCharacterXPosition } = createShallowCharacterPositionController();
+        const characterXPositionCoordinateBox = getCharacterPositionCoordinateBoxes(wrapper).at(0);
+        const characterYPositionCoordinateBox = getCharacterPositionCoordinateBoxes(wrapper).at(1);
+        characterYPositionCoordinateBox.simulate('blur');
+        expect(mockChangeCharacterYPosition.mock.calls.length).toBe(0);
+        characterXPositionCoordinateBox.simulate('blur');
+        expect(mockChangeCharacterXPosition.mock.calls.length).toBe(0);
+    });
+    test('When there is changes in row/column value, blue event does update', () => {
+        const { wrapper, mockChangeCharacterXPosition } = createShallowCharacterPositionController();
+        const characterXPositionCoordinateBox = getCharacterPositionCoordinateBoxes(wrapper).at(0);
+        const sampleXPosition = 'X';
+        const currentTarget = (value: string) => ({
+            name: 'xPosition',
+            value
+        });
+
+        characterXPositionCoordinateBox.simulate('change',
+            TestUtils.makeChangeEvent(currentTarget(sampleXPosition)));
+        wrapper.update();
+        expect(wrapper.instance().state.characterColumnLabel).toBe(sampleXPosition);
+
+        characterXPositionCoordinateBox.simulate('blur',
+            TestUtils.makeBlurEvent(currentTarget(sampleXPosition)));
+        expect(mockChangeCharacterXPosition.mock.calls.length).toBe(1);
+        expect(mockChangeCharacterXPosition.mock.calls[0][0]).toBe(sampleXPosition);
+    });
+    test('When the changed row/column value is invalid, blur event updates position values back to what it was', () => {
+        const { wrapper, mockChangeCharacterXPosition } = createShallowCharacterPositionController();
+        const characterXPositionCoordinateBox = getCharacterPositionCoordinateBoxes(wrapper).at(0);
+
+        const sceneDimensions = new SceneDimensions(1, 12, 1, 8);
+        const initialColumnValue = 'B';
+        const initialCharacterState = new CharacterState(initialColumnValue.charCodeAt(0) - 64, 6, 3, [], sceneDimensions);
+
+        wrapper.setProps({
+            characterState: initialCharacterState
+        });
+
+        const sampleXPosition = '3';
+        const currentTarget = (value: string) => ({
+            name: 'xPosition',
+            value
+        });
+
+        characterXPositionCoordinateBox.simulate('change',
+            TestUtils.makeChangeEvent(currentTarget(sampleXPosition)));
+        wrapper.update();
+        expect(wrapper.instance().state.characterColumnLabel).toBe(sampleXPosition);
+
+        characterXPositionCoordinateBox.simulate('blur',
+            TestUtils.makeBlurEvent(currentTarget(sampleXPosition)));
+        expect(mockChangeCharacterXPosition.mock.calls.length).toBe(0);
+        expect(wrapper.instance().state.characterColumnLabel).toBe(initialColumnValue);
+    });
+});

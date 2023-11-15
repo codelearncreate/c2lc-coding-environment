@@ -453,6 +453,34 @@ test('MoveLeftPosition moves the character Left one unit within the scene', () =
         .toHaveCharacterState(1, 1, 2, []);
 });
 
+test('getColumnValueFromLabel returns the column value or null for column value over the scene dimentions', () => {
+    const sceneDimensions = new SceneDimensions(1, 12, 1, 8);
+    (expect(new CharacterState(3, 2, 2, [], sceneDimensions).getColumnValueFromLabel('A')): any).toBe(1);
+    (expect(new CharacterState(3, 2, 2, [], sceneDimensions).getColumnValueFromLabel('L')): any).toBe(12);
+    (expect(new CharacterState(3, 2, 2, [], sceneDimensions).getColumnValueFromLabel('Z')): any).toBeNull();
+});
+
+test('getRowValueFromLabel returns the row value or null for row value over the scene dimentions', () => {
+    const sceneDimensions = new SceneDimensions(1, 12, 1, 8);
+    (expect(new CharacterState(3, 2, 2, [], sceneDimensions).getRowValueFromLabel(3)): any).toBe(3);
+    (expect(new CharacterState(3, 2, 2, [], sceneDimensions).getRowValueFromLabel(2)): any).toBe(2);
+    (expect(new CharacterState(3, 2, 2, [], sceneDimensions).getRowValueFromLabel(24)): any).toBeNull();
+});
+
+test('isValidXPosition checks if given x value has returned a value from getColumnValueFromLabel', () => {
+    const sceneDimensions = new SceneDimensions(1, 12, 1, 8);
+    (expect(new CharacterState(3, 2, 2, [], sceneDimensions).isValidXPosition('A')): any).toBe(true);
+    (expect(new CharacterState(3, 2, 2, [], sceneDimensions).isValidXPosition('L')): any).toBe(true);
+    (expect(new CharacterState(3, 2, 2, [], sceneDimensions).isValidXPosition('Z')): any).toBe(false);
+});
+
+test('isValidYPosition checks if given y value has returned a value from getRowValueFromLabel', () => {
+    const sceneDimensions = new SceneDimensions(1, 12, 1, 8);
+    (expect(new CharacterState(3, 2, 2, [], sceneDimensions).isValidYPosition(3)): any).toBe(true);
+    (expect(new CharacterState(3, 2, 2, [], sceneDimensions).isValidYPosition(2)): any).toBe(true);
+    (expect(new CharacterState(3, 2, 2, [], sceneDimensions).isValidYPosition(24)): any).toBe(false);
+});
+
 test('ChangeXPosition gets column label and updates xPosition', () => {
     const sceneDimensions = new SceneDimensions(1, 26, 1, 16);
     (expect(new CharacterState(2, 3, 2, [], sceneDimensions).changeXPosition('Z')): any)
