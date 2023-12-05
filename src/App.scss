@@ -13,7 +13,7 @@ body {
     box-sizing: border-box;
     display: grid;
     grid-template-columns: 1fr min-content minmax(auto, calc(#{$c2lc-scene-border-width} + #{$c2lc-scene-border-width} + #{$c2lc-scene-row-header-width} + #{$c2lc-scene-width} + #{$c2lc-scene-space-for-scrollbar} + #{$c2lc-app-scene-container-margin-right})) min-content 1fr;
-    grid-template-rows: auto auto auto 1fr 4.6rem;
+    grid-template-rows: auto auto 1fr 4.6rem;
     row-gap: 0;
     height: 100vh;
     overflow: auto;
@@ -23,19 +23,12 @@ body {
     max-height: -webkit-fill-available;
 }
 
-.App__notificationArea {
-    grid-column-start: 1;
-    grid-column-end: 6;
-    grid-row-start: 1;
-    grid-row-end: 2;
-}
-
 .App__header {
     background-color: #FFF;
     grid-column-start: 2;
     grid-column-end: 3;
-    grid-row-start: 2;
-    grid-row-end: 3;
+    grid-row-start: 1;
+    grid-row-end: 2;
     margin: 0.5rem 0.25rem 0.75rem 0.5rem;
 }
 
@@ -130,10 +123,10 @@ body {
     margin-bottom: 0.25rem;
     grid-column-start: 3;
     grid-column-end: 4;
-    grid-row-start: 2;
-    grid-row-end: 4;
+    grid-row-start: 1;
+    grid-row-end: 3;
     min-height: 12rem;
-    min-width: 19.5rem; 
+    min-width: 19.5rem;
 }
 
 .App__PenDownToggleSwitch-container {
@@ -144,8 +137,8 @@ body {
     display: grid;
     grid-column-start: 4;
     grid-column-end: 5;
-    grid-row-start: 2;
-    grid-row-end: 4;
+    grid-row-start: 1;
+    grid-row-end: 3;
     border-radius: 3px;
     margin-right: 0.5rem;
     margin-top: 0.25rem;
@@ -187,8 +180,8 @@ body {
     margin: 0 0.25rem 0.25rem 0.5rem;
     grid-column-start: 2;
     grid-column-end: 3;
-    grid-row-start: 3;
-    grid-row-end: 5;
+    grid-row-start: 2;
+    grid-row-end: 4;
     display: flex;
     flex-direction: column;
     grid-template-rows: min-content min-content auto;
@@ -282,8 +275,8 @@ body {
     margin-bottom: 0.25rem;
     grid-column-start: 3;
     grid-column-end: 5;
-    grid-row-start: 4;
-    grid-row-end: 5;
+    grid-row-start: 3;
+    grid-row-end: 4;
     height: auto;
 }
 
@@ -291,8 +284,8 @@ body {
     background-color: #67717E;
     grid-column-start: 1;
     grid-column-end: 6;
-    grid-row-start: 5;
-    grid-row-end: 6;
+    grid-row-start: 4;
+    grid-row-end: 5;
     box-shadow: inset 0px 7px 3px -3px rgba(0, 0, 0, 0.25);
 }
 
@@ -300,8 +293,8 @@ body {
     padding: 0 1rem;
     grid-column-start: 2;
     grid-column-end: 5;
-    grid-row-start: 5;
-    grid-row-end: 6;
+    grid-row-start: 4;
+    grid-row-end: 5;
     display: grid;
     grid-template-columns: 1fr 1fr;
 }

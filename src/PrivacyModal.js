@@ -62,36 +62,6 @@ class PrivacyModal extends React.Component<PrivacyModalProps, {}> {
                             </li>
                         </ul>
 
-                        <h5>Use of cookies for web analytics</h5>
-
-                        <p>We use a web analytics application called "Matomo" to help us
-                        understand how many people are using Weavly, approximately where they
-                        are located, and what types of devices they are using Weavly on.</p>
-
-                        <p>When you use Weavly, we create cookies that record the following
-                        information:</p>
-
-                        <ul>
-                            <li>A random unique identifier used to distinguish one user's device
-                            from another (so that we don't count someone's device more than
-                            once, or count different devices as one device)</li>
-                            <li>If you started Weavly by clicking on a link, then we record the
-                            location of the webpage that the link was on</li>
-                        </ul>
-
-                        <p>When you first load Weavly, we record an anonymized version of your IP
-                        address (with the last 2 parts, of 4, removed). For example, if your IP
-                        address was 1.2.3.4, we would store 1.2.0.0. We use this anonymized version
-                        of the IP address to look up an approximate location, so that we can
-                        understand where Weavly is being used.</p>
-
-                        <p>When you go to a website, your browser sends information about itself
-                        and the operating system that you are using. We record this information to
-                        understand which types of devices Weavly is being used on.</p>
-
-                        <p>We do not track what you are doing in Weavly or collect your personal
-                        information.</p>
-
                         <h5>What information does Weavly store?</h5>
 
                         <p>
@@ -107,8 +77,6 @@ class PrivacyModal extends React.Component<PrivacyModalProps, {}> {
                             <li>Any line that is drawn on the scene as a result of running your program</li>
                             <li>The last position of your character on the scene</li>
                             <li>The starting position of your character</li>
-                            <li>If you dismiss the cookie notification, we record that you
-                                dismissed it and Weavly won't show it to you again</li>
                             <li>The version of Weavly that was used</li>
                         </ul>
 

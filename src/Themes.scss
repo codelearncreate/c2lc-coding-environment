@@ -404,9 +404,9 @@ body.light-theme {
     .RefreshButton--disabled svg {
         .refresh-icon {
             fill: #505862;
-            stroke: #9DA4AF;        
+            stroke: #9DA4AF;
         }
-    
+
         circle {
             stroke: none;
             fill: #67717E;
@@ -461,18 +461,18 @@ body.light-theme {
                 background-color: #F1AE5B;
                 box-shadow: -8rem 0 0 8rem #F1AE5B;
             }
-        
+
             &::-moz-range-thumb {
                 background-color: #F1AE5B;
                 box-shadow: -8rem 0 0 8rem #F1AE5B;
             }
-           
+
             &::-moz-range-progress {
-                background-color: #F1AE5B; 
+                background-color: #F1AE5B;
             }
-            
+
             &::-ms-fill-lower {
-                background-color: #F1AE5B; 
+                background-color: #F1AE5B;
             }
         }
 
@@ -493,9 +493,9 @@ body.light-theme {
         &::-moz-range-progress {
             background-color: #33717F;
         }
-        
+
         &::-ms-fill-lower {
-            background-color: #33717F; 
+            background-color: #33717F;
         }
     }
 
@@ -875,7 +875,7 @@ body.gray-theme {
                 fill: #505862;
             }
         }
-    }    
+    }
 
     .App__header-menu {
         background-color: #D5D8DD;
@@ -887,26 +887,6 @@ body.gray-theme {
         }
     }
 
-    .CookieNotification {
-        background-color: #D5D8DD;
-    }
-
-    .CookieNotification__button {
-        background-color: #F1F2F4;
-        color: #1E1E1E;
-
-        &:hover {
-            background: #505862;
-            color: #FFFFFF;
-        }
-
-        &:focus {
-            box-shadow:
-                0 0 0 1px #D5D8DD,
-                0 0 0 $c2lc-focus-indicator-width #505862;
-        }
-    }
-
     .IconButton {
         &:not(.IconButton--disabled) {
             background-color: #818A98;
@@ -915,7 +895,7 @@ body.gray-theme {
                 path {
                     stroke: white;
                 }
-            }    
+            }
         }
 
         &:hover:not(.IconButton--disabled) {
@@ -1078,7 +1058,7 @@ body.gray-theme {
     #command-block--loop, .btn-command-block--loop {
         &.command-block--pressed {
             border: 3px solid #505862;
-        }    
+        }
     }
 
     button.command-block.btn-command-block--startLoop,
@@ -1580,7 +1560,7 @@ body.gray-theme {
                 0 0 0 0.2rem #67717E,
                 0 0 0 0.4rem #D5D8DD,
                 0 0 0 0.6rem #67717E;
-        }        
+        }
     }
 
     .StopButton:not(:hover):not(.StopButton--disabled) {
@@ -1761,35 +1741,6 @@ body.contrast-theme {
 
     .App__PrivacyModal__toggle-button:focus {
         border-color: #ffffff;
-    }
-
-    .CookieNotification {
-        background-color: white;
-    }
-
-    .CookieNotification__message {
-        color: black;
-    }
-
-    .CookieNotification__button {
-        background-color: black;
-        color: white;
-
-        &:hover {
-            background: white;
-            color: black;
-            box-shadow: 0 0 0 1px black;
-        }
-
-        &:focus {
-            box-shadow:
-                0 0 0 1px white,
-                0 0 0 $c2lc-focus-indicator-width black;
-        }
-
-        &:hover:focus {
-            box-shadow: 0 0 0 $c2lc-focus-indicator-width black;
-        }
     }
 
     .IconButton.App__header-soundOptions {
@@ -2632,7 +2583,7 @@ body.contrast-theme {
         svg {
             path.inner-circle {
                 fill: white;
-            }    
+            }
         }
     }
 
@@ -2713,7 +2664,7 @@ body.contrast-theme {
                 0 0 0 0.2rem #1E1E1E,
                 0 0 0 0.4rem #FFFFFF,
                 0 0 0 0.6rem #1E1E1E;
-        }        
+        }
     }
 
     .StopButton:not(:hover):not(.StopButton--disabled) {
@@ -2765,7 +2716,7 @@ body.contrast-theme {
             }
         }
         &:focus {
-            box-shadow: 
+            box-shadow:
                 0 0 0 0.1rem #1E1E1E,
                 0 0 0 0.3rem #FFFFFF,
                 0 0 0 0.5rem #1E1E1E
@@ -2786,7 +2737,7 @@ body.contrast-theme {
             }
         }
         &:focus {
-            box-shadow: 
+            box-shadow:
                 0 0 0 0.1rem #1E1E1E,
                 0 0 0 0.3rem #FFFFFF,
                 0 0 0 0.5rem #1E1E1E
