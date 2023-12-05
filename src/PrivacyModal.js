@@ -12,7 +12,6 @@ import './PrivacyModal.scss';
 
 type PrivacyModalProps = {
     intl: IntlShape,
-    focusOnCloseSelector: string,
     onClose: () => void,
     show: boolean
 }
@@ -29,7 +28,7 @@ class PrivacyModal extends React.Component<PrivacyModalProps, {}> {
             <ModalWithFooter
                 show={this.props.show}
                 focusOnOpenSelector={'.TextButton--primaryButton'}
-                focusOnCloseSelector={this.props.focusOnCloseSelector}
+                focusOnCloseSelector={'.App__PrivacyModal__toggle-button'}
                 onClose={this.props.onClose}
                 buttonProperties={[closeButtonProperties]}
             >
@@ -42,7 +41,7 @@ class PrivacyModal extends React.Component<PrivacyModalProps, {}> {
 
                 <ModalBody>
                     <div className='PrivacyModal__content'>
-                        <h5>Updated November 7th, 2022</h5>
+                        <h5>Updated December 5th, 2023</h5>
 
                         <p>
                             At Weavly, we believe that privacy is a fundamental human right, and acknowledge how important
