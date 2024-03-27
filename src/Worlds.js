@@ -10,9 +10,7 @@ import { ReactComponent as AmusementParkContrast } from './svg/AmusementParkCont
 import { ReactComponent as AmusementParkThumbnail } from './svg/AmusementParkThumbnail.svg';
 import { ReactComponent as AmusementParkThumbnailGray } from './svg/AmusementParkThumbnailGray.svg';
 import { ReactComponent as AmusementParkThumbnailContrast } from './svg/AmusementParkThumbnailContrast.svg';
-import { ReactComponent as AmusementParkTicket } from './svg/AmusementParkTicket.svg';
-import { ReactComponent as AmusementParkTicketGray } from './svg/AmusementParkTicketGray.svg';
-import { ReactComponent as AmusementParkTicketContrast } from './svg/AmusementParkTicketContrast.svg';
+import { ReactComponent as AmusementParkTrain } from './svg/AmusementParkTrain.svg';
 
 // Atlantic Canada
 import { ReactComponent as AtlanticCanada } from './svg/AtlanticCanada.svg';
@@ -76,9 +74,7 @@ import { ReactComponent as HauntedContrast } from './svg/Haunted-contrast.svg';
 import { ReactComponent as HauntedThumbnail } from './svg/HauntedThumbnail.svg';
 import { ReactComponent as HauntedThumbnailGray } from './svg/HauntedThumbnail-gray.svg';
 import { ReactComponent as HauntedThumbnailContrast } from './svg/HauntedThumbnail-contrast.svg';
-import { ReactComponent as Candle } from './svg/Candle.svg';
-import { ReactComponent as CandleGray } from './svg/Candle-gray.svg';
-import { ReactComponent as CandleContrast } from './svg/Candle-contrast.svg';
+import { ReactComponent as HauntedFlashlight } from './svg/HauntedFlashlight.svg';
 
 // Landmarks
 import { ReactComponent as LandmarksWorld } from './svg/LandmarksWorld.svg';
@@ -99,8 +95,6 @@ import { ReactComponent as MarbleThumbnail } from './svg/MarbleThumbnail.svg';
 import { ReactComponent as MarbleThumbnailGray } from './svg/MarbleThumbnailGray.svg';
 import { ReactComponent as MarbleThumbnailContrast } from './svg/MarbleThumbnailContrast.svg';
 import { ReactComponent as Marble } from './svg/Marble.svg';
-import { ReactComponent as MarbleGray } from './svg/MarbleGray.svg';
-import { ReactComponent as MarbleContrast } from './svg/MarbleContrast.svg';
 
 // Music Band
 
@@ -110,9 +104,7 @@ import { ReactComponent as MusicBandContrast } from './svg/MusicBandContrast.svg
 import { ReactComponent as MusicBandThumbnail } from './svg/MusicBandThumbnail.svg';
 import { ReactComponent as MusicBandThumbnailGray } from './svg/MusicBandThumbnailGray.svg';
 import { ReactComponent as MusicBandThumbnailContrast } from './svg/MusicBandThumbnailContrast.svg';
-import { ReactComponent as MusicBandBaton } from './svg/MusicBandBaton.svg';
-import { ReactComponent as MusicBandBatonGray } from './svg/MusicBandBatonGray.svg';
-import { ReactComponent as MusicBandBatonContrast } from './svg/MusicBandBatonContrast.svg';
+import { ReactComponent as MusicBandMusicNote } from './svg/MusicBandMusicNote.svg';
 
 // Savannah
 import { ReactComponent as Savannah } from './svg/Savannah.svg';
@@ -152,9 +144,7 @@ import { ReactComponent as SportsContrast } from './svg/SportsContrast.svg';
 import { ReactComponent as SportsThumbnail } from './svg/SportsThumbnail.svg';
 import { ReactComponent as SportsThumbnailGray } from './svg/SportsThumbnailGray.svg';
 import { ReactComponent as SportsThumbnailContrast } from './svg/SportsThumbnailContrast.svg';
-import { ReactComponent as SportsTrophy } from './svg/SportsTrophy.svg';
-import { ReactComponent as SportsTrophyGray } from './svg/SportsTrophyGray.svg';
-import { ReactComponent as SportsTrophyContrast } from './svg/SportsTrophyContrast.svg';
+import { ReactComponent as SportsGolfCart } from './svg/SportsGolfCart.svg';
 
 export type WorldProperties = {|
     background: ?React.ComponentType<{}>,
@@ -259,13 +249,13 @@ const worlds: {|
         thumbnailDark: AmusementParkThumbnail,
         thumbnailGray: AmusementParkThumbnailGray,
         thumbnailContrast: AmusementParkThumbnailContrast,
-        character: AmusementParkTicket,
-        characterGray: AmusementParkTicketGray,
-        characterContrast: AmusementParkTicketContrast,
+        character: AmusementParkTrain,
+        characterGray: AmusementParkTrain,
+        characterContrast: AmusementParkTrain,
         startingX: 1,
         startingY: 2,
         startingDirection: 2, // East
-        enableFlipCharacter: false
+        enableFlipCharacter: true
     },
     'AtlanticCanada': {
         background: AtlanticCanada,
@@ -741,9 +731,9 @@ const worlds: {|
         thumbnailDark: HauntedThumbnail,
         thumbnailGray: HauntedThumbnailGray,
         thumbnailContrast: HauntedThumbnailContrast,
-        character: Candle,
-        characterGray: CandleGray,
-        characterContrast: CandleContrast,
+        character: HauntedFlashlight,
+        characterGray: HauntedFlashlight,
+        characterContrast: HauntedFlashlight,
         startingX: 1,
         startingY: 2,
         startingDirection: 2, // East
@@ -852,8 +842,8 @@ const worlds: {|
         thumbnailGray: MarbleThumbnailGray,
         thumbnailContrast: MarbleThumbnailContrast,
         character: Marble,
-        characterGray: MarbleGray,
-        characterContrast: MarbleContrast,
+        characterGray: Marble,
+        characterContrast: Marble,
         startingX: 1,
         startingY: 2,
         startingDirection: 2, // East
@@ -908,9 +898,9 @@ const worlds: {|
         thumbnailDark: MusicBandThumbnail,
         thumbnailGray: MusicBandThumbnailGray,
         thumbnailContrast: MusicBandThumbnailContrast,
-        character: MusicBandBaton,
-        characterGray: MusicBandBatonGray,
-        characterContrast: MusicBandBatonContrast,
+        character: MusicBandMusicNote,
+        characterGray: MusicBandMusicNote,
+        characterContrast: MusicBandMusicNote,
         startingX: 1,
         startingY: 2,
         startingDirection: 2, // East
@@ -1073,9 +1063,9 @@ const worlds: {|
         thumbnailDark: SportsThumbnail,
         thumbnailGray: SportsThumbnailGray,
         thumbnailContrast: SportsThumbnailContrast,
-        character: SportsTrophy,
-        characterGray: SportsTrophyGray,
-        characterContrast: SportsTrophyContrast,
+        character: SportsGolfCart,
+        characterGray: SportsGolfCart,
+        characterContrast: SportsGolfCart,
         startingX: 1,
         startingY: 2,
         startingDirection: 2, // East
