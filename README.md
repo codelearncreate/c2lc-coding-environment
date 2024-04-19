@@ -5,8 +5,6 @@ disabilities. It can be used with a mouse, touchscreen, or keyboard,
 and supports assistive technologies such as screen readers. It is a web
 application that works in a browser.
 
-![screenshot of Weavly](./inclusive-coding-env.png)
-
 To try the latest version, visit [Weavly online](https://create.weavly.org/).
 
 ## Installation for Developers
