@@ -1,3 +1,4 @@
+@use "sass:math";
 @import 'variables';
 
 @keyframes pausedAnimation {
@@ -249,7 +250,7 @@ button.ProgramBlockEditor__program-block--updated.btn-command-block--right180 {
 
 .ProgramBlockEditor__action-panel-container-inner {
     position: absolute;
-    left: #{-$c2lc-action-panel-width / 2};
+    left: #{math.div(-$c2lc-action-panel-width, 2)};
     top: #{-$c2lc-action-panel-height * 1.4};
 }
 

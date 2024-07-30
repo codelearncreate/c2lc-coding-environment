@@ -2722,10 +2722,11 @@ body.contrast-theme {
                 0 0 0 0.2rem #1E1E1E,
                 0 0 0 0.4rem white;
 
+            background-color: #1E1E1E;
+
             svg rect {
                 fill: #ffffff
             }
-            background-color: #1E1E1E;
         }
 
         &:focus {

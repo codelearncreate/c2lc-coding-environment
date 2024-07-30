@@ -32,14 +32,14 @@
 }
 
 @mixin world-colors-std-contrast($world) {
-    @include world-colors($world, #0078FF, #FF0000, "contrast")
+    @include world-colors($world, #0078FF, #FF0000, "contrast");
 }
 
 /* Amusement Park */
 
-@include world-colors("AmusementPark", #88C3BC, #3A3F46)
-@include world-colors("AmusementPark", #B9BEC6, #505862, "gray")
-@include world-colors-std-contrast("AmusementPark")
+@include world-colors("AmusementPark", #88C3BC, #3A3F46);
+@include world-colors("AmusementPark", #B9BEC6, #505862, "gray");
+@include world-colors-std-contrast("AmusementPark");
 
 .WorldSelector__option-image--AmusementPark:hover {
     svg {
@@ -142,9 +142,9 @@ body.contrast-theme {
 
 /* Atlantic Canada */
 
-@include world-colors("AtlanticCanada", #567F88, #E5AF5E)
-@include world-colors("AtlanticCanada", #B9BEC6, #FFFFFF, "gray")
-@include world-colors-std-contrast("AtlanticCanada")
+@include world-colors("AtlanticCanada", #567F88, #E5AF5E);
+@include world-colors("AtlanticCanada", #B9BEC6, #FFFFFF, "gray");
+@include world-colors-std-contrast("AtlanticCanada");
 
 .WorldSelector__option-image--AtlanticCanada:hover {
     svg {
@@ -204,9 +204,9 @@ body.contrast-theme {
 
 /* Camping */
 
-@include world-colors("Camping", #8F8F8F, #FFC700)
-@include world-colors("Camping", #8F8F8F, #FFFFFF, "gray")
-@include world-colors-std-contrast("Camping")
+@include world-colors("Camping", #8F8F8F, #FFC700);
+@include world-colors("Camping", #8F8F8F, #FFFFFF, "gray");
+@include world-colors-std-contrast("Camping");
 
 .WorldSelector__option-image--Camping:hover {
     svg {
@@ -257,9 +257,9 @@ body.contrast-theme {
 
 /* DeepOcean */
 
-@include world-colors("DeepOcean", #8BA2C0, #FFFFFF)
-@include world-colors("DeepOcean", #FFFFFF, #22262A, "gray")
-@include world-colors-std-contrast("DeepOcean")
+@include world-colors("DeepOcean", #8BA2C0, #FFFFFF);
+@include world-colors("DeepOcean", #FFFFFF, #22262A, "gray");
+@include world-colors-std-contrast("DeepOcean");
 
 .WorldSelector__option-image--DeepOcean:hover {
     svg {
@@ -304,9 +304,9 @@ body.contrast-theme {
 
 /* Europe Trip */
 
-@include world-colors("EuropeTrip", #EBFAF8, #3F5574)
-@include world-colors("EuropeTrip", #818A98, #1E1E1E, "gray")
-@include world-colors-std-contrast("EuropeTrip")
+@include world-colors("EuropeTrip", #EBFAF8, #3F5574);
+@include world-colors("EuropeTrip", #818A98, #1E1E1E, "gray");
+@include world-colors-std-contrast("EuropeTrip");
 
 .WorldSelector__option-image--EuropeTrip:hover {
     svg {
@@ -395,9 +395,9 @@ body.contrast-theme {
 
 /* Grocery Store */
 
-@include world-colors("GroceryStore", #B7804A, #FFFFFF)
-@include world-colors("GroceryStore", #B9BEC6, #1E1E1E, "gray")
-@include world-colors-std-contrast("GroceryStore")
+@include world-colors("GroceryStore", #B7804A, #FFFFFF);
+@include world-colors("GroceryStore", #B9BEC6, #1E1E1E, "gray");
+@include world-colors-std-contrast("GroceryStore");
 
 .WorldSelector__option-image--GroceryStore:hover {
     svg {
@@ -466,9 +466,9 @@ body.contrast-theme {
 
 /* Haunted House */
 
-@include world-colors("Haunted", #5F607B, #FFC700)
-@include world-colors("Haunted", #7B7B7B, #FFFFFF, "gray")
-@include world-colors-std-contrast("Haunted")
+@include world-colors("Haunted", #5F607B, #FFC700);
+@include world-colors("Haunted", #7B7B7B, #FFFFFF, "gray");
+@include world-colors-std-contrast("Haunted");
 
 .WorldSelector__option-image--Haunted:hover {
     svg {
@@ -566,9 +566,9 @@ body.contrast-theme {
 
 /* Landmarks */
 
-@include world-colors("Landmarks", #F9F2EC, #784234)
-@include world-colors("Landmarks", #FFFFFF, #505862, "gray")
-@include world-colors-std-contrast("Landmarks")
+@include world-colors("Landmarks", #F9F2EC, #784234);
+@include world-colors("Landmarks", #FFFFFF, #505862, "gray");
+@include world-colors-std-contrast("Landmarks");
 
 .WorldSelector__option-image--Landmarks:hover {
     svg {
@@ -634,9 +634,9 @@ body.contrast-theme {
 
 /* Marble */
 
-@include world-colors("Marble", #F9F2EC, #3F5574)
-@include world-colors("Marble", #FFFFFF, #22262A, "gray")
-@include world-colors-std-contrast("Marble")
+@include world-colors("Marble", #F9F2EC, #3F5574);
+@include world-colors("Marble", #FFFFFF, #22262A, "gray");
+@include world-colors-std-contrast("Marble");
 
 .WorldSelector__option-image--Marble:hover {
     svg {
@@ -680,9 +680,9 @@ body.contrast-theme {
 
 /* Music Band */
 
-@include world-colors("MusicBand", #567F88, #E5AF5E)
-@include world-colors("MusicBand", #7F8898, #FFFFFF, "gray")
-@include world-colors-std-contrast("MusicBand")
+@include world-colors("MusicBand", #567F88, #E5AF5E);
+@include world-colors("MusicBand", #7F8898, #FFFFFF, "gray");
+@include world-colors-std-contrast("MusicBand");
 
 .WorldSelector__option-image--MusicBand:hover {
     svg {
@@ -757,10 +757,10 @@ body.contrast-theme {
 
 /* Sketchpad */
 
-@include world-colors("Sketchpad", #F1F2F4, #505862)
-@include world-colors("Sketchpad", #30444E, #FFFFFF, "dark")
-@include world-colors("Sketchpad", #D5D8DD, #505862, "gray")
-@include world-colors-std-contrast("Sketchpad")
+@include world-colors("Sketchpad", #F1F2F4, #505862);
+@include world-colors("Sketchpad", #30444E, #FFFFFF, "dark");
+@include world-colors("Sketchpad", #D5D8DD, #505862, "gray");
+@include world-colors-std-contrast("Sketchpad");
 
 .WorldSelector__option-image--Sketchpad:hover {
     svg {
@@ -814,9 +814,9 @@ body.contrast-theme {
 
 /* Savannah */
 
-@include world-colors("Savannah", #F9F2EC, #784234)
-@include world-colors("Savannah", #FFFFFF, #505862, "gray")
-@include world-colors-std-contrast("Savannah")
+@include world-colors("Savannah", #F9F2EC, #784234);
+@include world-colors("Savannah", #FFFFFF, #505862, "gray");
+@include world-colors-std-contrast("Savannah");
 
 .WorldSelector__option-image--Savannah:hover {
     svg {
@@ -871,9 +871,9 @@ body.contrast-theme {
 
 /* Space */
 
-@include world-colors("Space", #8BA2C0, #F1AE5B)
-@include world-colors("Space", #FFFFFF, #FFFFFF, "gray")
-@include world-colors-std-contrast("Space")
+@include world-colors("Space", #8BA2C0, #F1AE5B);
+@include world-colors("Space", #FFFFFF, #FFFFFF, "gray");
+@include world-colors-std-contrast("Space");
 
 .WorldSelector__option-image--Space:hover {
     svg {
@@ -918,9 +918,9 @@ body.contrast-theme {
 
 /* Sports */
 
-@include world-colors("Sports", #B0B988, #FFC86F)
-@include world-colors("Sports", #B9BEC6, #FFFFFF, "gray")
-@include world-colors-std-contrast("Sports")
+@include world-colors("Sports", #B0B988, #FFC86F);
+@include world-colors("Sports", #B9BEC6, #FFFFFF, "gray");
+@include world-colors-std-contrast("Sports");
 
 .WorldSelector__option-image--Sports:hover {
     svg {
