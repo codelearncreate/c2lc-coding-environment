@@ -2,7 +2,6 @@
 import React from 'react';
 import { IntlProvider} from 'react-intl';
 import App from './App';
-import HtmlLangUpdater from './HtmlLangUpdater';
 import type { LanguageTag } from './types';
 import messages from './messages.json';
 
@@ -20,6 +19,13 @@ function getLangFromLocalStorage(): LanguageTag {
     return 'en';
 }
 
+function setHtmlLang(lang: LanguageTag) {
+    const elem = document.documentElement;
+    if (elem && elem.tagName === 'HTML') {
+        elem.setAttribute('lang', lang);
+    }
+}
+
 type IntlContainerState = {
     language: LanguageTag
 };
@@ -27,8 +33,13 @@ type IntlContainerState = {
 export default class IntlContainer extends React.Component<{}, IntlContainerState> {
     constructor(props: any) {
         super(props);
+
+        const language = getLangFromLocalStorage();
+
+        setHtmlLang(language);
+
         this.state = {
-            language: getLangFromLocalStorage()
+            language: language
         };
     }
 
@@ -37,6 +48,8 @@ export default class IntlContainer extends React.Component<{}, IntlContainerStat
         if (window.localStorage) {
             window.localStorage.setItem('c2lc-lang', language);
         }
+
+        setHtmlLang(language);
 
         this.setState({
             language: language
@@ -52,7 +65,6 @@ export default class IntlContainer extends React.Component<{}, IntlContainerStat
                     language={this.state.language}
                     onChangeLanguage={this.handleChangeLanguage}
                 />
-                <HtmlLangUpdater lang={this.state.language}/>
             </IntlProvider>
         );
     }

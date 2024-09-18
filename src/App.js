@@ -1688,7 +1688,9 @@ export class App extends React.Component<AppProps, AppState> {
 
     render() {
         return (
-            <React.Fragment>
+            // Use a key to force rerendering of the whole app when the
+            // language is changed
+            <div key={this.props.language}>
                 <div
                     className={
                         classNames(
@@ -1735,7 +1737,7 @@ export class App extends React.Component<AppProps, AppState> {
                 </div>
                 {this.renderCharacterAriaLive()}
                 {this.renderModals()}
-            </React.Fragment>
+            </div>
         );
     }
 
