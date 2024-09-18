@@ -1688,8 +1688,10 @@ export class App extends React.Component<AppProps, AppState> {
 
     render() {
         return (
-            // Use a key to force rerendering of the whole app when the
-            // language is changed
+            // Use a 'key' to force rerendering of the whole app when the
+            // language is changed. Rerendering the app ensures that
+            // the correct screen reader voice is used on Firefox after
+            // changing languages.
             <div key={this.props.language}>
                 <div
                     className={
