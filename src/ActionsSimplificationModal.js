@@ -54,14 +54,14 @@ class ActionsSimplificationModal extends React.Component<ActionsSimplificationMo
 
     render() {
         const cancelButtonProperties = {
-            label: this.props.intl.formatMessage({ id: 'ActionsSimplificationModal.cancel'} ),
+            label: this.props.intl.formatMessage({ id: 'Cancel'} ),
             isPrimary: false,
             onClick: this.handleOnCancel
         };
         const saveButtonProperties = {
             id: 'ActionSimplificationModal-done',
             isPrimary: true,
-            label: this.props.intl.formatMessage({ id: 'ActionsSimplificationModal.save'} ),
+            label: this.props.intl.formatMessage({ id: 'Save'} ),
             onClick: this.saveChanges
         };
         return (

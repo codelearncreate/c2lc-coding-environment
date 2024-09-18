@@ -42,107 +42,93 @@ class PrivacyModal extends React.Component<PrivacyModalProps, {}> {
 
                 <ModalBody>
                     <div className='PrivacyModal__content'>
-                        <h5>Updated January 4th, 2024</h5>
+                        <h5>{this.props.intl.formatMessage({ id: 'PrivacyModal.section010.Heading'})}</h5>
 
                         <p>
-                            At Weavly, we believe that privacy is a fundamental human right, and acknowledge how important
-                            it is to our community—especially with regards to both children and parents.
+                            {this.props.intl.formatMessage({ id: 'PrivacyModal.section010.block010'})}
                         </p>
-                        <p>This page explains:</p>
+                        <p>{this.props.intl.formatMessage({ id: 'PrivacyModal.section010.block020'})}</p>
 
                         <ul>
                             <li>
-                                What type of information we store on our website (http://create.weavly.org/)
+                                {this.props.intl.formatMessage({ id: 'PrivacyModal.section010.block030.item010'})}
                             </li>
                             <li>
-                                How that information is used and processed
+                                {this.props.intl.formatMessage({ id: 'PrivacyModal.section010.block030.item020'})}
                             </li>
                             <li>
-                                How we keep your information safe
+                                {this.props.intl.formatMessage({ id: 'PrivacyModal.section010.block030.item030'})}
                             </li>
                         </ul>
 
-                        <h5>What information does Weavly store?</h5>
+                        <h5>{this.props.intl.formatMessage({ id: 'PrivacyModal.section020.Heading'})}</h5>
 
                         <p>
-                            As you use Weavly, we may store information on how Weavly is accessed and used by you. We store
-                            the following information independently on every browser/device pair that you use Weavly on:
+                            {this.props.intl.formatMessage({ id: 'PrivacyModal.section020.block010'})}
                         </p>
 
                         <ul>
-                            <li>Your prefered settings for display colour theme and keyboard shortcuts</li>
-                            <li>Your visible set of action blocks on the action panel</li>
-                            <li>Your selected background for the scene</li>
-                            <li>Your created program</li>
-                            <li>Any line that is drawn on the scene as a result of running your program</li>
-                            <li>The last position of your character on the scene</li>
-                            <li>The starting position of your character</li>
-                            <li>The version of Weavly that was used</li>
+                            <li>{this.props.intl.formatMessage({ id: 'PrivacyModal.section020.block020.item010'})}</li>
+                            <li>{this.props.intl.formatMessage({ id: 'PrivacyModal.section020.block020.item020'})}</li>
+                            <li>{this.props.intl.formatMessage({ id: 'PrivacyModal.section020.block020.item030'})}</li>
+                            <li>{this.props.intl.formatMessage({ id: 'PrivacyModal.section020.block020.item040'})}</li>
+                            <li>{this.props.intl.formatMessage({ id: 'PrivacyModal.section020.block020.item050'})}</li>
+                            <li>{this.props.intl.formatMessage({ id: 'PrivacyModal.section020.block020.item060'})}</li>
+                            <li>{this.props.intl.formatMessage({ id: 'PrivacyModal.section020.block020.item070'})}</li>
+                            <li>{this.props.intl.formatMessage({ id: 'PrivacyModal.section020.block020.item080'})}</li>
                         </ul>
 
                         <p>
-                            You can delete any information that Weavly has generated from your usage by clearing your
-                            browser's cache and local storage. Check your browser's documentation for details.
+                            {this.props.intl.formatMessage({ id: 'PrivacyModal.section020.block030'})}
                         </p>
 
-                        <h5>How does Weavly use this information?</h5>
+                        <h5>{this.props.intl.formatMessage({ id: 'PrivacyModal.section030.Heading'})}</h5>
 
                         <p>
-                            The generated information is kept in a local storage on your device to make your use of Weavly
-                            more convenient:
+                            {this.props.intl.formatMessage({ id: 'PrivacyModal.section030.block010'})}
                         </p>
 
                         <ul>
                             <li>
-                                Your settings for the coding environment are stored so you don't have to adjust them every
-                                time you launch Weavly
+                                {this.props.intl.formatMessage({ id: 'PrivacyModal.section030.block020.item010'})}
                             </li>
                             <li>
-                                If you happen to accidentally or intentionally close your browser, the coding environment
-                                will be the same as when you left it for the next time you launch Weavly
+                                {this.props.intl.formatMessage({ id: 'PrivacyModal.section030.block020.item020'})}
                             </li>
                         </ul>
 
                         <p>
-                            Although storing your information in the browser makes it convenient
-                            for every time you access Weavly, it may cause problems on shared computers. As a result,
-                            someone that uses the computer after you may be able to access your Weavly settings and program.
+                            {this.props.intl.formatMessage({ id: 'PrivacyModal.section030.block030'})}
                         </p>
 
-                        <h5>How do we keep your information safe?</h5>
+                        <h5>{this.props.intl.formatMessage({ id: 'PrivacyModal.section040.Heading'})}</h5>
 
-                        <p>The security of your data is important to us, but please keep in mind that no method of
-                            electronic storage is 100% secure. We currently use browser local storage to store the specified
-                            data. The information is stored in the browser by domain (create.weavly.org) and only code
-                            running from that domain may access it. Thus, other websites cannot access the data. However,
-                            local storage is not encrypted on disk and someone with access to the device could get access to
-                            the data.</p>
+                        <p>{this.props.intl.formatMessage({ id: 'PrivacyModal.section040.block010'})}</p>
 
-                        <h5>Children's Privacy</h5>
+                        <h5>{this.props.intl.formatMessage({ id: 'PrivacyModal.section050.Heading'})}</h5>
 
-                        <p>
-                            We do not knowingly collect personally identifiable information from anyone under the age of 18.
-                            If you are a parent or guardian and you have become aware that we have collected Personal Data
-                            from your children without verification of parental consent, we can take steps to remove that
-                            information from our servers. Please <a href="https://weavly.org/about/" target='_blank' rel='noopener noreferrer'>contact us</a>.
+                        <p dangerouslySetInnerHTML={
+                            {__html: this.props.intl.formatMessage(
+                                { id: 'PrivacyModal.section050.block010'},
+                                { contactLink: `<a href="https://weavly.org/about/" target='_blank' rel='noopener noreferrer'>${this.props.intl.formatMessage({ id: 'PrivacyModal.contactUs' })}</a>` }
+                            )}
+                        }>
                         </p>
 
-                        <h5>Changes to This Privacy Policy</h5>
+                        <h5>{this.props.intl.formatMessage({ id: 'PrivacyModal.section060.Heading'})}</h5>
 
                         <p>
-                            We may update our Privacy Policy from time to time. We will notify you of any changes by posting
-                            the new Privacy Policy on this page. We will let you know of any changes becoming effective by
-                            updating the “effective date” at the top of this Privacy Policy. You are advised to review this
-                            Privacy Policy periodically for any changes. Changes to this Privacy Policy are effective when
-                            they are posted on this page.
+                            {this.props.intl.formatMessage({ id: 'PrivacyModal.section060.block010'})}
                         </p>
 
-                        <h5>Contact Us</h5>
+                        <h5>{this.props.intl.formatMessage({ id: 'PrivacyModal.section070.Heading'})}</h5>
 
-                        <p>
-                            If you have any questions about this Privacy Policy,
-                            please <a href="https://weavly.org/about/" target='_blank' rel='noopener noreferrer'>contact
-                            us</a>.
+                        <p dangerouslySetInnerHTML={
+                            {__html: this.props.intl.formatMessage(
+                                { id: 'PrivacyModal.section070.block010'},
+                                { contactLink: `<a href="https://weavly.org/about/" target='_blank' rel='noopener noreferrer'>${this.props.intl.formatMessage({ id: 'PrivacyModal.contactUs' })}</a>` }
+                            )}
+                        }>
                         </p>
                     </div>
                 </ModalBody>

@@ -182,13 +182,13 @@ class KeyboardInputModal extends React.Component<KeyboardInputModalProps, Keyboa
 
     render () {
         const cancelButtonProperties = {
-            label: this.props.intl.formatMessage({id: 'KeyboardInputModal.Cancel'}),
+            label: this.props.intl.formatMessage({id: 'Cancel'}),
             onClick: this.cancelChanges
         };
 
         const doneButtonProperties = {
             id: 'KeyboardInputModal-done',
-            label: this.props.intl.formatMessage({id: 'KeyboardInputModal.Save'}),
+            label: this.props.intl.formatMessage({id: 'Save'}),
             onClick: this.saveChanges,
             isPrimary: true
         };
@@ -216,7 +216,7 @@ class KeyboardInputModal extends React.Component<KeyboardInputModalProps, Keyboa
                             </div>
                             <div className="KeyboardInputModal__content__toggleBar__toggle">
                                 <div aria-hidden='true'>
-                                    <FormattedMessage id='KeyboardInputModal.Toggle.Off'/>
+                                    <FormattedMessage id='Off'/>
                                 </div>
                                 <ToggleSwitch
                                     id='keyboardInputModal__toggle'
@@ -228,7 +228,7 @@ class KeyboardInputModal extends React.Component<KeyboardInputModalProps, Keyboa
                                     onChange={this.handleChangeKeyBindingsEnabled}
                                 />
                                 <div aria-hidden='true'>
-                                    <FormattedMessage id='KeyboardInputModal.Toggle.On'/>
+                                    <FormattedMessage id='On'/>
                                 </div>
                             </div>
                         </div>

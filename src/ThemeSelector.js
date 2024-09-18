@@ -131,8 +131,8 @@ class ThemeSelector extends React.Component<ThemeSelectorProps, ThemeSelectorSta
                 ariaLabelledById='ThemeSelector'
                 onClose={this.handleCancel}
                 buttonProperties={[
-                    {label: this.props.intl.formatMessage({id: 'ThemeSelector.cancelButton'}), onClick: this.handleCancel},
-                    {label: this.props.intl.formatMessage({id: 'ThemeSelector.saveButton'}), onClick: this.handleSave, isPrimary: true}
+                    {label: this.props.intl.formatMessage({id: 'Cancel'}), onClick: this.handleCancel},
+                    {label: this.props.intl.formatMessage({id: 'Save'}), onClick: this.handleSave, isPrimary: true}
                 ]}>
                 <ModalHeader
                     id='ThemeSelector'
