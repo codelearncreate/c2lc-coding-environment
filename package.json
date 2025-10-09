@@ -1,6 +1,6 @@
 {
     "name": "c2lc-coding-environment",
-    "version": "1.13.0",
+    "version": "1.13.1",
     "private": true,
     "dependencies": {
         "classnames": "2.3.1",

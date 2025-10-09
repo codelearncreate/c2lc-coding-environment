@@ -158,7 +158,7 @@ export class App extends React.Component<AppProps, AppState> {
     constructor(props: any) {
         super(props);
 
-        this.version = '1.13';
+        this.version = '1.13.1';
 
         this.appContext = {
             bluetoothApiIsAvailable: FeatureDetection.bluetoothApiIsAvailable()
