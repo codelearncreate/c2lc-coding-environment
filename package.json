@@ -42,7 +42,6 @@
         "react-app-polyfill": "^3.0.0",
         "sass": "1.77.6",
         "sass-loader": "16.0.3",
-        "serve": "14.2.4",
         "source-map-loader": "^3.0.0",
         "terser-webpack-plugin": "^5.2.5",
         "webpack": "^5.64.4",
@@ -56,7 +55,6 @@
         "coverage": "node scripts/test.js --watchAll=false --coverage",
         "eslint": "node scripts/eslint.js",
         "flow": "flow",
-        "serve": "serve build",
         "markdownlint": "markdownlint-cli2 \"./**/*.md\" \"#node_modules\" \"#src/vendor\" \"#build\""
     },
     "eslintConfig": {
